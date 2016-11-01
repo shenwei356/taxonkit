@@ -1,0 +1,13 @@
+site_name: TaxonKit - NCBI Taxonomy Toolkit
+pages:
+- Home: index.md
+- Download: download.md
+- Usage: usage.md
+- Links:
+    - Wei Shen's Bioinformatic tools: bioinf.md
+theme: yeti
+
+repo_url: https://github.com/shenwei356/taxonkit
+site_description: TaxonKit - NCBI Taxonomy Toolkit
+site_author: shenwei356
+google_analytics: ['UA-28948626-9', 'bioinf.shenwei.me/taxonkit']
