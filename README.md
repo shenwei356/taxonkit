@@ -1,5 +1,11 @@
-# TaxonKit - NCBI Taxonomy Toolkit
+# TaxonKit - Crossplatform and Efficient NCBI Taxonomy Toolkit
 
+**Documents:** [http://bioinf.shenwei.me/taxonkit](http://bioinf.shenwei.me/taxonkit)
+([**Usage**](http://bioinf.shenwei.me/taxonkit/usage/))
+
+**Source code:** [https://github.com/shenwei356/taxonkit](https://github.com/shenwei356/taxonkit)
+[![GitHub stars](https://img.shields.io/github/stars/shenwei356/taxonkit.svg?style=social&label=Star&?maxAge=2592000)](https://github.com/shenwei356/taxonkit)
+[![license](https://img.shields.io/github/license/shenwei356/taxonkit.svg?maxAge=2592000)](https://github.com/shenwei356/taxonkit/blob/master/LICENSE)
 
 **Latest version:** [![Latest Version](https://img.shields.io/github/release/shenwei356/taxonkit.svg?style=flat?maxAge=86400)](https://github.com/shenwei356/taxonkit/releases)
 [![Github Releases](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/total.svg?maxAge=3600)](http://bioinf.shenwei.me/taxonkit/download/)

@@ -39,6 +39,7 @@ Version: %s
 Author: Wei Shen <shenwei356@gmail.com>
 
 Source code: https://github.com/shenwei356/taxonkit
+Documents  : http://bioinf.shenwei.me/taxonkit
 
 Dataset:
 

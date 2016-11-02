@@ -61,7 +61,7 @@ Flags:
 
 Examples
 
-1. default usage
+1. Default usage
 
         $ taxonkit list --nodes nodes.dmp --ids 9605
         9605
@@ -70,7 +70,7 @@ Examples
             741158
           1425170
 
-1. change ident, the list could be used to extract sequences from BLAST database with `blastdbcmd`
+1. Removing indent. The list could be used to extract sequences from BLAST database with `blastdbcmd`
 
         $ taxonkit list --nodes nodes.dmp --ids 9605 --indent ""
         9605
@@ -79,7 +79,16 @@ Examples
         741158
         1425170
 
-1. adding names
+    **Performance:** Time and memory usage for whole taxon tree:
+
+        $ # emptying the buffers cache
+        $ su -c "free && sync && echo 3 > /proc/sys/vm/drop_caches && free"
+
+        $ memusg -t taxonkit list --nodes nodes.dmp --ids 1 --indent "" > t0.txt
+        elapsed time: 2.987s
+        peak rss: 82.79 MB
+
+1. Adding names
 
         $ taxonkit list --nodes nodes.dmp --names names.dmp --ids 9605
         9605 [genus] Homo
@@ -88,27 +97,35 @@ Examples
             741158 [subspecies] Homo sapiens ssp. Denisova
           1425170 [species] Homo heidelbergensis
 
+    **Performance:** Time and memory usage for whole taxon tree:
+
+        $ # emptying the buffers cache
+        $ su -c "free && sync && echo 3 > /proc/sys/vm/drop_caches && free"
+
+        $ memusg -t taxonkit list --nodes nodes.dmp --names names.dmp --ids 1 > t1.txt
+        elapsed time: 9.825s
+        peak rss: 648.65 MB
+
+
 
 
 <div id="disqus_thread"></div>
 <script>
+
 /**
-* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-*/
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 /*
 var disqus_config = function () {
-this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
 this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
 };
 */
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
-
-s.src = '//csvtk.disqus.com/embed.js';
-
+s.src = '//taxonkit.disqus.com/embed.js';
 s.setAttribute('data-timestamp', +new Date());
 (d.head || d.body).appendChild(s);
 })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
