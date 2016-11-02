@@ -198,7 +198,7 @@ Flags:
 <p>Examples</p>
 <ol>
 <li>
-<p>default usage</p>
+<p>Default usage</p>
 <pre><code>$ taxonkit list --nodes nodes.dmp --ids 9605
 9605
   9606
@@ -208,7 +208,7 @@ Flags:
 </code></pre>
 </li>
 <li>
-<p>removing ident, the list could be used to extract sequences from BLAST database with <code>blastdbcmd</code></p>
+<p>Removing indent. The list could be used to extract sequences from BLAST database with <code>blastdbcmd</code></p>
 <pre><code>$ taxonkit list --nodes nodes.dmp --ids 9605 --indent ""
 9605
 9606
@@ -216,17 +216,17 @@ Flags:
 741158
 1425170
 </code></pre>
-<p><strong>Performance</strong> Time and memory usage for whole taxon tree:</p>
+<p><strong>Performance:</strong> Time and memory usage for whole taxon tree:</p>
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
-$ memusg -t taxonkit list --nodes nodes.dmp --ids 9605 --indent "" &gt; t0.txt
-elapsed time: 2.098s
-peak rss: 76.0 MB
+$ memusg -t taxonkit list --nodes nodes.dmp --ids 1 --indent "" &gt; t0.txt
+elapsed time: 2.987s
+peak rss: 82.79 MB
 </code></pre>
 </li>
 <li>
-<p>adding names</p>
+<p>Adding names</p>
 <pre><code>$ taxonkit list --nodes nodes.dmp --names names.dmp --ids 9605
 9605 [genus] Homo
   9606 [species] Homo sapiens
@@ -234,7 +234,7 @@ peak rss: 76.0 MB
     741158 [subspecies] Homo sapiens ssp. Denisova
   1425170 [species] Homo heidelbergensis
 </code></pre>
-<p><strong>Performance</strong> Time and memory usage for whole taxon tree:</p>
+<p><strong>Performance:</strong> Time and memory usage for whole taxon tree:</p>
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
