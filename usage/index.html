@@ -153,6 +153,8 @@
         
             <li><a href="#list">list</a></li>
         
+            <li><a href="#lineage">lineage</a></li>
+        
     
     </ul>
 </div></div>
@@ -339,6 +341,37 @@ peak rss: 648.65 MB
 </code></pre>
 <p>Snapshot of taxonomy (taxid 1) in kate:
 <img alt="taxon.json.png" src="../files/taxon.json.png" /></p>
+</li>
+</ol>
+<h2 id="lineage">lineage</h2>
+<p>Usage</p>
+<pre><code>query lineage of given taxon IDs from file
+
+Usage:
+  taxonkit lineage [flags]
+
+Flags:
+  -f, --formated-rank   show formated rank
+      --names string    names.dmp file, when it given taxid will be followed by its scientific name (default &quot;names.dmp&quot;)
+      --nodes string    nodes.dmp file (default &quot;nodes.dmp&quot;)
+
+</code></pre>
+
+<p>Examples</p>
+<ol>
+<li>
+<p>Full lineage:</p>
+<pre><code>$ taxonkit lineage --nodes nodes.dmp --names names.dmp  t.taxid
+349741  cellular organisms;cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+834     cellular organisms;cellular organisms;Bacteria;FCB group;Fibrobacteres;Fibrobacteria;Fibrobacterales;Fibrobacteraceae;Fibrobacter;Fibrobacter succinogenes;Fibrobacter succinogenes subsp. succinogenes
+</code></pre>
+</li>
+<li>
+<p>Formated rank:</p>
+<pre><code>$ taxonkit lineage --nodes nodes.dmp --names names.dmp -f t.taxid
+349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+834     k__Bacteria;p__Fibrobacteres;c__Fibrobacteria;o__Fibrobacterales;f__Fibrobacteraceae;g__Fibrobacter;s__Fibrobacter succinogenes;S__Fibrobacter succinogenes subsp. succinogenes
+</code></pre>
 </li>
 </ol>
 <div id="disqus_thread"></div>
