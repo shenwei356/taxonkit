@@ -32,7 +32,7 @@ import (
 var RootCmd = &cobra.Command{
 	Use:   "taxonkit",
 	Short: "NCBI Taxonomy Toolkit",
-	Long: fmt.Sprintf(`TaxonKit - NCBI Taxonomy Toolkit
+	Long: fmt.Sprintf(`TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
 Version: %s
 

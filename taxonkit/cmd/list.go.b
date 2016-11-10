@@ -120,8 +120,9 @@ var listCmd = &cobra.Command{
 		log.Infof("%d nodes parsed", n)
 
 		var level int
-		if jsonFormat {
-			outfh.WriteString("{\n")
+		var appendComma4QueryLevel bool
+		if len(ids) > 1 {
+			appendComma4QueryLevel = true
 		}
 		for i, id := range ids {
 			if _, ok := tree[int32(id)]; !ok {
@@ -130,44 +131,21 @@ var listCmd = &cobra.Command{
 
 			level = 0
 			if jsonFormat {
+				outfh.WriteString("{\n")
 				level = 1
 			}
 
-			outfh.WriteString(strings.Repeat(indent, level))
-
-			if jsonFormat {
-				outfh.WriteString(`"`)
+			appendComma4QueryLevel = false
+			if i < len(ids)-1 {
+				appendComma4QueryLevel = true
 			}
-			outfh.WriteString(fmt.Sprintf("%d", id))
-
-			if printRank {
-				outfh.WriteString(fmt.Sprintf(" [%s]", ranks[int32(id)]))
-			}
-			if printName {
-				outfh.WriteString(fmt.Sprintf(" %s", names[int32(id)]))
-			}
-
-			level = 0
-			if jsonFormat {
-				outfh.WriteString(`": {`)
-				level = 1
-			}
-			outfh.WriteString("\n")
-
 			traverseTree(tree, int32(id), outfh, indent, level+1, names,
-				printName, ranks, printRank, jsonFormat)
+				printName, ranks, printRank,
+				jsonFormat, appendComma4QueryLevel)
 
 			if jsonFormat {
-				outfh.WriteString(fmt.Sprintf("%s}", strings.Repeat(indent, level)))
+				outfh.WriteString("}\n")
 			}
-			if jsonFormat && i < len(ids)-1 {
-				outfh.WriteString(",")
-			}
-			outfh.WriteString("\n")
-		}
-
-		if jsonFormat {
-			outfh.WriteString("}\n")
 		}
 
 		defer outfh.Close()
@@ -189,7 +167,7 @@ func traverseTree(tree map[int32]map[int32]bool, parent int32,
 	outfh *xopen.Writer, indent string, level int,
 	names map[int32]string, printName bool,
 	ranks map[int32]string, printRank bool,
-	jsonFormat bool) {
+	jsonFormat bool, appendComma4QueryLevel bool) {
 	if _, ok := tree[parent]; !ok {
 		return
 	}
@@ -240,11 +218,11 @@ func traverseTree(tree map[int32]map[int32]bool, parent int32,
 		tree[parent][child] = true
 
 		traverseTree(tree, child, outfh, indent, level+1, names, printName,
-			ranks, printRank, jsonFormat)
+			ranks, printRank, jsonFormat, appendComma4QueryLevel)
 
 		if jsonFormat && ok {
 			outfh.WriteString(fmt.Sprintf("%s}", strings.Repeat(indent, level)))
-			if level > 2 && i < len(children)-1 {
+			if (level == 1 && appendComma4QueryLevel) || (level > 1 && i < len(children)-1) {
 				outfh.WriteString(",")
 			}
 			outfh.WriteString("\n")

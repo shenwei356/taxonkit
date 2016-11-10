@@ -14,7 +14,7 @@ Usage
 ```
 TaxonKit - NCBI Taxonomy Toolkit
 
-Version: 0.1
+Version: 0.1.1
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -45,7 +45,7 @@ Use "TaxonKit [command] --help" for more information about a command.
 Usage
 
 ```
-list taxon tree of given taxon IDs.
+list taxon tree of given taxon IDs
 
 Usage:
   taxonkit list [flags]
@@ -53,9 +53,9 @@ Usage:
 Flags:
       --ids string      taxon ID(s), multiple IDs should be seperated by comma (default "1")
       --indent string   indent (default "  ")
+      --json            output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor
       --names string    names.dmp file, when it given taxid will be followed by its scientific name
       --nodes string    nodes.dmp file (default "nodes.dmp")
-      --show-rank       show rank of the node
 
 ```
 
@@ -63,21 +63,54 @@ Examples
 
 1. Default usage
 
-        $ taxonkit list --nodes nodes.dmp --ids 9605
+        $ taxonkit list --nodes nodes.dmp --ids 9605,239934
         9605
           9606
             63221
             741158
           1425170
 
-1. Removing indent. The list could be used to extract sequences from BLAST database with `blastdbcmd`
+        239934
+          239935
+            349741
+          512293
+            512294
+            1131822
+            1262691
+            1263034
+          1131336
+          1574264
+          1574265
+          1638783
+          1679444
+          1755639
+          1896967
 
-        $ taxonkit list --nodes nodes.dmp --ids 9605 --indent ""
+1. Removing indent. The list could be used to extract sequences from BLAST database with `blastdbcmd` (see [tutorial](http://bioinf.shenwei.me/taxonkit/tutorial/))
+
+        $ taxonkit list --nodes nodes.dmp --ids 9605,239934 --indent ""
         9605
         9606
         63221
         741158
         1425170
+
+        239934
+        239935
+        349741
+        512293
+        512294
+        1131822
+        1262691
+        1263034
+        1131336
+        1574264
+        1574265
+        1638783
+        1679444
+        1755639
+        1896967
+
 
     **Performance:** Time and memory usage for whole taxon tree:
 
@@ -90,12 +123,28 @@ Examples
 
 1. Adding names
 
-        $ taxonkit list --nodes nodes.dmp --names names.dmp --ids 9605
+        $ taxonkit list --nodes nodes.dmp --names names.dmp --ids 9605,239934
         9605 [genus] Homo
           9606 [species] Homo sapiens
             63221 [subspecies] Homo sapiens neanderthalensis
             741158 [subspecies] Homo sapiens ssp. Denisova
           1425170 [species] Homo heidelbergensis
+
+        239934 [genus] Akkermansia
+          239935 [species] Akkermansia muciniphila
+            349741 [no rank] Akkermansia muciniphila ATCC BAA-835
+          512293 [no rank] environmental samples
+            512294 [species] uncultured Akkermansia sp.
+            1131822 [species] uncultured Akkermansia sp. SMG25
+            1262691 [species] Akkermansia sp. CAG:344
+            1263034 [species] Akkermansia muciniphila CAG:154
+          1131336 [species] Akkermansia sp. KLE1605
+          1574264 [species] Akkermansia sp. KLE1797
+          1574265 [species] Akkermansia sp. KLE1798
+          1638783 [species] Akkermansia sp. UNK.MGS-1
+          1679444 [species] Akkermansia glycaniphila
+          1755639 [species] Akkermansia sp. MC_55
+          1896967 [species] Akkermansia sp. 54_46
 
     **Performance:** Time and memory usage for whole taxon tree:
 
@@ -106,8 +155,39 @@ Examples
         elapsed time: 9.825s
         peak rss: 648.65 MB
 
+1. Output in JSON format, so you can easily collapse and uncollapse taxonomy tree in modern text editor.
 
+        $ taxonkit list --nodes nodes.dmp --names names.dmp --ids 9605,239934 --json
+        {
+          "9605 [genus] Homo": {
+            "9606 [species] Homo sapiens": {
+              "63221 [subspecies] Homo sapiens neanderthalensis": {},
+              "741158 [subspecies] Homo sapiens ssp. Denisova": {}
+            }
+            "1425170 [species] Homo heidelbergensis": {}
+          },
+          "239934 [genus] Akkermansia": {
+            "239935 [species] Akkermansia muciniphila": {
+              "349741 [no rank] Akkermansia muciniphila ATCC BAA-835": {}
+            }
+            "512293 [no rank] environmental samples": {
+              "512294 [species] uncultured Akkermansia sp.": {},
+              "1131822 [species] uncultured Akkermansia sp. SMG25": {},
+              "1262691 [species] Akkermansia sp. CAG:344": {},
+              "1263034 [species] Akkermansia muciniphila CAG:154": {}
+            }
+            "1131336 [species] Akkermansia sp. KLE1605": {},
+            "1574264 [species] Akkermansia sp. KLE1797": {},
+            "1574265 [species] Akkermansia sp. KLE1798": {},
+            "1638783 [species] Akkermansia sp. UNK.MGS-1": {},
+            "1679444 [species] Akkermansia glycaniphila": {},
+            "1755639 [species] Akkermansia sp. MC_55": {},
+            "1896967 [species] Akkermansia sp. 54_46": {}
+          }
+        }
 
+    Snapshot of taxonomy (taxid 1) in kate:
+    ![taxon.json.png](files/taxon.json.png)
 
 <div id="disqus_thread"></div>
 <script>

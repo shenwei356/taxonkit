@@ -2,7 +2,9 @@ site_name: TaxonKit - NCBI Taxonomy Toolkit
 pages:
 - Home: index.md
 - Download: download.md
-- Usage: usage.md
+- Documents:
+    - Usage: usage.md
+    - Tutorial: tutorial.md
 - Links:
     - Wei Shen's Bioinformatic tools: bioinf.md
 theme: yeti

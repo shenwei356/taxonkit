@@ -31,3 +31,4 @@ benchmark/.Rhistory
 taxonkit/binaries*
 *names.dmp
 *nodes.dmp
+*.json

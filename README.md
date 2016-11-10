@@ -1,7 +1,8 @@
-# TaxonKit - Crossplatform and Efficient NCBI Taxonomy Toolkit
+# TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
 **Documents:** [http://bioinf.shenwei.me/taxonkit](http://bioinf.shenwei.me/taxonkit)
-([**Usage**](http://bioinf.shenwei.me/taxonkit/usage/))
+([**Usage**](http://bioinf.shenwei.me/taxonkit/usage/),
+[**Tutorial**](http://bioinf.shenwei.me/taxonkit/tutorial/))
 
 **Source code:** [https://github.com/shenwei356/taxonkit](https://github.com/shenwei356/taxonkit)
 [![GitHub stars](https://img.shields.io/github/stars/shenwei356/taxonkit.svg?style=social&label=Star&?maxAge=2592000)](https://github.com/shenwei356/taxonkit)
@@ -20,7 +21,7 @@
 
 Go to [Download Page](http://bioinf.shenwei.me/taxonkit/download) for more download options and changelogs.
 
-`taxonkit` is implemented in [Golang](https://golang.org/) programming language,
+`TaxonKit` is implemented in [Go](https://golang.org/) programming language,
  executable binary files **for most popular operating systems** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 

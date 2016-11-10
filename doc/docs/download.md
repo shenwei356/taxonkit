@@ -1,15 +1,17 @@
 # Download
 
-`taxonkit` is implemented in [Golang](https://golang.org/) programming language,
+`TaxonKit` is implemented in [Go](https://golang.org/) programming language,
  executable binary files **for most popular operating system** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 
 ## Current Version
 
-[taxonkit v0.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.1)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1)
+[TaxonKit v0.1.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.1)
 
-- first release
+- add feature of `taxonkit list`, users can choose output in readable JSON
+ format by flag `--json` so the taxonomy tree could be collapse and
+ uncollapse in modern text editor.
 
 Links:
 
@@ -33,7 +35,7 @@ Links:
 
 [Download Page](https://github.com/shenwei356/taxonkit/releases)
 
-`taxonkit` is implemented in [Golang](https://golang.org/) programming language,
+`TaxonKit` is implemented in [Go](https://golang.org/) programming language,
  executable binary files **for most popular operating systems** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 
@@ -61,7 +63,9 @@ For Go developer, just one command:
 
 ## Previous Versions
 
-
+- [TaxonKit v0.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1)
+    - first release
 
 
 <div id="disqus_thread"></div>
