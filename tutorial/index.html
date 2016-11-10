@@ -161,29 +161,57 @@
 <li><a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.gz">prot.accession2taxid.gz</a></li>
 </ul>
 <h3 id="steps">Steps</h3>
-<p>Taking bacteria for example.</p>
+<p>Taking virus for example.</p>
 <ol>
 <li>
-<p>Getting all taxids of bacteria (taxid 2):</p>
-<pre><code>$ taxonkit list --nodes nodes.dmp --ids 2 --indent "" &gt; bacteria.taxid.txt
+<p>Getting all taxids of virus (taxid 10239):</p>
+<pre><code>$ taxonkit list --nodes nodes.dmp --ids 10239 --indent "" &gt; virus.taxid.txt
 </code></pre>
 <p>It takes only 2.5s! Number of taxids:</p>
-<pre><code>$ wc -l bacteria.taxid.txt
-454591 bacteria.taxid.txt
+<pre><code>$ wc -l virus.taxid.txt
+454591 virus.taxid.txt
 </code></pre>
 </li>
 <li>
-<p>Extacting accessions with <a href="http://bioinf.shenwei.me/csvtk/download/">csvtk</a>:</p>
-<pre><code>$ csvtk -t grep -f taxid -P bacteria.taxid.txt prot.accession2taxid.gz | csvtk -t cut -f accession.version &gt; bacteria.taxid.acc.txt
+<p>Extacting accessions or GIs with <a href="http://bioinf.shenwei.me/csvtk/download/">csvtk</a>:</p>
+<ul>
+<li>
+<p>accession</p>
+<pre><code>$ zcat prot.accession2taxid.gz | \
+    csvtk -t grep -f taxid -P virus.taxid.txt | \
+    csvtk -t cut -f accession.version &gt; virus.taxid.acc.txt
 </code></pre>
+</li>
+<li>
+<p>gi</p>
+<pre><code>$ zcat prot.accession2taxid.gz | \
+    csvtk -t grep -f taxid -P virus.taxid.txt | \
+    csvtk -t cut -f gi &gt; virus.taxid.gi.txt
+</code></pre>
+<p>It costs 8 min</p>
+</li>
+</ul>
 </li>
 <li>
 <p>Extracting nr sequences:</p>
+<ul>
+<li>
+<p>accesion</p>
 <pre><code>$ blastdbcmd -db nr -entry all -outfmt "%a\t%T" | \
-    csvtk -t grep -f 2 -P bacteria.taxid.acc.txt | \
+    csvtk -t grep -f 2 -P virus.taxid.acc.txt | \
     csvtk -t cut -f 1 | \
-    blastdbcmd -db nr -entry_batch - -out bacteria.fa
+    blastdbcmd -db nr -entry_batch - -out nr.virus.fa
 </code></pre>
+</li>
+<li>
+<p>gi</p>
+<pre><code>$ blastdbcmd -db nr -entry all -outfmt "%g\t%T" | \
+    csvtk -t grep -f 2 -P virus.taxid.gi.txt | \
+    csvtk -t cut -f 1 | \
+    blastdbcmd -db nr -entry_batch - -out nr.virus.fa
+</code></pre>
+</li>
+</ul>
 </li>
 </ol>
 <div id="disqus_thread"></div>
