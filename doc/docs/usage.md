@@ -189,6 +189,39 @@ Examples
     Snapshot of taxonomy (taxid 1) in kate:
     ![taxon.json.png](files/taxon.json.png)
 
+
+## lineage
+
+Usage
+
+```
+query lineage of given taxon IDs from file
+
+Usage:
+  taxonkit lineage [flags]
+
+Flags:
+  -f, --formated-rank   show formated rank
+      --names string    names.dmp file, when it given taxid will be followed by its scientific name (default "names.dmp")
+      --nodes string    nodes.dmp file (default "nodes.dmp")
+
+```
+
+Examples
+
+1. Full lineage:
+
+        $ taxonkit lineage --nodes nodes.dmp --names names.dmp  t.taxid
+        349741  cellular organisms;cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+        834     cellular organisms;cellular organisms;Bacteria;FCB group;Fibrobacteres;Fibrobacteria;Fibrobacterales;Fibrobacteraceae;Fibrobacter;Fibrobacter succinogenes;Fibrobacter succinogenes subsp. succinogenes
+
+2. Formated rank:
+
+        $ taxonkit lineage --nodes nodes.dmp --names names.dmp -f t.taxid
+        349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+        834     k__Bacteria;p__Fibrobacteres;c__Fibrobacteria;o__Fibrobacterales;f__Fibrobacteraceae;g__Fibrobacter;s__Fibrobacter succinogenes;S__Fibrobacter succinogenes subsp. succinogenes
+
+
 <div id="disqus_thread"></div>
 <script>
 

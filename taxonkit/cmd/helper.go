@@ -33,7 +33,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.1.1"
+const VERSION = "0.1.2"
 
 func checkError(err error) {
 	if err != nil {
@@ -239,4 +239,20 @@ func getTaxonNames(file string, bufferSize int, chunkSize int) map[int32]string 
 		}
 	}
 	return names
+}
+
+// ReverseStringSlice reverses StringSlice
+func ReverseStringSlice(s []string) []string {
+	// make a copy of s
+	l := len(s)
+	t := make([]string, l)
+	for i := 0; i < l; i++ {
+		t[i] = s[i]
+	}
+
+	// reverse
+	for i, j := 0, l-1; i < j; i, j = i+1, j-1 {
+		t[i], t[j] = t[j], t[i]
+	}
+	return t
 }

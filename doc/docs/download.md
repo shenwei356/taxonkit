@@ -6,12 +6,10 @@
 
 ## Current Version
 
-[TaxonKit v0.1.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.1)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.1)
+[TaxonKit v0.1.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.2)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.2)
 
-- add feature of `taxonkit list`, users can choose output in readable JSON
- format by flag `--json` so the taxonomy tree could be collapse and
- uncollapse in modern text editor.
+- add command of `taxonkit lineage`, users can query lineage of given taxon IDs from file
 
 Links:
 
@@ -63,6 +61,11 @@ For Go developer, just one command:
 
 ## Previous Versions
 
+- [TaxonKit v0.1.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.1)
+    - add feature of `taxonkit list`, users can choose output in readable JSON
+ format by flag `--json` so the taxonomy tree could be collapse and
+ uncollapse in modern text editor.
 - [TaxonKit v0.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1)
     - first release

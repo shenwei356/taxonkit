@@ -8,27 +8,49 @@
 
 ### Steps
 
-Taking bacteria for example.
+Taking virus for example.
 
-1. Getting all taxids of bacteria (taxid 2):
+1. Getting all taxids of virus (taxid 10239):
 
-        $ taxonkit list --nodes nodes.dmp --ids 2 --indent "" > bacteria.taxid.txt
+        $ taxonkit list --nodes nodes.dmp --ids 10239 --indent "" > virus.taxid.txt
 
     It takes only 2.5s! Number of taxids:
 
-        $ wc -l bacteria.taxid.txt
-        454591 bacteria.taxid.txt
+        $ wc -l virus.taxid.txt
+        163104 virus.taxid.txt
 
-2. Extacting accessions with [csvtk](http://bioinf.shenwei.me/csvtk/download/):
+2. Extacting accessions or GIs with [csvtk](http://bioinf.shenwei.me/csvtk/download/):
 
-        $ csvtk -t grep -f taxid -P bacteria.taxid.txt prot.accession2taxid.gz | csvtk -t cut -f accession.version > bacteria.taxid.acc.txt
+    - accession
+
+            $ zcat prot.accession2taxid.gz | \
+                csvtk -t grep -f taxid -P virus.taxid.txt | \
+                csvtk -t cut -f accession.version > virus.taxid.acc.txt
+
+    - gi
+
+            $ zcat prot.accession2taxid.gz | \
+                csvtk -t grep -f taxid -P virus.taxid.txt | \
+                csvtk -t cut -f gi > virus.taxid.gi.txt
+
+        It costs 8 min
 
 3. Extracting nr sequences:
 
-        $ blastdbcmd -db nr -entry all -outfmt "%a\t%T" | \
-            csvtk -t grep -f 2 -P bacteria.taxid.acc.txt | \
-            csvtk -t cut -f 1 | \
-            blastdbcmd -db nr -entry_batch - -out bacteria.fa
+    - accesion
+
+            $ blastdbcmd -db nr -entry all -outfmt "%a\t%T" | \
+                csvtk -t grep -f 2 -P virus.taxid.acc.txt | \
+                csvtk -t cut -f 1 | \
+                blastdbcmd -db nr -entry_batch - -out nr.virus.fa
+
+    - gi
+
+            $ blastdbcmd -db nr -entry all -outfmt "%g\t%T" | \
+                csvtk -t grep -f 2 -P virus.taxid.gi.txt | \
+                csvtk -t cut -f 1 | \
+                blastdbcmd -db nr -entry_batch - -out nr.virus.fa
+
 
 <div id="disqus_thread"></div>
 <script>
