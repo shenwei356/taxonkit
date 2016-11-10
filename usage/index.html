@@ -72,8 +72,23 @@
             
             
             
-                <li class="active">
-                    <a href="./">Usage</a>
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        
+<li class="active">
+    <a href="./">Usage</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../tutorial/">Tutorial</a>
+</li>
+
+                    
+                    </ul>
                 </li>
             
             
@@ -107,7 +122,7 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../bioinf/">
+                    <a rel="prev" href="../tutorial/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -208,7 +223,7 @@ Flags:
 </code></pre>
 </li>
 <li>
-<p>Removing indent. The list could be used to extract sequences from BLAST database with <code>blastdbcmd</code></p>
+<p>Removing indent. The list could be used to extract sequences from BLAST database with <code>blastdbcmd</code> (see <a href="http://bioinf.shenwei.me/taxonkit/tutorial/">tutorial</a>)</p>
 <pre><code>$ taxonkit list --nodes nodes.dmp --ids 9605 --indent ""
 9605
 9606

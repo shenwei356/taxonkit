@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Wei Shen's Bioinformatic tools - TaxonKit - NCBI Taxonomy Toolkit</title>
+	<title>Tutorial - TaxonKit - NCBI Taxonomy Toolkit</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -72,7 +72,7 @@
             
             
             
-                <li class="dropdown">
+                <li class="dropdown active">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     
@@ -83,8 +83,8 @@
 
                     
                         
-<li >
-    <a href="../tutorial/">Tutorial</a>
+<li class="active">
+    <a href="./">Tutorial</a>
 </li>
 
                     
@@ -93,13 +93,13 @@
             
             
             
-                <li class="dropdown active">
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Links <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     
                         
-<li class="active">
-    <a href="./">Wei Shen's Bioinformatic tools</a>
+<li >
+    <a href="../bioinf/">Wei Shen's Bioinformatic tools</a>
 </li>
 
                     
@@ -117,12 +117,12 @@
                     </a>
                 </li>
                 <li >
-                    <a rel="next" href="../tutorial/">
+                    <a rel="next" href="../usage/">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
-                <li class="disabled">
-                    <a rel="prev" >
+                <li >
+                    <a rel="prev" href="../bioinf/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -145,11 +145,69 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
+        <li class="main active"><a href="#tutorial">Tutorial</a></li>
+        
+            <li><a href="#extract-all-sequences-of-certen-taxons-from-the-nr-database">Extract all sequences of certen taxons from the nr database</a></li>
+        
+    
     </ul>
 </div></div>
             <div class="col-md-9" role="main">
 
-<p><meta http-equiv="refresh" content="0; url=http://bioinf.shenwei.me" /></p></div>
+<h1 id="tutorial">Tutorial</h1>
+<h2 id="extract-all-sequences-of-certen-taxons-from-the-nr-database">Extract all sequences of certen taxons from the nr database</h2>
+<h3 id="dataset">Dataset</h3>
+<ul>
+<li><a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.gz">prot.accession2taxid.gz</a></li>
+</ul>
+<h3 id="steps">Steps</h3>
+<p>Taking bacteria for example.</p>
+<ol>
+<li>
+<p>Getting all taxids of bacteria (taxid 2):</p>
+<pre><code>$ taxonkit list --nodes nodes.dmp --ids 2 --indent "" &gt; bacteria.taxid.txt
+</code></pre>
+<p>It takes only 2.5s! Number of taxids:</p>
+<pre><code>$ wc -l bacteria.taxid.txt
+454591 bacteria.taxid.txt
+</code></pre>
+</li>
+<li>
+<p>Extacting accessions with <a href="http://bioinf.shenwei.me/csvtk/download/">csvtk</a>:</p>
+<pre><code>$ csvtk -t grep -f taxid -P bacteria.taxid.txt prot.accession2taxid.gz | csvtk -t cut -f accession.version &gt; bacteria.taxid.acc.txt
+</code></pre>
+</li>
+<li>
+<p>Extracting nr sequences:</p>
+<pre><code>$ blastdbcmd -db nr -entry all -outfmt "%a\t%T" | \
+    csvtk -t grep -f 2 -P bacteria.taxid.acc.txt | \
+    csvtk -t cut -f 1 | \
+    blastdbcmd -db nr -entry_batch - -out bacteria.fa
+</code></pre>
+</li>
+</ol>
+<div id="disqus_thread"></div>
+
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//taxonkit.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
         </div>
 
         <footer class="col-md-12">
