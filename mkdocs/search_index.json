@@ -2,7 +2,7 @@
     "docs": [
         {
             "location": "/", 
-            "text": "TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit\n\n\nDocuments:\n \nhttp://bioinf.shenwei.me/taxonkit\n\n(\nUsage\n,\n\nTutorial\n)\n\n\nSource code:\n \nhttps://github.com/shenwei356/taxonkit\n\n\n\n\n\n\nLatest version:\n \n\n\n\n\nSubcommands\n\n\n\n\nlist\n    list taxon tree of given taxon IDs\n\n\n\n\nInstallation\n\n\nGo to \nDownload Page\n for more download options and changelogs.\n\n\nTaxonKit\n is implemented in \nGo\n programming language,\n executable binary files \nfor most popular operating systems\n are freely available\n  in \nrelease\n page.\n\n\nJust \ndownload\n compressed\nexecutable file of your operating system,\nand uncompress it with \ntar -zxvf *.tar.gz\n command or other tools.\nAnd then:\n\n\n\n\n\n\nFor Linux-like systems\n\n\n\n\n\n\nIf you have root privilege simply copy it to \n/usr/local/bin\n:\n\n\nsudo cp taxonkit /usr/local/bin/\n\n\n\n\n\n\n\nOr add the directory of the executable file to environment variable\n\nPATH\n:\n\n\necho export PATH=\\$PATH:/PATH/OF/taxonkit \n ~/.bashrc\n\n\n\n\n\n\n\n\n\n\n\nFor windows\n, just copy \ntaxonkit.exe\n to \nC:\\WINDOWS\\system32\n.\n\n\n\n\n\n\nFor Go developer, just one command:\n\n\ngo get -u github.com/shenwei356/taxonkit/taxonkit\n\n\n\nContact\n\n\nEmail me for any problem when using taxonkit. shenwei356(at)gmail.com\n\n\nCreate an issue\n to report bugs,\npropose new functions or ask for help.\n\n\nLicense\n\n\nMIT License", 
+            "text": "TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit\n\n\nDocuments:\n \nhttp://bioinf.shenwei.me/taxonkit\n\n(\nUsage\n,\n\nTutorial\n)\n\n\nSource code:\n \nhttps://github.com/shenwei356/taxonkit\n\n\n\n\n\n\nLatest version:\n \n\n\n\n\nSubcommands\n\n\n\n\nlist\n    list taxon tree of given taxon IDs\n\n\nlineage\n query full lineages of given taxon IDs\n\n\n\n\nInstallation\n\n\nGo to \nDownload Page\n for more download options and changelogs.\n\n\nTaxonKit\n is implemented in \nGo\n programming language,\n executable binary files \nfor most popular operating systems\n are freely available\n  in \nrelease\n page.\n\n\nJust \ndownload\n compressed\nexecutable file of your operating system,\nand uncompress it with \ntar -zxvf *.tar.gz\n command or other tools.\nAnd then:\n\n\n\n\n\n\nFor Linux-like systems\n\n\n\n\n\n\nIf you have root privilege simply copy it to \n/usr/local/bin\n:\n\n\nsudo cp taxonkit /usr/local/bin/\n\n\n\n\n\n\n\nOr add the directory of the executable file to environment variable\n\nPATH\n:\n\n\necho export PATH=\\$PATH:/PATH/OF/taxonkit \n ~/.bashrc\n\n\n\n\n\n\n\n\n\n\n\nFor windows\n, just copy \ntaxonkit.exe\n to \nC:\\WINDOWS\\system32\n.\n\n\n\n\n\n\nFor Go developer, just one command:\n\n\ngo get -u github.com/shenwei356/taxonkit/taxonkit\n\n\n\nContact\n\n\nEmail me for any problem when using taxonkit. shenwei356(at)gmail.com\n\n\nCreate an issue\n to report bugs,\npropose new functions or ask for help.\n\n\nLicense\n\n\nMIT License", 
             "title": "Home"
         }, 
         {
@@ -12,7 +12,7 @@
         }, 
         {
             "location": "/#subcommands", 
-            "text": "list     list taxon tree of given taxon IDs", 
+            "text": "list     list taxon tree of given taxon IDs  lineage  query full lineages of given taxon IDs", 
             "title": "Subcommands"
         }, 
         {
