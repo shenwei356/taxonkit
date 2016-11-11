@@ -14,8 +14,8 @@
 
 ## Subcommands
 
-- `list`    list taxon tree of given taxon IDs
-- `lineage` query full lineages of given taxon IDs
+- `list`    list taxon tree of given taxids
+- `lineage` query full lineages of given taxids
 
 
 ## Installation
@@ -29,24 +29,7 @@ Go to [Download Page](http://bioinf.shenwei.me/taxonkit/download) for more downl
 Just [download](https://github.com/shenwei356/taxonkit/releases) compressed
 executable file of your operating system,
 and uncompress it with `tar -zxvf *.tar.gz` command or other tools.
-And then:
 
-1. **For Linux-like systems**
-    1. If you have root privilege simply copy it to `/usr/local/bin`:
-
-            sudo cp taxonkit /usr/local/bin/
-
-    1. Or add the directory of the executable file to environment variable
-    `PATH`:
-
-            echo export PATH=\$PATH:/PATH/OF/taxonkit >> ~/.bashrc
-
-
-1. **For windows**, just copy `taxonkit.exe` to `C:\WINDOWS\system32`.
-
-For Go developer, just one command:
-
-    go get -u github.com/shenwei356/taxonkit/taxonkit
 
 ## Contact
 

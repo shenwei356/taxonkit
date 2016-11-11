@@ -34,8 +34,8 @@ import (
 // lineageCmd represents the fx2tab command
 var lineageCmd = &cobra.Command{
 	Use:   "lineage",
-	Short: "query lineage of given taxon IDs from file",
-	Long: `query lineage of given taxon IDs from file
+	Short: "query lineage of given taxids from file",
+	Long: `query lineage of given taxids from file
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -182,6 +182,6 @@ func init() {
 	RootCmd.AddCommand(lineageCmd)
 
 	lineageCmd.Flags().StringP("nodes", "", "nodes.dmp", "nodes.dmp file")
-	lineageCmd.Flags().StringP("names", "", "names.dmp", "names.dmp file, when it given taxid will be followed by its scientific name")
+	lineageCmd.Flags().StringP("names", "", "names.dmp", "names.dmp file")
 	lineageCmd.Flags().BoolP("formated-rank", "f", false, "show formated rank")
 }

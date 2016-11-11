@@ -35,8 +35,8 @@ import (
 // listCmd represents the fx2tab command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "list taxon tree of given taxon IDs",
-	Long: `list taxon tree of given taxon IDs
+	Short: "list taxon tree of given taxids",
+	Long: `list taxon tree of given taxids
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -178,7 +178,7 @@ func init() {
 	RootCmd.AddCommand(listCmd)
 
 	listCmd.Flags().StringP("nodes", "", "nodes.dmp", "nodes.dmp file")
-	listCmd.Flags().StringP("ids", "", "1", "taxon ID(s), multiple IDs should be seperated by comma")
+	listCmd.Flags().StringP("ids", "", "1", "taxid(s), multiple values should be seperated by comma")
 
 	listCmd.Flags().StringP("indent", "", "  ", "indent")
 	listCmd.Flags().StringP("names", "", "", "names.dmp file, when it given taxid will be followed by its scientific name")

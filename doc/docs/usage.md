@@ -30,8 +30,8 @@ Usage:
   taxonkit [command]
 
 Available Commands:
-  lineage     query full lineages of given taxon IDs
-  list        list taxon tree of given taxon IDs
+  lineage     query full lineages of given taxids
+  list        list taxon tree of given taxids
   version     print version information and check for update
 
 Flags:
@@ -45,13 +45,13 @@ Flags:
 Usage
 
 ```
-list taxon tree of given taxon IDs
+list taxon tree of given taxids
 
 Usage:
   taxonkit list [flags]
 
 Flags:
-      --ids string      taxon ID(s), multiple IDs should be seperated by comma (default "1")
+      --ids string      taxid(s), multiple values should be seperated by comma (default "1")
       --indent string   indent (default "  ")
       --json            output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor
       --names string    names.dmp file, when it given taxid will be followed by its scientific name
@@ -195,14 +195,14 @@ Examples
 Usage
 
 ```
-query lineage of given taxon IDs from file
+query lineage of given taxids from file
 
 Usage:
   taxonkit lineage [flags]
 
 Flags:
   -f, --formated-rank   show formated rank
-      --names string    names.dmp file, when it given taxid will be followed by its scientific name (default "names.dmp")
+      --names string    names.dmp file (default "names.dmp")
       --nodes string    nodes.dmp file (default "nodes.dmp")
 
 ```
