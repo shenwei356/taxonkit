@@ -12,13 +12,14 @@ Please download and uncompress these files:
 Usage
 
 ```
-TaxonKit - NCBI Taxonomy Toolkit
+TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.1.1
+Version: 0.1.2
 
 Author: Wei Shen <shenwei356@gmail.com>
 
 Source code: https://github.com/shenwei356/taxonkit
+Documents  : http://bioinf.shenwei.me/taxonkit
 
 Dataset:
 
@@ -26,17 +27,16 @@ Dataset:
     ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
 Usage:
-  TaxonKit [command]
+  taxonkit [command]
 
 Available Commands:
+  lineage     query full lineages of given taxon IDs
   list        list taxon tree of given taxon IDs
   version     print version information and check for update
 
 Flags:
   -o, --out-file string   out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
   -j, --threads int       number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
-
-Use "TaxonKit [command] --help" for more information about a command.
 
 ```
 

@@ -15,6 +15,7 @@
 ## Subcommands
 
 - `list`    list taxon tree of given taxon IDs
+- `lineage` query full lineages of given taxon IDs
 
 
 ## Installation
