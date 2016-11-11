@@ -171,8 +171,8 @@
 <a href="http://bioinf.shenwei.me/taxonkit/download/"><img alt="Github Releases" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/total.svg?maxAge=3600" /></a></p>
 <h2 id="subcommands">Subcommands</h2>
 <ul>
-<li><code>list</code>    list taxon tree of given taxon IDs</li>
-<li><code>lineage</code> query full lineages of given taxon IDs</li>
+<li><code>list</code>    list taxon tree of given taxids</li>
+<li><code>lineage</code> query full lineages of given taxids</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <p>Go to <a href="http://bioinf.shenwei.me/taxonkit/download">Download Page</a> for more download options and changelogs.</p>
@@ -181,32 +181,7 @@
   in <a href="https://github.com/shenwei356/taxonkit/releases">release</a> page.</p>
 <p>Just <a href="https://github.com/shenwei356/taxonkit/releases">download</a> compressed
 executable file of your operating system,
-and uncompress it with <code>tar -zxvf *.tar.gz</code> command or other tools.
-And then:</p>
-<ol>
-<li>
-<p><strong>For Linux-like systems</strong></p>
-<ol>
-<li>
-<p>If you have root privilege simply copy it to <code>/usr/local/bin</code>:</p>
-<pre><code>sudo cp taxonkit /usr/local/bin/
-</code></pre>
-</li>
-<li>
-<p>Or add the directory of the executable file to environment variable
-<code>PATH</code>:</p>
-<pre><code>echo export PATH=\$PATH:/PATH/OF/taxonkit &gt;&gt; ~/.bashrc
-</code></pre>
-</li>
-</ol>
-</li>
-<li>
-<p><strong>For windows</strong>, just copy <code>taxonkit.exe</code> to <code>C:\WINDOWS\system32</code>.</p>
-</li>
-</ol>
-<p>For Go developer, just one command:</p>
-<pre><code>go get -u github.com/shenwei356/taxonkit/taxonkit
-</code></pre>
+and uncompress it with <code>tar -zxvf *.tar.gz</code> command or other tools.</p>
 <h2 id="contact">Contact</h2>
 <p>Email me for any problem when using taxonkit. shenwei356(at)gmail.com</p>
 <p><a href="https://github.com/shenwei356/taxonkit/issues">Create an issue</a> to report bugs,

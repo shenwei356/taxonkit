@@ -186,8 +186,8 @@ Usage:
   taxonkit [command]
 
 Available Commands:
-  lineage     query full lineages of given taxon IDs
-  list        list taxon tree of given taxon IDs
+  lineage     query full lineages of given taxids
+  list        list taxon tree of given taxids
   version     print version information and check for update
 
 Flags:
@@ -198,13 +198,13 @@ Flags:
 
 <h2 id="list">list</h2>
 <p>Usage</p>
-<pre><code>list taxon tree of given taxon IDs
+<pre><code>list taxon tree of given taxids
 
 Usage:
   taxonkit list [flags]
 
 Flags:
-      --ids string      taxon ID(s), multiple IDs should be seperated by comma (default &quot;1&quot;)
+      --ids string      taxid(s), multiple values should be seperated by comma (default &quot;1&quot;)
       --indent string   indent (default &quot;  &quot;)
       --json            output in JSON format. you can save the result in file with suffix &quot;.json&quot; and open with modern text editor
       --names string    names.dmp file, when it given taxid will be followed by its scientific name
@@ -345,14 +345,14 @@ peak rss: 648.65 MB
 </ol>
 <h2 id="lineage">lineage</h2>
 <p>Usage</p>
-<pre><code>query lineage of given taxon IDs from file
+<pre><code>query lineage of given taxids from file
 
 Usage:
   taxonkit lineage [flags]
 
 Flags:
   -f, --formated-rank   show formated rank
-      --names string    names.dmp file, when it given taxid will be followed by its scientific name (default &quot;names.dmp&quot;)
+      --names string    names.dmp file (default &quot;names.dmp&quot;)
       --nodes string    nodes.dmp file (default &quot;nodes.dmp&quot;)
 
 </code></pre>
