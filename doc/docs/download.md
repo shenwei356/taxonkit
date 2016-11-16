@@ -9,7 +9,7 @@
 [TaxonKit v0.1.3](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.3)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.3/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.3)
 
-- add command of `taxonkit reformat` which reformat full lineage to custom format
+- add command of `taxonkit reformat` which reformats full lineage to custom format
 
 
 Links:

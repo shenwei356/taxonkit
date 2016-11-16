@@ -54,7 +54,7 @@ Usage:
   taxonkit list [flags]
 
 Flags:
-      --ids string      taxid(s), multiple values should be seperated by comma (default "1")
+      --ids string      taxid(s), multiple values should be separated by comma (default "1")
       --indent string   indent (default "  ")
       --json            output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor
       --names string    names.dmp file, when it given taxid will be followed by its scientific name
