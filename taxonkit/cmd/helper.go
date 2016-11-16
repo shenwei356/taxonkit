@@ -33,7 +33,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.1.2"
+const VERSION = "0.1.3"
 
 func checkError(err error) {
 	if err != nil {
@@ -255,4 +255,66 @@ func ReverseStringSlice(s []string) []string {
 		t[i], t[j] = t[j], t[i]
 	}
 	return t
+}
+
+type taxonInfo struct {
+	child, parent int32
+	rank          string
+}
+
+var taxonParseFunc = func(line string) (interface{}, bool, error) {
+	items := strings.SplitN(line, "\t", 6)
+	if len(items) < 6 {
+		return nil, false, nil
+	}
+	child, e := strconv.Atoi(items[0])
+	if e != nil {
+		return nil, false, e
+	}
+	parent, e := strconv.Atoi(items[2])
+	if e != nil {
+		return nil, false, e
+	}
+	return taxonInfo{int32(child), int32(parent), items[4]}, true, nil
+}
+
+var rank2symbol = map[string]string{
+	"superkingdom": "k",
+	"phylum":       "p",
+	"class":        "c",
+	"order":        "o",
+	"family":       "f",
+	"genus":        "g",
+	"species":      "s",
+	"subspecies":   "S",
+}
+
+var symbol2rank = map[string]string{
+	"k": "superkingdom",
+	"p": "phylum",
+	"c": "class",
+	"o": "order",
+	"f": "family",
+	"g": "genus",
+	"s": "species",
+	"S": "subspecies",
+}
+
+var reRankPlaceHolder = regexp.MustCompile(`\{[^\}]\}`)
+
+var reRankPlaceHolders = map[string]*regexp.Regexp{
+	"k": regexp.MustCompile(`\{k\}`),
+	"p": regexp.MustCompile(`\{p\}`),
+	"c": regexp.MustCompile(`\{c\}`),
+	"o": regexp.MustCompile(`\{o\}`),
+	"f": regexp.MustCompile(`\{f\}`),
+	"g": regexp.MustCompile(`\{g\}`),
+	"s": regexp.MustCompile(`\{s\}`),
+	"S": regexp.MustCompile(`\{S\}`),
+}
+
+const norank = "no rank"
+
+func isStdin(file string) bool {
+	return file == "-"
 }

@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"runtime"
 	"sort"
-	"strconv"
 	"strings"
 
 	"github.com/shenwei356/breader"
@@ -70,32 +69,12 @@ var listCmd = &cobra.Command{
 
 		log.Infof("parsing nodes file: %s", nodesFile)
 
-		type info struct {
-			child, parent int32
-			rank          string
-		}
-		fn := func(line string) (interface{}, bool, error) {
-			items := strings.SplitN(line, "\t", 6)
-			if len(items) < 6 {
-				return nil, false, nil
-			}
-			child, e := strconv.Atoi(items[0])
-			if e != nil {
-				return nil, false, e
-			}
-			parent, e := strconv.Atoi(items[2])
-			if e != nil {
-				return nil, false, e
-			}
-			return info{int32(child), int32(parent), items[4]}, true, nil
-		}
-
-		reader, err := breader.NewBufferedReader(nodesFile, config.Threads, 10, fn)
+		reader, err := breader.NewBufferedReader(nodesFile, config.Threads, 10, taxonParseFunc)
 		checkError(err)
 
 		tree := make(map[int32]map[int32]bool)
 		ranks := make(map[int32]string)
-		var rel info
+		var info taxonInfo
 		var child, parent int32
 		var ok bool
 		var n int64
@@ -103,15 +82,15 @@ var listCmd = &cobra.Command{
 			checkError(chunk.Err)
 
 			for _, data := range chunk.Data {
-				rel = data.(info)
-				child, parent = rel.child, rel.parent
+				info = data.(taxonInfo)
+				child, parent = info.child, info.parent
 
 				if _, ok = tree[parent]; !ok {
 					tree[parent] = make(map[int32]bool)
 				}
 				tree[parent][child] = false
 				if printRank {
-					ranks[child] = rel.rank
+					ranks[child] = info.rank
 				}
 				n++
 			}

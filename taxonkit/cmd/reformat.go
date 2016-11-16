@@ -23,7 +23,6 @@ package cmd
 import (
 	"fmt"
 	"runtime"
-	"strconv"
 	"strings"
 
 	"github.com/shenwei356/breader"
@@ -31,11 +30,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// lineageCmd represents the fx2tab command
-var lineageCmd = &cobra.Command{
-	Use:   "lineage",
-	Short: "query lineage of given taxids from file",
-	Long: `query lineage of given taxids from file
+// flineageCmd represents the fx2tab command
+var flineageCmd = &cobra.Command{
+	Use:   "reformat",
+	Short: "reformat lineage",
+	Long: `reformat lineage
+
+Output format can be formated by flag --format, available placeholders:
+
+    {k}: superkingdom
+    {p}: phylum
+    {c}: class
+    {o}: order
+    {f}: family
+    {g}: genus
+    {s}: species
+    {S}: subspecies
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -44,7 +54,13 @@ var lineageCmd = &cobra.Command{
 
 		nodesFile := getFlagString(cmd, "nodes")
 		namesFile := getFlagString(cmd, "names")
-		formatedRank := getFlagBool(cmd, "formated-rank")
+		format := getFlagString(cmd, "format")
+		delimiter := getFlagString(cmd, "delimiter")
+		blank := getFlagString(cmd, "blank")
+
+		if !reRankPlaceHolder.MatchString(format) {
+			checkError(fmt.Errorf("placeholder of simplified rank not found in output format: %s", format))
+		}
 
 		files := getFileList(args)
 
@@ -66,29 +82,24 @@ var lineageCmd = &cobra.Command{
 		reader, err := breader.NewBufferedReader(nodesFile, config.Threads, 10, taxonParseFunc)
 		checkError(err)
 
-		tree := make(map[int32]int32)
-		ranks := make(map[int32]string)
+		name2rank := make(map[string]string)
 		var info taxonInfo
-		var child, parent int32
 		var n int64
 		for chunk := range reader.Ch {
 			checkError(chunk.Err)
 
 			for _, data := range chunk.Data {
 				info = data.(taxonInfo)
-				child, parent = info.child, info.parent
-
-				tree[child] = parent
-				ranks[child] = info.rank
+				name2rank[names[info.child]] = info.rank
 				n++
 			}
 		}
 
 		log.Infof("%d nodes parsed", n)
 
-		type taxid2lineage struct {
-			taxid   int32
-			lineage string
+		type lineage2flineage struct {
+			lineage  string
+			flineage string
 		}
 
 		fn := func(line string) (interface{}, bool, error) {
@@ -96,55 +107,44 @@ var lineageCmd = &cobra.Command{
 			if line == "" {
 				return nil, false, nil
 			}
-			id, e := strconv.Atoi(line)
-			if e != nil {
-				return nil, false, e
+
+			var rank, srank, name string
+			var ok bool
+			srank2name := make(map[string]string)
+			for _, name := range strings.Split(line, delimiter) {
+				if name == "" {
+					continue
+				}
+				if rank, ok = name2rank[name]; ok && rank != norank {
+					if srank, ok = rank2symbol[rank]; ok {
+						srank2name[srank] = name
+					}
+				}
 			}
 
-			lineage := []string{}
-			var l string
-			var child, parent int32
-			var ok bool
-			child = int32(id)
-			for true {
-				parent, ok = tree[child]
-				if !ok {
-					break
+			flineage := format
+			for srank, re := range reRankPlaceHolders {
+				if name, ok = srank2name[srank]; ok {
+					flineage = re.ReplaceAllString(flineage, name)
+				} else {
+					flineage = re.ReplaceAllString(flineage, blank)
 				}
-				if !formatedRank || ranks[child] != norank {
-					l = names[child]
-					if formatedRank {
-						l = rank2symbol[ranks[child]] + "__" + l
-					}
-					lineage = append(lineage, l)
-				}
-				if parent == 1 && child != 1 {
-					if !formatedRank || ranks[parent] != norank {
-						l = names[child]
-						if formatedRank {
-							l = rank2symbol[ranks[parent]] + "__" + l
-						}
-						lineage = append(lineage, l)
-					}
-					break
-				}
-				child = parent
 			}
-			child = int32(id)
-			return taxid2lineage{child, strings.Join(ReverseStringSlice(lineage), ";")}, true, nil
+
+			return lineage2flineage{line, flineage}, true, nil
 		}
 
 		for _, file := range files {
 			reader, err := breader.NewBufferedReader(file, config.Threads, 10, fn)
 			checkError(err)
 
-			var t2l taxid2lineage
+			var l2s lineage2flineage
 			for chunk := range reader.Ch {
 				checkError(chunk.Err)
 
 				for _, data := range chunk.Data {
-					t2l = data.(taxid2lineage)
-					outfh.WriteString(fmt.Sprintf("%d\t%s\n", t2l.taxid, t2l.lineage))
+					l2s = data.(lineage2flineage)
+					outfh.WriteString(fmt.Sprintf("%s\t%s\n", l2s.lineage, l2s.flineage))
 				}
 			}
 		}
@@ -154,9 +154,11 @@ var lineageCmd = &cobra.Command{
 }
 
 func init() {
-	RootCmd.AddCommand(lineageCmd)
+	RootCmd.AddCommand(flineageCmd)
 
-	lineageCmd.Flags().StringP("nodes", "", "nodes.dmp", "nodes.dmp file")
-	lineageCmd.Flags().StringP("names", "", "names.dmp", "names.dmp file")
-	lineageCmd.Flags().BoolP("formated-rank", "f", false, "show formated rank")
+	flineageCmd.Flags().StringP("nodes", "", "nodes.dmp", "nodes.dmp file")
+	flineageCmd.Flags().StringP("names", "", "names.dmp", "names.dmp file")
+	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholder of is need")
+	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
+	flineageCmd.Flags().StringP("blank", "b", "__", "blank string for missing level")
 }

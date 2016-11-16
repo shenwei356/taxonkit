@@ -14,7 +14,7 @@ Usage
 ```
 TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.1.2
+Version: 0.1.3
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -30,13 +30,16 @@ Usage:
   taxonkit [command]
 
 Available Commands:
-  lineage     query full lineages of given taxids
+  lineage     query lineage of given taxids from file
   list        list taxon tree of given taxids
+  reformat    reformat lineage
   version     print version information and check for update
 
 Flags:
   -o, --out-file string   out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
   -j, --threads int       number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
+
+Use "taxonkit [command] --help" for more information about a command.
 
 ```
 
@@ -220,6 +223,62 @@ Examples
         $ taxonkit lineage --nodes nodes.dmp --names names.dmp -f t.taxid
         349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
         834     k__Bacteria;p__Fibrobacteres;c__Fibrobacteria;o__Fibrobacterales;f__Fibrobacteraceae;g__Fibrobacter;s__Fibrobacter succinogenes;S__Fibrobacter succinogenes subsp. succinogenes
+
+## reformat
+
+Usage
+
+```
+reformat lineage
+
+Output format can be formated by flag --format, available placeholders:
+
+    {k}: superkingdom
+    {p}: phylum
+    {c}: class
+    {o}: order
+    {f}: family
+    {g}: genus
+    {s}: species
+    {S}: subspecies
+
+Usage:
+  taxonkit reformat [flags]
+
+Flags:
+  -b, --blank string       blank string for missing level (default "__")
+  -d, --delimiter string   field delimiter in input lineage (default ";")
+  -f, --format string      output format, placeholder of is need (default "{k};{p};{c};{o};{f};{g};{s}")
+      --names string       names.dmp file (default "names.dmp")
+      --nodes string       nodes.dmp file (default "nodes.dmp")
+
+```
+
+Examples:
+
+Example lineage list:
+
+    $ cat lineage.txt
+    root;cellular organisms;Bacteria;environmental samples <Bacteria>;uncultured murine large bowel bacterium BAC 54B;
+    root;cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;
+    root;Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y;
+    root;Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle;
+
+1. Default output format ("{k};{p};{c};{o};{f};{g};{s}")
+
+        $ taxonkit reformat lineage.txt | cut -f 2
+        Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
+        Viruses;__;__;__;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+
+2. Extracting species
+
+        $ taxonkit reformat lineage.txt -f "{s}" | cut -f 2
+        uncultured murine large bowel bacterium BAC 54B
+        Akkermansia muciniphila
+        Croceibacter phage P2559Y
+        Mouse Intracisternal A-particle
 
 
 <div id="disqus_thread"></div>
