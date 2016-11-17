@@ -398,8 +398,9 @@ Usage:
   taxonkit reformat [flags]
 
 Flags:
-  -b, --blank string       blank string for missing level (default &quot;__&quot;)
+      --blank string       blank string for missing rank, if given &quot;&quot;, &quot;unclassified xxx&quot; will used
   -d, --delimiter string   field delimiter in input lineage (default &quot;;&quot;)
+      --fill               estimate and fill missing rank with original lineage information (recommended)
   -f, --format string      output format, placeholder of is need (default &quot;{k};{p};{c};{o};{f};{g};{s}&quot;)
       --names string       names.dmp file (default &quot;names.dmp&quot;)
       --nodes string       nodes.dmp file (default &quot;nodes.dmp&quot;)
@@ -418,6 +419,15 @@ root;Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;I
 <li>
 <p>Default output format ("{k};{p};{c};{o};{f};{g};{s}")</p>
 <pre><code>$ taxonkit reformat lineage.txt | cut -f 2
+Bacteria;unclassified phylum;unclassified class;unclassified order;unclassified family;unclassified genus;uncultured murine large bowel bacterium BAC 54B
+Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+Viruses;unclassified phylum;unclassified class;Caudovirales;Siphoviridae;unclassified genus;Croceibacter phage P2559Y
+Viruses;unclassified phylum;unclassified class;unclassified order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+</code></pre>
+</li>
+<li>
+<p>Use custom strings for unclassfied ranks</p>
+<pre><code>$ ./taxonkit reformat lineage.txt  --blank "__" | cut -f 2
 Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
 Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
@@ -425,12 +435,12 @@ Viruses;__;__;__;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-
 </code></pre>
 </li>
 <li>
-<p>Extracting species</p>
-<pre><code>$ taxonkit reformat lineage.txt -f "{s}" | cut -f 2
-uncultured murine large bowel bacterium BAC 54B
-Akkermansia muciniphila
-Croceibacter phage P2559Y
-Mouse Intracisternal A-particle
+<p>Estimate and fill missing rank with original lineage information (<strong>recommended</strong>)</p>
+<pre><code>$ ./taxonkit reformat lineage.txt --fill | cut -f 2                               
+Bacteria;environmental samples &lt;Bacteria&gt;;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
+Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+Viruses;Retro-transcribing viruses;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
 </code></pre>
 </li>
 </ol>
