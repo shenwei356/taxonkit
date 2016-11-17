@@ -33,7 +33,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.1.3"
+const VERSION = "0.1.4"
 
 func checkError(err error) {
 	if err != nil {
@@ -299,8 +299,18 @@ var symbol2rank = map[string]string{
 	"s": "species",
 	"S": "subspecies",
 }
+var symbol2weight = map[string]float32{
+	"k": 1,
+	"p": 2,
+	"c": 3,
+	"o": 4,
+	"f": 5,
+	"g": 6,
+	"s": 7,
+	"S": 8,
+}
 
-var reRankPlaceHolder = regexp.MustCompile(`\{[^\}]\}`)
+var reRankPlaceHolder = regexp.MustCompile(`\{(\w)\}`)
 
 var reRankPlaceHolders = map[string]*regexp.Regexp{
 	"k": regexp.MustCompile(`\{k\}`),

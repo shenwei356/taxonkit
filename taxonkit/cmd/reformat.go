@@ -57,9 +57,30 @@ Output format can be formated by flag --format, available placeholders:
 		format := getFlagString(cmd, "format")
 		delimiter := getFlagString(cmd, "delimiter")
 		blank := getFlagString(cmd, "blank")
+		fill := getFlagBool(cmd, "fill")
 
+		// check format
 		if !reRankPlaceHolder.MatchString(format) {
 			checkError(fmt.Errorf("placeholder of simplified rank not found in output format: %s", format))
+		}
+		matches := reRankPlaceHolder.FindAllStringSubmatch(format, -1)
+		outSranks := make(map[string]struct{})
+		outSranksList := []string{}
+		var currentWeight float32
+		var currentSymbol string
+		for _, match := range matches {
+			if weight, ok := symbol2weight[match[1]]; !ok {
+				checkError(fmt.Errorf("invalid placeholder: %s", match[0]))
+			} else {
+				if weight < currentWeight {
+					checkError(fmt.Errorf(`invalid placeholder order: {%s} {%s}. "%s" should be behind of "%s"`,
+						currentSymbol, match[1], symbol2rank[currentSymbol], symbol2rank[match[1]]))
+				}
+				outSranks[match[1]] = struct{}{}
+				outSranksList = append(outSranksList, match[1])
+				currentWeight = weight
+				currentSymbol = match[1]
+			}
 		}
 
 		files := getFileList(args)
@@ -108,27 +129,113 @@ Output format can be formated by flag --format, available placeholders:
 				return nil, false, nil
 			}
 
-			var rank, srank, name string
+			// names and weights
+			names2 := strings.Split(line, delimiter)
+			weights := make([]float32, len(names2))
+			var rank, srank string
 			var ok bool
 			srank2name := make(map[string]string)
-			for _, name := range strings.Split(line, delimiter) {
+			var currentWeight float32
+			for i, name := range names2 {
 				if name == "" {
 					continue
 				}
-				if rank, ok = name2rank[name]; ok && rank != norank {
+				rank, ok = name2rank[name]
+				if !ok { // unofficial name
+					currentWeight += 0.1
+					weights[i] = currentWeight
+					continue
+				}
+				if rank != norank {
 					if srank, ok = rank2symbol[rank]; ok {
 						srank2name[srank] = name
+						weights[i] = symbol2weight[srank]
+						currentWeight = weights[i]
+					} else {
+						log.Warningf("please contact author to add this rank to code: %s", rank)
+					}
+				} else {
+					currentWeight += 0.1
+					weights[i] = currentWeight
+				}
+			}
+
+			// preprare replacements.
+			// find the orphan names and missing ranks
+			replacements := make(map[string]string, len(matches))
+			// for _, match := range matches {
+			// 	if blank == "" {
+			// 		replacements[match[1]] = "unclassified " + symbol2rank[match[1]]
+			// 	} else {
+			// 		replacements[match[1]] = blank
+			// 	}
+			// }
+
+			orphans := make(map[string]float32)
+			orphansList := []string{}
+			existedSranks := make(map[string]struct{})
+			for i, name := range names2 {
+				if name == "" {
+					continue
+				}
+				if name2rank[name] == norank {
+					orphans[name] = weights[i]
+					orphansList = append(orphansList, name)
+				} else {
+					if _, ok = outSranks[rank2symbol[name2rank[name]]]; ok { // to be outputed
+						replacements[rank2symbol[name2rank[name]]] = name
+						existedSranks[rank2symbol[name2rank[name]]] = struct{}{}
+					} else if name2rank[name] == "" {
+						orphans[name] = weights[i]
+						orphansList = append(orphansList, name)
+					}
+				}
+			}
+
+			if fill {
+				jj := -1
+				var hit bool
+				var lastRank string
+				for i, srank := range outSranksList {
+					if _, ok = existedSranks[srank]; ok {
+						lastRank = replacements[srank]
+						continue
+					}
+					hit = false
+					for j, name := range orphansList {
+						if j <= jj {
+							continue
+						}
+						if i == 0 {
+							if orphans[name] < symbol2weight[outSranksList[i]] {
+								hit = true
+							}
+						} else if i == len(outSranksList)-1 {
+
+						} else if orphans[name] > symbol2weight[outSranksList[i-1]] &&
+							orphans[name] < symbol2weight[outSranksList[i+1]] {
+							hit = true
+						}
+
+						if hit {
+							replacements[srank] = name
+							jj = j
+							break
+						}
+					}
+					if !hit {
+						if blank == "" {
+							replacements[srank] = fmt.Sprintf("unclassified %s %s", lastRank, symbol2rank[srank])
+						} else {
+							replacements[srank] = blank
+						}
 					}
 				}
 			}
 
 			flineage := format
 			for srank, re := range reRankPlaceHolders {
-				if name, ok = srank2name[srank]; ok {
-					flineage = re.ReplaceAllString(flineage, name)
-				} else {
-					flineage = re.ReplaceAllString(flineage, blank)
-				}
+				flineage = re.ReplaceAllString(flineage, replacements[srank])
 			}
 
 			return lineage2flineage{line, flineage}, true, nil
@@ -160,5 +267,6 @@ func init() {
 	flineageCmd.Flags().StringP("names", "", "names.dmp", "names.dmp file")
 	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholder of is need")
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
-	flineageCmd.Flags().StringP("blank", "b", "__", "blank string for missing level")
+	flineageCmd.Flags().StringP("blank", "", "", `blank string for missing rank, if given "", "unclassified xxx" will used`)
+	flineageCmd.Flags().BoolP("fill", "", false, "estimate and fill missing rank with original lineage information (recommended)")
 }

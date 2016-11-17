@@ -246,8 +246,9 @@ Usage:
   taxonkit reformat [flags]
 
 Flags:
-  -b, --blank string       blank string for missing level (default "__")
+      --blank string       blank string for missing rank, if given "", "unclassified xxx" will used
   -d, --delimiter string   field delimiter in input lineage (default ";")
+      --fill               estimate and fill missing rank with original lineage information (recommended)
   -f, --format string      output format, placeholder of is need (default "{k};{p};{c};{o};{f};{g};{s}")
       --names string       names.dmp file (default "names.dmp")
       --nodes string       nodes.dmp file (default "nodes.dmp")
@@ -267,19 +268,27 @@ Example lineage list:
 1. Default output format ("{k};{p};{c};{o};{f};{g};{s}")
 
         $ taxonkit reformat lineage.txt | cut -f 2
+        Bacteria;unclassified phylum;unclassified class;unclassified order;unclassified family;unclassified genus;uncultured murine large bowel bacterium BAC 54B
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Viruses;unclassified phylum;unclassified class;Caudovirales;Siphoviridae;unclassified genus;Croceibacter phage P2559Y
+        Viruses;unclassified phylum;unclassified class;unclassified order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+
+1. Use custom strings for unclassfied ranks
+
+        $ ./taxonkit reformat lineage.txt  --blank "__" | cut -f 2
         Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
         Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
         Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
         Viruses;__;__;__;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
 
-2. Extracting species
 
-        $ taxonkit reformat lineage.txt -f "{s}" | cut -f 2
-        uncultured murine large bowel bacterium BAC 54B
-        Akkermansia muciniphila
-        Croceibacter phage P2559Y
-        Mouse Intracisternal A-particle
+1. Estimate and fill missing rank with original lineage information (**recommended**)
 
+        $ ./taxonkit reformat lineage.txt --fill | cut -f 2                               
+        Bacteria;environmental samples <Bacteria>;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+        Viruses;Retro-transcribing viruses;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
 
 <div id="disqus_thread"></div>
 <script>
