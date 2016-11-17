@@ -265,8 +265,8 @@ func init() {
 
 	flineageCmd.Flags().StringP("nodes", "", "nodes.dmp", "nodes.dmp file")
 	flineageCmd.Flags().StringP("names", "", "names.dmp", "names.dmp file")
-	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholder of is need")
+	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholders of rank are needed")
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
-	flineageCmd.Flags().StringP("blank", "", "", `blank string for missing rank, if given "", "unclassified xxx" will used`)
+	flineageCmd.Flags().StringP("blank", "", "", `blank string for missing rank, if given "", "unclassified xxx xxx" will used`)
 	flineageCmd.Flags().BoolP("fill", "", false, "estimate and fill missing rank with original lineage information (recommended)")
 }

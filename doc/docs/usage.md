@@ -246,10 +246,10 @@ Usage:
   taxonkit reformat [flags]
 
 Flags:
-      --blank string       blank string for missing rank, if given "", "unclassified xxx" will used
+      --blank string       blank string for missing rank, if given "", "unclassified xxx xxx" will used
   -d, --delimiter string   field delimiter in input lineage (default ";")
       --fill               estimate and fill missing rank with original lineage information (recommended)
-  -f, --format string      output format, placeholder of is need (default "{k};{p};{c};{o};{f};{g};{s}")
+  -f, --format string      output format, placeholders of rank are needed (default "{k};{p};{c};{o};{f};{g};{s}")
       --names string       names.dmp file (default "names.dmp")
       --nodes string       nodes.dmp file (default "nodes.dmp")
 
