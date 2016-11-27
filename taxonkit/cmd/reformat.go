@@ -52,12 +52,10 @@ Output format can be formated by flag --format, available placeholders:
 		config := getConfigs(cmd)
 		runtime.GOMAXPROCS(config.Threads)
 
-		nodesFile := getFlagString(cmd, "nodes")
-		namesFile := getFlagString(cmd, "names")
 		format := getFlagString(cmd, "format")
 		delimiter := getFlagString(cmd, "delimiter")
-		blank := getFlagString(cmd, "blank")
-		fill := getFlagBool(cmd, "fill")
+		blank := getFlagString(cmd, "miss-rank-repl")
+		fill := getFlagBool(cmd, "fill-miss-rank")
 
 		// check format
 		if !reRankPlaceHolder.MatchString(format) {
@@ -94,13 +92,13 @@ Output format can be formated by flag --format, available placeholders:
 
 		var names map[int32]string
 
-		log.Infof("parsing names file: %s", namesFile)
-		names = getTaxonNames(namesFile, config.Threads, 10)
+		log.Infof("parsing names file: %s", config.NamesFile)
+		names = getTaxonNames(config.NamesFile, config.Threads, 10)
 		log.Infof("%d names parsed", len(names))
 
-		log.Infof("parsing nodes file: %s", nodesFile)
+		log.Infof("parsing nodes file: %s", config.NodesFile)
 
-		reader, err := breader.NewBufferedReader(nodesFile, config.Threads, 10, taxonParseFunc)
+		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
 		checkError(err)
 
 		name2rank := make(map[string]string)
@@ -163,13 +161,11 @@ Output format can be formated by flag --format, available placeholders:
 			// preprare replacements.
 			// find the orphan names and missing ranks
 			replacements := make(map[string]string, len(matches))
-			// for _, match := range matches {
-			// 	if blank == "" {
-			// 		replacements[match[1]] = "unclassified " + symbol2rank[match[1]]
-			// 	} else {
-			// 		replacements[match[1]] = blank
-			// 	}
-			// }
+			if !fill {
+				for _, match := range matches {
+					replacements[match[1]] = blank
+				}
+			}
 
 			orphans := make(map[string]float32)
 			orphansList := []string{}
@@ -182,7 +178,7 @@ Output format can be formated by flag --format, available placeholders:
 					orphans[name] = weights[i]
 					orphansList = append(orphansList, name)
 				} else {
-					if _, ok = outSranks[rank2symbol[name2rank[name]]]; ok { // to be outputed
+					if _, ok = outSranks[rank2symbol[name2rank[name]]]; ok { // to be outputted
 						replacements[rank2symbol[name2rank[name]]] = name
 						existedSranks[rank2symbol[name2rank[name]]] = struct{}{}
 					} else if name2rank[name] == "" {
@@ -263,10 +259,8 @@ Output format can be formated by flag --format, available placeholders:
 func init() {
 	RootCmd.AddCommand(flineageCmd)
 
-	flineageCmd.Flags().StringP("nodes", "", "nodes.dmp", "nodes.dmp file")
-	flineageCmd.Flags().StringP("names", "", "names.dmp", "names.dmp file")
 	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholders of rank are needed")
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
-	flineageCmd.Flags().StringP("blank", "", "", `blank string for missing rank, if given "", "unclassified xxx xxx" will used`)
-	flineageCmd.Flags().BoolP("fill", "", false, "estimate and fill missing rank with original lineage information (recommended)")
+	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank, if given "", "unclassified xxx xxx" will used`)
+	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "estimate and fill missing rank with original lineage information (recommended)")
 }

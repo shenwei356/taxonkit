@@ -16,7 +16,7 @@
 ## Subcommands
 
 - `list`    list taxon tree of given taxids
-- `lineage` query full lineages of given taxids
+- `lineage` query lineage of given taxids from file/stdin
 - `reformat` reformat lineage
 
 

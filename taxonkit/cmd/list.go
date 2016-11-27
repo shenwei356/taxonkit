@@ -43,8 +43,6 @@ var listCmd = &cobra.Command{
 		runtime.GOMAXPROCS(config.Threads)
 
 		ids := getFlagTaxonIDs(cmd, "ids")
-		nodesFile := getFlagString(cmd, "nodes")
-		namesFile := getFlagString(cmd, "names")
 		indent := getFlagString(cmd, "indent")
 		jsonFormat := getFlagBool(cmd, "json")
 
@@ -57,19 +55,18 @@ var listCmd = &cobra.Command{
 		checkError(err)
 
 		var names map[int32]string
-		var printName bool
-		var printRank bool
-		if namesFile != "" {
-			printName = true
-			printRank = true
-			log.Infof("parsing names file: %s", namesFile)
-			names = getTaxonNames(namesFile, config.Threads, 10)
+		printName := getFlagBool(cmd, "show-name")
+		printRank := getFlagBool(cmd, "show-rank")
+
+		if printName {
+			log.Infof("parsing names file: %s", config.NamesFile)
+			names = getTaxonNames(config.NamesFile, config.Threads, 10)
 			log.Infof("%d names parsed", len(names))
 		}
 
-		log.Infof("parsing nodes file: %s", nodesFile)
+		log.Infof("parsing nodes file: %s", config.NodesFile)
 
-		reader, err := breader.NewBufferedReader(nodesFile, config.Threads, 10, taxonParseFunc)
+		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
 		checkError(err)
 
 		tree := make(map[int32]map[int32]bool)
@@ -156,11 +153,10 @@ var listCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(listCmd)
 
-	listCmd.Flags().StringP("nodes", "", "nodes.dmp", "nodes.dmp file")
 	listCmd.Flags().StringP("ids", "", "1", "taxid(s), multiple values should be separated by comma")
-
 	listCmd.Flags().StringP("indent", "", "  ", "indent")
-	listCmd.Flags().StringP("names", "", "", "names.dmp file, when it given taxid will be followed by its scientific name")
+	listCmd.Flags().BoolP("show-rank", "", false, `output rank`)
+	listCmd.Flags().BoolP("show-name", "", false, `output scientific name`)
 	listCmd.Flags().BoolP("json", "", false, `output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor`)
 }
 

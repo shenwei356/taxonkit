@@ -12,9 +12,9 @@ Taking virus for example.
 
 1. Getting all taxids of virus (taxid 10239):
 
-        $ taxonkit list --nodes nodes.dmp --ids 10239 --indent "" > virus.taxid.txt
+        $ taxonkit list --ids 10239 --indent "" > virus.taxid.txt
 
-    It takes only 2.5s! Number of taxids:
+    It takes only 2.5 seconds! Number of taxids:
 
         $ wc -l virus.taxid.txt
         163104 virus.taxid.txt
@@ -33,7 +33,7 @@ Taking virus for example.
                 csvtk -t grep -f taxid -P virus.taxid.txt | \
                 csvtk -t cut -f gi > virus.taxid.gi.txt
 
-        It costs 8 min
+        It costs ~ 8 minutes.
 
 3. Extracting nr sequences:
 

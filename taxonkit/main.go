@@ -21,23 +21,10 @@
 package main
 
 import (
-	"os"
 	// "runtime/pprof"
 
-	"github.com/op/go-logging"
 	"github.com/shenwei356/taxonkit/taxonkit/cmd"
 )
-
-var logFormat = logging.MustStringFormatter(
-	// `%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{id:03x}%{color:reset} %{message}`,
-	`%{color}[%{level:.4s}]%{color:reset} %{message}`,
-)
-
-func init() {
-	backend := logging.NewLogBackend(os.Stderr, "", 0)
-	backendFormatter := logging.NewBackendFormatter(backend, logFormat)
-	logging.SetBackend(backendFormatter)
-}
 
 func main() {
 	// go tool pprof ./taxonkit pprof

@@ -20,6 +20,22 @@
 
 package cmd
 
-import "github.com/op/go-logging"
+import (
+	"os"
 
-var log = logging.MustGetLogger("taxonkit")
+	"github.com/op/go-logging"
+)
+
+var log *logging.Logger
+
+var logFormat = logging.MustStringFormatter(
+	// `%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{id:03x}%{color:reset} %{message}`,
+	`%{color}[%{level:.4s}]%{color:reset} %{message}`,
+)
+
+func init() {
+	backend := logging.NewLogBackend(os.Stderr, "", 0)
+	backendFormatter := logging.NewBackendFormatter(backend, logFormat)
+	logging.SetBackend(backendFormatter)
+	log = logging.MustGetLogger("taxonkit")
+}

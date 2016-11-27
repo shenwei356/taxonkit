@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/shenwei356/breader"
+	"github.com/shenwei356/util/stringutil"
 	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
 )
@@ -34,16 +35,14 @@ import (
 // lineageCmd represents the fx2tab command
 var lineageCmd = &cobra.Command{
 	Use:   "lineage",
-	Short: "query lineage of given taxids from file",
-	Long: `query lineage of given taxids from file
+	Short: "query lineage of given taxids from file/stdin",
+	Long: `query lineage of given taxids from file/stdin
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
 		runtime.GOMAXPROCS(config.Threads)
 
-		nodesFile := getFlagString(cmd, "nodes")
-		namesFile := getFlagString(cmd, "names")
 		formatedRank := getFlagBool(cmd, "formated-rank")
 
 		files := getFileList(args)
@@ -57,13 +56,13 @@ var lineageCmd = &cobra.Command{
 
 		var names map[int32]string
 
-		log.Infof("parsing names file: %s", namesFile)
-		names = getTaxonNames(namesFile, config.Threads, 10)
+		log.Infof("parsing names file: %s", config.NamesFile)
+		names = getTaxonNames(config.NamesFile, config.Threads, 10)
 		log.Infof("%d names parsed", len(names))
 
-		log.Infof("parsing nodes file: %s", nodesFile)
+		log.Infof("parsing nodes file: %s", config.NodesFile)
 
-		reader, err := breader.NewBufferedReader(nodesFile, config.Threads, 10, taxonParseFunc)
+		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
 		checkError(err)
 
 		tree := make(map[int32]int32)
@@ -131,7 +130,7 @@ var lineageCmd = &cobra.Command{
 				child = parent
 			}
 			child = int32(id)
-			return taxid2lineage{child, strings.Join(ReverseStringSlice(lineage), ";")}, true, nil
+			return taxid2lineage{child, strings.Join(stringutil.ReverseStringSlice(lineage), ";")}, true, nil
 		}
 
 		for _, file := range files {
@@ -156,7 +155,5 @@ var lineageCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(lineageCmd)
 
-	lineageCmd.Flags().StringP("nodes", "", "nodes.dmp", "nodes.dmp file")
-	lineageCmd.Flags().StringP("names", "", "names.dmp", "names.dmp file")
 	lineageCmd.Flags().BoolP("formated-rank", "f", false, "show formated rank")
 }
