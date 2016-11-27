@@ -6,29 +6,29 @@
 
 ## Current Version
 
-[TaxonKit v0.1.4](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.4)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.4/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.4)
+[TaxonKit v0.1.5](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.5)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.5/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.5)
 
-- add flag `--fill` for `taxonkit reformat`, which estimates and fills missing rank with original lineage information
+- reorganize code and flags
 
 
 Links:
 
 - **Linux**
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_386.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_linux_386.tar.gz)
-    [taxonkit_linux_386.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_linux_386.tar.gz)
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_linux_amd64.tar.gz)
-    [taxonkit_linux_amd64.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_linux_amd64.tar.gz)
+    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_386.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_linux_386.tar.gz)
+    [taxonkit_linux_386.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_linux_386.tar.gz)
+    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_linux_amd64.tar.gz)
+    [taxonkit_linux_amd64.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_linux_amd64.tar.gz)
 - **Mac OS X**
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_386.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_darwin_386.tar.gz)
-      [taxonkit_darwin_386.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_darwin_386.tar.gz)
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_darwin_amd64.tar.gz)
-      [taxonkit_darwin_amd64.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_darwin_amd64.tar.gz)
+    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_386.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_darwin_386.tar.gz)
+      [taxonkit_darwin_386.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_darwin_386.tar.gz)
+    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_darwin_amd64.tar.gz)
+      [taxonkit_darwin_amd64.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_darwin_amd64.tar.gz)
 - **Windows**
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_386.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_windows_386.exe.tar.gz)
-    [taxonkit_windows_386.exe.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_windows_386.exe.tar.gz)
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_windows_amd64.exe.tar.gz)
-    [taxonkit_windows_amd64.exe.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.4/taxonkit_windows_amd64.exe.tar.gz)
+    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_386.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_windows_386.exe.tar.gz)
+    [taxonkit_windows_386.exe.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_windows_386.exe.tar.gz)
+    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_windows_amd64.exe.tar.gz)
+    [taxonkit_windows_amd64.exe.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.5/taxonkit_windows_amd64.exe.tar.gz)
 
 ## Installation
 
@@ -62,6 +62,9 @@ For Go developer, just one command:
 
 ## Previous Versions
 
+- [TaxonKit v0.1.4](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.4)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.4/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.4)
+    - add flag `--fill` for `taxonkit reformat`, which estimates and fills missing rank with original lineage information
 - [TaxonKit v0.1.3](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.3)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.3/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.3)
     - add command of `taxonkit reformat` which reformats full lineage to custom format
