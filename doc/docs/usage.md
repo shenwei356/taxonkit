@@ -226,12 +226,6 @@ Examples
 
         $ cat taxids.txt | taxonkit lineage
 
-2. Formated rank:
-
-        $ taxonkit lineage -f t.taxid
-        349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
-        834     k__Bacteria;p__Fibrobacteres;c__Fibrobacteria;o__Fibrobacterales;f__Fibrobacteraceae;g__Fibrobacter;s__Fibrobacter succinogenes;S__Fibrobacter succinogenes subsp. succinogenes
-
 ## reformat
 
 Usage

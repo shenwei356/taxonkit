@@ -1,6 +1,6 @@
 # Tutorial
 
-## Extract all sequences of certen taxons from the nr database
+## Extract all protein sequences of specific taxons from the NCBI nr database
 
 ### Dataset
 

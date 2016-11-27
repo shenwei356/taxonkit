@@ -43,7 +43,7 @@ var lineageCmd = &cobra.Command{
 		config := getConfigs(cmd)
 		runtime.GOMAXPROCS(config.Threads)
 
-		formatedRank := getFlagBool(cmd, "formated-rank")
+		// formatedRank := getFlagBool(cmd, "formated-rank")
 
 		files := getFileList(args)
 
@@ -101,7 +101,6 @@ var lineageCmd = &cobra.Command{
 			}
 
 			lineage := []string{}
-			var l string
 			var child, parent int32
 			var ok bool
 			child = int32(id)
@@ -110,21 +109,8 @@ var lineageCmd = &cobra.Command{
 				if !ok {
 					break
 				}
-				if !formatedRank || ranks[child] != norank {
-					l = names[child]
-					if formatedRank {
-						l = rank2symbol[ranks[child]] + "__" + l
-					}
-					lineage = append(lineage, l)
-				}
+				lineage = append(lineage, names[child])
 				if parent == 1 && child != 1 {
-					if !formatedRank || ranks[parent] != norank {
-						l = names[child]
-						if formatedRank {
-							l = rank2symbol[ranks[parent]] + "__" + l
-						}
-						lineage = append(lineage, l)
-					}
 					break
 				}
 				child = parent
@@ -154,6 +140,4 @@ var lineageCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(lineageCmd)
-
-	lineageCmd.Flags().BoolP("formated-rank", "f", false, "show formated rank")
 }

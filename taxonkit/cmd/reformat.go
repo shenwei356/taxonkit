@@ -150,7 +150,7 @@ Output format can be formated by flag --format, available placeholders:
 						weights[i] = symbol2weight[srank]
 						currentWeight = weights[i]
 					} else {
-						log.Warningf("please contact author to add this rank to code: %s", rank)
+						// log.Warningf("please contact author to add this rank to code: %s", rank)
 					}
 				} else {
 					currentWeight += 0.1
