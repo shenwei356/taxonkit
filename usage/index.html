@@ -168,11 +168,12 @@
 <ul>
 <li><a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz">ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz</a></li>
 </ul>
+<p>And copy "names.dmp" and "nodes.dmp" to data directory: "$HOME/.taxonkit".</p>
 <h2 id="taxonkit">taxonkit</h2>
 <p>Usage</p>
 <pre><code>TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.1.3
+Version: 0.1.5
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -181,8 +182,11 @@ Documents  : http://bioinf.shenwei.me/taxonkit
 
 Dataset:
 
-    Please download and uncompress these files:
+    Please download and decompress &quot;taxdump.tar.gz&quot;:
     ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
+
+    and copy &quot;names.dmp&quot; and &quot;nodes.dmp&quot; to data directory:
+    &quot;/home/shenwei/.taxonkit&quot;
 
 Usage:
   taxonkit [command]
@@ -194,8 +198,10 @@ Available Commands:
   version     print version information and check for update
 
 Flags:
-  -o, --out-file string   out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
-  -j, --threads int       number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
+      --names-file string   names.dmp file (default &quot;/home/shenwei/.taxonkit/names.dmp&quot;)
+      --nodes-file string   nodes.dmp file (default &quot;/home/shenwei/.taxonkit/nodes.dmp&quot;)
+  -o, --out-file string     out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
+  -j, --threads int         number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
 
 Use &quot;taxonkit [command] --help&quot; for more information about a command.
 
@@ -212,8 +218,8 @@ Flags:
       --ids string      taxid(s), multiple values should be separated by comma (default &quot;1&quot;)
       --indent string   indent (default &quot;  &quot;)
       --json            output in JSON format. you can save the result in file with suffix &quot;.json&quot; and open with modern text editor
-      --names string    names.dmp file, when it given taxid will be followed by its scientific name
-      --nodes string    nodes.dmp file (default &quot;nodes.dmp&quot;)
+      --show-name       output scientific name
+      --show-rank       output rank
 
 </code></pre>
 
@@ -221,7 +227,7 @@ Flags:
 <ol>
 <li>
 <p>Default usage</p>
-<pre><code>$ taxonkit list --nodes nodes.dmp --ids 9605,239934
+<pre><code>$ taxonkit list --ids 9605,239934
 9605
   9606
     63221
@@ -247,7 +253,7 @@ Flags:
 </li>
 <li>
 <p>Removing indent. The list could be used to extract sequences from BLAST database with <code>blastdbcmd</code> (see <a href="http://bioinf.shenwei.me/taxonkit/tutorial/">tutorial</a>)</p>
-<pre><code>$ taxonkit list --nodes nodes.dmp --ids 9605,239934 --indent ""
+<pre><code>$ taxonkit list --ids 9605,239934 --indent ""
 9605
 9606
 63221
@@ -274,14 +280,14 @@ Flags:
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
-$ memusg -t taxonkit list --nodes nodes.dmp --ids 1 --indent "" &gt; t0.txt
-elapsed time: 2.987s
+$ memusg -t taxonkit list --ids 1 --indent "" &gt; t0.txt
+elapsed time: 3.093s
 peak rss: 82.79 MB
 </code></pre>
 </li>
 <li>
 <p>Adding names</p>
-<pre><code>$ taxonkit list --nodes nodes.dmp --names names.dmp --ids 9605,239934
+<pre><code>$ taxonkit list --show-rank --show-name --ids 9605,239934
 9605 [genus] Homo
   9606 [species] Homo sapiens
     63221 [subspecies] Homo sapiens neanderthalensis
@@ -308,14 +314,14 @@ peak rss: 82.79 MB
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
-$ memusg -t taxonkit list --nodes nodes.dmp --names names.dmp --ids 1 &gt; t1.txt
+$ memusg -t taxonkit list --show-rank --show-name --ids 1 &gt; t1.txt
 elapsed time: 9.825s
 peak rss: 648.65 MB
 </code></pre>
 </li>
 <li>
 <p>Output in JSON format, so you can easily collapse and uncollapse taxonomy tree in modern text editor.</p>
-<pre><code>$ taxonkit list --nodes nodes.dmp --names names.dmp --ids 9605,239934 --json
+<pre><code>$ taxonkit list --show-rank --show-name --ids 9605,239934 --json
 {
   "9605 [genus] Homo": {
     "9606 [species] Homo sapiens": {
@@ -350,15 +356,13 @@ peak rss: 648.65 MB
 </ol>
 <h2 id="lineage">lineage</h2>
 <p>Usage</p>
-<pre><code>query lineage of given taxids from file
+<pre><code>query lineage of given taxids from file/stdin
 
 Usage:
   taxonkit lineage [flags]
 
 Flags:
   -f, --formated-rank   show formated rank
-      --names string    names.dmp file (default &quot;names.dmp&quot;)
-      --nodes string    nodes.dmp file (default &quot;nodes.dmp&quot;)
 
 </code></pre>
 
@@ -366,14 +370,17 @@ Flags:
 <ol>
 <li>
 <p>Full lineage:</p>
-<pre><code>$ taxonkit lineage --nodes nodes.dmp --names names.dmp  t.taxid
+<pre><code>$ taxonkit lineage taxids.txt
 349741  cellular organisms;cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
 834     cellular organisms;cellular organisms;Bacteria;FCB group;Fibrobacteres;Fibrobacteria;Fibrobacterales;Fibrobacteraceae;Fibrobacter;Fibrobacter succinogenes;Fibrobacter succinogenes subsp. succinogenes
+</code></pre>
+<p>or read taxids from STDIN:</p>
+<pre><code>$ cat taxids.txt | taxonkit lineage
 </code></pre>
 </li>
 <li>
 <p>Formated rank:</p>
-<pre><code>$ taxonkit lineage --nodes nodes.dmp --names names.dmp -f t.taxid
+<pre><code>$ taxonkit lineage -f t.taxid
 349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
 834     k__Bacteria;p__Fibrobacteres;c__Fibrobacteria;o__Fibrobacterales;f__Fibrobacteraceae;g__Fibrobacter;s__Fibrobacter succinogenes;S__Fibrobacter succinogenes subsp. succinogenes
 </code></pre>
@@ -398,12 +405,10 @@ Usage:
   taxonkit reformat [flags]
 
 Flags:
-      --blank string       blank string for missing rank, if given &quot;&quot;, &quot;unclassified xxx xxx&quot; will used
-  -d, --delimiter string   field delimiter in input lineage (default &quot;;&quot;)
-      --fill               estimate and fill missing rank with original lineage information (recommended)
-  -f, --format string      output format, placeholders of rank are needed (default &quot;{k};{p};{c};{o};{f};{g};{s}&quot;)
-      --names string       names.dmp file (default &quot;names.dmp&quot;)
-      --nodes string       nodes.dmp file (default &quot;nodes.dmp&quot;)
+  -d, --delimiter string        field delimiter in input lineage (default &quot;;&quot;)
+  -F, --fill-miss-rank          estimate and fill missing rank with original lineage information (recommended)
+  -f, --format string           output format, placeholders of rank are needed (default &quot;{k};{p};{c};{o};{f};{g};{s}&quot;)
+  -r, --miss-rank-repl string   replacement string for missing rank, if given &quot;&quot;, &quot;unclassified xxx xxx&quot; will used
 
 </code></pre>
 
@@ -427,7 +432,7 @@ Viruses;;;;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-partic
 </li>
 <li>
 <p>Use custom strings for unclassfied ranks</p>
-<pre><code>$ taxonkit reformat lineage.txt  --blank "__" | cut -f 2
+<pre><code>$ taxonkit reformat lineage.txt --miss-rank-repl "__" | cut -f 2
 Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
 Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
@@ -435,8 +440,10 @@ Viruses;__;__;__;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-
 </code></pre>
 </li>
 <li>
-<p>Estimate and fill missing rank with original lineage information (<strong>recommended</strong>)</p>
-<pre><code>$ taxonkit reformat lineage.txt --fill | cut -f 2                               
+<p>Estimate and fill missing rank with original lineage information
+   (<strong>recommended</strong>, very useful for formating input data for
+   <a href="https://bitbucket.org/biobakery/biobakery/wiki/lefse">LEfSe</a>)</p>
+<pre><code>$ taxonkit reformat lineage.txt --fill-miss-rank | cut -f 2
 Bacteria;environmental samples &lt;Bacteria&gt;;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
 Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y

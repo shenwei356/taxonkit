@@ -165,9 +165,9 @@
 <ol>
 <li>
 <p>Getting all taxids of virus (taxid 10239):</p>
-<pre><code>$ taxonkit list --nodes nodes.dmp --ids 10239 --indent "" &gt; virus.taxid.txt
+<pre><code>$ taxonkit list --ids 10239 --indent "" &gt; virus.taxid.txt
 </code></pre>
-<p>It takes only 2.5s! Number of taxids:</p>
+<p>It takes only 2.5 seconds! Number of taxids:</p>
 <pre><code>$ wc -l virus.taxid.txt
 163104 virus.taxid.txt
 </code></pre>
@@ -188,7 +188,7 @@
     csvtk -t grep -f taxid -P virus.taxid.txt | \
     csvtk -t cut -f gi &gt; virus.taxid.gi.txt
 </code></pre>
-<p>It costs 8 min</p>
+<p>It costs ~ 8 minutes.</p>
 </li>
 </ul>
 </li>
