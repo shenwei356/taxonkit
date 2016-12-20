@@ -51,7 +51,7 @@ And then:
     1. Or add the current directory of the executable file to environment variable
     `PATH`:
 
-            echo export PATH=\$PATH:\"$(pwd)\" >> ~/.bashrc
+            echo export PATH=\"$(pwd)\":\$PATH >> ~/.bashrc
             source ~/.bashrc
 
 1. **For windows**, just copy `taxonkit.exe` to `C:\WINDOWS\system32`.
