@@ -33,8 +33,8 @@ import (
 // flineageCmd represents the fx2tab command
 var flineageCmd = &cobra.Command{
 	Use:   "reformat",
-	Short: "reformat lineage",
-	Long: `reformat lineage
+	Short: "reformat lineage from stdin",
+	Long: `reformat lineage from stdin
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -56,6 +56,7 @@ Output format can be formated by flag --format, available placeholders:
 		delimiter := getFlagString(cmd, "delimiter")
 		blank := getFlagString(cmd, "miss-rank-repl")
 		fill := getFlagBool(cmd, "fill-miss-rank")
+		field := getFlagPositiveInt(cmd, "lineage-field") - 1
 
 		// check format
 		if !reRankPlaceHolder.MatchString(format) {
@@ -116,19 +117,26 @@ Output format can be formated by flag --format, available placeholders:
 
 		log.Infof("%d nodes parsed", n)
 
-		type lineage2flineage struct {
-			lineage  string
+		type line2flineage struct {
+			line     string
 			flineage string
 		}
 
 		fn := func(line string) (interface{}, bool, error) {
+			if len(line) == 0 || line[0] == '#' {
+				return nil, false, nil
+			}
 			line = strings.Trim(line, "\r\n ")
 			if line == "" {
 				return nil, false, nil
 			}
+			data := strings.Split(line, "\t")
+			if len(data) < field+1 {
+				field = len(data) - 1
+			}
 
 			// names and weights
-			names2 := strings.Split(line, delimiter)
+			names2 := strings.Split(data[field], delimiter)
 			weights := make([]float32, len(names2))
 			var rank, srank string
 			var ok bool
@@ -234,20 +242,20 @@ Output format can be formated by flag --format, available placeholders:
 				flineage = re.ReplaceAllString(flineage, replacements[srank])
 			}
 
-			return lineage2flineage{line, flineage}, true, nil
+			return line2flineage{line, flineage}, true, nil
 		}
 
 		for _, file := range files {
 			reader, err := breader.NewBufferedReader(file, config.Threads, 10, fn)
 			checkError(err)
 
-			var l2s lineage2flineage
+			var l2s line2flineage
 			for chunk := range reader.Ch {
 				checkError(chunk.Err)
 
 				for _, data := range chunk.Data {
-					l2s = data.(lineage2flineage)
-					outfh.WriteString(fmt.Sprintf("%s\t%s\n", l2s.lineage, l2s.flineage))
+					l2s = data.(line2flineage)
+					outfh.WriteString(fmt.Sprintf("%s\t%s\n", l2s.line, l2s.flineage))
 				}
 			}
 		}
@@ -263,4 +271,5 @@ func init() {
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
 	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank, if given "", "unclassified xxx xxx" will used`)
 	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "estimate and fill missing rank with original lineage information (recommended)")
+	flineageCmd.Flags().IntP("lineage-field", "c", 2, "field index of lineage. data from stdin should be tab-separated")
 }

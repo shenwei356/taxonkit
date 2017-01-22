@@ -15,7 +15,7 @@ Usage
 ```
 TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.1.5
+Version: 0.1.7
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -36,7 +36,7 @@ Usage:
 Available Commands:
   lineage     query lineage of given taxids from file
   list        list taxon tree of given taxids
-  reformat    reformat lineage
+  reformat    reformat lineage from stdin
   version     print version information and check for update
 
 Flags:
@@ -218,9 +218,24 @@ Examples
 
 1. Full lineage:
 
+        # note that 10000000 is a fake taxid
+        $ cat taxids.txt
+        9606
+        349741
+        239935
+        11932
+        314101
+        1327037
+        10000000
+
         $ taxonkit lineage taxids.txt
-        349741  cellular organisms;cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-        834     cellular organisms;cellular organisms;Bacteria;FCB group;Fibrobacteres;Fibrobacteria;Fibrobacterales;Fibrobacteraceae;Fibrobacter;Fibrobacter succinogenes;Fibrobacter succinogenes subsp. succinogenes
+        9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+        349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+        239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
+        1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+        10000000
 
     or read taxids from STDIN:
 
@@ -231,7 +246,7 @@ Examples
 Usage
 
 ```
-reformat lineage
+reformat lineage from stdin
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -251,46 +266,69 @@ Flags:
   -d, --delimiter string        field delimiter in input lineage (default ";")
   -F, --fill-miss-rank          estimate and fill missing rank with original lineage information (recommended)
   -f, --format string           output format, placeholders of rank are needed (default "{k};{p};{c};{o};{f};{g};{s}")
+  -c, --lineage-field int       field index of lineage. data from stdin should be tab-separated (default 2)
   -r, --miss-rank-repl string   replacement string for missing rank, if given "", "unclassified xxx xxx" will used
 
 ```
 
 Examples:
 
-Example lineage list:
+Example lineage (produced by: `taxonkit lineage taxids.txt > lineage.txt`)
 
     $ cat lineage.txt
-    root;cellular organisms;Bacteria;environmental samples <Bacteria>;uncultured murine large bowel bacterium BAC 54B;
-    root;cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;
-    root;Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y;
-    root;Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle;
+    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+    349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+    239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+    11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+    314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
+    1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+    10000000
 
-1. Default output format ("{k};{p};{c};{o};{f};{g};{s}")
+1. Default output format (`"{k};{p};{c};{o};{f};{g};{s}"`)
 
-        $ taxonkit reformat lineage.txt | cut -f 2
-        Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B                                                  
+        # reformated lineages are appended to the input data
+        $ taxonkit reformat lineage.txt
+        9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens    Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+        ...
+        10000000                ;;;;;;
+
+        $ taxonkit reformat lineage.txt | cut -f 3
+        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
         Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-        Viruses;;;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
         Viruses;;;;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
+        Viruses;;;Caudovirales;Siphoviridae;;Croceibacter phage P2559
+        ;;;;;;
 
 1. Use custom strings for unclassfied ranks
 
-        $ taxonkit reformat lineage.txt --miss-rank-repl "__" | cut -f 2
-        Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
+        $ taxonkit reformat lineage.txt --miss-rank-repl "__" | cut -f 3
+        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
         Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-        Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
         Viruses;__;__;__;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-
+        Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
+        Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
+        __;__;__;__;__;__;__
 
 1. Estimate and fill missing rank with original lineage information
    (**recommended**, very useful for formating input data for
    [LEfSe](https://bitbucket.org/biobakery/biobakery/wiki/lefse))
 
-        $ taxonkit reformat lineage.txt --fill-miss-rank | cut -f 2
-        Bacteria;environmental samples <Bacteria>;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
+        $ taxonkit reformat lineage.txt --fill-miss-rank | cut -f 3
+        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
         Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-        Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
         Viruses;Retro-transcribing viruses;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Bacteria;environmental samples;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
+        Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+        unclassified  superkingdom;unclassified  phylum;unclassified  class;unclassified  order;unclassified  family;unclassified  genus;unclassified  species
+
+1. from taxid -> 7-columns lineage:
+
+    $ cat taxids.txt | taxonkit lineage | taxonkit reformat -F
+
 
 <div id="disqus_thread"></div>
 <script>

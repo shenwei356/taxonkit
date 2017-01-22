@@ -30,7 +30,7 @@ Go to [Download Page](http://bioinf.shenwei.me/taxonkit/download) for more downl
 
 Just [download](https://github.com/shenwei356/taxonkit/releases) compressed
 executable file of your operating system,
-and uncompress it with `tar -zxvf *.tar.gz` command or other tools.
+and uncompress it with `tar -zxvf xxx.tar.gz` command or other tools.
 
 
 ## Contact

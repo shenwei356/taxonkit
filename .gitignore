@@ -32,4 +32,4 @@ taxonkit/binaries*
 *names.dmp
 *nodes.dmp
 *.json
-site/doc
+doc/site

@@ -6,29 +6,23 @@
 
 ## Current Version
 
-[TaxonKit v0.1.6](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.6)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.6/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.6)
+[TaxonKit v0.1.7](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.7)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.7/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.7)
 
-- remove flag `-f/--formated-rank` from `taxonkit lineage`,
-  using `taxonkit reformat` can archieve same result.
+- `taxonkit reformat`: supports reading stdin from output of `taxonkit lineage`,
+ reformated lineages are appended to input data.
 
 Links:
 
-- **Linux**
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_386.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_linux_386.tar.gz)
-    [taxonkit_linux_386.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_linux_386.tar.gz)
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_linux_amd64.tar.gz)
-    [taxonkit_linux_amd64.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_linux_amd64.tar.gz)
-- **Mac OS X**
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_386.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_darwin_386.tar.gz)
-      [taxonkit_darwin_386.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_darwin_386.tar.gz)
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_darwin_amd64.tar.gz)
-      [taxonkit_darwin_amd64.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_darwin_amd64.tar.gz)
-- **Windows**
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_386.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_windows_386.exe.tar.gz)
-    [taxonkit_windows_386.exe.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_windows_386.exe.tar.gz)
-    - [![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_windows_amd64.exe.tar.gz)
-    [taxonkit_windows_amd64.exe.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.6/taxonkit_windows_amd64.exe.tar.gz)
+OS     |Arch      |File                                                                                                                                      |Download Count
+:------|:---------|:-----------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Linux  |32-bit    |[taxonkit_linux_386.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_linux_386.tar.gz)                    |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_386.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_linux_386.tar.gz)
+Linux  |**64-bit**|[**taxonkit_linux_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_linux_amd64.tar.gz)            |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_linux_amd64.tar.gz)
+OS X   |32-bit    |[taxonkit_darwin_386.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_darwin_386.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_386.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_darwin_386.tar.gz)
+OS X   |**64-bit**|[**taxonkit_darwin_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_darwin_amd64.tar.gz)          |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_darwin_amd64.tar.gz)
+Windows|32-bit    |[taxonkit_windows_386.exe.tar.gz](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_windows_386.exe.tar.gz)        |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_386.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_windows_386.exe.tar.gz)
+Windows|**64-bit**|[**taxonkit_windows_amd64.exe.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_windows_amd64.exe.tar.gz)|[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.1.7/taxonkit_windows_amd64.exe.tar.gz)
+
 
 ## Installation
 
@@ -38,12 +32,14 @@ Links:
  executable binary files **for most popular operating systems** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 
+#### Method 1: Download binaries
+
 Just [download](https://github.com/shenwei356/taxonkit/releases) compressed
 executable file of your operating system,
-and uncompress it with `tar -zxvf *.tar.gz` command or other tools.
+and decompress it with `tar -zxvf *.tar.gz` command or other tools.
 And then:
 
-1. For Unix-like systems
+1. **For Linux-like systems**
     1. If you have root privilege simply copy it to `/usr/local/bin`:
 
             sudo cp taxonkit /usr/local/bin/
@@ -51,17 +47,30 @@ And then:
     1. Or add the current directory of the executable file to environment variable
     `PATH`:
 
-            echo export PATH=\"$(pwd)\":\$PATH >> ~/.bashrc
+            echo export PATH=\$PATH:\"$(pwd)\" >> ~/.bashrc
             source ~/.bashrc
 
 1. **For windows**, just copy `taxonkit.exe` to `C:\WINDOWS\system32`.
 
-For Go developer, just one command:
+#### Method 2: Install via conda
+
+    conda config --add channels conda-forge
+    conda config --add channels defaults
+    conda config --add channels r
+    conda config --add channels bioconda
+    conda install taxonkit
+
+#### Method 3: For Go developer
 
     go get -u github.com/shenwei356/taxonkit/taxonkit
 
+
 ## Previous Versions
 
+- [TaxonKit v0.1.6](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.6)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.6/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.6)
+    - remove flag `-f/--formated-rank` from `taxonkit lineage`,
+      using `taxonkit reformat` can archieve same result.
 - [TaxonKit v0.1.5](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.5)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.1.5/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.1.5)
     - reorganize code and flags
