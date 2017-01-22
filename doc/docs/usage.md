@@ -325,9 +325,9 @@ Example lineage (produced by: `taxonkit lineage taxids.txt > lineage.txt`)
         Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
         unclassified  superkingdom;unclassified  phylum;unclassified  class;unclassified  order;unclassified  family;unclassified  genus;unclassified  species
 
-1. from taxid -> 7-columns lineage:
+1. from taxid to 7-columns lineage:
 
-    $ cat taxids.txt | taxonkit lineage | taxonkit reformat -F
+        $ cat taxids.txt | taxonkit lineage | taxonkit reformat -F
 
 
 <div id="disqus_thread"></div>
