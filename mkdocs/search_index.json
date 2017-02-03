@@ -2,12 +2,12 @@
     "docs": [
         {
             "location": "/", 
-            "text": "TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit\n\n\nDocuments:\n \nhttp://bioinf.shenwei.me/taxonkit\n\n(\nUsage\n,\n\nTutorial\n)\n\n\nSource code:\n \nhttps://github.com/shenwei356/taxonkit\n\n\n\n\n\n\n\n\nLatest version:\n \n\n\n\n\nSubcommands\n\n\n\n\nlist\n    list taxon tree of given taxids\n\n\nlineage\n query lineage of given taxids from file/stdin\n\n\nreformat\n reformat lineage\n\n\n\n\nInstallation\n\n\nGo to \nDownload Page\n for more download options and changelogs.\n\n\nTaxonKit\n is implemented in \nGo\n programming language,\n executable binary files \nfor most popular operating systems\n are freely available\n  in \nrelease\n page.\n\n\nJust \ndownload\n compressed\nexecutable file of your operating system,\nand uncompress it with \ntar -zxvf xxx.tar.gz\n command or other tools.\n\n\nContact\n\n\nEmail me for any problem when using taxonkit. shenwei356(at)gmail.com\n\n\nCreate an issue\n to report bugs,\npropose new functions or ask for help.\n\n\nLicense\n\n\nMIT License", 
+            "text": "TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit\n\n\n\n\nDocuments:\n \nhttp://bioinf.shenwei.me/taxonkit\n\n(\nUsage\n,\n\nTutorial\n)\n\n\nSource code:\n \nhttps://github.com/shenwei356/taxonkit\n\n\n\n\n\n\n\n\n\n\nLatest version:\n \n\n\n\n\n\n\n\n\nSubcommands\n\n\n\n\nlist\n    list taxon tree of given taxids\n\n\nlineage\n query lineage of given taxids from file/stdin\n\n\nreformat\n reformat lineage\n\n\n\n\nInstallation\n\n\nGo to \nDownload Page\n for more download options and changelogs.\n\n\nTaxonKit\n is implemented in \nGo\n programming language,\n executable binary files \nfor most popular operating systems\n are freely available\n  in \nrelease\n page.\n\n\nJust \ndownload\n compressed\nexecutable file of your operating system,\nand uncompress it with \ntar -zxvf xxx.tar.gz\n command or other tools.\n\n\nContact\n\n\nEmail me for any problem when using taxonkit. shenwei356(at)gmail.com\n\n\nCreate an issue\n to report bugs,\npropose new functions or ask for help.\n\n\nLicense\n\n\nMIT License", 
             "title": "Home"
         }, 
         {
             "location": "/#taxonkit-cross-platform-and-efficient-ncbi-taxonomy-toolkit", 
-            "text": "Documents:   http://bioinf.shenwei.me/taxonkit \n( Usage , Tutorial )  Source code:   https://github.com/shenwei356/taxonkit     Latest version:", 
+            "text": "Documents:   http://bioinf.shenwei.me/taxonkit \n( Usage , Tutorial )  Source code:   https://github.com/shenwei356/taxonkit      Latest version:", 
             "title": "TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit"
         }, 
         {
