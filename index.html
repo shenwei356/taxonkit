@@ -187,9 +187,39 @@
 <p><code>TaxonKit</code> is implemented in <a href="https://golang.org/">Go</a> programming language,
  executable binary files <strong>for most popular operating systems</strong> are freely available
   in <a href="https://github.com/shenwei356/taxonkit/releases">release</a> page.</p>
+<h4 id="method-1-download-binaries">Method 1: Download binaries</h4>
 <p>Just <a href="https://github.com/shenwei356/taxonkit/releases">download</a> compressed
 executable file of your operating system,
-and uncompress it with <code>tar -zxvf xxx.tar.gz</code> command or other tools.</p>
+and decompress it with <code>tar -zxvf *.tar.gz</code> command or other tools.
+And then:</p>
+<ol>
+<li>
+<p><strong>For Linux-like systems</strong></p>
+<ol>
+<li>
+<p>If you have root privilege simply copy it to <code>/usr/local/bin</code>:</p>
+<pre><code>sudo cp taxonkit /usr/local/bin/
+</code></pre>
+</li>
+<li>
+<p>Or add the current directory of the executable file to environment variable
+<code>PATH</code>:</p>
+<pre><code>echo export PATH=\$PATH:\"$(pwd)\" &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>For windows</strong>, just copy <code>taxonkit.exe</code> to <code>C:\WINDOWS\system32</code>.</p>
+</li>
+</ol>
+<h4 id="method-2-install-via-conda">Method 2: Install via conda <a href="http://bioinf.shenwei.me/taxonkit/download/"><img alt="Install-with-conda" src="https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg" /></a> <a href="https://anaconda.org/bioconda/taxonkit"><img alt="Anaconda Cloud" src="https://anaconda.org/bioconda/taxonkit/badges/version.svg" /></a> <a href="https://anaconda.org/bioconda/taxonkit"><img alt="downloads" src="https://anaconda.org/bioconda/taxonkit/badges/downloads.svg" /></a></h4>
+<pre><code>conda install -c bioconda taxonkit
+</code></pre>
+<h4 id="method-3-for-go-developer">Method 3: For Go developer</h4>
+<pre><code>go get -u github.com/shenwei356/taxonkit/taxonkit
+</code></pre>
 <h2 id="contact">Contact</h2>
 <p>Email me for any problem when using taxonkit. shenwei356(at)gmail.com</p>
 <p><a href="https://github.com/shenwei356/taxonkit/issues">Create an issue</a> to report bugs,
