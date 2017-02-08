@@ -52,7 +52,7 @@ And then:
 
 1. **For windows**, just copy `taxonkit.exe` to `C:\WINDOWS\system32`.
 
-#### Method 2: Install via conda
+#### Method 2: Install via conda [![Install-with-conda](https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg)](http://bioinf.shenwei.me/taxonkit/download/) [![Anaconda Cloud](https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit) [![downloads](https://anaconda.org/bioconda/taxonkit/badges/downloads.svg)](https://anaconda.org/bioconda/taxonkit)
 
     conda install -c bioconda taxonkit
 

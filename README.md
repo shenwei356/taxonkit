@@ -11,6 +11,8 @@
 - **Latest version:** [![Latest Version](https://img.shields.io/github/release/shenwei356/taxonkit.svg?style=flat?maxAge=86400)](https://github.com/shenwei356/taxonkit/releases)
 [![Github Releases](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/total.svg?maxAge=3600)](http://bioinf.shenwei.me/taxonkit/download/)
 [![Cross-platform](https://img.shields.io/badge/platform-any-ec2eb4.svg?style=flat)](http://bioinf.shenwei.me/taxonkit/download/)
+[![Install-with-conda](	https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg)](http://bioinf.shenwei.me/taxonkit/download/)
+[![Anaconda Cloud](	https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit)
 
 
 ## Subcommands
@@ -28,11 +30,34 @@ Go to [Download Page](http://bioinf.shenwei.me/taxonkit/download) for more downl
  executable binary files **for most popular operating systems** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 
+#### Method 1: Download binaries
+
 Just [download](https://github.com/shenwei356/taxonkit/releases) compressed
 executable file of your operating system,
-and uncompress it with `tar -zxvf xxx.tar.gz` command or other tools.
+and decompress it with `tar -zxvf *.tar.gz` command or other tools.
+And then:
 
+1. **For Linux-like systems**
+    1. If you have root privilege simply copy it to `/usr/local/bin`:
 
+            sudo cp taxonkit /usr/local/bin/
+
+    1. Or add the current directory of the executable file to environment variable
+    `PATH`:
+
+            echo export PATH=\$PATH:\"$(pwd)\" >> ~/.bashrc
+            source ~/.bashrc
+
+1. **For windows**, just copy `taxonkit.exe` to `C:\WINDOWS\system32`.
+
+#### Method 2: Install via conda [![Install-with-conda](https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg)](http://bioinf.shenwei.me/taxonkit/download/) [![Anaconda Cloud](https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit) [![downloads](https://anaconda.org/bioconda/taxonkit/badges/downloads.svg)](https://anaconda.org/bioconda/taxonkit)
+
+    conda install -c bioconda taxonkit
+
+#### Method 3: For Go developer
+
+    go get -u github.com/shenwei356/taxonkit/taxonkit
+    
 ## Contact
 
 Email me for any problem when using taxonkit. shenwei356(at)gmail.com
