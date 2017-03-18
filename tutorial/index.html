@@ -173,7 +173,7 @@
 </code></pre>
 </li>
 <li>
-<p>Extacting accessions or GIs with <a href="http://bioinf.shenwei.me/csvtk/download/">csvtk</a>:</p>
+<p>Retrieving accessions <s>or GIs</s>(NCBI stopped using <code>gi</code>) with <a href="http://bioinf.shenwei.me/csvtk/download/">csvtk</a>:</p>
 <ul>
 <li>
 <p>accession</p>
@@ -183,17 +183,18 @@
 </code></pre>
 </li>
 <li>
-<p>gi</p>
+<p><s>gi</p>
 <pre><code>$ zcat prot.accession2taxid.gz | \
     csvtk -t grep -f taxid -P virus.taxid.txt | \
     csvtk -t cut -f gi &gt; virus.taxid.gi.txt
 </code></pre>
-<p>It costs ~ 8 minutes.</p>
+<p></s>
+It costs ~ 8 minutes.</p>
 </li>
 </ul>
 </li>
 <li>
-<p>Extracting nr sequences:</p>
+<p>Retrieving nr sequences:</p>
 <ul>
 <li>
 <p>accesion</p>
@@ -204,14 +205,18 @@
 </code></pre>
 </li>
 <li>
-<p>gi</p>
+<p><s>gi</p>
 <pre><code>$ blastdbcmd -db nr -entry all -outfmt "%g\t%T" | \
     csvtk -t grep -f 2 -P virus.taxid.gi.txt | \
     csvtk -t cut -f 1 | \
     blastdbcmd -db nr -entry_batch - -out nr.virus.fa
 </code></pre>
+<p></s></p>
 </li>
 </ul>
+<p>Another way is retrieving from <a href="ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz">nr FASTA sequences</a> using <a href="http://bioinf.shenwei.me/seqkit/download">SeqKit</a>:</p>
+<pre><code>gzip -c -d nr.gz | seqkit grep -f virus.taxid.acc.txt &gt; nr.virus.fa
+</code></pre>
 </li>
 </ol>
 <div id="disqus_thread"></div>
