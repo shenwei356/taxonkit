@@ -19,23 +19,23 @@ Taking virus for example.
         $ wc -l virus.taxid.txt
         163104 virus.taxid.txt
 
-2. Extacting accessions or GIs with [csvtk](http://bioinf.shenwei.me/csvtk/download/):
+2. Retrieving accessions <s>or GIs</s>(NCBI stopped using `gi`) with [csvtk](http://bioinf.shenwei.me/csvtk/download/):
 
     - accession
 
             $ zcat prot.accession2taxid.gz | \
                 csvtk -t grep -f taxid -P virus.taxid.txt | \
                 csvtk -t cut -f accession.version > virus.taxid.acc.txt
-
-    - gi
+    
+    - <s>gi
 
             $ zcat prot.accession2taxid.gz | \
                 csvtk -t grep -f taxid -P virus.taxid.txt | \
                 csvtk -t cut -f gi > virus.taxid.gi.txt
-
+        </s>
         It costs ~ 8 minutes.
 
-3. Extracting nr sequences:
+3. Retrieving nr sequences:
 
     - accesion
 
@@ -44,13 +44,17 @@ Taking virus for example.
                 csvtk -t cut -f 1 | \
                 blastdbcmd -db nr -entry_batch - -out nr.virus.fa
 
-    - gi
+    - <s>gi
 
             $ blastdbcmd -db nr -entry all -outfmt "%g\t%T" | \
                 csvtk -t grep -f 2 -P virus.taxid.gi.txt | \
                 csvtk -t cut -f 1 | \
                 blastdbcmd -db nr -entry_batch - -out nr.virus.fa
+        </s>
 
+    Another way is retrieving from [nr FASTA sequences](ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz) using [SeqKit](http://bioinf.shenwei.me/seqkit/download):
+    
+        gzip -c -d nr.gz | seqkit grep -f virus.taxid.acc.txt > nr.virus.fa
 
 <div id="disqus_thread"></div>
 <script>
