@@ -86,8 +86,9 @@ var lineageCmd = &cobra.Command{
 		log.Infof("%d nodes parsed", n)
 
 		type taxid2lineage struct {
-			taxid   int32
-			lineage string
+			taxid          int32
+			lineage        string
+			lineageInTaxid string
 		}
 
 		fn := func(line string) (interface{}, bool, error) {
@@ -101,6 +102,7 @@ var lineageCmd = &cobra.Command{
 			}
 
 			lineage := []string{}
+			lineageInTaxid := []string{}
 			var child, parent int32
 			var ok bool
 			child = int32(id)
@@ -110,13 +112,18 @@ var lineageCmd = &cobra.Command{
 					break
 				}
 				lineage = append(lineage, names[child])
+				lineageInTaxid = append(lineageInTaxid, strconv.Itoa(int(child)))
 				if parent == 1 && child != 1 {
 					break
 				}
 				child = parent
 			}
 			child = int32(id)
-			return taxid2lineage{child, strings.Join(stringutil.ReverseStringSlice(lineage), ";")}, true, nil
+			return taxid2lineage{child,
+					strings.Join(stringutil.ReverseStringSlice(lineage), ";"),
+					strings.Join(stringutil.ReverseStringSlice(lineageInTaxid), ";"),
+				},
+				true, nil
 		}
 
 		for _, file := range files {
@@ -129,7 +136,7 @@ var lineageCmd = &cobra.Command{
 
 				for _, data := range chunk.Data {
 					t2l = data.(taxid2lineage)
-					outfh.WriteString(fmt.Sprintf("%d\t%s\n", t2l.taxid, t2l.lineage))
+					outfh.WriteString(fmt.Sprintf("%d\t%s\t%s\n", t2l.taxid, t2l.lineage, t2l.lineageInTaxid))
 				}
 			}
 		}
