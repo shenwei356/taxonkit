@@ -153,7 +153,7 @@ var listCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(listCmd)
 
-	listCmd.Flags().StringP("ids", "", "1", "taxid(s), multiple values should be separated by comma")
+	listCmd.Flags().StringP("ids", "", "", "taxid(s), multiple values should be separated by comma")
 	listCmd.Flags().StringP("indent", "", "  ", "indent")
 	listCmd.Flags().BoolP("show-rank", "", false, `output rank`)
 	listCmd.Flags().BoolP("show-name", "", false, `output scientific name`)

@@ -33,8 +33,8 @@ import (
 // flineageCmd represents the fx2tab command
 var flineageCmd = &cobra.Command{
 	Use:   "reformat",
-	Short: "reformat lineage from stdin",
-	Long: `reformat lineage from stdin
+	Short: "reformat lineage",
+	Long: `reformat lineage
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -85,7 +85,7 @@ Output format can be formated by flag --format, available placeholders:
 		files := getFileList(args)
 
 		if len(files) == 1 && isStdin(files[0]) && !xopen.IsStdin() {
-			checkError(fmt.Errorf("warning: stdin not detected"))
+			checkError(fmt.Errorf("stdin not detected"))
 		}
 
 		outfh, err := xopen.Wopen(config.OutFile)
@@ -271,5 +271,5 @@ func init() {
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
 	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank, if given "", "unclassified xxx xxx" will used`)
 	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "estimate and fill missing rank with original lineage information (recommended)")
-	flineageCmd.Flags().IntP("lineage-field", "c", 2, "field index of lineage. data from stdin should be tab-separated")
+	flineageCmd.Flags().IntP("lineage-field", "i", 2, "field index of lineage. data should be tab-separated")
 }

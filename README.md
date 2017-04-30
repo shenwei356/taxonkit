@@ -18,9 +18,9 @@
 ## Subcommands
 
 - `list`    list taxon tree of given taxids
-- `lineage` query lineage of given taxids from file/stdin
-- `reformat` reformat lineage
-
+- `lineage` query lineage of given taxids (supporting STDIN)
+- `reformat` reformat lineage (supporting STDIN)
+- `name2taxid` query taxid by taxon scientific name (supporting STDIN)
 
 ## Installation
 
@@ -57,7 +57,7 @@ And then:
 #### Method 3: For Go developer
 
     go get -u github.com/shenwei356/taxonkit/taxonkit
-    
+
 ## Contact
 
 Email me for any problem when using taxonkit. shenwei356(at)gmail.com

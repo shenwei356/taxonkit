@@ -35,20 +35,21 @@ import (
 // lineageCmd represents the fx2tab command
 var lineageCmd = &cobra.Command{
 	Use:   "lineage",
-	Short: "query lineage of given taxids from file/stdin",
-	Long: `query lineage of given taxids from file/stdin
+	Short: "query lineage of given taxids",
+	Long: `query lineage of given taxids
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
 		runtime.GOMAXPROCS(config.Threads)
 
-		// formatedRank := getFlagBool(cmd, "formated-rank")
+		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
+		field := getFlagPositiveInt(cmd, "taxid-field") - 1
 
 		files := getFileList(args)
 
 		if len(files) == 1 && isStdin(files[0]) && !xopen.IsStdin() {
-			checkError(fmt.Errorf("warning: stdin not detected"))
+			checkError(fmt.Errorf("stdin not detected"))
 		}
 
 		outfh, err := xopen.Wopen(config.OutFile)
@@ -86,6 +87,7 @@ var lineageCmd = &cobra.Command{
 		log.Infof("%d nodes parsed", n)
 
 		type taxid2lineage struct {
+			line           string
 			taxid          int32
 			lineage        string
 			lineageInTaxid string
@@ -96,9 +98,18 @@ var lineageCmd = &cobra.Command{
 			if line == "" {
 				return nil, false, nil
 			}
-			id, e := strconv.Atoi(line)
+
+			data := strings.Split(line, "\t")
+			if len(data) < field+1 {
+				field = len(data) - 1
+			}
+
+			if data[field] == "" {
+				return taxid2lineage{line, -1, "", ""}, true, nil
+			}
+			id, e := strconv.Atoi(data[field])
 			if e != nil {
-				return nil, false, e
+				return taxid2lineage{line, -1, "", ""}, true, nil
 			}
 
 			lineage := []string{}
@@ -112,18 +123,25 @@ var lineageCmd = &cobra.Command{
 					break
 				}
 				lineage = append(lineage, names[child])
-				lineageInTaxid = append(lineageInTaxid, strconv.Itoa(int(child)))
+				if printLineageInTaxid {
+					lineageInTaxid = append(lineageInTaxid, strconv.Itoa(int(child)))
+				}
 				if parent == 1 && child != 1 {
 					break
 				}
 				child = parent
 			}
 			child = int32(id)
-			return taxid2lineage{child,
+			if printLineageInTaxid {
+				return taxid2lineage{line, child,
 					strings.Join(stringutil.ReverseStringSlice(lineage), ";"),
 					strings.Join(stringutil.ReverseStringSlice(lineageInTaxid), ";"),
-				},
-				true, nil
+				}, true, nil
+			}
+			return taxid2lineage{line, child,
+				strings.Join(stringutil.ReverseStringSlice(lineage), ";"),
+				"",
+			}, true, nil
 		}
 
 		for _, file := range files {
@@ -136,7 +154,11 @@ var lineageCmd = &cobra.Command{
 
 				for _, data := range chunk.Data {
 					t2l = data.(taxid2lineage)
-					outfh.WriteString(fmt.Sprintf("%d\t%s\t%s\n", t2l.taxid, t2l.lineage, t2l.lineageInTaxid))
+					if printLineageInTaxid {
+						outfh.WriteString(fmt.Sprintf("%s\t%s\t%s\n", t2l.line, t2l.lineage, t2l.lineageInTaxid))
+					} else {
+						outfh.WriteString(fmt.Sprintf("%s\t%s\n", t2l.line, t2l.lineage))
+					}
 				}
 			}
 		}
@@ -147,4 +169,6 @@ var lineageCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(lineageCmd)
+	lineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show lineage consisting of taxids`)
+	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. data should be tab-separated")
 }
