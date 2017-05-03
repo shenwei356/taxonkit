@@ -35,7 +35,7 @@ Taking virus for example.
         </s>
         It costs ~ 8 minutes.
 
-3. Retrieving nr sequences:
+3. Retrieving nr sequences from BLAST database:
 
     - accesion
 
@@ -52,7 +52,7 @@ Taking virus for example.
                 blastdbcmd -db nr -entry_batch - -out nr.virus.fa
         </s>
 
-    Another way is retrieving from [nr FASTA sequences](ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz) using [SeqKit](http://bioinf.shenwei.me/seqkit/download):
+    Another way is directly retrieving from [nr FASTA sequences](ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz) using [SeqKit](http://bioinf.shenwei.me/seqkit/download):
     
         gzip -c -d nr.gz | seqkit grep -f virus.taxid.acc.txt > nr.virus.fa
 

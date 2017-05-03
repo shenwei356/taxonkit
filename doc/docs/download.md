@@ -1,7 +1,7 @@
 # Download
 
 `TaxonKit` is implemented in [Go](https://golang.org/) programming language,
- executable binary files **for most popular operating system** are freely available
+ executable binary files **for most popular operating systems** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 
 ## Current Version

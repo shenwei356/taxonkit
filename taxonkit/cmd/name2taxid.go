@@ -47,7 +47,7 @@ var name2taxidCmd = &cobra.Command{
 		files := getFileList(args)
 
 		if len(files) == 1 && isStdin(files[0]) && !xopen.IsStdin() {
-			checkError(fmt.Errorf("tdin not detected"))
+			checkError(fmt.Errorf("stdin not detected"))
 		}
 
 		outfh, err := xopen.Wopen(config.OutFile)
@@ -66,7 +66,7 @@ var name2taxidCmd = &cobra.Command{
 			reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
 			checkError(err)
 
-			ranks := make(map[int32]string)
+			ranks = make(map[int32]string)
 			var info taxonInfo
 			var n int64
 			for chunk := range reader.Ch {
