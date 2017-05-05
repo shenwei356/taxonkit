@@ -194,7 +194,7 @@ It costs ~ 8 minutes.</p>
 </ul>
 </li>
 <li>
-<p>Retrieving nr sequences:</p>
+<p>Retrieving nr sequences from BLAST database:</p>
 <ul>
 <li>
 <p>accesion</p>
@@ -214,7 +214,7 @@ It costs ~ 8 minutes.</p>
 <p></s></p>
 </li>
 </ul>
-<p>Another way is retrieving from <a href="ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz">nr FASTA sequences</a> using <a href="http://bioinf.shenwei.me/seqkit/download">SeqKit</a>:</p>
+<p>Another way is directly retrieving from <a href="ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz">nr FASTA sequences</a> using <a href="http://bioinf.shenwei.me/seqkit/download">SeqKit</a>:</p>
 <pre><code>gzip -c -d nr.gz | seqkit grep -f virus.taxid.acc.txt &gt; nr.virus.fa
 </code></pre>
 </li>
