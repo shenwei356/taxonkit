@@ -22,6 +22,11 @@
 - `reformat` reformat lineage (supporting STDIN)
 - `name2taxid` query taxid by taxon scientific name (supporting STDIN)
 
+Misc
+
+- `version`   print version information and check for update
+- `genautocomplete` generate shell autocompletion script
+
 ## Installation
 
 Go to [Download Page](http://bioinf.shenwei.me/taxonkit/download) for more download options and changelogs.
@@ -57,6 +62,25 @@ And then:
 #### Method 3: For Go developer
 
     go get -u github.com/shenwei356/taxonkit/taxonkit
+
+## Bash-completion
+
+Note: The current version supports Bash only.
+This should work for *nix systems with Bash installed.
+
+Howto:
+
+1. run: `taxonkit genautocomplete`
+
+2. create and edit `~/.bash_completion` file if you don't have it.
+
+        nano ~/.bash_completion
+
+    add the following:
+
+        for bcfile in ~/.bash_completion.d/* ; do
+          . $bcfile
+        done
 
 ## Contact
 

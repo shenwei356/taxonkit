@@ -86,6 +86,7 @@ var listCmd = &cobra.Command{
 					tree[parent] = make(map[int32]bool)
 				}
 				tree[parent][child] = false
+				tree[child] = make(map[int32]bool)
 				if printRank {
 					ranks[child] = info.rank
 				}
