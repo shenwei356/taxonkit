@@ -159,6 +159,8 @@
         
             <li><a href="#name2taxid">name2taxid</a></li>
         
+            <li><a href="#genautocomplete">genautocomplete</a></li>
+        
     
     </ul>
 </div></div>
@@ -175,7 +177,7 @@
 <p>Usage</p>
 <pre><code>TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.2.0
+Version: 0.2.1
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -194,14 +196,16 @@ Usage:
   taxonkit [command]
 
 Available Commands:
-  help        Help about any command
-  lineage     query lineage of given taxids
-  list        list taxon tree of given taxids
-  name2taxid  query taxid by taxon scientific name
-  reformat    reformat lineage
-  version     print version information and check for update
+  genautocomplete generate shell autocompletion script
+  help            Help about any command
+  lineage         query lineage of given taxids
+  list            list taxon tree of given taxids
+  name2taxid      query taxid by taxon scientific name
+  reformat        reformat lineage
+  version         print version information and check for update
 
 Flags:
+  -h, --help                help for taxonkit
       --names-file string   names.dmp file (default &quot;/home/shenwei/.taxonkit/names.dmp&quot;)
       --nodes-file string   nodes.dmp file (default &quot;/home/shenwei/.taxonkit/nodes.dmp&quot;)
   -o, --out-file string     out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
@@ -561,6 +565,37 @@ Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumeta
 </code></pre>
 </li>
 </ol>
+<h2 id="genautocomplete">genautocomplete</h2>
+<p>Usage</p>
+<pre><code>generate shell autocompletion script
+
+Note: The current version supports Bash only.
+This should work for *nix systems with Bash installed.
+
+Howto:
+
+1. run: taxonkit genautocomplete
+
+2. create and edit ~/.bash_completion file if you don't have it.
+
+        nano ~/.bash_completion
+
+   add the following:
+
+        for bcfile in ~/.bash_completion.d/* ; do
+          . $bcfile
+        done
+
+Usage:
+  taxonkit genautocomplete [flags]
+
+Flags:
+      --file string   autocompletion file (default &quot;/home/shenwei/.bash_completion.d/taxonkit.sh&quot;)
+  -h, --help          help for genautocomplete
+      --type string   autocompletion type (currently only bash supported) (default &quot;bash&quot;)
+
+</code></pre>
+
 <div id="disqus_thread"></div>
 
 <script>

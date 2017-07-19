@@ -151,6 +151,8 @@
         
             <li><a href="#installation">Installation</a></li>
         
+            <li><a href="#bash-completion">Bash-completion</a></li>
+        
             <li><a href="#contact">Contact</a></li>
         
             <li><a href="#license">License</a></li>
@@ -182,6 +184,11 @@
 <li><code>lineage</code> query lineage of given taxids (supporting STDIN)</li>
 <li><code>reformat</code> reformat lineage (supporting STDIN)</li>
 <li><code>name2taxid</code> query taxid by taxon scientific name (supporting STDIN)</li>
+</ul>
+<p>Misc</p>
+<ul>
+<li><code>version</code>   print version information and check for update</li>
+<li><code>genautocomplete</code> generate shell autocompletion script</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <p>Go to <a href="http://bioinf.shenwei.me/taxonkit/download">Download Page</a> for more download options and changelogs.</p>
@@ -221,6 +228,25 @@ source ~/.bashrc
 <h4 id="method-3-for-go-developer">Method 3: For Go developer</h4>
 <pre><code>go get -u github.com/shenwei356/taxonkit/taxonkit
 </code></pre>
+<h2 id="bash-completion">Bash-completion</h2>
+<p>Note: The current version supports Bash only.
+This should work for *nix systems with Bash installed.</p>
+<p>Howto:</p>
+<ol>
+<li>
+<p>run: <code>taxonkit genautocomplete</code></p>
+</li>
+<li>
+<p>create and edit <code>~/.bash_completion</code> file if you don't have it.</p>
+<pre><code>nano ~/.bash_completion
+</code></pre>
+<p>add the following:</p>
+<pre><code>for bcfile in ~/.bash_completion.d/* ; do
+  . $bcfile
+done
+</code></pre>
+</li>
+</ol>
 <h2 id="contact">Contact</h2>
 <p>Email me for any problem when using taxonkit. shenwei356(at)gmail.com</p>
 <p><a href="https://github.com/shenwei356/taxonkit/issues">Create an issue</a> to report bugs,
