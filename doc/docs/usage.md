@@ -15,7 +15,7 @@ Usage
 ```
 TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.2.2
+Version: 0.2.3
 
 Author: Wei Shen <shenwei356@gmail.com>
 
