@@ -93,12 +93,15 @@ Output format can be formated by flag --format, available placeholders:
 
 		var names map[int32]string
 
-		log.Infof("parsing names file: %s", config.NamesFile)
+		if config.Verbose {
+			log.Infof("parsing names file: %s", config.NamesFile)
+		}
 		names = getTaxonNames(config.NamesFile, config.Threads, 10)
-		log.Infof("%d names parsed", len(names))
+		if config.Verbose {
+			log.Infof("%d names parsed", len(names))
 
-		log.Infof("parsing nodes file: %s", config.NodesFile)
-
+			log.Infof("parsing nodes file: %s", config.NodesFile)
+		}
 		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
 		checkError(err)
 
@@ -115,7 +118,9 @@ Output format can be formated by flag --format, available placeholders:
 			}
 		}
 
-		log.Infof("%d nodes parsed", n)
+		if config.Verbose {
+			log.Infof("%d nodes parsed", n)
+		}
 
 		type line2flineage struct {
 			line     string

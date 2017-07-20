@@ -103,4 +103,5 @@ Dataset:
 
 	RootCmd.PersistentFlags().StringP("nodes-file", "", NodesFile, "nodes.dmp file")
 	RootCmd.PersistentFlags().StringP("names-file", "", NamesFile, "names.dmp file")
+	RootCmd.PersistentFlags().BoolP("verbose", "", false, "print verbose information")
 }

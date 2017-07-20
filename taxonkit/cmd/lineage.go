@@ -57,12 +57,15 @@ var lineageCmd = &cobra.Command{
 
 		var names map[int32]string
 
-		log.Infof("parsing names file: %s", config.NamesFile)
+		if config.Verbose {
+			log.Infof("parsing names file: %s", config.NamesFile)
+		}
 		names = getTaxonNames(config.NamesFile, config.Threads, 10)
-		log.Infof("%d names parsed", len(names))
+		if config.Verbose {
+			log.Infof("%d names parsed", len(names))
 
-		log.Infof("parsing nodes file: %s", config.NodesFile)
-
+			log.Infof("parsing nodes file: %s", config.NodesFile)
+		}
 		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
 		checkError(err)
 
@@ -84,7 +87,9 @@ var lineageCmd = &cobra.Command{
 			}
 		}
 
-		log.Infof("%d nodes parsed", n)
+		if config.Verbose {
+			log.Infof("%d nodes parsed", n)
+		}
 
 		type taxid2lineage struct {
 			line           string

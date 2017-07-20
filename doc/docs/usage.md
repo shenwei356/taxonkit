@@ -15,7 +15,7 @@ Usage
 ```
 TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.2.1
+Version: 0.2.2
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -48,6 +48,7 @@ Flags:
       --nodes-file string   nodes.dmp file (default "/home/shenwei/.taxonkit/nodes.dmp")
   -o, --out-file string     out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
   -j, --threads int         number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
+      --verbose             print verbose information
 
 Use "taxonkit [command] --help" for more information about a command.
 

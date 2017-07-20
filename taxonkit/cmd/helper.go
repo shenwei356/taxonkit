@@ -31,7 +31,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.2.1"
+const VERSION = "0.2.2"
 
 // Config is the struct containing all global flags
 type Config struct {
@@ -39,6 +39,7 @@ type Config struct {
 	OutFile   string
 	NodesFile string
 	NamesFile string
+	Verbose   bool
 }
 
 func getConfigs(cmd *cobra.Command) Config {
@@ -47,6 +48,7 @@ func getConfigs(cmd *cobra.Command) Config {
 		OutFile:   getFlagString(cmd, "out-file"),
 		NodesFile: getFlagString(cmd, "nodes-file"),
 		NamesFile: getFlagString(cmd, "names-file"),
+		Verbose:   getFlagBool(cmd, "verbose"),
 	}
 }
 

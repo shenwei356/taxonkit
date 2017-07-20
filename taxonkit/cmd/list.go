@@ -59,12 +59,18 @@ var listCmd = &cobra.Command{
 		printRank := getFlagBool(cmd, "show-rank")
 
 		if printName {
-			log.Infof("parsing names file: %s", config.NamesFile)
+			if config.Verbose {
+				log.Infof("parsing names file: %s", config.NamesFile)
+			}
 			names = getTaxonNames(config.NamesFile, config.Threads, 10)
-			log.Infof("%d names parsed", len(names))
+			if config.Verbose {
+				log.Infof("%d names parsed", len(names))
+			}
 		}
 
-		log.Infof("parsing nodes file: %s", config.NodesFile)
+		if config.Verbose {
+			log.Infof("parsing nodes file: %s", config.NodesFile)
+		}
 
 		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
 		checkError(err)
@@ -94,7 +100,9 @@ var listCmd = &cobra.Command{
 			}
 		}
 
-		log.Infof("%d nodes parsed", n)
+		if config.Verbose {
+			log.Infof("%d nodes parsed", n)
+		}
 
 		var level int
 		if jsonFormat {

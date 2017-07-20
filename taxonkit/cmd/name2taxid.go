@@ -55,14 +55,19 @@ var name2taxidCmd = &cobra.Command{
 
 		var m map[string][]int32
 
-		log.Infof("parsing names file: %s", config.NamesFile)
+		if config.Verbose {
+			log.Infof("parsing names file: %s", config.NamesFile)
+		}
 		m = getTaxonNames2Taxid(config.NamesFile, config.Threads, 10)
-		log.Infof("%d names parsed", len(m))
+		if config.Verbose {
+			log.Infof("%d names parsed", len(m))
+		}
 
 		var ranks map[int32]string
 		if printRank {
-			log.Infof("parsing nodes file: %s", config.NodesFile)
-
+			if config.Verbose {
+				log.Infof("parsing nodes file: %s", config.NodesFile)
+			}
 			reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
 			checkError(err)
 
@@ -79,7 +84,9 @@ var name2taxidCmd = &cobra.Command{
 				}
 			}
 
-			log.Infof("%d nodes parsed", n)
+			if config.Verbose {
+				log.Infof("%d nodes parsed", n)
+			}
 		}
 
 		type line2taxids struct {
