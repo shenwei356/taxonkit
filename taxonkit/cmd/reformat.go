@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"github.com/shenwei356/breader"
+	"github.com/shenwei356/util/stringutil"
 	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
 )
@@ -127,6 +128,7 @@ Output format can be formated by flag --format, available placeholders:
 			flineage string
 		}
 
+		unescape := stringutil.UnEscaper()
 		fn := func(line string) (interface{}, bool, error) {
 			if len(line) == 0 || line[0] == '#' {
 				return nil, false, nil
@@ -247,7 +249,7 @@ Output format can be formated by flag --format, available placeholders:
 				flineage = re.ReplaceAllString(flineage, replacements[srank])
 			}
 
-			return line2flineage{line, flineage}, true, nil
+			return line2flineage{line, unescape(flineage)}, true, nil
 		}
 
 		for _, file := range files {
