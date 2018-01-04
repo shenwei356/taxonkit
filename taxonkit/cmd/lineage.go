@@ -131,7 +131,7 @@ var lineageCmd = &cobra.Command{
 				if printLineageInTaxid {
 					lineageInTaxid = append(lineageInTaxid, strconv.Itoa(int(child)))
 				}
-				if parent == 1 && child != 1 {
+				if parent == 1 {
 					break
 				}
 				child = parent
