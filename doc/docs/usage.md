@@ -10,12 +10,9 @@ And copy "names.dmp" and "nodes.dmp" to data directory: "$HOME/.taxonkit".
 
 ## taxonkit
 
-Usage
-
-```
 TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.2.3
+Version: 0.2.4-dev2
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -338,6 +335,11 @@ Example lineage (produced by: `taxonkit lineage taxids.txt > lineage.txt`)
         Viruses;Retro-transcribing viruses;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
         Bacteria;environmental samples;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
         Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+
+1. Support tab in format string
+
+        $ echo 9606 | taxonkit lineage | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}"
+        9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens Eukaryota       Chordata        Mammalia        Primates        Hominidae  Homo    Homo sapiens
 
 1. from taxid to 7-columns lineage:
 
