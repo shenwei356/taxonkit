@@ -151,16 +151,6 @@
         
             <li><a href="#taxonkit">taxonkit</a></li>
         
-            <li><a href="#list">list</a></li>
-        
-            <li><a href="#lineage">lineage</a></li>
-        
-            <li><a href="#reformat">reformat</a></li>
-        
-            <li><a href="#name2taxid">name2taxid</a></li>
-        
-            <li><a href="#genautocomplete">genautocomplete</a></li>
-        
     
     </ul>
 </div></div>
@@ -174,429 +164,417 @@
 </ul>
 <p>And copy "names.dmp" and "nodes.dmp" to data directory: "$HOME/.taxonkit".</p>
 <h2 id="taxonkit">taxonkit</h2>
-<p>Usage</p>
-<pre><code>TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
+<p>TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit</p>
+<p>Version: 0.2.4-dev2</p>
+<p>Author: Wei Shen <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#104;&#101;&#110;&#119;&#101;&#105;&#51;&#53;&#54;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#115;&#104;&#101;&#110;&#119;&#101;&#105;&#51;&#53;&#54;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a></p>
+<p>Source code: https://github.com/shenwei356/taxonkit
+Documents  : http://bioinf.shenwei.me/taxonkit</p>
+<p>Dataset:</p>
+<pre><code>Please download and decompress "taxdump.tar.gz":
+ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
-Version: 0.2.3
-
-Author: Wei Shen &lt;shenwei356@gmail.com&gt;
-
-Source code: https://github.com/shenwei356/taxonkit
-Documents  : http://bioinf.shenwei.me/taxonkit
-
-Dataset:
-
-    Please download and decompress &quot;taxdump.tar.gz&quot;:
-    ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
-
-    and copy &quot;names.dmp&quot; and &quot;nodes.dmp&quot; to data directory:
-    &quot;/home/shenwei/.taxonkit&quot;
-
-Usage:
-  taxonkit [command]
-
-Available Commands:
+and copy "names.dmp" and "nodes.dmp" to data directory:
+"/home/shenwei/.taxonkit"
+</code></pre>
+<p>Usage:
+  taxonkit [command]</p>
+<p>Available Commands:
   genautocomplete generate shell autocompletion script
   help            Help about any command
   lineage         query lineage of given taxids
   list            list taxon tree of given taxids
   name2taxid      query taxid by taxon scientific name
   reformat        reformat lineage
-  version         print version information and check for update
-
-Flags:
+  version         print version information and check for update</p>
+<p>Flags:
   -h, --help                help for taxonkit
-      --names-file string   names.dmp file (default &quot;/home/shenwei/.taxonkit/names.dmp&quot;)
-      --nodes-file string   nodes.dmp file (default &quot;/home/shenwei/.taxonkit/nodes.dmp&quot;)
-  -o, --out-file string     out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
+      --names-file string   names.dmp file (default "/home/shenwei/.taxonkit/names.dmp")
+      --nodes-file string   nodes.dmp file (default "/home/shenwei/.taxonkit/nodes.dmp")
+  -o, --out-file string     out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
   -j, --threads int         number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
-      --verbose             print verbose information
+      --verbose             print verbose information</p>
+<p>Use "taxonkit [command] --help" for more information about a command.</p>
+<pre><code>
+## list
 
-Use &quot;taxonkit [command] --help&quot; for more information about a command.
+Usage
 
 </code></pre>
 
-<h2 id="list">list</h2>
-<p>Usage</p>
-<pre><code>list taxon tree of given taxids
-
-Usage:
-  taxonkit list [flags]
-
-Flags:
+<p>list taxon tree of given taxids</p>
+<p>Usage:
+  taxonkit list [flags]</p>
+<p>Flags:
       --ids string      taxid(s), multiple values should be separated by comma
-      --indent string   indent (default &quot;  &quot;)
-      --json            output in JSON format. you can save the result in file with suffix &quot;.json&quot; and open with modern text editor
+      --indent string   indent (default "  ")
+      --json            output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor
       --show-name       output scientific name
-      --show-rank       output rank
+      --show-rank       output rank</p>
+<pre><code>
+Examples
+
+1. Default usage
+
+        $ taxonkit list --ids 9605,239934
+        9605
+          9606
+            63221
+            741158
+          1425170
+
+        239934
+          239935
+            349741
+          512293
+            512294
+            1131822
+            1262691
+            1263034
+          1131336
+          1574264
+          1574265
+          1638783
+          1679444
+          1755639
+          1896967
+
+1. Removing indent. The list could be used to extract sequences from BLAST database with `blastdbcmd` (see [tutorial](http://bioinf.shenwei.me/taxonkit/tutorial/))
+
+        $ taxonkit list --ids 9605,239934 --indent &quot;&quot;
+        9605
+        9606
+        63221
+        741158
+        1425170
+
+        239934
+        239935
+        349741
+        512293
+        512294
+        1131822
+        1262691
+        1263034
+        1131336
+        1574264
+        1574265
+        1638783
+        1679444
+        1755639
+        1896967
+
+
+    **Performance:** Time and memory usage for whole taxon tree:
+
+        $ # emptying the buffers cache
+        $ su -c &quot;free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free&quot;
+
+        $ memusg -t taxonkit list --ids 1 --indent &quot;&quot; &gt; t0.txt
+        elapsed time: 3.093s
+        peak rss: 82.79 MB
+
+1. Adding names
+
+        $ taxonkit list --show-rank --show-name --ids 9605,239934
+        9605 [genus] Homo
+          9606 [species] Homo sapiens
+            63221 [subspecies] Homo sapiens neanderthalensis
+            741158 [subspecies] Homo sapiens ssp. Denisova
+          1425170 [species] Homo heidelbergensis
+
+        239934 [genus] Akkermansia
+          239935 [species] Akkermansia muciniphila
+            349741 [no rank] Akkermansia muciniphila ATCC BAA-835
+          512293 [no rank] environmental samples
+            512294 [species] uncultured Akkermansia sp.
+            1131822 [species] uncultured Akkermansia sp. SMG25
+            1262691 [species] Akkermansia sp. CAG:344
+            1263034 [species] Akkermansia muciniphila CAG:154
+          1131336 [species] Akkermansia sp. KLE1605
+          1574264 [species] Akkermansia sp. KLE1797
+          1574265 [species] Akkermansia sp. KLE1798
+          1638783 [species] Akkermansia sp. UNK.MGS-1
+          1679444 [species] Akkermansia glycaniphila
+          1755639 [species] Akkermansia sp. MC_55
+          1896967 [species] Akkermansia sp. 54_46
+
+    **Performance:** Time and memory usage for whole taxon tree:
+
+        $ # emptying the buffers cache
+        $ su -c &quot;free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free&quot;
+
+        $ memusg -t taxonkit list --show-rank --show-name --ids 1 &gt; t1.txt
+        elapsed time: 9.825s
+        peak rss: 648.65 MB
+
+1. Output in JSON format, so you can easily collapse and uncollapse taxonomy tree in modern text editor.
+
+        $ taxonkit list --show-rank --show-name --ids 9605,239934 --json
+        {
+          &quot;9605 [genus] Homo&quot;: {
+            &quot;9606 [species] Homo sapiens&quot;: {
+              &quot;63221 [subspecies] Homo sapiens neanderthalensis&quot;: {},
+              &quot;741158 [subspecies] Homo sapiens ssp. Denisova&quot;: {}
+            }
+            &quot;1425170 [species] Homo heidelbergensis&quot;: {}
+          },
+          &quot;239934 [genus] Akkermansia&quot;: {
+            &quot;239935 [species] Akkermansia muciniphila&quot;: {
+              &quot;349741 [no rank] Akkermansia muciniphila ATCC BAA-835&quot;: {}
+            }
+            &quot;512293 [no rank] environmental samples&quot;: {
+              &quot;512294 [species] uncultured Akkermansia sp.&quot;: {},
+              &quot;1131822 [species] uncultured Akkermansia sp. SMG25&quot;: {},
+              &quot;1262691 [species] Akkermansia sp. CAG:344&quot;: {},
+              &quot;1263034 [species] Akkermansia muciniphila CAG:154&quot;: {}
+            }
+            &quot;1131336 [species] Akkermansia sp. KLE1605&quot;: {},
+            &quot;1574264 [species] Akkermansia sp. KLE1797&quot;: {},
+            &quot;1574265 [species] Akkermansia sp. KLE1798&quot;: {},
+            &quot;1638783 [species] Akkermansia sp. UNK.MGS-1&quot;: {},
+            &quot;1679444 [species] Akkermansia glycaniphila&quot;: {},
+            &quot;1755639 [species] Akkermansia sp. MC_55&quot;: {},
+            &quot;1896967 [species] Akkermansia sp. 54_46&quot;: {}
+          }
+        }
+
+    Snapshot of taxonomy (taxid 1) in kate:
+    ![taxon.json.png](files/taxon.json.png)
+
+
+## lineage
+
+Usage
 
 </code></pre>
 
-<p>Examples</p>
-<ol>
-<li>
-<p>Default usage</p>
-<pre><code>$ taxonkit list --ids 9605,239934
-9605
-  9606
-    63221
-    741158
-  1425170
-
-239934
-  239935
-    349741
-  512293
-    512294
-    1131822
-    1262691
-    1263034
-  1131336
-  1574264
-  1574265
-  1638783
-  1679444
-  1755639
-  1896967
-</code></pre>
-</li>
-<li>
-<p>Removing indent. The list could be used to extract sequences from BLAST database with <code>blastdbcmd</code> (see <a href="http://bioinf.shenwei.me/taxonkit/tutorial/">tutorial</a>)</p>
-<pre><code>$ taxonkit list --ids 9605,239934 --indent ""
-9605
-9606
-63221
-741158
-1425170
-
-239934
-239935
-349741
-512293
-512294
-1131822
-1262691
-1263034
-1131336
-1574264
-1574265
-1638783
-1679444
-1755639
-1896967
-</code></pre>
-<p><strong>Performance:</strong> Time and memory usage for whole taxon tree:</p>
-<pre><code>$ # emptying the buffers cache
-$ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
-
-$ memusg -t taxonkit list --ids 1 --indent "" &gt; t0.txt
-elapsed time: 3.093s
-peak rss: 82.79 MB
-</code></pre>
-</li>
-<li>
-<p>Adding names</p>
-<pre><code>$ taxonkit list --show-rank --show-name --ids 9605,239934
-9605 [genus] Homo
-  9606 [species] Homo sapiens
-    63221 [subspecies] Homo sapiens neanderthalensis
-    741158 [subspecies] Homo sapiens ssp. Denisova
-  1425170 [species] Homo heidelbergensis
-
-239934 [genus] Akkermansia
-  239935 [species] Akkermansia muciniphila
-    349741 [no rank] Akkermansia muciniphila ATCC BAA-835
-  512293 [no rank] environmental samples
-    512294 [species] uncultured Akkermansia sp.
-    1131822 [species] uncultured Akkermansia sp. SMG25
-    1262691 [species] Akkermansia sp. CAG:344
-    1263034 [species] Akkermansia muciniphila CAG:154
-  1131336 [species] Akkermansia sp. KLE1605
-  1574264 [species] Akkermansia sp. KLE1797
-  1574265 [species] Akkermansia sp. KLE1798
-  1638783 [species] Akkermansia sp. UNK.MGS-1
-  1679444 [species] Akkermansia glycaniphila
-  1755639 [species] Akkermansia sp. MC_55
-  1896967 [species] Akkermansia sp. 54_46
-</code></pre>
-<p><strong>Performance:</strong> Time and memory usage for whole taxon tree:</p>
-<pre><code>$ # emptying the buffers cache
-$ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
-
-$ memusg -t taxonkit list --show-rank --show-name --ids 1 &gt; t1.txt
-elapsed time: 9.825s
-peak rss: 648.65 MB
-</code></pre>
-</li>
-<li>
-<p>Output in JSON format, so you can easily collapse and uncollapse taxonomy tree in modern text editor.</p>
-<pre><code>$ taxonkit list --show-rank --show-name --ids 9605,239934 --json
-{
-  "9605 [genus] Homo": {
-    "9606 [species] Homo sapiens": {
-      "63221 [subspecies] Homo sapiens neanderthalensis": {},
-      "741158 [subspecies] Homo sapiens ssp. Denisova": {}
-    }
-    "1425170 [species] Homo heidelbergensis": {}
-  },
-  "239934 [genus] Akkermansia": {
-    "239935 [species] Akkermansia muciniphila": {
-      "349741 [no rank] Akkermansia muciniphila ATCC BAA-835": {}
-    }
-    "512293 [no rank] environmental samples": {
-      "512294 [species] uncultured Akkermansia sp.": {},
-      "1131822 [species] uncultured Akkermansia sp. SMG25": {},
-      "1262691 [species] Akkermansia sp. CAG:344": {},
-      "1263034 [species] Akkermansia muciniphila CAG:154": {}
-    }
-    "1131336 [species] Akkermansia sp. KLE1605": {},
-    "1574264 [species] Akkermansia sp. KLE1797": {},
-    "1574265 [species] Akkermansia sp. KLE1798": {},
-    "1638783 [species] Akkermansia sp. UNK.MGS-1": {},
-    "1679444 [species] Akkermansia glycaniphila": {},
-    "1755639 [species] Akkermansia sp. MC_55": {},
-    "1896967 [species] Akkermansia sp. 54_46": {}
-  }
-}
-</code></pre>
-<p>Snapshot of taxonomy (taxid 1) in kate:
-<img alt="taxon.json.png" src="../files/taxon.json.png" /></p>
-</li>
-</ol>
-<h2 id="lineage">lineage</h2>
-<p>Usage</p>
-<pre><code>query lineage of given taxids
-
-Usage:
-  taxonkit lineage [flags]
-
-Flags:
+<p>query lineage of given taxids</p>
+<p>Usage:
+  taxonkit lineage [flags]</p>
+<p>Flags:
   -t, --show-lineage-taxids   show lineage consisting of taxids
-  -i, --taxid-field int       field index of taxid. data should be tab-separated (default 1)
+  -i, --taxid-field int       field index of taxid. data should be tab-separated (default 1)</p>
+<pre><code>
+Examples
+
+1. Full lineage:
+
+        # note that 10000000 is a fake taxid
+        $ cat taxids.txt
+        9606
+        349741
+        239935
+        11932
+        314101
+        1327037
+        10000000
+
+
+        $ taxonkit lineage -t taxids.txt
+        9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+        349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+        239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
+        1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+        10000000
+
+    show lineage consisting of taxids:
+
+        $ taxonkit lineage -t taxids.txt
+        9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
+        349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835  131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
+        239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila       131567;2;1783257;74201;203494;48461;1647988;239934;239935
+        11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle        10239;35268;11632;35276;11749;11932
+        314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B   131567;2;48479;314101
+        1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y   10239;35237;28883;10699;196894;1327037
+        10000000
+
+    or read taxids from STDIN:
+
+        $ cat taxids.txt | taxonkit lineage
+
+## reformat
+
+Usage
 
 </code></pre>
 
-<p>Examples</p>
-<ol>
-<li>
-<p>Full lineage:</p>
-<pre><code># note that 10000000 is a fake taxid
-$ cat taxids.txt
-9606
-349741
-239935
-11932
-314101
-1327037
-10000000
-
-$ taxonkit lineage -t taxids.txt
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
-349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-10000000
+<p>rreformat lineage</p>
+<p>Output format can be formated by flag --format, available placeholders:</p>
+<pre><code>{k}: superkingdom
+{p}: phylum
+{c}: class
+{o}: order
+{f}: family
+{g}: genus
+{s}: species
+{S}: subspecies
 </code></pre>
-<p>show lineage consisting of taxids:</p>
-<pre><code>$ taxonkit lineage -t taxids.txt
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
-349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835  131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
-239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila       131567;2;1783257;74201;203494;48461;1647988;239934;239935
-11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle        10239;35268;11632;35276;11749;11932
-314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B   131567;2;48479;314101
-1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y   10239;35237;28883;10699;196894;1327037
-10000000
-</code></pre>
-<p>or read taxids from STDIN:</p>
-<pre><code>$ cat taxids.txt | taxonkit lineage
-</code></pre>
-</li>
-</ol>
-<h2 id="reformat">reformat</h2>
-<p>Usage</p>
-<pre><code>rreformat lineage
-
-Output format can be formated by flag --format, available placeholders:
-
-    {k}: superkingdom
-    {p}: phylum
-    {c}: class
-    {o}: order
-    {f}: family
-    {g}: genus
-    {s}: species
-    {S}: subspecies
-
-Usage:
-  taxonkit reformat [flags]
-
-Flags:
-  -d, --delimiter string        field delimiter in input lineage (default &quot;;&quot;)
+<p>Usage:
+  taxonkit reformat [flags]</p>
+<p>Flags:
+  -d, --delimiter string        field delimiter in input lineage (default ";")
   -F, --fill-miss-rank          estimate and fill missing rank with original lineage information (recommended)
-  -f, --format string           output format, placeholders of rank are needed (default &quot;{k};{p};{c};{o};{f};{g};{s}&quot;)
+  -f, --format string           output format, placeholders of rank are needed (default "{k};{p};{c};{o};{f};{g};{s}")
   -i, --lineage-field int       field index of lineage. data should be tab-separated (default 2)
-  -r, --miss-rank-repl string   replacement string for missing rank, if given &quot;&quot;, &quot;unclassified xxx xxx&quot; will used
+  -r, --miss-rank-repl string   replacement string for missing rank, if given "", "unclassified xxx xxx" will used</p>
+<pre><code>
+Examples:
+
+Example lineage (produced by: `taxonkit lineage taxids.txt &gt; lineage.txt`)
+
+    $ cat lineage.txt
+    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+    349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+    239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+    11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+    314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
+    1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+
+1. Default output format (`&quot;{k};{p};{c};{o};{f};{g};{s}&quot;`)
+
+        # reformated lineages are appended to the input data
+        $ taxonkit reformat --lineage-field 2 lineage.txt
+        $ taxonkit reformat lineage.txt
+        9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+        ...
+
+        $ taxonkit reformat lineage.txt | cut -f 3
+        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Viruses;;;;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
+        Viruses;;;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
+
+1. Use custom strings for unclassfied ranks
+
+        $ taxonkit reformat lineage.txt --miss-rank-repl &quot;__&quot; | cut -f 3
+        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Viruses;__;__;__;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
+        Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
+
+1. Estimate and fill missing rank with original lineage information
+   (**recommended**, very useful for formating input data for
+   [LEfSe](https://bitbucket.org/biobakery/biobakery/wiki/lefse))
+
+        $ taxonkit reformat lineage.txt --fill-miss-rank | cut -f 3
+        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Viruses;Retro-transcribing viruses;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Bacteria;environmental samples;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
+        Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+
+1. Support tab in format string
+
+        $ echo 9606 | taxonkit lineage | taxonkit reformat -f &quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}&quot;
+        9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens Eukaryota       Chordata        Mammalia        Primates        Hominidae  Homo    Homo sapiens
+
+1. from taxid to 7-columns lineage:
+
+        $ cat taxids.txt | taxonkit lineage | taxonkit reformat
+
+## name2taxid
+
+Usage
 
 </code></pre>
 
-<p>Examples:</p>
-<p>Example lineage (produced by: <code>taxonkit lineage taxids.txt &gt; lineage.txt</code>)</p>
-<pre><code>$ cat lineage.txt
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
-349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-</code></pre>
-<ol>
-<li>
-<p>Default output format (<code>"{k};{p};{c};{o};{f};{g};{s}"</code>)</p>
-<pre><code># reformated lineages are appended to the input data
-$ taxonkit reformat --lineage-field 2 lineage.txt
-$ taxonkit reformat lineage.txt
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
-...
-
-$ taxonkit reformat lineage.txt | cut -f 3
-Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
-Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Viruses;;;;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
-Viruses;;;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
-</code></pre>
-</li>
-<li>
-<p>Use custom strings for unclassfied ranks</p>
-<pre><code>$ taxonkit reformat lineage.txt --miss-rank-repl "__" | cut -f 3
-Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
-Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Viruses;__;__;__;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
-Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
-</code></pre>
-</li>
-<li>
-<p>Estimate and fill missing rank with original lineage information
-   (<strong>recommended</strong>, very useful for formating input data for
-   <a href="https://bitbucket.org/biobakery/biobakery/wiki/lefse">LEfSe</a>)</p>
-<pre><code>$ taxonkit reformat lineage.txt --fill-miss-rank | cut -f 3
-Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
-Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Viruses;Retro-transcribing viruses;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-Bacteria;environmental samples;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
-Viruses;dsDNA viruses, no RNA stage;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-</code></pre>
-</li>
-<li>
-<p>from taxid to 7-columns lineage:</p>
-<pre><code>$ cat taxids.txt | taxonkit lineage | taxonkit reformat
-</code></pre>
-</li>
-</ol>
-<h2 id="name2taxid">name2taxid</h2>
-<p>Usage</p>
-<pre><code>query taxid by taxon scientific name
-
-Usage:
-  taxonkit name2taxid [flags]
-
-Flags:
+<p>query taxid by taxon scientific name</p>
+<p>Usage:
+  taxonkit name2taxid [flags]</p>
+<p>Flags:
   -i, --name-field int   field index of name. data should be tab-separated (default 1)
-      --show-rank        show rank
+      --show-rank        show rank</p>
+<pre><code>
+Examples
+
+Example data
+
+    $ cat names.txt
+    Homo sapiens
+    Akkermansia muciniphila ATCC BAA-835
+    Akkermansia muciniphila
+    Mouse Intracisternal A-particle
+    Wei Shen
+    uncultured murine large bowel bacterium BAC 54B
+    Croceibacter phage P2559Y
+
+1. default
+
+        # taxonkit name2taxid names.txt
+        $ cat names.txt | taxonkit name2taxid
+        Homo sapiens    9606
+        Akkermansia muciniphila ATCC BAA-835    349741
+        Akkermansia muciniphila 239935
+        Mouse Intracisternal A-particle 11932
+        Wei Shen
+        uncultured murine large bowel bacterium BAC 54B 314101
+        Croceibacter phage P2559Y       1327037
+
+1. show rank
+
+        $ cat names.txt | taxonkit name2taxid --show-rank
+        Homo sapiens    9606    species
+        Akkermansia muciniphila ATCC BAA-835    349741  no rank
+        Akkermansia muciniphila 239935  species
+        Mouse Intracisternal A-particle 11932   species
+        Wei Shen
+        uncultured murine large bowel bacterium BAC 54B 314101  species
+        Croceibacter phage P2559Y       1327037 species
+
+1. from name to lineage
+
+        $ cat names.txt | taxonkit name2taxid | taxonkit lineage --taxid-field 2
+        Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+        Akkermansia muciniphila ATCC BAA-835    349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+        Akkermansia muciniphila 239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Mouse Intracisternal A-particle 11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Wei Shen
+        uncultured murine large bowel bacterium BAC 54B 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
+        Croceibacter phage P2559Y       1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+
+        $ cat names.txt | taxonkit name2taxid | taxonkit lineage --taxid-field 2 --show-lineage-taxids
+        Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens        131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
+        ...
+
+## genautocomplete
+
+Usage
 
 </code></pre>
 
-<p>Examples</p>
-<p>Example data</p>
-<pre><code>$ cat names.txt
-Homo sapiens
-Akkermansia muciniphila ATCC BAA-835
-Akkermansia muciniphila
-Mouse Intracisternal A-particle
-Wei Shen
-uncultured murine large bowel bacterium BAC 54B
-Croceibacter phage P2559Y
-</code></pre>
+<p>generate shell autocompletion script</p>
+<p>Note: The current version supports Bash only.
+This should work for *nix systems with Bash installed.</p>
+<p>Howto:</p>
 <ol>
 <li>
-<p>default</p>
-<pre><code># taxonkit name2taxid names.txt
-$ cat names.txt | taxonkit name2taxid
-Homo sapiens    9606
-Akkermansia muciniphila ATCC BAA-835    349741
-Akkermansia muciniphila 239935
-Mouse Intracisternal A-particle 11932
-Wei Shen
-uncultured murine large bowel bacterium BAC 54B 314101
-Croceibacter phage P2559Y       1327037
-</code></pre>
+<p>run: taxonkit genautocomplete</p>
 </li>
 <li>
-<p>show rank</p>
-<pre><code>$ cat names.txt | taxonkit name2taxid --show-rank
-Homo sapiens    9606    species
-Akkermansia muciniphila ATCC BAA-835    349741  no rank
-Akkermansia muciniphila 239935  species
-Mouse Intracisternal A-particle 11932   species
-Wei Shen
-uncultured murine large bowel bacterium BAC 54B 314101  species
-Croceibacter phage P2559Y       1327037 species
-</code></pre>
-</li>
-<li>
-<p>from name to lineage</p>
-<pre><code>$ cat names.txt | taxonkit name2taxid | taxonkit lineage --taxid-field 2
-Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
-Akkermansia muciniphila ATCC BAA-835    349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-Akkermansia muciniphila 239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Mouse Intracisternal A-particle 11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-Wei Shen
-uncultured murine large bowel bacterium BAC 54B 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-Croceibacter phage P2559Y       1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-
-$ cat names.txt | taxonkit name2taxid | taxonkit lineage --taxid-field 2 --show-lineage-taxids
-Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens        131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
-...
+<p>create and edit ~/.bash_completion file if you don't have it.</p>
+<pre><code>nano ~/.bash_completion
 </code></pre>
 </li>
 </ol>
-<h2 id="genautocomplete">genautocomplete</h2>
-<p>Usage</p>
-<pre><code>generate shell autocompletion script
-
-Note: The current version supports Bash only.
-This should work for *nix systems with Bash installed.
-
-Howto:
-
-1. run: taxonkit genautocomplete
-
-2. create and edit ~/.bash_completion file if you don't have it.
-
-        nano ~/.bash_completion
-
-   add the following:
-
-        for bcfile in ~/.bash_completion.d/* ; do
-          . $bcfile
-        done
-
-Usage:
-  taxonkit genautocomplete [flags]
-
-Flags:
-      --file string   autocompletion file (default &quot;/home/shenwei/.bash_completion.d/taxonkit.sh&quot;)
-  -h, --help          help for genautocomplete
-      --type string   autocompletion type (currently only bash supported) (default &quot;bash&quot;)
-
+<p>add the following:</p>
+<pre><code>    for bcfile in ~/.bash_completion.d/* ; do
+      . $bcfile
+    done
 </code></pre>
-
+<p>Usage:
+  taxonkit genautocomplete [flags]</p>
+<p>Flags:
+      --file string   autocompletion file (default "/home/shenwei/.bash_completion.d/taxonkit.sh")
+  -h, --help          help for genautocomplete
+      --type string   autocompletion type (currently only bash supported) (default "bash")</p>
+<p>```</p>
 <div id="disqus_thread"></div>
 
 <script>
