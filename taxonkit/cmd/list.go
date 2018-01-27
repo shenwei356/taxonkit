@@ -81,10 +81,11 @@ var listCmd = &cobra.Command{
 		var child, parent int32
 		var ok bool
 		var n int64
+		var data interface{}
 		for chunk := range reader.Ch {
 			checkError(chunk.Err)
 
-			for _, data := range chunk.Data {
+			for _, data = range chunk.Data {
 				info = data.(taxonInfo)
 				child, parent = info.child, info.parent
 

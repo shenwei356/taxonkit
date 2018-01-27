@@ -31,7 +31,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.2.4-dev2"
+const VERSION = "0.2.4-dev3"
 
 // Config is the struct containing all global flags
 type Config struct {
@@ -73,7 +73,7 @@ func getFlagTaxonIDs(cmd *cobra.Command, flag string) []int {
 	return ids
 }
 
-type taxid2name struct {
+type Taxid2Name struct {
 	id   int32
 	name string
 }
@@ -90,20 +90,20 @@ var nameParseFunc = func(line string) (interface{}, bool, error) {
 	if e != nil {
 		return nil, false, e
 	}
-	return taxid2name{int32(id), items[2]}, true, nil
+	return Taxid2Name{int32(id), items[2]}, true, nil
 }
 
 func getTaxonNames(file string, bufferSize int, chunkSize int) map[int32]string {
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
 	checkError(err)
 
-	var rel taxid2name
+	var rel Taxid2Name
 	m := make(map[int32]string)
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
 		for _, data := range chunk.Data {
-			rel = data.(taxid2name)
+			rel = data.(Taxid2Name)
 			m[rel.id] = rel.name
 		}
 	}
@@ -114,7 +114,7 @@ func getTaxonNames2Taxid(file string, bufferSize int, chunkSize int) map[string]
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
 	checkError(err)
 
-	var rel taxid2name
+	var rel Taxid2Name
 	m := make(map[string][]int32)
 	var ok bool
 	var name string
@@ -122,7 +122,7 @@ func getTaxonNames2Taxid(file string, bufferSize int, chunkSize int) map[string]
 		checkError(chunk.Err)
 
 		for _, data := range chunk.Data {
-			rel = data.(taxid2name)
+			rel = data.(Taxid2Name)
 			name = strings.ToLower(rel.name)
 			if _, ok = m[name]; !ok {
 				m[name] = make([]int32, 0, 1)
@@ -131,6 +131,35 @@ func getTaxonNames2Taxid(file string, bufferSize int, chunkSize int) map[string]
 		}
 	}
 	return m
+}
+
+func parseTaxonNames(file string, bufferSize int, chunkSize int) (map[int32]string, map[string][]int32, map[string]struct{}) {
+	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
+	checkError(err)
+
+	var rel Taxid2Name
+	taxid2name := make(map[int32]string)
+	name2taxids := make(map[string][]int32)
+	fuzzyNames := make(map[string]struct{})
+	var ok bool
+	var name string
+	for chunk := range reader.Ch {
+		checkError(chunk.Err)
+
+		for _, data := range chunk.Data {
+			rel = data.(Taxid2Name)
+			taxid2name[rel.id] = rel.name
+
+			name = strings.ToLower(rel.name)
+			if _, ok = name2taxids[name]; !ok {
+				name2taxids[name] = make([]int32, 0, 1)
+			} else {
+				fuzzyNames[name] = struct{}{}
+			}
+			name2taxids[name] = append(name2taxids[name], rel.id)
+		}
+	}
+	return taxid2name, name2taxids, fuzzyNames
 }
 
 type taxonInfo struct {

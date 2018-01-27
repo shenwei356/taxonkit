@@ -43,6 +43,7 @@ var lineageCmd = &cobra.Command{
 		config := getConfigs(cmd)
 		runtime.GOMAXPROCS(config.Threads)
 
+		delimiter := getFlagString(cmd, "delimiter")
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
 
@@ -74,10 +75,11 @@ var lineageCmd = &cobra.Command{
 		var info taxonInfo
 		var child, parent int32
 		var n int64
+		var data interface{}
 		for chunk := range reader.Ch {
 			checkError(chunk.Err)
 
-			for _, data := range chunk.Data {
+			for _, data = range chunk.Data {
 				info = data.(taxonInfo)
 				child, parent = info.child, info.parent
 
@@ -139,12 +141,12 @@ var lineageCmd = &cobra.Command{
 			child = int32(id)
 			if printLineageInTaxid {
 				return taxid2lineage{line, child,
-					strings.Join(stringutil.ReverseStringSlice(lineage), ";"),
-					strings.Join(stringutil.ReverseStringSlice(lineageInTaxid), ";"),
+					strings.Join(stringutil.ReverseStringSlice(lineage), delimiter),
+					strings.Join(stringutil.ReverseStringSlice(lineageInTaxid), delimiter),
 				}, true, nil
 			}
 			return taxid2lineage{line, child,
-				strings.Join(stringutil.ReverseStringSlice(lineage), ";"),
+				strings.Join(stringutil.ReverseStringSlice(lineage), delimiter),
 				"",
 			}, true, nil
 		}
@@ -176,4 +178,5 @@ func init() {
 	RootCmd.AddCommand(lineageCmd)
 	lineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show lineage consisting of taxids`)
 	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. data should be tab-separated")
+	lineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in lineage")
 }

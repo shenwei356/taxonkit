@@ -112,10 +112,11 @@ var name2taxidCmd = &cobra.Command{
 			checkError(err)
 
 			var l2t line2taxids
+			var data interface{}
 			for chunk := range reader.Ch {
 				checkError(chunk.Err)
 
-				for _, data := range chunk.Data {
+				for _, data = range chunk.Data {
 					l2t = data.(line2taxids)
 					if len(l2t.taxids) == 0 {
 						if printRank {

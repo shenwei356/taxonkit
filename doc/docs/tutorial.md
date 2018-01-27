@@ -52,9 +52,9 @@ Taking virus for example.
                 blastdbcmd -db nr -entry_batch - -out nr.virus.fa
         </s>
 
-    Another way is directly retrieving from [nr FASTA sequences](ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz) using [SeqKit](http://bioinf.shenwei.me/seqkit/download):
+    **Another way is directly retrieving from [nr FASTA sequences](ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz) using [SeqKit](http://bioinf.shenwei.me/seqkit/download):**
     
-        gzip -c -d nr.gz | seqkit grep -f virus.taxid.acc.txt > nr.virus.fa
+        seqkit grep -f virus.taxid.acc.txt nr.gz | gzip -c > nr.virus.fa.gz
 
 <div id="disqus_thread"></div>
 <script>
