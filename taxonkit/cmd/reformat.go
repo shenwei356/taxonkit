@@ -50,14 +50,7 @@ Output format can be formated by flag --format, available placeholders:
 
 Output format can contains some escape charactors like "\t".
 
-This command appends reformated lineage to the input line, along with an extra
-flag-column to indicate the reliability of the result.
-
-Note that lots of taxids share same taxon name like "diastema" and "solieria".
-This command does not consider the context for a given taxon name, which may
-bring potential bug. If the reformating is reliable, the value of flag column
-is "OK", otherwise it list the taxon names which may cause error.
-
+This command appends reformated lineage to the input line.
 The corresponding taxids of reformated lineage can be provided as another
 column by flag "-t/--show-lineage-taxids".
 
@@ -108,43 +101,26 @@ column by flag "-t/--show-lineage-taxids".
 		checkError(err)
 
 		if config.Verbose {
-			log.Infof("parsing names file: %s", config.NamesFile)
+			log.Infof("parsing names (%s) and nodes file (%s)", config.NamesFile, config.NodesFile)
 		}
 
-		taxid2name, name2taxids, fuzzyNamesMap := parseTaxonNames(config.NamesFile, config.Threads, 10)
-
+		taxid2parent, taxid2rank, taxid2name, name2parent2taxid, name2taxid,
+			_ := getTaxonNames2TaxidAndRank(config.NodesFile, config.NamesFile, config.Threads, 20)
+		// fmt.Println(len(taxid2parent),
+		// 	len(taxid2rank),
+		// 	len(taxid2name),
+		// 	len(name2parent2taxid),
+		// 	len(name2taxid),
+		// 	len(fuzzyNamesMap))
 		if config.Verbose {
 			log.Infof("%d names parsed", len(taxid2name))
-
-			log.Infof("parsing nodes file: %s", config.NodesFile)
-		}
-
-		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
-		checkError(err)
-
-		name2rank := make(map[string]string)
-		var info taxonInfo
-		var n int64
-		var data interface{}
-		for chunk := range reader.Ch {
-			checkError(chunk.Err)
-
-			for _, data = range chunk.Data {
-				info = data.(taxonInfo)
-				name2rank[strings.ToLower(taxid2name[info.child])] = info.rank
-				n++
-			}
-		}
-
-		if config.Verbose {
-			log.Infof("%d nodes parsed", n)
+			log.Infof("%d nodes parsed", len(taxid2parent))
 		}
 
 		type line2flineage struct {
-			line       string
-			flineage   string
-			iflineage  string
-			fuzzyNames []string
+			line      string
+			flineage  string
+			iflineage string
 		}
 
 		unescape := stringutil.UnEscaper()
@@ -168,23 +144,24 @@ column by flag "-t/--show-lineage-taxids".
 			var ok bool
 			srank2name := make(map[string]string)
 			var currentWeight float32
-			var fuzzyNames []string
 			name2Name := make(map[string]string, len(names2)) // lower case of name : name
 			var lname string
+			var plname string
 			for i, name := range names2 {
 				if name == "" {
 					continue
-				}
-
-				if _, ok = fuzzyNamesMap[name]; ok {
-					fuzzyNames = append(fuzzyNames, name)
 				}
 
 				lname = strings.ToLower(name)
 				name2Name[lname] = name
 				name = lname
 
-				rank, ok = name2rank[name]
+				if i == 0 {
+					rank = taxid2rank[name2taxid[name]]
+				} else {
+					plname = strings.ToLower(names2[i-1])
+					rank = taxid2rank[name2parent2taxid[name][plname]]
+				}
 				if !ok { // unofficial name
 					currentWeight += 0.1
 					weights[i] = currentWeight
@@ -215,7 +192,7 @@ column by flag "-t/--show-lineage-taxids".
 			}
 
 			orphans := make(map[string]float32)
-			orphansList := []string{}
+			orphansList := make([][2]string, 0, 20)
 			existedSranks := make(map[string]struct{})
 			for i, name := range names2 {
 				if name == "" {
@@ -223,17 +200,31 @@ column by flag "-t/--show-lineage-taxids".
 				}
 				name = strings.ToLower(name)
 
-				if name2rank[name] == norank {
-					orphans[name] = weights[i]
-					orphansList = append(orphansList, name)
+				if i == 0 {
+					rank = taxid2rank[name2taxid[name]]
 				} else {
-					if _, ok = outSranks[rank2symbol[name2rank[name]]]; ok { // to be outputted
-						replacements[rank2symbol[name2rank[name]]] = name2Name[name]
-						ireplacements[rank2symbol[name2rank[name]]] = fmt.Sprintf("%d", name2taxids[name][0])
-						existedSranks[rank2symbol[name2rank[name]]] = struct{}{}
-					} else if name2rank[name] == "" {
+					plname = strings.ToLower(names2[i-1])
+					rank = taxid2rank[name2parent2taxid[name][plname]]
+				}
+
+				if rank == norank {
+					orphans[name] = weights[i]
+					orphansList = append(orphansList, [2]string{name, plname})
+				} else {
+					if _, ok = outSranks[rank2symbol[rank]]; ok { // to be outputted
+						replacements[rank2symbol[rank]] = name2Name[name]
+						if i == 0 {
+							ireplacements[rank2symbol[rank]] = fmt.Sprintf("%d",
+								name2taxid[name])
+						} else {
+							ireplacements[rank2symbol[rank]] = fmt.Sprintf("%d",
+								name2parent2taxid[name][plname])
+						}
+
+						existedSranks[rank2symbol[rank]] = struct{}{}
+					} else if rank == "" {
 						orphans[name] = weights[i]
-						orphansList = append(orphansList, name)
+						orphansList = append(orphansList, [2]string{name, plname})
 					}
 				}
 			}
@@ -242,16 +233,18 @@ column by flag "-t/--show-lineage-taxids".
 				jj := -1
 				var hit bool
 				var lastRank string
+				var name, pname string
 				for i, srank := range outSranksList {
 					if _, ok = existedSranks[srank]; ok {
 						lastRank = replacements[srank]
 						continue
 					}
 					hit = false
-					for j, name := range orphansList {
+					for j, n2p := range orphansList {
 						if j <= jj {
 							continue
 						}
+						name, pname = n2p[0], n2p[1]
 						if i == 0 {
 							if orphans[name] < symbol2weight[outSranksList[i]] {
 								hit = true
@@ -265,7 +258,7 @@ column by flag "-t/--show-lineage-taxids".
 
 						if hit {
 							replacements[srank] = name2Name[name]
-							ireplacements[srank] = fmt.Sprintf("%d", name2taxids[name][0])
+							ireplacements[srank] = fmt.Sprintf("%d", name2parent2taxid[name][pname])
 							jj = j
 							break
 						}
@@ -288,10 +281,9 @@ column by flag "-t/--show-lineage-taxids".
 				iflineage = re.ReplaceAllString(iflineage, ireplacements[srank])
 			}
 
-			return line2flineage{line, unescape(flineage), unescape(iflineage), fuzzyNames}, true, nil
+			return line2flineage{line, unescape(flineage), unescape(iflineage)}, true, nil
 		}
 
-		var flag string
 		for _, file := range files {
 			reader, err := breader.NewBufferedReader(file, config.Threads, 10, fn)
 			checkError(err)
@@ -302,15 +294,11 @@ column by flag "-t/--show-lineage-taxids".
 
 				for _, data := range chunk.Data {
 					l2s = data.(line2flineage)
-					if len(l2s.fuzzyNames) > 0 {
-						flag = strings.Join(l2s.fuzzyNames, delimiter)
-					} else {
-						flag = "OK"
-					}
+
 					if printLineageInTaxid {
-						outfh.WriteString(fmt.Sprintf("%s\t%s\t%s\t%s\n", l2s.line, l2s.flineage, flag, l2s.iflineage))
+						outfh.WriteString(fmt.Sprintf("%s\t%s\t%s\n", l2s.line, l2s.flineage, l2s.iflineage))
 					} else {
-						outfh.WriteString(fmt.Sprintf("%s\t%s\t%s\n", l2s.line, l2s.flineage, flag))
+						outfh.WriteString(fmt.Sprintf("%s\t%s\n", l2s.line, l2s.flineage))
 					}
 				}
 			}
@@ -326,8 +314,8 @@ func init() {
 	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholders of rank are needed")
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
 	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank, if given "", "unclassified xxx xxx" will used`)
-	flineageCmd.Flags().StringP("miss-taxid-repl", "R", "0", `replacement string for missing taxid`)
+	flineageCmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
 	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "estimate and fill missing rank with original lineage information (recommended)")
 	flineageCmd.Flags().IntP("lineage-field", "i", 2, "field index of lineage. data should be tab-separated")
-	flineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show reformated taxids`)
+	flineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)
 }
