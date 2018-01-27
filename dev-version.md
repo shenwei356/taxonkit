@@ -1,0 +1,6 @@
+- `taxonkit reformat`:
+    - supporting escape strings like `\t`, `\n`, #5
+    - outputting corresponding taxids for reformated lineage. #8
+- `taxonkit lineage`:
+    - fix bug for taxid `1` #7 
+    - add flag `-d/--delimiter`.
