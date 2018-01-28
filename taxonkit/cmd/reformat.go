@@ -104,7 +104,7 @@ column by flag "-t/--show-lineage-taxids".
 			log.Infof("parsing names (%s) and nodes file (%s)", config.NamesFile, config.NodesFile)
 		}
 
-		taxid2parent, taxid2rank, taxid2name, name2parent2taxid, name2taxid,
+		_, taxid2rank, _, name2parent2taxid, name2taxid,
 			_ := getTaxonNames2TaxidAndRank(config.NodesFile, config.NamesFile, config.Threads, 20)
 		// fmt.Println(len(taxid2parent),
 		// 	len(taxid2rank),
@@ -113,8 +113,7 @@ column by flag "-t/--show-lineage-taxids".
 		// 	len(name2taxid),
 		// 	len(fuzzyNamesMap))
 		if config.Verbose {
-			log.Infof("%d names parsed", len(taxid2name))
-			log.Infof("%d nodes parsed", len(taxid2parent))
+			log.Infof("%d nodes parsed", len(taxid2rank))
 		}
 
 		type line2flineage struct {

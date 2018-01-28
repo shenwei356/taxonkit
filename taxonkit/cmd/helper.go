@@ -142,11 +142,12 @@ func getTaxonNames2TaxidAndRank(fileNodes string,
 	name2parent2taxid map[string]map[string]int32,
 	name2taxid map[string]int32,
 	fuzzyNames map[string]struct{}) {
+
 	reader, err := breader.NewBufferedReader(fileNodes, bufferSize, chunkSize, taxonParseFunc)
 	checkError(err)
 
-	taxid2rank = make(map[int32]string, 10000)
-	taxid2parent = make(map[int32]int32, 10000)
+	taxid2rank = make(map[int32]string, 2000000)
+	taxid2parent = make(map[int32]int32, 2000000)
 	var info taxonInfo
 	var data interface{}
 	var name string
@@ -161,16 +162,17 @@ func getTaxonNames2TaxidAndRank(fileNodes string,
 		}
 	}
 
-	reader, err = breader.NewBufferedReader(fileNames, bufferSize, chunkSize, nameParseFunc)
-	checkError(err)
-
 	var rel Taxid2Name
-	taxid2name = make(map[int32]string, 10000)
-	name2parent2taxid = make(map[string]map[string]int32, 10000)
-	name2taxid = make(map[string]int32, 10000) // not accurate
-	fuzzyNames = make(map[string]struct{}, 1000)
+	taxid2name = make(map[int32]string, 2000000)
+	name2parent2taxid = make(map[string]map[string]int32, 2000000)
+	name2taxid = make(map[string]int32, 2000000) // not accurate
+	fuzzyNames = make(map[string]struct{}, 2000)
 	var pname string
 
+	// have to read names.dmp twice.
+	// first round
+	reader, err = breader.NewBufferedReader(fileNames, bufferSize, chunkSize, nameParseFunc)
+	checkError(err)
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
@@ -183,7 +185,6 @@ func getTaxonNames2TaxidAndRank(fileNodes string,
 	// have to read names.dmp twice.
 	reader, err = breader.NewBufferedReader(fileNames, bufferSize, chunkSize, nameParseFunc)
 	checkError(err)
-
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
