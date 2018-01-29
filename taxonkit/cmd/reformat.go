@@ -104,16 +104,10 @@ column by flag "-t/--show-lineage-taxids".
 			log.Infof("parsing names (%s) and nodes file (%s)", config.NamesFile, config.NodesFile)
 		}
 
-		_, taxid2rank, _, name2parent2taxid, name2taxid,
-			_ := getTaxonNames2TaxidAndRank(config.NodesFile, config.NamesFile, config.Threads, 20)
-		// fmt.Println(len(taxid2parent),
-		// 	len(taxid2rank),
-		// 	len(taxid2name),
-		// 	len(name2parent2taxid),
-		// 	len(name2taxid),
-		// 	len(fuzzyNamesMap))
+		taxid2taxon, name2parent2taxid, name2taxid := getName2Parent2Taxid(config.NodesFile, config.NamesFile, config.Threads, 20)
+
 		if config.Verbose {
-			log.Infof("%d nodes parsed", len(taxid2rank))
+			log.Infof("%d nodes parsed", len(taxid2taxon))
 		}
 
 		type line2flineage struct {
@@ -156,10 +150,10 @@ column by flag "-t/--show-lineage-taxids".
 				name = lname
 
 				if i == 0 {
-					rank = taxid2rank[name2taxid[name]]
+					rank = taxid2taxon[name2taxid[name]].Rank
 				} else {
 					plname = strings.ToLower(names2[i-1])
-					rank = taxid2rank[name2parent2taxid[name][plname]]
+					rank = taxid2taxon[name2parent2taxid[name][plname]].Rank
 				}
 				if !ok { // unofficial name
 					currentWeight += 0.1
@@ -200,10 +194,10 @@ column by flag "-t/--show-lineage-taxids".
 				name = strings.ToLower(name)
 
 				if i == 0 {
-					rank = taxid2rank[name2taxid[name]]
+					rank = taxid2taxon[name2taxid[name]].Rank
 				} else {
 					plname = strings.ToLower(names2[i-1])
-					rank = taxid2rank[name2parent2taxid[name][plname]]
+					rank = taxid2taxon[name2parent2taxid[name][plname]].Rank
 				}
 
 				if rank == norank {

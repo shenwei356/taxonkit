@@ -77,7 +77,7 @@ var listCmd = &cobra.Command{
 
 		tree := make(map[int32]map[int32]bool)
 		ranks := make(map[int32]string)
-		var info taxonInfo
+		var taxon Taxon
 		var child, parent int32
 		var ok bool
 		var n int64
@@ -86,8 +86,8 @@ var listCmd = &cobra.Command{
 			checkError(chunk.Err)
 
 			for _, data = range chunk.Data {
-				info = data.(taxonInfo)
-				child, parent = info.child, info.parent
+				taxon = data.(Taxon)
+				child, parent = taxon.Taxid, taxon.Parent
 
 				if _, ok = tree[parent]; !ok {
 					tree[parent] = make(map[int32]bool)
@@ -97,7 +97,7 @@ var listCmd = &cobra.Command{
 					tree[child] = make(map[int32]bool)
 				}
 				if printRank {
-					ranks[child] = info.rank
+					ranks[child] = taxon.Rank
 				}
 				n++
 			}

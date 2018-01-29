@@ -72,7 +72,7 @@ var lineageCmd = &cobra.Command{
 
 		tree := make(map[int32]int32)
 		ranks := make(map[int32]string)
-		var info taxonInfo
+		var taxon Taxon
 		var child, parent int32
 		var n int64
 		var data interface{}
@@ -80,11 +80,11 @@ var lineageCmd = &cobra.Command{
 			checkError(chunk.Err)
 
 			for _, data = range chunk.Data {
-				info = data.(taxonInfo)
-				child, parent = info.child, info.parent
+				taxon = data.(Taxon)
+				child, parent = taxon.Taxid, taxon.Parent
 
 				tree[child] = parent
-				ranks[child] = info.rank
+				ranks[child] = taxon.Rank
 				n++
 			}
 		}

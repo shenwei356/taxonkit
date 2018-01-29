@@ -73,9 +73,12 @@ func getFlagTaxonIDs(cmd *cobra.Command, flag string) []int {
 	return ids
 }
 
-type Taxid2Name struct {
-	id   int32
-	name string
+// Taxon represents a taxonomic node
+type Taxon struct {
+	Taxid  int32
+	Parent int32
+	Name   string
+	Rank   string
 }
 
 var nameParseFunc = func(line string) (interface{}, bool, error) {
@@ -90,125 +93,107 @@ var nameParseFunc = func(line string) (interface{}, bool, error) {
 	if e != nil {
 		return nil, false, e
 	}
-	return Taxid2Name{int32(id), items[2]}, true, nil
+	return Taxon{Taxid: int32(id), Name: items[2]}, true, nil
 }
 
 func getTaxonNames(file string, bufferSize int, chunkSize int) map[int32]string {
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
 	checkError(err)
 
-	var rel Taxid2Name
-	m := make(map[int32]string)
+	var taxon Taxon
+	taxid2name := make(map[int32]string)
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
 		for _, data := range chunk.Data {
-			rel = data.(Taxid2Name)
-			m[rel.id] = rel.name
+			taxon = data.(Taxon)
+			taxid2name[taxon.Taxid] = taxon.Name
 		}
 	}
-	return m
+	return taxid2name
 }
 
-func getTaxonNames2Taxid(file string, bufferSize int, chunkSize int) map[string][]int32 {
+func getTaxonName2Taxids(file string, bufferSize int, chunkSize int) map[string][]int32 {
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
 	checkError(err)
 
-	var rel Taxid2Name
-	m := make(map[string][]int32)
+	var taxon Taxon
+	name2taxids := make(map[string][]int32)
 	var ok bool
 	var name string
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
 		for _, data := range chunk.Data {
-			rel = data.(Taxid2Name)
-			name = strings.ToLower(rel.name)
-			if _, ok = m[name]; !ok {
-				m[name] = make([]int32, 0, 1)
+			taxon = data.(Taxon)
+			name = strings.ToLower(taxon.Name)
+			if _, ok = name2taxids[name]; !ok {
+				name2taxids[name] = make([]int32, 0, 1)
 			}
-			m[name] = append(m[name], rel.id)
+			name2taxids[name] = append(name2taxids[name], taxon.Taxid)
 		}
 	}
-	return m
+	return name2taxids
 }
 
-func getTaxonNames2TaxidAndRank(fileNodes string,
+func getName2Parent2Taxid(fileNodes string,
 	fileNames string,
 	bufferSize int,
-	chunkSize int) (taxid2parent map[int32]int32,
-	taxid2rank map[int32]string,
-	taxid2name map[int32]string,
+	chunkSize int) (
+	taxid2taxon map[int32]*Taxon,
 	name2parent2taxid map[string]map[string]int32,
-	name2taxid map[string]int32,
-	fuzzyNames map[string]struct{}) {
+	name2taxid map[string]int32) {
 
+	// taxid -> rank, taxid -> parentid
 	reader, err := breader.NewBufferedReader(fileNodes, bufferSize, chunkSize, taxonParseFunc)
 	checkError(err)
 
-	taxid2rank = make(map[int32]string, 2000000)
-	taxid2parent = make(map[int32]int32, 2000000)
-	var info taxonInfo
+	// 2000000 comes from $(wc -l nodes.dmp)
+	taxid2taxon = make(map[int32]*Taxon, 2000000)
+	name2parent2taxid = make(map[string]map[string]int32, 2000000)
+	name2taxid = make(map[string]int32, 2000000) // not accurate
+
+	// taxid -> rank, taxid -> parentid
+	var taxon Taxon
 	var data interface{}
-	var name string
 	var ok bool
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
-
 		for _, data = range chunk.Data {
-			info = data.(taxonInfo)
-			taxid2rank[info.child] = info.rank
-			taxid2parent[info.child] = info.parent
-		}
-	}
-
-	var rel Taxid2Name
-	taxid2name = make(map[int32]string, 2000000)
-	name2parent2taxid = make(map[string]map[string]int32, 2000000)
-	name2taxid = make(map[string]int32, 2000000) // not accurate
-	fuzzyNames = make(map[string]struct{}, 2000)
-	var pname string
-
-	// have to read names.dmp twice.
-	// first round
-	reader, err = breader.NewBufferedReader(fileNames, bufferSize, chunkSize, nameParseFunc)
-	checkError(err)
-	for chunk := range reader.Ch {
-		checkError(chunk.Err)
-
-		for _, data := range chunk.Data {
-			rel = data.(Taxid2Name)
-			taxid2name[rel.id] = rel.name
-		}
-	}
-
-	// have to read names.dmp twice.
-	reader, err = breader.NewBufferedReader(fileNames, bufferSize, chunkSize, nameParseFunc)
-	checkError(err)
-	for chunk := range reader.Ch {
-		checkError(chunk.Err)
-
-		for _, data := range chunk.Data {
-			rel = data.(Taxid2Name)
-
-			name = strings.ToLower(rel.name)
-			pname = strings.ToLower(taxid2name[taxid2parent[rel.id]])
-			if _, ok = name2parent2taxid[name]; !ok {
-				name2parent2taxid[name] = make(map[string]int32, 1)
-			} else {
-				fuzzyNames[name] = struct{}{}
+			taxon = data.(Taxon)
+			// clone
+			taxid2taxon[taxon.Taxid] = &Taxon{
+				Taxid:  taxon.Taxid,
+				Parent: taxon.Parent,
+				// Name:   taxon.Name,
+				Rank: taxon.Rank,
 			}
-			name2parent2taxid[name][pname] = rel.id
-			name2taxid[name] = rel.id
 		}
 	}
 
-	return
-}
+	// taxid -> name
+	reader, err = breader.NewBufferedReader(fileNames, bufferSize, chunkSize, nameParseFunc)
+	checkError(err)
+	for chunk := range reader.Ch {
+		checkError(chunk.Err)
+		for _, data := range chunk.Data {
+			taxon = data.(Taxon)
+			taxid2taxon[taxon.Taxid].Name = taxon.Name
+		}
+	}
 
-type taxonInfo struct {
-	child, parent int32
-	rank          string
+	// name -> parent-name -> taxid
+	var name, pname string
+	for taxid, taxon := range taxid2taxon {
+		name = strings.ToLower(taxon.Name)
+		pname = strings.ToLower(taxid2taxon[taxid2taxon[taxid].Parent].Name)
+		if _, ok = name2parent2taxid[name]; !ok {
+			name2parent2taxid[name] = make(map[string]int32, 1)
+		}
+		name2parent2taxid[name][pname] = taxid
+		name2taxid[name] = taxid
+	}
+	return
 }
 
 var taxonParseFunc = func(line string) (interface{}, bool, error) {
@@ -224,7 +209,7 @@ var taxonParseFunc = func(line string) (interface{}, bool, error) {
 	if e != nil {
 		return nil, false, e
 	}
-	return taxonInfo{int32(child), int32(parent), items[4]}, true, nil
+	return Taxon{Taxid: int32(child), Parent: int32(parent), Rank: items[4]}, true, nil
 }
 
 var rank2symbol = map[string]string{

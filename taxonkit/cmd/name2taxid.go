@@ -58,7 +58,7 @@ var name2taxidCmd = &cobra.Command{
 		if config.Verbose {
 			log.Infof("parsing names file: %s", config.NamesFile)
 		}
-		m = getTaxonNames2Taxid(config.NamesFile, config.Threads, 10)
+		m = getTaxonName2Taxids(config.NamesFile, config.Threads, 10)
 		if config.Verbose {
 			log.Infof("%d names parsed", len(m))
 		}
@@ -72,14 +72,14 @@ var name2taxidCmd = &cobra.Command{
 			checkError(err)
 
 			ranks = make(map[int32]string)
-			var info taxonInfo
+			var taxon Taxon
 			var n int64
 			for chunk := range reader.Ch {
 				checkError(chunk.Err)
 
 				for _, data := range chunk.Data {
-					info = data.(taxonInfo)
-					ranks[info.child] = info.rank
+					taxon = data.(Taxon)
+					ranks[taxon.Taxid] = taxon.Rank
 					n++
 				}
 			}
