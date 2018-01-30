@@ -81,15 +81,6 @@ Dataset:
 
 `, VERSION, DataDir)
 
-	var existed bool
-	existed, err = pathutil.DirExists(DataDir)
-	checkError(err)
-	if !existed {
-		log.Warningf(`data directory not created. please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp" and "nodes.dmp" to %s`, DataDir)
-		if err = os.Mkdir(DataDir, 0744); err != nil {
-			checkError(err)
-		}
-	}
 	NodesFile = filepath.Join(DataDir, "nodes.dmp")
 	NamesFile = filepath.Join(DataDir, "names.dmp")
 
@@ -104,4 +95,14 @@ Dataset:
 	RootCmd.PersistentFlags().StringP("nodes-file", "", NodesFile, "nodes.dmp file")
 	RootCmd.PersistentFlags().StringP("names-file", "", NamesFile, "names.dmp file")
 	RootCmd.PersistentFlags().BoolP("verbose", "", false, "print verbose information")
+
+	var existed bool
+	existed, err = pathutil.DirExists(DataDir)
+	checkError(err)
+	if !existed {
+		log.Errorf(`data directory not created. please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp" and "nodes.dmp" to %s`, DataDir)
+		// if err = os.Mkdir(DataDir, 0744); err != nil {
+		// 	checkError(err)
+		// }
+	}
 }
