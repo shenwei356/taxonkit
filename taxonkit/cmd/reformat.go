@@ -62,6 +62,7 @@ column by flag "-t/--show-lineage-taxids".
 		format := getFlagString(cmd, "format")
 		delimiter := getFlagString(cmd, "delimiter")
 		blank := getFlagString(cmd, "miss-rank-repl")
+		prefix := getFlagString(cmd, "miss-rank-repl-prefix")
 		iblank := getFlagString(cmd, "miss-taxid-repl")
 		fill := getFlagBool(cmd, "fill-miss-rank")
 		field := getFlagPositiveInt(cmd, "lineage-field") - 1
@@ -258,7 +259,7 @@ column by flag "-t/--show-lineage-taxids".
 					}
 					if !hit {
 						if blank == "" {
-							replacements[srank] = fmt.Sprintf("unclassified %s %s", lastRank, symbol2rank[srank])
+							replacements[srank] = fmt.Sprintf("%s%s %s", prefix, lastRank, symbol2rank[srank])
 						} else {
 							replacements[srank] = blank
 						}
@@ -306,7 +307,8 @@ func init() {
 
 	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholders of rank are needed")
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
-	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank, if given "", "unclassified xxx xxx" will used`)
+	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank, if given "", "unclassified xxx xxx" will used, where "unclassified " is settable by flag -p/--miss-rank-repl-prefix`)
+	flineageCmd.Flags().StringP("miss-rank-repl-prefix", "p", "unclassified ", `prefix for estimated taxon level`)
 	flineageCmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
 	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "estimate and fill missing rank with original lineage information (recommended)")
 	flineageCmd.Flags().IntP("lineage-field", "i", 2, "field index of lineage. data should be tab-separated")
