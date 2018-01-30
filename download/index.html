@@ -165,13 +165,27 @@
  executable binary files <strong>for most popular operating systems</strong> are freely available
   in <a href="https://github.com/shenwei356/taxonkit/releases">release</a> page.</p>
 <h2 id="current-version">Current Version</h2>
-<p><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.2.3">TaxonKit v0.2.3</a>
-<a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.2.3"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.2.3/total.svg" /></a></p>
+<p><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.2.4">TaxonKit v0.2.4</a>
+<a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.2.4"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.2.4/total.svg" /></a></p>
 <ul>
-<li>fix bug brought in v0.2.1</li>
+<li><code>taxonkit reformat</code>:<ul>
+<li>more accurate result when using flag <code>-F/--fill-miss-rank</code> to estimate and fill missing rank with original lineage information</li>
+<li>supporting escape strings like <code>\t</code>, <code>\n</code>, #5</li>
+<li>outputting corresponding taxids for reformated lineage. #8</li>
+</ul>
+</li>
+<li><code>taxonkit lineage</code>:<ul>
+<li>fix bug for taxid <code>1</code> #7</li>
+<li>add flag <code>-d/--delimiter</code>.</li>
+</ul>
+</li>
 </ul>
 <p>Links:</p>
-<p><strong><em>Tip: run <code>taxonkit version</code> to check update !!!</em></strong></p>
+<p><strong><em>Tips</em></strong></p>
+<ul>
+<li>run <code>taxonkit version</code> to check update !!!</li>
+<li>run <code>taxonkit genautocomplete</code> to update Bash completion !!!</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -185,38 +199,38 @@
 <tr>
 <td align="left">Linux</td>
 <td align="left">32-bit</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_linux_386.tar.gz">taxonkit_linux_386.tar.gz</a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_386.tar.gz">mirror</a>)</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_linux_386.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_386.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_linux_386.tar.gz">taxonkit_linux_386.tar.gz</a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_386.tar.gz">mirror</a>)</td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_linux_386.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_386.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">Linux</td>
 <td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_linux_amd64.tar.gz"><strong>taxonkit_linux_amd64.tar.gz</strong></a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz">mirror</a>)</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_linux_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_linux_amd64.tar.gz"><strong>taxonkit_linux_amd64.tar.gz</strong></a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz">mirror</a>)</td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_linux_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">OS X</td>
 <td align="left">32-bit</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_darwin_386.tar.gz">taxonkit_darwin_386.tar.gz</a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_386.tar.gz">mirror</a>)</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_darwin_386.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_386.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_darwin_386.tar.gz">taxonkit_darwin_386.tar.gz</a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_386.tar.gz">mirror</a>)</td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_darwin_386.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_386.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">OS X</td>
 <td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_darwin_amd64.tar.gz"><strong>taxonkit_darwin_amd64.tar.gz</strong></a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz">mirror</a>)</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_darwin_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_darwin_amd64.tar.gz"><strong>taxonkit_darwin_amd64.tar.gz</strong></a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz">mirror</a>)</td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_darwin_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">Windows</td>
 <td align="left">32-bit</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_windows_386.exe.tar.gz">taxonkit_windows_386.exe.tar.gz</a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_windows_386.exe.tar.gz">mirror</a>)</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_windows_386.exe.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_386.exe.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_windows_386.exe.tar.gz">taxonkit_windows_386.exe.tar.gz</a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_windows_386.exe.tar.gz">mirror</a>)</td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_windows_386.exe.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_386.exe.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">Windows</td>
 <td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_windows_amd64.exe.tar.gz"><strong>taxonkit_windows_amd64.exe.tar.gz</strong></a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz">mirror</a>)</td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.3/taxonkit_windows_amd64.exe.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_windows_amd64.exe.tar.gz"><strong>taxonkit_windows_amd64.exe.tar.gz</strong></a>, (<a href="http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz">mirror</a>)</td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.2.4/taxonkit_windows_amd64.exe.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 </tbody>
 </table>
@@ -279,6 +293,11 @@ done
 </ol>
 <h2 id="previous-versions">Previous Versions</h2>
 <ul>
+<li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.2.3">TaxonKit v0.2.3</a>
+<a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.2.3"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.2.3/total.svg" /></a><ul>
+<li>fix bug brought in v0.2.1</li>
+</ul>
+</li>
 <li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.2.2">TaxonKit v0.2.2</a>
 <a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.2.2"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.2.2/total.svg" /></a><ul>
 <li>make verbose information optional <a href="https://github.com/shenwei356/taxonkit/issues/4">#4</a></li>
