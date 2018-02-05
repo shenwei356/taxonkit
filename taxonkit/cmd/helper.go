@@ -96,6 +96,21 @@ var nameParseFunc = func(line string) (interface{}, bool, error) {
 	return Taxon{Taxid: int32(id), Name: items[2]}, true, nil
 }
 
+var nameParseFunc2 = func(line string) (interface{}, bool, error) {
+	items := strings.Split(line, "\t")
+	if len(items) < 7 {
+		return nil, false, nil
+	}
+	if !(items[6] == "scientific name" || items[6] == "synonym") {
+		return nil, false, nil
+	}
+	id, e := strconv.Atoi(items[0])
+	if e != nil {
+		return nil, false, e
+	}
+	return Taxon{Taxid: int32(id), Name: items[2]}, true, nil
+}
+
 func getTaxonNames(file string, bufferSize int, chunkSize int) map[int32]string {
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
 	checkError(err)
@@ -114,7 +129,7 @@ func getTaxonNames(file string, bufferSize int, chunkSize int) map[int32]string 
 }
 
 func getTaxonName2Taxids(file string, bufferSize int, chunkSize int) map[string][]int32 {
-	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
+	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc2)
 	checkError(err)
 
 	var taxon Taxon
