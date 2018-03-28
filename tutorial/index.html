@@ -215,7 +215,7 @@ It costs ~ 8 minutes.</p>
 </li>
 </ul>
 <p><strong>Another way is directly retrieving from <a href="ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz">nr FASTA sequences</a> using <a href="http://bioinf.shenwei.me/seqkit/download">SeqKit</a>:</strong></p>
-<pre><code>seqkit grep -f virus.taxid.acc.txt nr.gz | gzip -c &gt; nr.virus.fa.gz
+<pre><code>seqkit grep -f virus.taxid.acc.txt nr.gz -o nr.virus.fa.gz
 </code></pre>
 </li>
 </ol>
