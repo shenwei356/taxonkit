@@ -95,6 +95,7 @@ Dataset:
 	RootCmd.PersistentFlags().StringP("nodes-file", "", NodesFile, "nodes.dmp file")
 	RootCmd.PersistentFlags().StringP("names-file", "", NamesFile, "names.dmp file")
 	RootCmd.PersistentFlags().BoolP("verbose", "", false, "print verbose information")
+	RootCmd.PersistentFlags().BoolP("line-buffered", "", false, "use line buffering on output, i.e., immediately writing to stdin/file for every line of output")
 
 	var existed bool
 	existed, err = pathutil.DirExists(DataDir)

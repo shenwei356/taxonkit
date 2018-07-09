@@ -294,6 +294,9 @@ column by flag "-t/--show-lineage-taxids".
 					} else {
 						outfh.WriteString(fmt.Sprintf("%s\t%s\n", l2s.line, l2s.flineage))
 					}
+					if config.LineBuffered {
+						outfh.Flush()
+					}
 				}
 			}
 		}

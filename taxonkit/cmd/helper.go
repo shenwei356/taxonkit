@@ -31,24 +31,26 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.2.4"
+const VERSION = "0.2.5-dev"
 
 // Config is the struct containing all global flags
 type Config struct {
-	Threads   int
-	OutFile   string
-	NodesFile string
-	NamesFile string
-	Verbose   bool
+	Threads      int
+	OutFile      string
+	NodesFile    string
+	NamesFile    string
+	Verbose      bool
+	LineBuffered bool
 }
 
 func getConfigs(cmd *cobra.Command) Config {
 	return Config{
-		Threads:   getFlagPositiveInt(cmd, "threads"),
-		OutFile:   getFlagString(cmd, "out-file"),
-		NodesFile: getFlagString(cmd, "nodes-file"),
-		NamesFile: getFlagString(cmd, "names-file"),
-		Verbose:   getFlagBool(cmd, "verbose"),
+		Threads:      getFlagPositiveInt(cmd, "threads"),
+		OutFile:      getFlagString(cmd, "out-file"),
+		NodesFile:    getFlagString(cmd, "nodes-file"),
+		NamesFile:    getFlagString(cmd, "names-file"),
+		Verbose:      getFlagBool(cmd, "verbose"),
+		LineBuffered: getFlagBool(cmd, "line-buffered"),
 	}
 }
 

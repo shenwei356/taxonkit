@@ -357,53 +357,53 @@ Examples:
    (**recommended**, very useful for formating input data for
    [LEfSe](https://bitbucket.org/biobakery/biobakery/wiki/lefse))
 
-       $ cat lineage.txt | taxonkit reformat -t -F > lineage.txt.reformat.fill
-       $ cat lineage.txt.reformat.fill \
-           | perl -pe 's/^/Taxid   : /; \
-               s/\t/\nLineage : /; \
-               s/\t/\nReformat: /; \
-               s/\t/\nTaxids  : /; \
-               print "\n";'
+        $ cat lineage.txt | taxonkit reformat -t -F > lineage.txt.reformat.fill
+        $ cat lineage.txt.reformat.fill \
+            | perl -pe 's/^/Taxid   : /; \
+                s/\t/\nLineage : /; \
+                s/\t/\nReformat: /; \
+                s/\t/\nTaxids  : /; \
+                print "\n";'
 
-       Taxid   : 9606
-       Lineage : cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
-       Reformat: Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
-       Taxids  : 2759;7711;40674;9443;9604;9605;9606
+        Taxid   : 9606
+        Lineage : cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+        Reformat: Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+        Taxids  : 2759;7711;40674;9443;9604;9605;9606
 
-       Taxid   : 9913
-       Lineage : cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Cetartiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus
-       Reformat: Eukaryota;Chordata;Mammalia;unclassified Mammalia order;Bovidae;Bos;Bos taurus
-       Taxids  : 2759;7711;40674;;9895;9903;9913
+        Taxid   : 9913
+        Lineage : cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Cetartiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus
+        Reformat: Eukaryota;Chordata;Mammalia;unclassified Mammalia order;Bovidae;Bos;Bos taurus
+        Taxids  : 2759;7711;40674;;9895;9903;9913
 
-       Taxid   : 376619
-       Lineage : cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS
-       Reformat: Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
-       Taxids  : 2;1224;1236;72273;34064;262;263
+        Taxid   : 376619
+        Lineage : cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS
+        Reformat: Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
+        Taxids  : 2;1224;1236;72273;34064;262;263
 
-       Taxid   : 349741
-       Lineage : cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-       Reformat: Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-       Taxids  : 2;74201;203494;48461;1647988;239934;239935
+        Taxid   : 349741
+        Lineage : cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+        Reformat: Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Taxids  : 2;74201;203494;48461;1647988;239934;239935
 
-       Taxid   : 239935
-       Lineage : cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-       Reformat: Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-       Taxids  : 2;74201;203494;48461;1647988;239934;239935
+        Taxid   : 239935
+        Lineage : cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Reformat: Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Taxids  : 2;74201;203494;48461;1647988;239934;239935
 
-       Taxid   : 314101
-       Lineage : cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-       Reformat: Bacteria;unclassified Bacteria phylum;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
-       Taxids  : 2;;;;;;314101
+        Taxid   : 314101
+        Lineage : cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
+        Reformat: Bacteria;unclassified Bacteria phylum;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
+        Taxids  : 2;;;;;;314101
 
-       Taxid   : 11932
-       Lineage : Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-       Reformat: Viruses;unclassified Viruses phylum;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-       Taxids  : 10239;;;;11632;11749;11932
+        Taxid   : 11932
+        Lineage : Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Reformat: Viruses;unclassified Viruses phylum;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Taxids  : 10239;;;;11632;11749;11932
 
-       Taxid   : 1327037
-       Lineage : Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-       Reformat: Viruses;unclassified Viruses phylum;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae genus;Croceibacter phage P2559Y
-       Taxids  : 10239;;;28883;10699;;1327037
+        Taxid   : 1327037
+        Lineage : Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+        Reformat: Viruses;unclassified Viruses phylum;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae genus;Croceibacter phage P2559Y
+        Taxids  : 10239;;;28883;10699;;1327037
 
 1. Support tab in format string
 

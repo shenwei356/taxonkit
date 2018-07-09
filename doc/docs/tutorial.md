@@ -54,7 +54,7 @@ Taking virus for example.
 
     **Another way is directly retrieving from [nr FASTA sequences](ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz) using [SeqKit](http://bioinf.shenwei.me/seqkit/download):**
     
-        seqkit grep -f virus.taxid.acc.txt nr.gz | gzip -c > nr.virus.fa.gz
+        seqkit grep -f virus.taxid.acc.txt nr.gz -o nr.virus.fa.gz
 
 <div id="disqus_thread"></div>
 <script>

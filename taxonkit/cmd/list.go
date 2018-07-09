@@ -141,9 +141,12 @@ var listCmd = &cobra.Command{
 				level = 1
 			}
 			outfh.WriteString("\n")
+			if config.LineBuffered {
+				outfh.Flush()
+			}
 
 			traverseTree(tree, int32(id), outfh, indent, level+1, names,
-				printName, ranks, printRank, jsonFormat)
+				printName, ranks, printRank, jsonFormat, config)
 
 			if jsonFormat {
 				outfh.WriteString(fmt.Sprintf("%s}", strings.Repeat(indent, level)))
@@ -152,10 +155,16 @@ var listCmd = &cobra.Command{
 				outfh.WriteString(",")
 			}
 			outfh.WriteString("\n")
+			if config.LineBuffered {
+				outfh.Flush()
+			}
 		}
 
 		if jsonFormat {
 			outfh.WriteString("}\n")
+			if config.LineBuffered {
+				outfh.Flush()
+			}
 		}
 
 		defer outfh.Close()
@@ -176,7 +185,7 @@ func traverseTree(tree map[int32]map[int32]bool, parent int32,
 	outfh *xopen.Writer, indent string, level int,
 	names map[int32]string, printName bool,
 	ranks map[int32]string, printRank bool,
-	jsonFormat bool) {
+	jsonFormat bool, config Config) {
 	if _, ok := tree[parent]; !ok {
 		return
 	}
@@ -223,11 +232,14 @@ func traverseTree(tree map[int32]map[int32]bool, parent int32,
 			}
 		}
 		outfh.WriteString("\n")
+		if config.LineBuffered {
+			outfh.Flush()
+		}
 
 		tree[parent][child] = true
 
 		traverseTree(tree, child, outfh, indent, level+1, names, printName,
-			ranks, printRank, jsonFormat)
+			ranks, printRank, jsonFormat, config)
 
 		if jsonFormat && ok {
 			outfh.WriteString(fmt.Sprintf("%s}", strings.Repeat(indent, level)))
@@ -235,6 +247,9 @@ func traverseTree(tree map[int32]map[int32]bool, parent int32,
 				outfh.WriteString(",")
 			}
 			outfh.WriteString("\n")
+			if config.LineBuffered {
+				outfh.Flush()
+			}
 		}
 	}
 }

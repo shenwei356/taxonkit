@@ -166,6 +166,9 @@ var lineageCmd = &cobra.Command{
 					} else {
 						outfh.WriteString(fmt.Sprintf("%s\t%s\n", t2l.line, t2l.lineage))
 					}
+					if config.LineBuffered {
+						outfh.Flush()
+					}
 				}
 			}
 		}

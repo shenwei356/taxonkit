@@ -124,12 +124,18 @@ var name2taxidCmd = &cobra.Command{
 						} else {
 							outfh.WriteString(fmt.Sprintf("%s\t%s\n", l2t.line, ""))
 						}
+						if config.LineBuffered {
+							outfh.Flush()
+						}
 					} else {
 						for _, taxid = range l2t.taxids {
 							if printRank {
 								outfh.WriteString(fmt.Sprintf("%s\t%d\t%s\n", l2t.line, taxid, ranks[taxid]))
 							} else {
 								outfh.WriteString(fmt.Sprintf("%s\t%d\n", l2t.line, taxid))
+							}
+							if config.LineBuffered {
+								outfh.Flush()
 							}
 						}
 					}
