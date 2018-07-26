@@ -31,7 +31,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.2.5-dev2"
+const VERSION = "0.2.5-dev3"
 
 // Config is the struct containing all global flags
 type Config struct {

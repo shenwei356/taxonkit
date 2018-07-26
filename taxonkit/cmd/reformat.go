@@ -128,7 +128,7 @@ column by flag "-t/--show-lineage-taxids".
 			}
 			data := strings.Split(line, "\t")
 			if len(data) < field+1 {
-				return nil, false, fmt.Errorf("lineage-field (%d) out of range (%d)", field+1, len(data))
+				return nil, false, fmt.Errorf("lineage-field (%d) out of range (%d):%s", field+1, len(data), line)
 			}
 
 			// names and weights
@@ -151,10 +151,8 @@ column by flag "-t/--show-lineage-taxids".
 				name = lname
 
 				if _, ok = name2taxid[name]; !ok { // unofficial name
-					checkError(fmt.Errorf("unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) lineages were manually edited", name))
-					// currentWeight += 0.1
-					// weights[i] = currentWeight
-					continue
+					log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, name)
+					return line2flineage{line, "", ""}, true, nil
 				}
 
 				if i == 0 {
@@ -162,9 +160,11 @@ column by flag "-t/--show-lineage-taxids".
 				} else {
 					plname = strings.ToLower(names2[i-1])
 					if _, ok = name2parent2taxid[name]; !ok {
-						checkError(fmt.Errorf("unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) lineages were manually edited", name))
+						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, name)
+						return line2flineage{line, "", ""}, true, nil
 					} else if _, ok = name2parent2taxid[name][plname]; !ok {
-						checkError(fmt.Errorf("unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) lineages were manually edited", plname))
+						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, plname)
+						return line2flineage{line, "", ""}, true, nil
 					}
 					rank = taxid2taxon[name2parent2taxid[name][plname]].Rank
 				}
