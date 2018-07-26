@@ -201,10 +201,6 @@ column by flag "-t/--show-lineage-taxids".
 				}
 				name = strings.ToLower(name)
 
-				if _, ok = name2taxid[name]; !ok { // unofficial name
-					continue
-				}
-
 				if i == 0 {
 					rank = taxid2taxon[name2taxid[name]].Rank
 				} else {
@@ -268,6 +264,7 @@ column by flag "-t/--show-lineage-taxids".
 							break
 						}
 					}
+					hit = false
 					if !hit {
 						if blank == "" {
 							replacements[srank] = fmt.Sprintf("%s%s %s", prefix, lastRank, symbol2rank[srank])
@@ -324,7 +321,7 @@ func init() {
 	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank, if given "", "unclassified xxx xxx" will used, where "unclassified " is settable by flag -p/--miss-rank-repl-prefix`)
 	flineageCmd.Flags().StringP("miss-rank-repl-prefix", "p", "unclassified ", `prefix for estimated taxon level`)
 	flineageCmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
-	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "estimate and fill missing rank with original lineage information (recommended)")
+	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "fill missing rank with original lineage information (experimental)")
 	flineageCmd.Flags().IntP("lineage-field", "i", 2, "field index of lineage. data should be tab-separated")
 	flineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)
 }
