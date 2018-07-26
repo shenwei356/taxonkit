@@ -150,16 +150,23 @@ column by flag "-t/--show-lineage-taxids".
 				name2Name[lname] = name
 				name = lname
 
+				if _, ok = name2taxid[name]; !ok { // unofficial name
+					checkError(fmt.Errorf("unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) lineages were manually edited", name))
+					// currentWeight += 0.1
+					// weights[i] = currentWeight
+					continue
+				}
+
 				if i == 0 {
 					rank = taxid2taxon[name2taxid[name]].Rank
 				} else {
 					plname = strings.ToLower(names2[i-1])
+					if _, ok = name2parent2taxid[name]; !ok {
+						checkError(fmt.Errorf("unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) lineages were manually edited", name))
+					} else if _, ok = name2parent2taxid[name][plname]; !ok {
+						checkError(fmt.Errorf("unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) lineages were manually edited", plname))
+					}
 					rank = taxid2taxon[name2parent2taxid[name][plname]].Rank
-				}
-				if !ok { // unofficial name
-					currentWeight += 0.1
-					weights[i] = currentWeight
-					continue
 				}
 				if rank != norank {
 					if srank, ok = rank2symbol[rank]; ok {
@@ -193,6 +200,10 @@ column by flag "-t/--show-lineage-taxids".
 					continue
 				}
 				name = strings.ToLower(name)
+
+				if _, ok = name2taxid[name]; !ok { // unofficial name
+					continue
+				}
 
 				if i == 0 {
 					rank = taxid2taxon[name2taxid[name]].Rank

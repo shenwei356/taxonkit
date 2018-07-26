@@ -1,2 +1,3 @@
-- `taxonkit name2taxid`: support synonyms names. [#9](https://github.com/shenwei356/taxonkit/commit/d4fac1c1138a571957f52eb431ff0d85c03852a8)
-- add global flag: `--line-buffered` to disable output buffer. []#11](https://github.com/shenwei356/taxonkit/issues/11)
+- `taxonkit reformat`: detects lineages containing unofficial taxon name and won't show panic message.
+- `taxonkit name2taxid`: supports synonyms names. [#9](https://github.com/shenwei356/taxonkit/commit/d4fac1c1138a571957f52eb431ff0d85c03852a8)
+- add global flag: `--line-buffered` to disable output buffer. [#11](https://github.com/shenwei356/taxonkit/issues/11)
