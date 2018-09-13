@@ -112,78 +112,175 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#tutorial">Tutorial</a></li>
-            <li><a href="#extract-all-protein-sequences-of-specific-taxons-from-the-ncbi-nr-database">Extract all protein sequences of specific taxons from the NCBI nr database</a></li>
+            <li><a href="#making-nr-blastdb-for-specific-taxids">Making nr blastdb for specific taxids</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
 <h1 id="tutorial">Tutorial</h1>
-<h2 id="extract-all-protein-sequences-of-specific-taxons-from-the-ncbi-nr-database">Extract all protein sequences of specific taxons from the NCBI nr database</h2>
-<h3 id="dataset">Dataset</h3>
+<h2 id="making-nr-blastdb-for-specific-taxids">Making nr blastdb for specific taxids</h2>
+<p>[rewrite on 2018-09-13]</p>
+<p>Data:</p>
 <ul>
-<li><a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.gz">prot.accession2taxid.gz</a></li>
+<li><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/db">pre-formated blastdb</a> (09/10/2018) </li>
+<li><a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.gz">prot.accession2taxid.gz</a> (09/07/2018) (optional, but recommended)</li>
 </ul>
-<h3 id="steps">Steps</h3>
-<p>Taking virus for example.</p>
+<p>Hardware in this tutorial</p>
+<ul>
+<li>CPU: AMD 8-cores/16-threads 3.7Ghz</li>
+<li>RAM: 32GB</li>
+<li>DISK:<ul>
+<li>Taxonomy files stores in NVMe SSD</li>
+<li>blatdb files stores in 7200rpm HDD</li>
+</ul>
+</li>
+</ul>
+<p>Tools:</p>
+<ul>
+<li><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/">blast+</a></li>
+<li><a href="https://zlib.net/pigz/">pigz</a> (recommended, faster than gzip)</li>
+<li><a href="https://bioinf.shenwei.me/taxonkit">taxonkit</a></li>
+<li><a href="https://bioinf.shenwei.me/seqkit">seqkit</a> (recommended)</li>
+</ul>
+<p>Steps:</p>
 <ol>
 <li>
-<p>Getting all taxids of virus (taxid 10239):</p>
-<pre><code>$ taxonkit list --ids 10239 --indent "" &gt; virus.taxid.txt
-</code></pre>
-<p>It takes only 2.5 seconds! Number of taxids:</p>
-<pre><code>$ wc -l virus.taxid.txt
-163104 virus.taxid.txt
-</code></pre>
-</li>
-<li>
-<p>Retrieving accessions <s>or GIs</s>(NCBI stopped using <code>gi</code>) with <a href="http://bioinf.shenwei.me/csvtk/download/">csvtk</a>:</p>
-<ul>
-<li>
-<p>accession</p>
-<pre><code>$ zcat prot.accession2taxid.gz | \
-    csvtk -t grep -f taxid -P virus.taxid.txt | \
-    csvtk -t cut -f accession.version &gt; virus.taxid.acc.txt
+<p>Listing all taxids below <code>$id</code> using taxonkit.</p>
+<pre><code>id=6656
+
+# 6656 is the phylum Arthropoda
+# echo 6656 | taxonkit lineage | taxonkit reformat 
+# 6656    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Protostomia;Ecdysozoa;Panarthropoda;Arthropoda    Eukaryota;Arthropoda;;;;;
+
+# time: 3s 
+taxonkit list --ids $id --indent "" &gt; $id.taxid.txt
+
+wc -l $id.taxid.txt
+# 518373 6656.taxid.txt
 </code></pre>
 </li>
 <li>
-<p><s>gi</p>
-<pre><code>$ zcat prot.accession2taxid.gz | \
-    csvtk -t grep -f taxid -P virus.taxid.txt | \
-    csvtk -t cut -f gi &gt; virus.taxid.gi.txt
-</code></pre>
-<p></s>
-It costs ~ 8 minutes.</p>
-</li>
-</ul>
-</li>
+<p>Retrieving target accessions. There are two options:</p>
+<ol>
 <li>
-<p>Retrieving nr sequences from BLAST database:</p>
-<ul>
-<li>
-<p>accesion</p>
-<pre><code>$ blastdbcmd -db nr -entry all -outfmt "%a\t%T" | \
-    csvtk -t grep -f 2 -P virus.taxid.acc.txt | \
-    csvtk -t cut -f 1 | \
-    blastdbcmd -db nr -entry_batch - -out nr.virus.fa
+<p>From prot.accession2taxid.gz (<strong>faster, recommended</strong>). <em>Note that some accessions are not in <code>nr</code></em>.</p>
+<pre><code># time: 4min
+pigz -dc prot.accession2taxid.gz \
+    | csvtk grep -t -f taxid -P $id.taxid.txt \
+    | csvtk cut -t -f accession.version \
+    | sed 1d \
+    &gt; $id.acc.txt
+
+wc -l $id.acc.txt
+# 8174609 6656.acc.txt
 </code></pre>
 </li>
 <li>
-<p><s>gi</p>
-<pre><code>$ blastdbcmd -db nr -entry all -outfmt "%g\t%T" | \
-    csvtk -t grep -f 2 -P virus.taxid.gi.txt | \
-    csvtk -t cut -f 1 | \
-    blastdbcmd -db nr -entry_batch - -out nr.virus.fa
+<p>From pre-formated <code>nr</code> blastdb </p>
+<pre><code># time: 40min
+blastdbcmd -db nr -entry all -outfmt "%a %T" | pigz -c &gt; nr.acc2taxid.txt.gz
+
+pigz -dc nr.acc2taxid.txt.gz | wc -l
+# 555220892
+
+# time: 3min
+pigz -dc nr.acc2taxid.txt.gz \
+    | csvtk grep -d ' ' -D ' ' -f 2 -P $id.taxid.txt \
+    | cut -d ' '  -f 1 \
+    &gt; $id.acc.txt
+
+wc -l $id.acc.txt
+# 6928021 6656.acc.txt
 </code></pre>
-<p></s></p>
 </li>
-</ul>
-<p>[update 2018-09-10] <strong>Another way is directly retrieving from <a href="ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz">nr FASTA sequences</a> using <a href="http://bioinf.shenwei.me/seqkit/download">SeqKit</a>:</strong></p>
-<pre><code>zcat nr.gz \
-    | perl -e 'BEGIN{ $/ = "&gt;"; &lt;&gt;; } while(&lt;&gt;){s/&gt;$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; while($h =~ /(.+?) \[(.+?)\]/g){ print "&gt;$1 [$2]\n$s";} } ' \
-    | seqkit grep -f virus.taxid.acc.txt -o nr.virus.fa.gz
+</ol>
+</li>
+<li>
+<p>Retrieving FASTA sequences from pre-formated blastdb. There are two options:</p>
+<ol>
+<li>
+<p>From <code>nr.fa</code> exported from pre-formated blastdb (<strong>faster, smaller output file, recommended</strong>). 
+   <strong>DO NOT directly download <code>nr.gz</code> from <a href="ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz">ncbi ftp</a></strong>,
+   in which the FASTA headers are not well formated.</p>
+<pre><code># time: 117min
+blastdbcmd -db nr -dbtype prot -entry all -outfmt "%f" -out - | pigz -c &gt; nr.fa.gz
+
+# time: 80min
+# perl one-liner is used to unfold records having mulitple accessions
+cat &lt;(echo) &lt;(pigz -dc nr.fa.gz) \
+    | perl -e 'BEGIN{ $/ = "\n&gt;"; &lt;&gt;; } while(&lt;&gt;){s/&gt;$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ /&gt;/) { print "&gt;$_"; next; }; $h = "&gt;$h"; while($h =~ /&gt;([^ ]+ .+?) ?(?=&gt;|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print "&gt;$h1\n$s";} } ' \
+    | seqkit grep --delete-matched -f $id.acc.txt -o nr.$id.fa.gz
+
+# counting sequences
+# 
+# ls -lh nr.$id.fa.gz
+# -rw-r--r-- 1 shenwei shenwei 902M 9月  13 01:42 nr.6656.fa.gz
+# 
+pigz -dc nr.$id.fa.gz | grep '^&gt;' -c
+
+# 6928017
+# Here 6928017 ~=  6928021 ($id.acc.txt)
 </code></pre>
-<p>The perl one-liner is for "unfolding" records in nr.gz, 
-in which different IDs in different species share same sequences.</p>
+</li>
+<li>
+<p>Directly from pre-formated blastdb</p>
+<pre><code># time: 5h20min
+blastdbcmd -db nr -entry_batch $id.acc.txt -out - | pigz -c &gt; nr.$id.fa.gz
+
+# counting sequences
+#
+# Note that the headers of outputed fasta by blastdbcmd are "folded"
+# for accessions from different species with same sequences, so the 
+# number may be small than $(wc -l $id.acc.txt).
+pigz -dc nr.$id.fa.gz | grep '^&gt;' -c
+# 1577383
+
+# counting accessions
+#  
+# ls -lh nr.$id.fa.gz
+# -rw-r--r-- 1 shenwei shenwei 2.1G 9月  13 03:38 nr.6656.fa.gz
+#
+pigz -dc nr.$id.fa.gz | grep '^&gt;' | sed 's/&gt;/\n&gt;/g' | grep '^&gt;' -c
+# 288415413
+</code></pre>
+</li>
+</ol>
+</li>
+<li>
+<p>makeblastdb</p>
+<pre><code>pigz -dc nr.$id.fa.gz &gt; nr.$id.fa
+
+# time: 3min ($nr.$id.fa from step 3 option 1)
+#
+# building $nr.$id.fa from step 3 option 2 with -parse_seqids would produce error:
+#
+#     BLAST Database creation error: Error: Duplicate seq_ids are found: SP|P29868.1
+#
+makeblastdb -parse_seqids -in nr.$id.fa -dbtype prot -out nr.$id
+
+# rm nr.$id.fa
+</code></pre>
+</li>
+<li>
+<p>blastp (optional)</p>
+<pre><code># blastdb nr.$id is built from sequences in step 3 option 1
+# 
+blastp -num_threads 16 -db nr.$id -query t4.fa &gt; t4.fa.blast
+# real    0m20.866s
+
+# $ cat t4.fa.blast | grep Query= -A 10
+# Query= A0A0J9X1W9.2 RecName: Full=Mu-theraphotoxin-Hd1a; Short=Mu-TRTX-Hd1a
+#    
+# Length=35
+                                                                     Score     E
+# Sequences producing significant alignments:                          (Bits)  Value
+
+# 2MPQ_A  Chain A, Solution structure of the sodium channel toxin Hd1a  72.4    2e-17
+# A0A0J9X1W9.2  RecName: Full=Mu-theraphotoxin-Hd1a; Short=Mu-TRTX-...  72.4    2e-17
+# ADB56726.1  HNTX-IV.2 precursor [Haplopelma hainanum]                 66.6    9e-15
+# D2Y233.1  RecName: Full=Mu-theraphotoxin-Hhn1b 2; Short=Mu-TRTX-H...  66.6    9e-15
+# ADB56830.1  HNTX-IV.3 precursor [Haplopelma hainanum]                 66.6    9e-15
+</code></pre>
 </li>
 </ol>
 <div id="disqus_thread"></div>
