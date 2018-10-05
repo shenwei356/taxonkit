@@ -35,7 +35,7 @@ Go to [Download Page](http://bioinf.shenwei.me/taxonkit/download) for more downl
  executable binary files **for most popular operating systems** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 
-#### Method 1: Download binaries
+#### Method 1: Download binaries (latest stable/dev version)
 
 Just [download](https://github.com/shenwei356/taxonkit/releases) compressed
 executable file of your operating system,
@@ -47,19 +47,21 @@ And then:
 
             sudo cp taxonkit /usr/local/bin/
 
-    1. Or add the current directory of the executable file to environment variable
-    `PATH`:
+    1. Or copy to anywhere in the environment variable `PATH`:
 
-            echo export PATH=\$PATH:\"$(pwd)\" >> ~/.bashrc
-            source ~/.bashrc
+            mkdir -p $HOME/bin/; cp taxonkit $HOME/bin/
 
 1. **For windows**, just copy `taxonkit.exe` to `C:\WINDOWS\system32`.
 
-#### Method 2: Install via conda [![Install-with-conda](https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg)](http://bioinf.shenwei.me/taxonkit/download/) [![Anaconda Cloud](https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit) [![downloads](https://anaconda.org/bioconda/taxonkit/badges/downloads.svg)](https://anaconda.org/bioconda/taxonkit)
+#### Method 2: Install via conda  (latest stable version) [![Install-with-conda](https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg)](http://bioinf.shenwei.me/taxonkit/download/) [![Anaconda Cloud](https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit) [![downloads](https://anaconda.org/bioconda/taxonkit/badges/downloads.svg)](https://anaconda.org/bioconda/taxonkit)
 
     conda install -c bioconda taxonkit
 
-#### Method 3: For Go developer
+#### Method 3: Install via homebrew (latest stable version)
+
+    brew install brewsci/bio/taxonkit
+
+#### Method 4: For Go developer (latest stable/dev version)
 
     go get -u github.com/shenwei356/taxonkit/taxonkit
 
