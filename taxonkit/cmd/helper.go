@@ -22,21 +22,25 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/shenwei356/breader"
+	"github.com/shenwei356/util/pathutil"
 	"github.com/spf13/cobra"
 )
 
 // VERSION of csvtk
-const VERSION = "0.2.5-dev3"
+const VERSION = "0.2.5-dev4"
 
 // Config is the struct containing all global flags
 type Config struct {
 	Threads      int
 	OutFile      string
+	DataDir      string
 	NodesFile    string
 	NamesFile    string
 	Verbose      bool
@@ -44,11 +48,25 @@ type Config struct {
 }
 
 func getConfigs(cmd *cobra.Command) Config {
+	var val, dataDir string
+	if val = os.Getenv("TAXONKIT_DB"); val != "" {
+		dataDir = val
+	} else {
+		dataDir = getFlagString(cmd, "data-dir")
+	}
+
+	existed, err := pathutil.DirExists(dataDir)
+	checkError(err)
+	if !existed {
+		log.Errorf(`data directory not created. please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp" and "nodes.dmp" to %s`, dataDir)
+	}
+
 	return Config{
 		Threads:      getFlagPositiveInt(cmd, "threads"),
 		OutFile:      getFlagString(cmd, "out-file"),
-		NodesFile:    getFlagString(cmd, "nodes-file"),
-		NamesFile:    getFlagString(cmd, "names-file"),
+		DataDir:      dataDir,
+		NodesFile:    filepath.Join(dataDir, "nodes.dmp"),
+		NamesFile:    filepath.Join(dataDir, "names.dmp"),
 		Verbose:      getFlagBool(cmd, "verbose"),
 		LineBuffered: getFlagBool(cmd, "line-buffered"),
 	}

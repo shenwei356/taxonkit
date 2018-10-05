@@ -23,12 +23,10 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"runtime"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
-	"github.com/shenwei356/util/pathutil"
 	"github.com/spf13/cobra"
 )
 
@@ -48,18 +46,12 @@ func Execute() {
 	}
 }
 
-// DataDir is the directory of TaxonKit
-var DataDir string
-
-// NodesFile refers to the "nodes.dump"
-var NodesFile string
-
-// NamesFile refers to the "names.dump"
-var NamesFile string
+// defaulDataDir is the directory of TaxonKit
+var defaulDataDir string
 
 func init() {
 	var err error
-	DataDir, err = homedir.Expand("~/.taxonkit/")
+	defaulDataDir, err = homedir.Expand("~/.taxonkit/")
 	checkError(errors.Wrap(err, "get data directory"))
 
 	RootCmd.Long = fmt.Sprintf(`TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
@@ -79,10 +71,10 @@ Dataset:
     and copy "names.dmp" and "nodes.dmp" to data directory:
     "%s"
 
-`, VERSION, DataDir)
+    or some other directory, and later you can refer to using flag --data-dir,
+    or environment variable TAXONKIT_DB
 
-	NodesFile = filepath.Join(DataDir, "nodes.dmp")
-	NamesFile = filepath.Join(DataDir, "names.dmp")
+`, VERSION, defaulDataDir)
 
 	defaultThreads := runtime.NumCPU()
 	if defaultThreads > 2 {
@@ -91,19 +83,7 @@ Dataset:
 
 	RootCmd.PersistentFlags().IntP("threads", "j", defaultThreads, "number of CPUs. (default value: 1 for single-CPU PC, 2 for others)")
 	RootCmd.PersistentFlags().StringP("out-file", "o", "-", `out file ("-" for stdout, suffix .gz for gzipped out)`)
-
-	RootCmd.PersistentFlags().StringP("nodes-file", "", NodesFile, "nodes.dmp file")
-	RootCmd.PersistentFlags().StringP("names-file", "", NamesFile, "names.dmp file")
+	RootCmd.PersistentFlags().StringP("data-dir", "", defaulDataDir, "directory containing nodes.dmp and names.dmp")
 	RootCmd.PersistentFlags().BoolP("verbose", "", false, "print verbose information")
 	RootCmd.PersistentFlags().BoolP("line-buffered", "", false, "use line buffering on output, i.e., immediately writing to stdin/file for every line of output")
-
-	var existed bool
-	existed, err = pathutil.DirExists(DataDir)
-	checkError(err)
-	if !existed {
-		log.Errorf(`data directory not created. please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp" and "nodes.dmp" to %s`, DataDir)
-		// if err = os.Mkdir(DataDir, 0744); err != nil {
-		// 	checkError(err)
-		// }
-	}
 }
