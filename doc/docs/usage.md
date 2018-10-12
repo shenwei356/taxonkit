@@ -13,7 +13,7 @@ And copy "names.dmp" and "nodes.dmp" to data directory: "$HOME/.taxonkit".
 ```
 TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.2.4
+Version: 0.2.5
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -28,6 +28,9 @@ Dataset:
     and copy "names.dmp" and "nodes.dmp" to data directory:
     "/home/shenwei/.taxonkit"
 
+    or some other directory, and later you can refer to using flag --data-dir,
+    or environment variable TAXONKIT_DB
+
 Usage:
   taxonkit [command]
 
@@ -41,14 +44,12 @@ Available Commands:
   version         print version information and check for update
 
 Flags:
-  -h, --help                help for taxonkit
-      --names-file string   names.dmp file (default "/home/shenwei/.taxonkit/names.dmp")
-      --nodes-file string   nodes.dmp file (default "/home/shenwei/.taxonkit/nodes.dmp")
-  -o, --out-file string     out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
-  -j, --threads int         number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
-      --verbose             print verbose information
-
-Use "taxonkit [command] --help" for more information about a command.
+      --data-dir string   directory containing nodes.dmp and names.dmp (default "/home/shenwei/.taxonkit")
+  -h, --help              help for taxonkit
+      --line-buffered     use line buffering on output, i.e., immediately writing to stdin/file for every line of output
+  -o, --out-file string   out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
+  -j, --threads int       number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
+      --verbose           print verbose information
 
 ```
 
@@ -235,7 +236,7 @@ Examples
         10000000
 
 
-        $ taxonkit lineage -t taxids.txt
+        $ taxonkit lineage taxids.txt
         9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
         349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
         239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
@@ -243,8 +244,21 @@ Examples
         314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
         1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
         10000000
+        
+1. Show rank
 
-1. show lineage consisting of taxids:
+        $ taxonkit lineage -r taxids.txt | cut -f 1,3
+        9606    species
+        9913    species
+        376619  no rank
+        349741  no rank
+        239935  species
+        314101  species
+        11932   species
+        1327037 species
+
+
+1. Show lineage consisting of taxids:
 
         $ taxonkit lineage -t taxids.txt
         9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
@@ -288,7 +302,7 @@ Usage:
 
 Flags:
   -d, --delimiter string               field delimiter in input lineage (default ";")
-  -F, --fill-miss-rank                 estimate and fill missing rank with original lineage information (recommended)
+  -F, --fill-miss-rank                 fill missing rank with original lineage information (experimental)
   -f, --format string                  output format, placeholders of rank are needed (default "{k};{p};{c};{o};{f};{g};{s}")
   -h, --help                           help for reformat
   -i, --lineage-field int              field index of lineage. data should be tab-separated (default 2)

@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"runtime"
 	"strconv"
@@ -45,6 +46,7 @@ var lineageCmd = &cobra.Command{
 
 		delimiter := getFlagString(cmd, "delimiter")
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
+		printRank := getFlagBool(cmd, "show-rank")
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
 
 		files := getFileList(args)
@@ -151,6 +153,7 @@ var lineageCmd = &cobra.Command{
 			}, true, nil
 		}
 
+		var buf bytes.Buffer
 		for _, file := range files {
 			reader, err := breader.NewBufferedReader(file, config.Threads, 10, fn)
 			checkError(err)
@@ -161,11 +164,20 @@ var lineageCmd = &cobra.Command{
 
 				for _, data := range chunk.Data {
 					t2l = data.(taxid2lineage)
+
+					buf.Reset()
+					buf.WriteString(t2l.line + "\t" + t2l.lineage)
+
 					if printLineageInTaxid {
-						outfh.WriteString(fmt.Sprintf("%s\t%s\t%s\n", t2l.line, t2l.lineage, t2l.lineageInTaxid))
-					} else {
-						outfh.WriteString(fmt.Sprintf("%s\t%s\n", t2l.line, t2l.lineage))
+						buf.WriteString("\t" + t2l.lineageInTaxid)
 					}
+					if printRank {
+						buf.WriteString("\t" + ranks[t2l.taxid])
+					}
+
+					buf.WriteString("\n")
+
+					outfh.WriteString(buf.String())
 					if config.LineBuffered {
 						outfh.Flush()
 					}
@@ -180,6 +192,7 @@ var lineageCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(lineageCmd)
 	lineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show lineage consisting of taxids`)
+	lineageCmd.Flags().BoolP("show-rank", "r", false, `show rank of taxids`)
 	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. data should be tab-separated")
 	lineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in lineage")
 }
