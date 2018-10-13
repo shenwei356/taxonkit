@@ -34,7 +34,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.2.5"
+const VERSION = "0.3.0"
 
 // Config is the struct containing all global flags
 type Config struct {
@@ -61,8 +61,7 @@ func getConfigs(cmd *cobra.Command) Config {
 		log.Errorf(`data directory not created. please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp" and "nodes.dmp" to %s`, dataDir)
 	}
 
-	return Config{
-		Threads:      getFlagPositiveInt(cmd, "threads"),
+	return Config{Threads: getFlagPositiveInt(cmd, "threads"),
 		OutFile:      getFlagString(cmd, "out-file"),
 		DataDir:      dataDir,
 		NodesFile:    filepath.Join(dataDir, "nodes.dmp"),

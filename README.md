@@ -1,4 +1,4 @@
-# TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
+# TaxonKit - A cross-platform and Efficient NCBI Taxonomy Toolkit
 
 - **Documents:** [http://bioinf.shenwei.me/taxonkit](http://bioinf.shenwei.me/taxonkit)
 ([**Usage**](http://bioinf.shenwei.me/taxonkit/usage/),

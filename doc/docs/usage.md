@@ -11,9 +11,9 @@ And copy "names.dmp" and "nodes.dmp" to data directory: "$HOME/.taxonkit".
 ## taxonkit
 
 ```
-TaxonKit - Cross-platform and Efficient NCBI Taxonomy Toolkit
+TaxonKit - A cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.2.5
+Version: 0.3.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -217,6 +217,7 @@ Flags:
   -d, --delimiter string      field delimiter in lineage (default ";")
   -h, --help                  help for lineage
   -t, --show-lineage-taxids   show lineage consisting of taxids
+  -r, --show-rank             show rank of taxids
   -i, --taxid-field int       field index of taxid. data should be tab-separated (default 1)
 
 ```
@@ -244,7 +245,7 @@ Examples
         314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
         1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
         10000000
-        
+
 1. Show rank
 
         $ taxonkit lineage -r taxids.txt | cut -f 1,3
