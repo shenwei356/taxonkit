@@ -123,7 +123,7 @@
 <p>[rewrite on 2018-09-13]</p>
 <p>Data:</p>
 <ul>
-<li><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/db">pre-formated blastdb</a> (09/10/2018) </li>
+<li><a href="ftp://ftp.ncbi.nlm.nih.gov/blast/db">pre-formated blastdb</a> (09/10/2018)</li>
 <li><a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.gz">prot.accession2taxid.gz</a> (09/07/2018) (optional, but recommended)</li>
 </ul>
 <p>Hardware in this tutorial</p>
@@ -142,6 +142,7 @@
 <li><a href="https://zlib.net/pigz/">pigz</a> (recommended, faster than gzip)</li>
 <li><a href="https://bioinf.shenwei.me/taxonkit">taxonkit</a></li>
 <li><a href="https://bioinf.shenwei.me/seqkit">seqkit</a> (recommended)</li>
+<li><a href="https://github.com/shenwei356/rush">rush</a> (optional, for parallizing filtering sequence)</li>
 </ul>
 <p>Steps:</p>
 <ol>
@@ -150,10 +151,10 @@
 <pre><code>id=6656
 
 # 6656 is the phylum Arthropoda
-# echo 6656 | taxonkit lineage | taxonkit reformat 
+# echo 6656 | taxonkit lineage | taxonkit reformat
 # 6656    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Protostomia;Ecdysozoa;Panarthropoda;Arthropoda    Eukaryota;Arthropoda;;;;;
 
-# time: 3s 
+# time: 3s
 taxonkit list --ids $id --indent "" &gt; $id.taxid.txt
 
 wc -l $id.taxid.txt
@@ -177,7 +178,7 @@ wc -l $id.acc.txt
 </code></pre>
 </li>
 <li>
-<p>From pre-formated <code>nr</code> blastdb </p>
+<p>From pre-formated <code>nr</code> blastdb</p>
 <pre><code># time: 40min
 blastdbcmd -db nr -entry all -outfmt "%a %T" | pigz -c &gt; nr.acc2taxid.txt.gz
 
@@ -200,23 +201,49 @@ wc -l $id.acc.txt
 <p>Retrieving FASTA sequences from pre-formated blastdb. There are two options:</p>
 <ol>
 <li>
-<p>From <code>nr.fa</code> exported from pre-formated blastdb (<strong>faster, smaller output file, recommended</strong>). 
+<p>From <code>nr.fa</code> exported from pre-formated blastdb (<strong>faster, smaller output file, recommended</strong>).
    <strong>DO NOT directly download <code>nr.gz</code> from <a href="ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz">ncbi ftp</a></strong>,
    in which the FASTA headers are not well formated.</p>
-<pre><code># time: 117min
+<pre><code># 1. exporting nr.fa from pre-formated blastdb
+
+# time: 117min (run only once)
 blastdbcmd -db nr -dbtype prot -entry all -outfmt "%f" -out - | pigz -c &gt; nr.fa.gz
 
+# 2. filtering sequence belong to $taxid
+
+# methond 1)
 # time: 80min
 # perl one-liner is used to unfold records having mulitple accessions
 cat &lt;(echo) &lt;(pigz -dc nr.fa.gz) \
     | perl -e 'BEGIN{ $/ = "\n&gt;"; &lt;&gt;; } while(&lt;&gt;){s/&gt;$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ /&gt;/) { print "&gt;$_"; next; }; $h = "&gt;$h"; while($h =~ /&gt;([^ ]+ .+?) ?(?=&gt;|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print "&gt;$h1\n$s";} } ' \
     | seqkit grep --delete-matched -f $id.acc.txt -o nr.$id.fa.gz
 
+# method 2) (**faster**)
+
+# 33min (run only once)
+# (1). split nr.fa.gz. # Note: I have 16 cpus.
+$ time seqkit split2 -p 15 nr.fa.gz
+
+# (2). parallize unfolding
+$ cat unfold_blastdb_fa.sh
+#!/bin/sh
+perl -e 'BEGIN{ $/ = "\n&gt;"; &lt;&gt;; } while(&lt;&gt;){s/&gt;$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ /&gt;/) { print "&gt;$_"; next; }; $h = "&gt;$h"; while($h =~ /&gt;([^ ]+ .+?) ?(?=&gt;|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print "&gt;$h1\n$s";} } '
+
+# 10 min
+ls nr.fa.gz.split/nr.part_*.fa.gz \
+    | rush -j 15 -v id=$id 'cat &lt;(echo) &lt;(pigz -dc {}) \
+        | ./unfold_blastdb_fa.sh \
+        | seqkit grep --delete-matched -f {id}.acc.txt -o nr.{id}.{%@nr\.(.+)$} '
+
+# (3). merge result
+cat nr.$id.part*.fa.gz &gt; nr.$id.fa.gz
+rm nr.$id.part*.fa.gz
+
 # counting sequences
-# 
+#
 # ls -lh nr.$id.fa.gz
 # -rw-r--r-- 1 shenwei shenwei 902M 9月  13 01:42 nr.6656.fa.gz
-# 
+#
 pigz -dc nr.$id.fa.gz | grep '^&gt;' -c
 
 # 6928017
@@ -231,13 +258,13 @@ blastdbcmd -db nr -entry_batch $id.acc.txt -out - | pigz -c &gt; nr.$id.fa.gz
 # counting sequences
 #
 # Note that the headers of outputed fasta by blastdbcmd are "folded"
-# for accessions from different species with same sequences, so the 
+# for accessions from different species with same sequences, so the
 # number may be small than $(wc -l $id.acc.txt).
 pigz -dc nr.$id.fa.gz | grep '^&gt;' -c
 # 1577383
 
 # counting accessions
-#  
+#
 # ls -lh nr.$id.fa.gz
 # -rw-r--r-- 1 shenwei shenwei 2.1G 9月  13 03:38 nr.6656.fa.gz
 #
@@ -265,13 +292,13 @@ makeblastdb -parse_seqids -in nr.$id.fa -dbtype prot -out nr.$id
 <li>
 <p>blastp (optional)</p>
 <pre><code># blastdb nr.$id is built from sequences in step 3 option 1
-# 
+#
 blastp -num_threads 16 -db nr.$id -query t4.fa &gt; t4.fa.blast
 # real    0m20.866s
 
 # $ cat t4.fa.blast | grep Query= -A 10
 # Query= A0A0J9X1W9.2 RecName: Full=Mu-theraphotoxin-Hd1a; Short=Mu-TRTX-Hd1a
-#    
+#
 # Length=35
                                                                      Score     E
 # Sequences producing significant alignments:                          (Bits)  Value
