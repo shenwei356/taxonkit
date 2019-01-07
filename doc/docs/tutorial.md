@@ -2,11 +2,21 @@
 
 ## Making nr blastdb for specific taxids
 
-[rewrite on 2018-09-13]
+Attention:
+
+- [BLAST+ 2.8.1 is released with new databases](https://ncbiinsights.ncbi.nlm.nih.gov/2019/01/04/blast-2-8-1-with-new-databases-and-better-performance/),
+which allows you to limit your search by taxonomy using information built into the BLAST databases.
+So you don't need to build blastdb for specific taxids now.
+
+Changes:
+
+- 2018-09-13 rewritten
+- 2018-12-22 providing faster method for step 3.1
+- 2019-01-07 add note of new blastdb version
 
 Data:
 
-- [pre-formated blastdb](ftp://ftp.ncbi.nlm.nih.gov/blast/db) (09/10/2018) 
+- [pre-formated blastdb](ftp://ftp.ncbi.nlm.nih.gov/blast/db) (09/10/2018)
 - [prot.accession2taxid.gz](ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.gz) (09/07/2018) (optional, but recommended)
 
 Hardware in this tutorial
@@ -16,116 +26,151 @@ Hardware in this tutorial
 - DISK:
     - Taxonomy files stores in NVMe SSD
     - blatdb files stores in 7200rpm HDD
-    
+
 Tools:
 
 - [blast+](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
 - [pigz](https://zlib.net/pigz/) (recommended, faster than gzip)
 - [taxonkit](https://bioinf.shenwei.me/taxonkit)
 - [seqkit](https://bioinf.shenwei.me/seqkit) (recommended)
-    
+- [rush](https://github.com/shenwei356/rush) (optional, for parallizing filtering sequence)
+
 Steps:
 
 1. Listing all taxids below `$id` using taxonkit.
 
         id=6656
-        
+
         # 6656 is the phylum Arthropoda
-        # echo 6656 | taxonkit lineage | taxonkit reformat 
+        # echo 6656 | taxonkit lineage | taxonkit reformat
         # 6656    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Protostomia;Ecdysozoa;Panarthropoda;Arthropoda    Eukaryota;Arthropoda;;;;;
-        
-        # time: 3s 
-        taxonkit list --ids $id --indent "" > $id.taxid.txt 
-        
+
+        # time: 3s
+        taxonkit list --ids $id --indent "" > $id.taxid.txt
+
         wc -l $id.taxid.txt
         # 518373 6656.taxid.txt
 
 2. Retrieving target accessions. There are two options:
 
     1. From prot.accession2taxid.gz (**faster, recommended**). *Note that some accessions are not in `nr`*.
-    
+
             # time: 4min
             pigz -dc prot.accession2taxid.gz \
                 | csvtk grep -t -f taxid -P $id.taxid.txt \
                 | csvtk cut -t -f accession.version \
                 | sed 1d \
                 > $id.acc.txt
-            
-            
+
+
             wc -l $id.acc.txt
             # 8174609 6656.acc.txt
-    
-    1. From pre-formated `nr` blastdb 
-    
+
+    1. From pre-formated `nr` blastdb
+
             # time: 40min
             blastdbcmd -db nr -entry all -outfmt "%a %T" | pigz -c > nr.acc2taxid.txt.gz
-            
+
             pigz -dc nr.acc2taxid.txt.gz | wc -l
             # 555220892
-            
+
             # time: 3min
             pigz -dc nr.acc2taxid.txt.gz \
                 | csvtk grep -d ' ' -D ' ' -f 2 -P $id.taxid.txt \
                 | cut -d ' '  -f 1 \
                 > $id.acc.txt
-            
-            
+
+
             wc -l $id.acc.txt
             # 6928021 6656.acc.txt
-    
-    
+
+
 3. Retrieving FASTA sequences from pre-formated blastdb. There are two options:
 
-   
-    1. From `nr.fa` exported from pre-formated blastdb (**faster, smaller output file, recommended**). 
+
+    1. From `nr.fa` exported from pre-formated blastdb (**faster, smaller output file, recommended**).
        **DO NOT directly download `nr.gz` from [ncbi ftp](ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz)**,
        in which the FASTA headers are not well formated.
-    
-            # time: 117min
+
+            # 1. exporting nr.fa from pre-formated blastdb
+
+            # time: 117min (run only once)
             blastdbcmd -db nr -dbtype prot -entry all -outfmt "%f" -out - | pigz -c > nr.fa.gz
-            
+
+            # =====================================================================
+
+            # 2. filtering sequence belong to $taxid
+
+            # ---------------------------------------------------------------------
+
+            # methond 1)
             # time: 80min
             # perl one-liner is used to unfold records having mulitple accessions
             cat <(echo) <(pigz -dc nr.fa.gz) \
                 | perl -e 'BEGIN{ $/ = "\n>"; <>; } while(<>){s/>$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ />/) { print ">$_"; next; }; $h = ">$h"; while($h =~ />([^ ]+ .+?) ?(?=>|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print ">$h1\n$s";} } ' \
                 | seqkit grep --delete-matched -f $id.acc.txt -o nr.$id.fa.gz
-                
-            # counting sequences
-            # 
+
+            # ---------------------------------------------------------------------
+
+            # method 2) (**faster**)
+
+            # 33min (run only once)
+            # (1). split nr.fa.gz. # Note: I have 16 cpus.
+            $ time seqkit split2 -p 15 nr.fa.gz
+
+            # (2). parallize unfolding
+            $ cat unfold_blastdb_fa.sh
+            #!/bin/sh
+            perl -e 'BEGIN{ $/ = "\n>"; <>; } while(<>){s/>$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ />/) { print ">$_"; next; }; $h = ">$h"; while($h =~ />([^ ]+ .+?) ?(?=>|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print ">$h1\n$s";} } '
+
+            # 10 min
+            ls nr.fa.gz.split/nr.part_*.fa.gz \
+                | rush -j 15 -v id=$id 'cat <(echo) <(pigz -dc {}) \
+                    | ./unfold_blastdb_fa.sh \
+                    | seqkit grep --delete-matched -f {id}.acc.txt -o nr.{id}.{%@nr\.(.+)$} '
+
+            # (3). merge result
+            cat nr.$id.part*.fa.gz > nr.$id.fa.gz
+            rm nr.$id.part*.fa.gz
+
+            # =====================================================================
+
+            # 3. counting sequences
+            #
             # ls -lh nr.$id.fa.gz
             # -rw-r--r-- 1 shenwei shenwei 902M 9月  13 01:42 nr.6656.fa.gz
-            # 
+            #
             pigz -dc nr.$id.fa.gz | grep '^>' -c
-            
+
             # 6928017
             # Here 6928017 ~=  6928021 ($id.acc.txt)
-        
+
     1. Directly from pre-formated blastdb
-    
+
             # time: 5h20min
             blastdbcmd -db nr -entry_batch $id.acc.txt -out - | pigz -c > nr.$id.fa.gz
-            
-            
+
+
             # counting sequences
             #
             # Note that the headers of outputed fasta by blastdbcmd are "folded"
-            # for accessions from different species with same sequences, so the 
+            # for accessions from different species with same sequences, so the
             # number may be small than $(wc -l $id.acc.txt).
             pigz -dc nr.$id.fa.gz | grep '^>' -c
             # 1577383
-            
+
             # counting accessions
-            #  
+            #
             # ls -lh nr.$id.fa.gz
             # -rw-r--r-- 1 shenwei shenwei 2.1G 9月  13 03:38 nr.6656.fa.gz
             #
             pigz -dc nr.$id.fa.gz | grep '^>' | sed 's/>/\n>/g' | grep '^>' -c
             # 288415413
-        
+
 4. makeblastdb
 
         pigz -dc nr.$id.fa.gz > nr.$id.fa
-        
+
         # time: 3min ($nr.$id.fa from step 3 option 1)
         #
         # building $nr.$id.fa from step 3 option 2 with -parse_seqids would produce error:
@@ -133,19 +178,19 @@ Steps:
         #     BLAST Database creation error: Error: Duplicate seq_ids are found: SP|P29868.1
         #
         makeblastdb -parse_seqids -in nr.$id.fa -dbtype prot -out nr.$id
-        
+
         # rm nr.$id.fa
 
 5. blastp (optional)
 
         # blastdb nr.$id is built from sequences in step 3 option 1
-        # 
+        #
         blastp -num_threads 16 -db nr.$id -query t4.fa > t4.fa.blast
         # real    0m20.866s
-        
+
         # $ cat t4.fa.blast | grep Query= -A 10
         # Query= A0A0J9X1W9.2 RecName: Full=Mu-theraphotoxin-Hd1a; Short=Mu-TRTX-Hd1a
-        #    
+        #
         # Length=35
                                                                              Score     E
         # Sequences producing significant alignments:                          (Bits)  Value

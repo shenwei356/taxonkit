@@ -7,7 +7,7 @@ pages:
     - Tutorial: tutorial.md
 - Links:
     - Wei Shen's Bioinformatic tools: bioinf.md
-theme: yeti
+theme: cinder
 
 repo_url: https://github.com/shenwei356/taxonkit
 site_description: TaxonKit - NCBI Taxonomy Toolkit
