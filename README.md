@@ -18,7 +18,8 @@
 ## Subcommands
 
 - `list`    list taxon tree of given taxids
-- `lineage` query lineage of given taxids (supporting STDIN)
+- `lineage` query lineage of given taxids (supporting STDIN), performance benchmark ([details](bench/README.md)):
+  ![](bench/bench.get_lineage.reformat.tsv.png)  
 - `reformat` reformat lineage (supporting STDIN)
 - `name2taxid` query taxid by taxon scientific name (supporting STDIN)
 
