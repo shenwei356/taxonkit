@@ -153,6 +153,8 @@
                 <li class="third-level"><a href="#method-4-for-go-developer-latest-stabledev-version">Method 4: For Go developer (latest stable/dev version)</a></li>
             <li class="second-level"><a href="#bash-completion">Bash-completion</a></li>
                 
+            <li class="second-level"><a href="#citation">Citation</a></li>
+                
             <li class="second-level"><a href="#contact">Contact</a></li>
                 
             <li class="second-level"><a href="#license">License</a></li>
@@ -176,11 +178,13 @@
 <a href="http://bioinf.shenwei.me/taxonkit/download/"><img alt="Cross-platform" src="https://img.shields.io/badge/platform-any-ec2eb4.svg?style=flat" /></a>
 <a href="http://bioinf.shenwei.me/taxonkit/download/"><img alt="Install-with-conda" src="https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg" /></a>
 <a href="https://anaconda.org/bioconda/taxonkit"><img alt="Anaconda Cloud" src="https://anaconda.org/bioconda/taxonkit/badges/version.svg" /></a></li>
+<li><strong><a href="#citation">Please cite</a>:</strong> <a href="https://doi.org/10.1101/513523"><img alt="doi" src="https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat" /></a></li>
 </ul>
 <h2 id="subcommands">Subcommands</h2>
 <ul>
 <li><code>list</code>    list taxon tree of given taxids</li>
-<li><code>lineage</code> query lineage of given taxids (supporting STDIN)</li>
+<li><code>lineage</code> query lineage of given taxids (supporting STDIN), performance benchmark (<a href="bench/README.md">details</a>):
+  <img alt="" src="bench/bench.get_lineage.reformat.tsv.png" />  </li>
 <li><code>reformat</code> reformat lineage (supporting STDIN)</li>
 <li><code>name2taxid</code> query taxid by taxon scientific name (supporting STDIN)</li>
 </ul>
@@ -247,6 +251,8 @@ done
 </code></pre>
 </li>
 </ol>
+<h2 id="citation">Citation</h2>
+<p>If you use TaxonKit in your work, please cite <a href="https://www.biorxiv.org/content/early/2019/01/08/513523">the preprint</a>.</p>
 <h2 id="contact">Contact</h2>
 <p>Email me for any problem when using taxonkit. shenwei356(at)gmail.com</p>
 <p><a href="https://github.com/shenwei356/taxonkit/issues">Create an issue</a> to report bugs,
@@ -306,5 +312,5 @@ propose new functions or ask for help.</p>
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-01-07 10:34:58
+Build Date UTC : 2019-01-09 06:07:04
 -->
