@@ -22,6 +22,7 @@
 - ETE, version: [3.1.1](https://pypi.org/project/ete3/3.1.1/)
 - BioPython, version: [1.73](https://pypi.org/project/biopython/1.73/)
 - taxadb, version: [0.9.0](https://pypi.org/project/taxadb/0.9.0)
+- TaxonKit, version: [0.3.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.3.0)
 
 ## Installation and Configurations
 

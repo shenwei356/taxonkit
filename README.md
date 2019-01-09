@@ -13,7 +13,7 @@
 [![Cross-platform](https://img.shields.io/badge/platform-any-ec2eb4.svg?style=flat)](http://bioinf.shenwei.me/taxonkit/download/)
 [![Install-with-conda](	https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg)](http://bioinf.shenwei.me/taxonkit/download/)
 [![Anaconda Cloud](	https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit)
-
+- **[Please cite](#citation):** [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
 
 ## Subcommands
 
@@ -84,6 +84,10 @@ Howto:
         for bcfile in ~/.bash_completion.d/* ; do
           . $bcfile
         done
+
+## Citation
+
+If you use TaxonKit in your work, please cite [the preprint](https://www.biorxiv.org/content/early/2019/01/08/513523).
 
 ## Contact
 
