@@ -35,3 +35,4 @@ taxonkit/binaries*
 doc/site
 taxonkit/archive
 taxonkit/*.gz
+test.*

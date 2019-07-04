@@ -41,10 +41,12 @@ var taxidlogCmd = &cobra.Command{
 	Short: "create taxid changelog from dump archive",
 	Long: `create taxid changelog from dump archive
 
-Steps
+Steps:
 
-	mkdir -p archive;
-	cd archive;
+	# dependencies:
+	# 	rush - https://github.com/shenwei356/rush/
+
+	mkdir -p archive; cd archive;
 
 	# --------- download ---------
 
@@ -66,7 +68,8 @@ Steps
 
 	# --------- create log ---------
 
-	taxonkit taxid-changelog -i archive -o log.csv.gz
+	cd ..
+	taxonkit taxid-changelog -i archive -o log.csv.gz --verbose
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -114,11 +117,10 @@ func (c TaxidChangeCode) String() string {
 }
 
 type TaxidChange struct {
-	// Taxid         int32
-	Version       string
-	Lineage       []string
-	LineageTaxids []int32
+	Version       int16
+	TaxidVersion  int16
 	Change        TaxidChangeCode
+	LineageTaxids []int32
 	ChangeValue   []int32
 }
 
@@ -129,7 +131,7 @@ func (changes TaxidChanges) Len() int { return len(changes) }
 func (changes TaxidChanges) Swap(i, j int) { changes[i], changes[j] = changes[j], changes[i] }
 
 func (changes TaxidChanges) Less(i, j int) bool {
-	return strings.Compare(changes[i].Version, changes[j].Version) < 0 || changes[i].Change < changes[j].Change
+	return changes[i].Version < changes[j].Version || changes[i].Change < changes[j].Change
 }
 
 func (c TaxidChange) String() string {
@@ -139,7 +141,10 @@ func (c TaxidChange) String() string {
 	var i int
 
 	// version
-	buf.WriteString(c.Version)
+	buf.WriteString(fmt.Sprintf("%d", c.Version))
+
+	// taxid version
+	buf.WriteString(fmt.Sprintf(",%d", c.TaxidVersion))
 
 	// change
 	buf.WriteString(",")
@@ -160,12 +165,6 @@ func (c TaxidChange) String() string {
 			tmp[i] = fmt.Sprintf("%d", tid)
 		}
 		buf.WriteString(strings.Join(tmp, ";"))
-	}
-
-	// lineage
-	buf.WriteString(",")
-	if c.Lineage != nil {
-		buf.WriteString(strings.Join(c.Lineage, ";"))
 	}
 
 	// lineage-taxid
@@ -196,13 +195,17 @@ func createChangelog(config Config, path string, dirs []string) {
 
 	// taxid -> change-code -> []changes
 	data := make(map[int32]map[TaxidChangeCode][]TaxidChange, 10000)
+
+	// version -> taxid -> name
+	taxid2names := make(map[string]map[int32]string, len(dirs))
+
+	// versions
+	versions := dirs
+
 	var ok bool
-	for j, dir := range dirs {
-		if j == 3 {
-			break
-		}
+	for version, dir := range dirs {
 		if config.Verbose {
-			log.Infof("parsing archive (%3d/%3d): %s", j+1, len(dirs), dir)
+			log.Infof("parsing archive (%3d/%3d): %s", version+1, len(dirs), dir)
 		}
 
 		// -------------- checking newly added and lineage-changed taxids --------------
@@ -215,13 +218,10 @@ func createChangelog(config Config, path string, dirs []string) {
 			filepath.Join(path, dir, "nodes.dmp"), filepath.Join(path, dir, "names.dmp"),
 			config.Threads, 10,
 		)
+		taxid2names[dir] = taxid2name
 
-		var i int
-		var tid int32
 		var prevChange TaxidChange
 		for taxid, lineageTaxids := range taxid2lineageTaxids {
-			// fmt.Printf("%d: %s\n", taxid, strings.Join(lineage, "; "))
-
 			if _, ok = data[taxid]; !ok { // newly added
 				data[taxid] = make(map[TaxidChangeCode][]TaxidChange, 1)
 
@@ -229,40 +229,29 @@ func createChangelog(config Config, path string, dirs []string) {
 					data[taxid][TaxidNew] = make([]TaxidChange, 0, 1)
 				}
 
-				lineage := make([]string, len(lineageTaxids))
-				for i, tid = range lineageTaxids {
-					lineage[i] = taxid2name[tid]
-				}
-
 				data[taxid][TaxidNew] = append(data[taxid][TaxidNew], TaxidChange{
-					Version:       dir,
-					Lineage:       lineage,
+					Version:       int16(version),
 					LineageTaxids: lineageTaxids,
+					TaxidVersion:  int16(version),
 					Change:        TaxidNew,
 					ChangeValue:   nil,
 				})
 			} else { // existed
 				// newly added
 				if _, ok = data[taxid][TaxidNew]; !ok {
-					// checkError(fmt.Errorf("%d should have a NEW record", taxid))
 					// !!!!!!!
-					// deleted nodes can be used again ...
+					// deleted nodes can be re-used ...
+					// e.g., 1390515 , deleted in 2014-08-01, added in 2014-09-01
 					// !!!!!!!
-					data[taxid] = make(map[TaxidChangeCode][]TaxidChange, 1)
+					// log.Infof(fmt.Sprintf("%d, v%s, %s", taxid, versions[version], data[taxid]))
 
 					if _, ok = data[taxid][TaxidNew]; !ok {
 						data[taxid][TaxidNew] = make([]TaxidChange, 0, 1)
 					}
-
-					lineage := make([]string, len(lineageTaxids))
-					for i, tid = range lineageTaxids {
-						lineage[i] = taxid2name[tid]
-					}
-
 					data[taxid][TaxidNew] = append(data[taxid][TaxidNew], TaxidChange{
-						Version:       dir,
-						Lineage:       lineage,
+						Version:       int16(version),
 						LineageTaxids: lineageTaxids,
+						TaxidVersion:  int16(version),
 						Change:        TaxidNew,
 						ChangeValue:   nil,
 					})
@@ -275,19 +264,16 @@ func createChangelog(config Config, path string, dirs []string) {
 						prevChange = data[taxid][TaxidLineageChanged][len(data[taxid][TaxidLineageChanged])-1] // check NEW
 					}
 
-					if !linegeUnchange(lineageTaxids, prevChange.LineageTaxids) {
+					if !linegeUnchange(lineageTaxids, prevChange.LineageTaxids, taxid2names, dir, versions[prevChange.TaxidVersion]) {
+						// changed
 						if _, ok = data[taxid][TaxidLineageChanged]; !ok {
 							data[taxid][TaxidLineageChanged] = make([]TaxidChange, 0, 1)
 						}
 
-						lineage := make([]string, len(lineageTaxids))
-						for i, tid = range lineageTaxids {
-							lineage[i] = taxid2name[tid]
-						}
 						data[taxid][TaxidLineageChanged] = append(data[taxid][TaxidLineageChanged], TaxidChange{
-							Version:       dir,
-							Lineage:       lineage,
+							Version:       int16(version),
 							LineageTaxids: lineageTaxids,
+							TaxidVersion:  int16(version),
 							Change:        TaxidLineageChanged,
 							ChangeValue:   nil,
 						})
@@ -298,42 +284,45 @@ func createChangelog(config Config, path string, dirs []string) {
 			}
 		}
 
+		var changes []TaxidChange
+
 		// -------------- checking deleted taxids --------------
 
 		if config.Verbose {
 			log.Infof("  parsing delnodes.dmp")
 		}
-		var changes []TaxidChange
-		taxids := getDelnodes(filepath.Join(path, dir, "delnodes.dmp"), config.Threads, 10)
-		for _, taxid := range taxids {
+
+		delTaxids := getDelnodes(filepath.Join(path, dir, "delnodes.dmp"), config.Threads, 10)
+		for _, taxid := range delTaxids {
 			if _, ok = data[taxid]; !ok {
 				data[taxid] = make(map[TaxidChangeCode][]TaxidChange, 1)
 			}
+
 			if _, ok = data[taxid][TaxidDelete]; !ok {
 				data[taxid][TaxidDelete] = make([]TaxidChange, 0, 1)
 
 				// extract lineage in NEW / CHANGED record
 				if changes, ok = data[taxid][TaxidLineageChanged]; ok {
 					data[taxid][TaxidDelete] = append(data[taxid][TaxidDelete], TaxidChange{
-						Version:       dir,
-						Lineage:       changes[len(changes)-1].Lineage,
+						Version:       int16(version),
 						LineageTaxids: changes[len(changes)-1].LineageTaxids,
+						TaxidVersion:  changes[len(changes)-1].TaxidVersion,
 						Change:        TaxidDelete,
 						ChangeValue:   nil,
 					})
 				} else if changes, ok = data[taxid][TaxidNew]; ok {
 					data[taxid][TaxidDelete] = append(data[taxid][TaxidDelete], TaxidChange{
-						Version:       dir,
-						Lineage:       changes[len(changes)-1].Lineage,
+						Version:       int16(version),
 						LineageTaxids: changes[len(changes)-1].LineageTaxids,
+						TaxidVersion:  changes[len(changes)-1].TaxidVersion,
 						Change:        TaxidDelete,
 						ChangeValue:   nil,
 					})
-				} else {
+				} else { // firt archive
 					data[taxid][TaxidDelete] = append(data[taxid][TaxidDelete], TaxidChange{
-						Version:       dir,
-						Lineage:       nil,
+						Version:       int16(version),
 						LineageTaxids: nil,
+						TaxidVersion:  -1,
 						Change:        TaxidDelete,
 						ChangeValue:   nil,
 					})
@@ -370,32 +359,34 @@ func createChangelog(config Config, path string, dirs []string) {
 			}
 
 			if toRecord {
+				// recording merged taxid
 				if changes, ok = data[from][TaxidLineageChanged]; ok {
 					data[from][TaxidMerge] = append(data[from][TaxidMerge], TaxidChange{
-						Version:       dir,
-						Lineage:       changes[len(changes)-1].Lineage,
+						Version:       int16(version),
 						LineageTaxids: changes[len(changes)-1].LineageTaxids,
+						TaxidVersion:  changes[len(changes)-1].TaxidVersion,
 						Change:        TaxidMerge,
 						ChangeValue:   []int32{to},
 					})
 				} else if changes, ok = data[from][TaxidNew]; ok {
 					data[from][TaxidMerge] = append(data[from][TaxidMerge], TaxidChange{
-						Version:       dir,
-						Lineage:       changes[len(changes)-1].Lineage,
+						Version:       int16(version),
 						LineageTaxids: changes[len(changes)-1].LineageTaxids,
+						TaxidVersion:  changes[len(changes)-1].TaxidVersion,
 						Change:        TaxidMerge,
 						ChangeValue:   []int32{to},
 					})
 				} else {
 					data[from][TaxidMerge] = append(data[from][TaxidMerge], TaxidChange{
-						Version:       dir,
-						Lineage:       nil,
+						Version:       int16(version),
 						LineageTaxids: nil,
+						TaxidVersion:  -1,
 						Change:        TaxidMerge,
 						ChangeValue:   []int32{to},
 					})
 				}
 
+				// add change to "to"
 				if _, ok = data[to]; !ok {
 					data[to] = make(map[TaxidChangeCode][]TaxidChange, 1)
 				}
@@ -404,20 +395,20 @@ func createChangelog(config Config, path string, dirs []string) {
 				}
 				if len(data[to][TaxidAbsorb]) == 0 {
 					data[to][TaxidAbsorb] = append(data[to][TaxidAbsorb], TaxidChange{
-						Version:       dir,
-						Lineage:       nil,
+						Version:       int16(version),
 						LineageTaxids: taxid2lineageTaxids[to],
+						TaxidVersion:  int16(version),
 						Change:        TaxidAbsorb,
 						ChangeValue:   []int32{from},
 					})
-				} else {
+				} else { // append to
 					data[to][TaxidAbsorb][0].ChangeValue = append(data[to][TaxidAbsorb][0].ChangeValue, from)
 				}
 			}
 		}
 	}
 
-	// output
+	// -------------- output --------------
 
 	header := strings.Split("taxid,version,change,change-value,lineage,lineage-taxids", ",")
 	writer.Write(header)
@@ -427,12 +418,30 @@ func createChangelog(config Config, path string, dirs []string) {
 	var tmp, items []string
 	var tid int32
 	var i int
-	for taxid, v := range data {
-		changes = make([]TaxidChange, 0, 1)
-		for _, cs = range v {
+	var taxid2name map[int32]string
+
+	if config.Verbose {
+		log.Infof("sorting %d taxids", len(data))
+	}
+	taxids := make([]int, len(data))
+	i = 0
+	for taxid := range data {
+		taxids[i] = int(taxid)
+		i++
+	}
+	sort.Ints(taxids)
+
+	if config.Verbose {
+		log.Infof("write to file: %s", config.OutFile)
+	}
+	for _, taxid := range taxids {
+		changes = make([]TaxidChange, 0, len(data[int32(taxid)]))
+		for _, cs = range data[int32(taxid)] {
 			changes = append(changes, cs...)
 		}
+
 		sort.Sort(TaxidChanges(changes))
+
 		for _, c = range changes {
 			items = make([]string, 0, len(header))
 
@@ -440,7 +449,7 @@ func createChangelog(config Config, path string, dirs []string) {
 			items = append(items, fmt.Sprintf("%d", taxid))
 
 			// version
-			items = append(items, c.Version)
+			items = append(items, versions[int(c.Version)])
 
 			// change
 			items = append(items, fmt.Sprintf("%s", c.Change))
@@ -466,8 +475,14 @@ func createChangelog(config Config, path string, dirs []string) {
 			}
 
 			// lineage
-			if c.Lineage != nil {
-				items = append(items, strings.Join(c.Lineage, ";"))
+			if c.TaxidVersion >= 0 {
+				taxid2name = taxid2names[versions[int(c.TaxidVersion)]]
+				tmp = make([]string, len(c.LineageTaxids))
+				for i, tid = range c.LineageTaxids {
+					tmp[i] = taxid2name[tid]
+				}
+
+				items = append(items, strings.Join(tmp, ";"))
 			} else {
 				items = append(items, "")
 			}
@@ -517,7 +532,7 @@ func checkArchives(config Config, path string) []string {
 		}
 	}
 	if len(dirs) == 0 {
-		checkError(fmt.Errorf("no unzipeed directories found in: %s", path))
+		checkError(fmt.Errorf("no unzipped directories found in path: %s", path))
 	}
 	for _, dir := range dirs {
 		checkFile(filepath.Join(path, dir, "names.dmp"))
@@ -527,7 +542,7 @@ func checkArchives(config Config, path string) []string {
 	}
 
 	if config.Verbose {
-		log.Infof("%d archieves found in %s", len(dirs), path)
+		log.Infof("%d archieves found in path: %s", len(dirs), path)
 	}
 
 	return dirs
@@ -541,7 +556,7 @@ func checkFile(file string) {
 	}
 }
 
-func linegeUnchange(a, b []int32) bool {
+func linegeUnchange(a, b []int32, taxid2names map[string]map[int32]string, va, vb string) bool {
 	if (a == nil) != (b == nil) {
 		return false
 	}
@@ -550,9 +565,10 @@ func linegeUnchange(a, b []int32) bool {
 		return false
 	}
 	for i, v := range a {
-		if v != b[i] {
+		if taxid2names[va][v] != taxid2names[vb][b[i]] {
 			return false
 		}
 	}
+
 	return true
 }
