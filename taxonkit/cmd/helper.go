@@ -230,6 +230,62 @@ func getName2Parent2Taxid(fileNodes string,
 	return
 }
 
+func getTaxid2Lineage(fileNodes string, fileNames string, bufferSize int, chunkSize int) (map[int32][]int32, map[int32]string, map[int32]string) {
+	var names map[int32]string
+	names = getTaxonNames(fileNames, bufferSize, chunkSize)
+
+	reader, err := breader.NewBufferedReader(fileNodes, bufferSize, chunkSize, taxonParseFunc)
+	checkError(err)
+
+	tree := make(map[int32]int32)
+	ranks := make(map[int32]string)
+	var taxon Taxon
+	var child, parent int32
+	var n int64
+	var data interface{}
+	for chunk := range reader.Ch {
+		checkError(chunk.Err)
+
+		for _, data = range chunk.Data {
+			taxon = data.(Taxon)
+			child, parent = taxon.Taxid, taxon.Parent
+
+			tree[child] = parent
+			ranks[child] = taxon.Rank
+			n++
+		}
+	}
+
+	taxid2lineageTaxids := make(map[int32][]int32, 10000)
+
+	var ok bool
+	var i, j int
+	for taxid := range tree {
+		lineageTaxids := []int32{}
+		child = taxid
+		for true {
+			parent, ok = tree[child]
+			if !ok {
+				break
+			}
+
+			lineageTaxids = append(lineageTaxids, child)
+
+			if parent == 1 {
+				break
+			}
+			child = parent
+		}
+		// reverse lineageTaxids
+		for i = len(lineageTaxids)/2 - 1; i >= 0; i-- {
+			j = len(lineageTaxids) - 1 - i
+			lineageTaxids[i], lineageTaxids[j] = lineageTaxids[j], lineageTaxids[i]
+		}
+		taxid2lineageTaxids[taxid] = lineageTaxids
+	}
+	return taxid2lineageTaxids, names, ranks
+}
+
 var taxonParseFunc = func(line string) (interface{}, bool, error) {
 	items := strings.SplitN(line, "\t", 6)
 	if len(items) < 6 {
@@ -244,6 +300,74 @@ var taxonParseFunc = func(line string) (interface{}, bool, error) {
 		return nil, false, e
 	}
 	return Taxon{Taxid: int32(child), Parent: int32(parent), Rank: items[4]}, true, nil
+}
+
+func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
+	type delNode int32
+	delnodesParseFunc := func(line string) (interface{}, bool, error) {
+		items := strings.Split(line, "\t")
+		if len(items) < 2 {
+			return nil, false, nil
+		}
+		id, e := strconv.Atoi(items[0])
+		if e != nil {
+			return nil, false, e
+		}
+		return delNode(id), true, nil
+	}
+
+	taxids := make([]int32, 0, 100000)
+
+	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
+	checkError(err)
+
+	var taxid delNode
+	for chunk := range reader.Ch {
+		checkError(chunk.Err)
+
+		for _, data := range chunk.Data {
+			taxid = data.(delNode)
+			taxids = append(taxids, int32(taxid))
+		}
+	}
+
+	return taxids
+}
+
+func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
+	type mergedNodes [2]int32
+	delnodesParseFunc := func(line string) (interface{}, bool, error) {
+		items := strings.Split(line, "\t")
+		if len(items) < 4 {
+			return nil, false, nil
+		}
+		from, e := strconv.Atoi(items[0])
+		if e != nil {
+			return nil, false, e
+		}
+		to, e := strconv.Atoi(items[2])
+		if e != nil {
+			return nil, false, e
+		}
+		return mergedNodes([2]int32{int32(from), int32(to)}), true, nil
+	}
+
+	merges := make([][2]int32, 0, 10000)
+
+	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
+	checkError(err)
+
+	var merge mergedNodes
+	for chunk := range reader.Ch {
+		checkError(chunk.Err)
+
+		for _, data := range chunk.Data {
+			merge = data.(mergedNodes)
+			merges = append(merges, [2]int32(merge))
+		}
+	}
+
+	return merges
 }
 
 var rank2symbol = map[string]string{
