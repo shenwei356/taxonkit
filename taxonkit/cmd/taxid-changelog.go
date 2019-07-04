@@ -43,33 +43,33 @@ var taxidlogCmd = &cobra.Command{
 
 Steps:
 
-	# dependencies:
-	# 	rush - https://github.com/shenwei356/rush/
+    # dependencies:
+    # 	rush - https://github.com/shenwei356/rush/
 
-	mkdir -p archive; cd archive;
+    mkdir -p archive; cd archive;
 
-	# --------- download ---------
+    # --------- download ---------
 
-	# option 1
-	# for fast network connection
-	wget ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp*.zip
+    # option 1
+    # for fast network connection
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp*.zip
 
-	# option 2
-	# for bad network connection like mine
-	url=https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
-	wget $url -O - -o /dev/null \
-		| grep taxdmp | perl -ne '/(taxdmp_.+?.zip)/; print "$1\n";' \
-		| rush -j 2 -v url=$url 'axel -n 5 {url}/{}' \
-			--immediate-output  -c -C download.rush
+    # option 2
+    # for bad network connection like mine
+    url=https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
+    wget $url -O - -o /dev/null \
+        | grep taxdmp | perl -ne '/(taxdmp_.+?.zip)/; print "$1\n";' \
+        | rush -j 2 -v url=$url 'axel -n 5 {url}/{}' \
+            --immediate-output  -c -C download.rush
 
-	# --------- unzip ---------
+    # --------- unzip ---------
 
-	ls taxdmp*.zip | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}'
+    ls taxdmp*.zip | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}'
 
-	# --------- create log ---------
+    # --------- create log ---------
 
-	cd ..
-	taxonkit taxid-changelog -i archive -o log.csv.gz --verbose
+    cd ..
+    taxonkit taxid-changelog -i archive -o log.csv.gz --verbose
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -77,6 +77,10 @@ Steps:
 		runtime.GOMAXPROCS(config.Threads)
 
 		archivePath := getFlagString(cmd, "archive")
+		if archivePath == "" {
+			checkError(fmt.Errorf("flag -i/--archive needed"))
+		}
+
 		dirs := checkArchives(config, archivePath)
 		createChangelog(config, archivePath, dirs)
 	},
@@ -84,7 +88,7 @@ Steps:
 
 func init() {
 	RootCmd.AddCommand(taxidlogCmd)
-	taxidlogCmd.Flags().StringP("archive", "i", ";", "directory containing decompressed dumped archives")
+	taxidlogCmd.Flags().StringP("archive", "i", "", "directory containing decompressed dumped archives")
 }
 
 type TaxidChangeCode int32
