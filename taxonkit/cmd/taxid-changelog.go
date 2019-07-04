@@ -226,6 +226,8 @@ func createChangelog(config Config, path string, dirs []string) {
 	// versions
 	versions := dirs
 
+	sort.Strings(dirs)
+
 	var ok bool
 	for version, dir := range dirs {
 		if config.Verbose {
@@ -438,7 +440,7 @@ func createChangelog(config Config, path string, dirs []string) {
 	header := strings.Split("taxid,version,change,change-value,name,rank,lineage,lineage-taxids", ",")
 	writer.Write(header)
 
-	var changes, cs []TaxidChange
+	var cs []TaxidChange
 	var c TaxidChange
 	var tmp, items []string
 	var tid int32
@@ -460,7 +462,8 @@ func createChangelog(config Config, path string, dirs []string) {
 		log.Infof("write to file: %s", config.OutFile)
 	}
 	for _, taxid := range taxids {
-		changes = make([]TaxidChange, 0, len(data[int32(taxid)]))
+		// sort by version and then change
+		changes := make([]TaxidChange, 0, len(data[int32(taxid)]))
 		for _, cs = range data[int32(taxid)] {
 			changes = append(changes, cs...)
 		}
