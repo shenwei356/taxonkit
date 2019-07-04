@@ -81,6 +81,8 @@ Output format (CSV):
                     #    1) empty for NEW, DELETE, LINEAGE_CHANGED
                     #    2) new taxid for MERGE,
                     #    3) merged taxids for ABSORB
+    name            # scientific name
+    rank            # rank
     lineage         # full lineage of the taxid
     lineage-taxids  # taxids of the lineage
 
@@ -218,6 +220,9 @@ func createChangelog(config Config, path string, dirs []string) {
 	// version -> taxid -> name
 	taxid2names := make(map[string]map[int32]string, len(dirs))
 
+	// version -> taxid -> rank
+	taxid2ranks := make(map[string]map[int32]string, len(dirs))
+
 	// versions
 	versions := dirs
 
@@ -233,11 +238,12 @@ func createChangelog(config Config, path string, dirs []string) {
 			log.Infof("  parsing names.dmp & nodes.dmp")
 		}
 
-		taxid2lineageTaxids, taxid2name, _ := getTaxid2Lineage(
+		taxid2lineageTaxids, taxid2name, taxid2rank := getTaxid2Lineage(
 			filepath.Join(path, dir, "nodes.dmp"), filepath.Join(path, dir, "names.dmp"),
 			config.Threads, 10,
 		)
 		taxid2names[dir] = taxid2name
+		taxid2ranks[dir] = taxid2rank
 
 		var prevChange TaxidChange
 		for taxid, lineageTaxids := range taxid2lineageTaxids {
@@ -429,7 +435,7 @@ func createChangelog(config Config, path string, dirs []string) {
 
 	// -------------- output --------------
 
-	header := strings.Split("taxid,version,change,change-value,lineage,lineage-taxids", ",")
+	header := strings.Split("taxid,version,change,change-value,name,rank,lineage,lineage-taxids", ",")
 	writer.Write(header)
 
 	var changes, cs []TaxidChange
@@ -491,6 +497,21 @@ func createChangelog(config Config, path string, dirs []string) {
 					tmp[i] = fmt.Sprintf("%d", tid)
 				}
 				items = append(items, strings.Join(tmp, ";"))
+			}
+
+			// name
+
+			if c.TaxidVersion >= 0 {
+				items = append(items, taxid2names[versions[int(c.TaxidVersion)]][int32(taxid)])
+			} else {
+				items = append(items, "")
+			}
+
+			// rank
+			if c.TaxidVersion >= 0 {
+				items = append(items, taxid2ranks[versions[int(c.TaxidVersion)]][int32(taxid)])
+			} else {
+				items = append(items, "")
 			}
 
 			// lineage
