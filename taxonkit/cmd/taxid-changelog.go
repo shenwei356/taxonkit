@@ -71,6 +71,21 @@ Steps:
     cd ..
     taxonkit taxid-changelog -i archive -o log.csv.gz --verbose
 
+Output format (CSV):
+
+    # fields        comments
+    taxid           # taxid
+    version         # version / time of archive, e.g, 2019-07-01
+    change          # change, values: NEW, DELETE, LINEAGE_CHANGED, MERGE, ABSORB
+    change-value    # variable values for changes: 
+                    #    1) empty for NEW, DELETE, LINEAGE_CHANGED
+                    #    2) new taxid for MERGE,
+                    #    3) merged taxids for ABSORB
+    lineage         # full lineage of the taxid
+    lineage-taxids  # taxids of the lineage
+
+    # you can use csvtk to investigate them. e.g.,
+    csvtk grep -f taxid -p 1390515 log.csv.gz
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
