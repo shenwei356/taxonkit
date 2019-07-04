@@ -33,3 +33,6 @@ taxonkit/binaries*
 *nodes.dmp
 *.json
 doc/site
+taxonkit/archive
+taxonkit/*.gz
+test.*
