@@ -1,6 +1,6 @@
 - [TaxonKit v0.4.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.4.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.4.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.4.1)
-    - `taxonkit taxid-changelog`: add fields: `name` and `rank`.
+    - `taxonkit taxid-changelog`: add fields: `name` and `rank`, and fix sorting bug.
 - [TaxonKit v0.4.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.4.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.4.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.4.0)
     - new command: `taxonkit taxid-changelog`: for creating taxid changelog from dump archive
