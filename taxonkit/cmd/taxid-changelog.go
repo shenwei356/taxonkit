@@ -76,11 +76,18 @@ Output format (CSV):
     # fields        comments
     taxid           # taxid
     version         # version / time of archive, e.g, 2019-07-01
-    change          # change, values: NEW, DELETE, LINEAGE_CHANGED, MERGE, ABSORB
+    change          # change, values:
+                    #   NEW             newly added
+                    #   DELETE          deleted
+                    #   MERGE           merged into another taxid
+                    #   ABSORB          other taxids merged into this one
+                    #   L_CHANGE_LIN    lineage taxids remain but lineage remain
+                    #   L_CHANGE_TAX    lineage taxids changed
+                    #   L_CHANGE_LEN    lineage length changed
     change-value    # variable values for changes: 
-                    #    1) empty for NEW, DELETE, LINEAGE_CHANGED
-                    #    2) new taxid for MERGE,
-                    #    3) merged taxids for ABSORB
+                    #   1) empty for NEW, DELETE, L_CHANGE_LIN, L_CHANGE_TAX, L_CHANGE_LEN
+                    #   2) new taxid for MERGE,
+                    #   3) merged taxids for ABSORB
     name            # scientific name
     rank            # rank
     lineage         # full lineage of the taxid
@@ -117,14 +124,15 @@ const (
 	TaxidMerge
 	TaxidAbsorb
 	TaxidLineageChanged
+	TaxidLineageChangedLin // lineage taxids remain, but lineage changed
+	TaxidLineageChangedTax // lineage taxids changed
+	TaxidLineageChangedLen // number of lineage taxids changed
 )
 
 func (c TaxidChangeCode) String() string {
 	switch c {
 	case TaxidUnchanged:
 		return "UNCHANGE"
-	case TaxidLineageChanged:
-		return "LINEAGE_CHANGED"
 	case TaxidNew:
 		return "NEW"
 	case TaxidDelete:
@@ -133,8 +141,40 @@ func (c TaxidChangeCode) String() string {
 		return "MERGE"
 	case TaxidAbsorb:
 		return "ABSORB"
+	case TaxidLineageChanged:
+		return "L_CHANGE"
+	case TaxidLineageChangedLin:
+		return "L_CHANGE_LIN"
+	case TaxidLineageChangedTax:
+		return "L_CHANGE_TAX"
+	case TaxidLineageChangedLen:
+		return "L_CHANGE_LEN"
 	}
 	return "UNDEFINED TaxidChangeCode"
+}
+
+func linegeChangeType(a, b []int32, taxid2names map[string]map[int32]string, va, vb string) TaxidChangeCode {
+	if (a == nil) != (b == nil) {
+		return TaxidLineageChangedLen
+	}
+
+	if len(a) != len(b) {
+		return TaxidLineageChangedLen
+	}
+
+	for i, v := range a {
+		if v != b[i] {
+			return TaxidLineageChangedTax
+		}
+	}
+
+	for i, v := range a {
+		if taxid2names[va][v] != taxid2names[vb][b[i]] {
+			return TaxidLineageChangedLin
+		}
+	}
+
+	return TaxidUnchanged
 }
 
 type TaxidChange struct {
@@ -152,7 +192,16 @@ func (changes TaxidChanges) Len() int { return len(changes) }
 func (changes TaxidChanges) Swap(i, j int) { changes[i], changes[j] = changes[j], changes[i] }
 
 func (changes TaxidChanges) Less(i, j int) bool {
-	return changes[i].Version < changes[j].Version || changes[i].Change < changes[j].Change
+	if changes[i].Version < changes[j].Version {
+		return true
+	}
+	if changes[i].Version > changes[j].Version {
+		return false
+	}
+	if changes[i].Change < changes[j].Change {
+		return true
+	}
+	return false
 }
 
 func (c TaxidChange) String() string {
@@ -174,10 +223,6 @@ func (c TaxidChange) String() string {
 	// change value
 	buf.WriteString(",")
 	switch c.Change {
-	case TaxidUnchanged:
-	case TaxidLineageChanged:
-	case TaxidNew:
-	case TaxidDelete:
 	case TaxidMerge:
 		buf.WriteString(fmt.Sprintf("%d", c.ChangeValue[0]))
 	case TaxidAbsorb:
@@ -248,6 +293,7 @@ func createChangelog(config Config, path string, dirs []string) {
 		taxid2ranks[dir] = taxid2rank
 
 		var prevChange TaxidChange
+		var changeCode TaxidChangeCode
 		for taxid, lineageTaxids := range taxid2lineageTaxids {
 			if _, ok = data[taxid]; !ok { // newly added
 				data[taxid] = make(map[TaxidChangeCode][]TaxidChange, 1)
@@ -287,12 +333,12 @@ func createChangelog(config Config, path string, dirs []string) {
 
 					if _, ok = data[taxid][TaxidLineageChanged]; !ok { // it had already been changed
 						prevChange = data[taxid][TaxidNew][0] // check NEW
-					} else { // first change
+					} else { // last change
 						prevChange = data[taxid][TaxidLineageChanged][len(data[taxid][TaxidLineageChanged])-1] // check NEW
 					}
 
-					if !linegeUnchange(lineageTaxids, prevChange.LineageTaxids, taxid2names, dir, versions[prevChange.TaxidVersion]) {
-						// changed
+					changeCode = linegeChangeType(lineageTaxids, prevChange.LineageTaxids, taxid2names, dir, versions[prevChange.TaxidVersion])
+					if changeCode > 0 { // changed
 						if _, ok = data[taxid][TaxidLineageChanged]; !ok {
 							data[taxid][TaxidLineageChanged] = make([]TaxidChange, 0, 1)
 						}
@@ -301,7 +347,7 @@ func createChangelog(config Config, path string, dirs []string) {
 							Version:       int16(version),
 							LineageTaxids: lineageTaxids,
 							TaxidVersion:  int16(version),
-							Change:        TaxidLineageChanged,
+							Change:        changeCode,
 							ChangeValue:   nil,
 						})
 					}
@@ -484,14 +530,6 @@ func createChangelog(config Config, path string, dirs []string) {
 
 			// change value
 			switch c.Change {
-			case TaxidUnchanged:
-				items = append(items, "")
-			case TaxidLineageChanged:
-				items = append(items, "")
-			case TaxidNew:
-				items = append(items, "")
-			case TaxidDelete:
-				items = append(items, "")
 			case TaxidMerge:
 				items = append(items, fmt.Sprintf("%d", c.ChangeValue[0]))
 			case TaxidAbsorb:
@@ -500,6 +538,8 @@ func createChangelog(config Config, path string, dirs []string) {
 					tmp[i] = fmt.Sprintf("%d", tid)
 				}
 				items = append(items, strings.Join(tmp, ";"))
+			default:
+				items = append(items, "")
 			}
 
 			// name
@@ -597,21 +637,4 @@ func checkFile(file string) {
 	} else if !exists {
 		checkError(fmt.Errorf("path not found: %s", file))
 	}
-}
-
-func linegeUnchange(a, b []int32, taxid2names map[string]map[int32]string, va, vb string) bool {
-	if (a == nil) != (b == nil) {
-		return false
-	}
-
-	if len(a) != len(b) {
-		return false
-	}
-	for i, v := range a {
-		if taxid2names[va][v] != taxid2names[vb][b[i]] {
-			return false
-		}
-	}
-
-	return true
 }
