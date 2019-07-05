@@ -474,8 +474,17 @@ func createChangelog(config Config, path string, dirs []string) {
 						Change:        TaxidAbsorb,
 						ChangeValue:   []int32{from},
 					})
-				} else { // append to
+				} else if data[to][TaxidAbsorb][len(data[to][TaxidAbsorb])-1].Version == int16(version) {
+					// append to previous change with same version
 					data[to][TaxidAbsorb][0].ChangeValue = append(data[to][TaxidAbsorb][0].ChangeValue, from)
+				} else { // append as another change
+					data[to][TaxidAbsorb] = append(data[to][TaxidAbsorb], TaxidChange{
+						Version:       int16(version),
+						LineageTaxids: taxid2lineageTaxids[to],
+						TaxidVersion:  int16(version),
+						Change:        TaxidAbsorb,
+						ChangeValue:   []int32{from},
+					})
 				}
 			}
 		}
