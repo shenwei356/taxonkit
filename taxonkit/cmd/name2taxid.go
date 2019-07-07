@@ -149,6 +149,6 @@ var name2taxidCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(name2taxidCmd)
-	name2taxidCmd.Flags().BoolP("show-rank", "", false, `show rank`)
+	name2taxidCmd.Flags().BoolP("show-rank", "r", false, `show rank`)
 	name2taxidCmd.Flags().IntP("name-field", "i", 1, "field index of name. data should be tab-separated")
 }

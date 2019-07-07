@@ -182,6 +182,7 @@ Output:
 						id = int(child)
 					} else {
 						id = -1
+						log.Warningf("taxid %d not found", child)
 						break
 					}
 				}

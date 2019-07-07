@@ -176,8 +176,8 @@ func init() {
 
 	listCmd.Flags().StringP("ids", "", "", "taxid(s), multiple values should be separated by comma")
 	listCmd.Flags().StringP("indent", "", "  ", "indent")
-	listCmd.Flags().BoolP("show-rank", "", false, `output rank`)
-	listCmd.Flags().BoolP("show-name", "", false, `output scientific name`)
+	listCmd.Flags().BoolP("show-rank", "r", false, `output rank`)
+	listCmd.Flags().BoolP("show-name", "n", false, `output scientific name`)
 	listCmd.Flags().BoolP("json", "", false, `output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor`)
 }
 

@@ -54,21 +54,21 @@ func init() {
 	defaulDataDir, err = homedir.Expand("~/.taxonkit/")
 	checkError(errors.Wrap(err, "get data directory"))
 
-	RootCmd.Long = fmt.Sprintf(`TaxonKit - A cross-platform and Efficient NCBI Taxonomy Toolkit
+	RootCmd.Long = fmt.Sprintf(`TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
 Version: %s
 
 Author: Wei Shen <shenwei356@gmail.com>
 
 Source code: https://github.com/shenwei356/taxonkit
-Documents  : http://bioinf.shenwei.me/taxonkit
+Documents  : https://bioinf.shenwei.me/taxonkit
 
 Dataset:
 
     Please download and decompress "taxdump.tar.gz":
     ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
-    and copy "names.dmp" and "nodes.dmp" to data directory:
+    and copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data directory:
     "%s"
 
     or some other directory, and later you can refer to using flag --data-dir,
@@ -81,7 +81,7 @@ Dataset:
 		defaultThreads = 2
 	}
 
-	RootCmd.PersistentFlags().IntP("threads", "j", defaultThreads, "number of CPUs. (default value: 1 for single-CPU PC, 2 for others)")
+	RootCmd.PersistentFlags().IntP("threads", "j", defaultThreads, "number of CPUs. 2 is enough (default value: 1 for single-CPU PC, 2 for others)")
 	RootCmd.PersistentFlags().StringP("out-file", "o", "-", `out file ("-" for stdout, suffix .gz for gzipped out)`)
 	RootCmd.PersistentFlags().StringP("data-dir", "", defaulDataDir, "directory containing nodes.dmp and names.dmp")
 	RootCmd.PersistentFlags().BoolP("verbose", "", false, "print verbose information")

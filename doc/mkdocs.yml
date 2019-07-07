@@ -5,9 +5,31 @@ pages:
 - Documents:
     - Usage: usage.md
     - Tutorial: tutorial.md
+    - Benchmark: /bench
+- Taxid-Changelog: https://github.com/shenwei356/taxid-changelog
 - Links:
     - Wei Shen's Bioinformatic tools: bioinf.md
-theme: cinder
+
+theme:
+    name: 'material'
+    palette:
+        primary: 'teal'
+        accent: 'blue grey'
+    logo:
+        icon: 'school'
+    favicon: 'files/favicon.ico'
+    feature:
+        tabs: false
+extra:
+  manifest: 'manifest.webmanifest'
+  
+arkdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: true
+      linenums: false
+  - toc:
+      permalink:  Link
 
 repo_url: https://github.com/shenwei356/taxonkit
 site_description: TaxonKit - NCBI Taxonomy Toolkit

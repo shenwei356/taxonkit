@@ -13,6 +13,7 @@
 [![Cross-platform](https://img.shields.io/badge/platform-any-ec2eb4.svg?style=flat)](http://bioinf.shenwei.me/taxonkit/download/)
 [![Install-with-conda](	https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg)](http://bioinf.shenwei.me/taxonkit/download/)
 [![Anaconda Cloud](	https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit)
+- [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of taxids, including taxids deletion, new adding, merge, reuse, and rank/name changes.
 - **[Please cite](#citation):** [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
 
 ## Subcommands
