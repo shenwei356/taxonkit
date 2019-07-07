@@ -1,189 +1,628 @@
+
+
+
+
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="TaxonKit - NCBI Taxonomy Toolkit"> 
-    <meta name="author" content="shenwei356"> 
-    <link rel="shortcut icon" href="../img/favicon.ico">
-
-    <title>Usage - TaxonKit - NCBI Taxonomy Toolkit</title>
-
-    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
-    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
-    <link href="../css/base.css" rel="stylesheet">
-    <link href="../css/cinder.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/highlight.css">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
-    <script>
-    WebFont.load({
-        google: {
-            families: ['Open Sans', 'PT Sans']
-        }
-    });
-    </script>
-
+<html lang="en" class="no-js">
+  <head>
     
-</head>
-
-<body>
-
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="TaxonKit - NCBI Taxonomy Toolkit">
+      
+      
+      
+        <meta name="author" content="shenwei356">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../files/favicon.ico">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-ponylang-0.2.5">
+    
+    
+      
+        <title>Usage - TaxonKit - NCBI Taxonomy Toolkit</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.dfc6cb0c.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.6079476c.css">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.6586f7cd.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="blue-grey">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="../#usage-and-examples" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+          <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon">school</i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                TaxonKit - NCBI Taxonomy Toolkit
+              </span>
+              <span class="md-header-nav__topic">
+                Usage
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
             
 
-            <!-- Main title -->
 
-            <a class="navbar-brand" href="..">TaxonKit - NCBI Taxonomy Toolkit</a>
-        </div>
+  
 
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                
-                
-                    <li >
-                        <a href="..">Home</a>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../download/">Download</a>
-                    </li>
-                
-                
-                
-                    <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li class="active">
-    <a href="./">Usage</a>
-</li>
 
-                        
-                            
-<li >
-    <a href="../tutorial/">Tutorial</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Links <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../bioinf/">Wei Shen's Bioinformatic tools</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                            <i class="fa fa-search"></i> Search
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="next" href="../download/">
-                            <i class="fa fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="../tutorial/">
-                            Next <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/shenwei356/taxonkit/edit/master/docs/usage.md"><i class="fa fa-github"></i> Edit on GitHub</a>
-                    </li>
-            </ul>
-        </div>
+  <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
     </div>
-</div>
+  </a>
 
-    <div class="container">
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
         
-        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="first-level active"><a href="#usage-and-examples">Usage and Examples</a></li>
-            <li class="second-level"><a href="#before-use">Before use</a></li>
-                
-            <li class="second-level"><a href="#taxonkit">taxonkit</a></li>
-                
-            <li class="second-level"><a href="#list">list</a></li>
-                
-            <li class="second-level"><a href="#lineage">lineage</a></li>
-                
-            <li class="second-level"><a href="#reformat">reformat</a></li>
-                
-            <li class="second-level"><a href="#name2taxid">name2taxid</a></li>
-                
-            <li class="second-level"><a href="#genautocomplete">genautocomplete</a></li>
-                
-    </ul>
-</div></div>
-        <div class="col-md-9" role="main">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <span class="md-nav__button md-logo">
+      
+        <i class="md-icon">school</i>
+      
+    </span>
+    TaxonKit - NCBI Taxonomy Toolkit
+  </label>
+  
+    <div class="md-nav__source">
+      
 
-<h1 id="usage-and-examples">Usage and Examples</h1>
+
+  
+
+
+  <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../download/" title="Download" class="md-nav__link">
+      Download
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Documents
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Documents
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Usage
+      </label>
+    
+    <a href="./" title="Usage" class="md-nav__link md-nav__link--active">
+      Usage
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        
+          <li class="md-nav__item">
+    <a href="#before-use" title="Before use" class="md-nav__link">
+    Before use
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#taxonkit" title="taxonkit" class="md-nav__link">
+    taxonkit
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#list" title="list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#lineage" title="lineage" class="md-nav__link">
+    lineage
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#reformat" title="reformat" class="md-nav__link">
+    reformat
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#name2taxid" title="name2taxid" class="md-nav__link">
+    name2taxid
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#taxid-changelog" title="taxid-changelog" class="md-nav__link">
+    taxid-changelog
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#genautocomplete" title="genautocomplete" class="md-nav__link">
+    genautocomplete
+  </a>
+  
+</li>
+        
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tutorial/" title="Tutorial" class="md-nav__link">
+      Tutorial
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="/bench" title="Benchmark" class="md-nav__link">
+      Benchmark
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="https://github.com/shenwei356/taxid-changelog" title="Taxid-Changelog" class="md-nav__link">
+      Taxid-Changelog
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Links
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Links
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bioinf/" title="Wei Shen's Bioinformatic tools" class="md-nav__link">
+      Wei Shen's Bioinformatic tools
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        
+          <li class="md-nav__item">
+    <a href="#before-use" title="Before use" class="md-nav__link">
+    Before use
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#taxonkit" title="taxonkit" class="md-nav__link">
+    taxonkit
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#list" title="list" class="md-nav__link">
+    list
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#lineage" title="lineage" class="md-nav__link">
+    lineage
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#reformat" title="reformat" class="md-nav__link">
+    reformat
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#name2taxid" title="name2taxid" class="md-nav__link">
+    name2taxid
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#taxid-changelog" title="taxid-changelog" class="md-nav__link">
+    taxid-changelog
+  </a>
+  
+</li>
+        
+      
+        
+          <li class="md-nav__item">
+    <a href="#genautocomplete" title="genautocomplete" class="md-nav__link">
+    genautocomplete
+  </a>
+  
+</li>
+        
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/shenwei356/taxonkit/edit/master/docs/usage.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="usage-and-examples">Usage and Examples</h1>
+<p>Table of Contents</p>
+<!-- TOC -->
+
+<ul>
+<li><a href="#before-use">Before use</a></li>
+<li><a href="#taxonkit">taxonkit</a></li>
+<li><a href="#list">list</a></li>
+<li><a href="#lineage">lineage</a></li>
+<li><a href="#reformat">reformat</a></li>
+<li><a href="#name2taxid">name2taxid</a></li>
+<li><a href="#taxid-changelog">taxid-changelog</a></li>
+<li><a href="#genautocomplete">genautocomplete</a>
+<!-- /TOC --></li>
+</ul>
 <h2 id="before-use">Before use</h2>
 <p>Please download and uncompress these files:</p>
 <ul>
 <li><a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz">ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz</a></li>
 </ul>
-<p>And copy "names.dmp" and "nodes.dmp" to data directory: "$HOME/.taxonkit".</p>
+<p>And copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data directory: "$HOME/.taxonkit".</p>
 <h2 id="taxonkit">taxonkit</h2>
-<pre><code>TaxonKit - A cross-platform and Efficient NCBI Taxonomy Toolkit
+<pre><code class="text">TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.3.0
+Version: 0.5.0
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
 Source code: https://github.com/shenwei356/taxonkit
-Documents  : http://bioinf.shenwei.me/taxonkit
+Documents  : https://bioinf.shenwei.me/taxonkit
 
 Dataset:
 
     Please download and decompress &quot;taxdump.tar.gz&quot;:
     ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
-    and copy &quot;names.dmp&quot; and &quot;nodes.dmp&quot; to data directory:
+    and copy &quot;names.dmp&quot;, &quot;nodes.dmp&quot;, &quot;delnodes.dmp&quot; and &quot;merged.dmp&quot; to data directory:
     &quot;/home/shenwei/.taxonkit&quot;
 
     or some other directory, and later you can refer to using flag --data-dir,
@@ -199,6 +638,7 @@ Available Commands:
   list            list taxon tree of given taxids
   name2taxid      query taxid by taxon scientific name
   reformat        reformat lineage
+  taxid-changelog create taxid changelog from dump archives
   version         print version information and check for update
 
 Flags:
@@ -206,14 +646,16 @@ Flags:
   -h, --help              help for taxonkit
       --line-buffered     use line buffering on output, i.e., immediately writing to stdin/file for every line of output
   -o, --out-file string   out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
-  -j, --threads int       number of CPUs. (default value: 1 for single-CPU PC, 2 for others) (default 2)
+  -j, --threads int       number of CPUs. 2 is enough (default value: 1 for single-CPU PC, 2 for others) (default 2)
       --verbose           print verbose information
+
+Use &quot;taxonkit [command] --help&quot; for more information about a command
 
 </code></pre>
 
 <h2 id="list">list</h2>
 <p>Usage</p>
-<pre><code>list taxon tree of given taxids
+<pre><code class="text">list taxon tree of given taxids
 
 Usage:
   taxonkit list [flags]
@@ -222,8 +664,8 @@ Flags:
       --ids string      taxid(s), multiple values should be separated by comma
       --indent string   indent (default &quot;  &quot;)
       --json            output in JSON format. you can save the result in file with suffix &quot;.json&quot; and open with modern text editor
-      --show-name       output scientific name
-      --show-rank       output rank
+  -n, --show-name       output scientific name
+  -r, --show-rank       output rank
 
 </code></pre>
 
@@ -231,7 +673,8 @@ Flags:
 <ol>
 <li>
 <p>Default usage</p>
-<pre><code>$ taxonkit list --ids 9605,239934
+<pre><code>:::sh
+$ taxonkit list --ids 9605,239934
 9605
   9606
     63221
@@ -284,74 +727,113 @@ Flags:
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
-$ memusg -t taxonkit list --ids 1 --indent "" &gt; t0.txt
-elapsed time: 3.093s
-peak rss: 82.79 MB
+$ memusg -t taxonkit list --ids 1 --indent "" --verbose &gt; t0.txt
+13:52:58.905 [INFO] parsing nodes file: /home/shenwei/.taxonkit/nodes.dmp
+13:53:01.449 [INFO] 2121511 nodes parsed
+
+elapsed time: 4.088s
+peak rss: 441.95 MB
 </code></pre>
 </li>
 <li>
 <p>Adding names</p>
-<pre><code>$ taxonkit list --show-rank --show-name --ids 9605,239934
+<pre><code>$ taxonkit list --show-rank --show-name --indent "    " --ids 9605,239934
 9605 [genus] Homo
-  9606 [species] Homo sapiens
-    63221 [subspecies] Homo sapiens neanderthalensis
-    741158 [subspecies] Homo sapiens ssp. Denisova
-  1425170 [species] Homo heidelbergensis
+    9606 [species] Homo sapiens
+        63221 [subspecies] Homo sapiens neanderthalensis
+        741158 [subspecies] Homo sapiens subsp. 'Denisova'
+    1425170 [species] Homo heidelbergensis
 
 239934 [genus] Akkermansia
-  239935 [species] Akkermansia muciniphila
-    349741 [no rank] Akkermansia muciniphila ATCC BAA-835
-  512293 [no rank] environmental samples
-    512294 [species] uncultured Akkermansia sp.
-    1131822 [species] uncultured Akkermansia sp. SMG25
-    1262691 [species] Akkermansia sp. CAG:344
-    1263034 [species] Akkermansia muciniphila CAG:154
-  1131336 [species] Akkermansia sp. KLE1605
-  1574264 [species] Akkermansia sp. KLE1797
-  1574265 [species] Akkermansia sp. KLE1798
-  1638783 [species] Akkermansia sp. UNK.MGS-1
-  1679444 [species] Akkermansia glycaniphila
-  1755639 [species] Akkermansia sp. MC_55
-  1896967 [species] Akkermansia sp. 54_46
+    239935 [species] Akkermansia muciniphila
+        349741 [no rank] Akkermansia muciniphila ATCC BAA-835
+    512293 [no rank] environmental samples
+        512294 [species] uncultured Akkermansia sp.
+        1131822 [species] uncultured Akkermansia sp. SMG25
+        1262691 [species] Akkermansia sp. CAG:344
+        1263034 [species] Akkermansia muciniphila CAG:154
+    1131336 [species] Akkermansia sp. KLE1605
+    1574264 [species] Akkermansia sp. KLE1797
+    1574265 [species] Akkermansia sp. KLE1798
+    1638783 [species] Akkermansia sp. UNK.MGS-1
+    1679444 [species] Akkermansia glycaniphila
+    1755639 [species] Akkermansia sp. MC_55
+    1872421 [species] Akkermansia sp.
+    1896967 [species] Akkermansia sp. 54_46
+    1929996 [species] Akkermansia sp. Phil8
+    1945963 [species] Akkermansia sp. UBA3271
+    1945964 [species] Akkermansia sp. UBA5128
+    1945965 [species] Akkermansia sp. UBA7059
+    1945966 [species] Akkermansia sp. UBA7090
+    2478952 [species] Akkermansia sp. aa_0143
 </code></pre>
 <p><strong>Performance:</strong> Time and memory usage for whole taxon tree:</p>
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
 $ memusg -t taxonkit list --show-rank --show-name --ids 1 &gt; t1.txt
-elapsed time: 9.825s
-peak rss: 648.65 MB
+elapsed time: 8.785s
+peak rss: 1.17 GB
 </code></pre>
 </li>
 <li>
 <p>Output in JSON format, so you can easily collapse and uncollapse taxonomy tree in modern text editor.</p>
-<pre><code>$ taxonkit list --show-rank --show-name --ids 9605,239934 --json
+<pre><code>$ taxonkit list --show-rank --show-name --indent "    " --ids 9605,239934 --json
 {
-  "9605 [genus] Homo": {
-    "9606 [species] Homo sapiens": {
-      "63221 [subspecies] Homo sapiens neanderthalensis": {},
-      "741158 [subspecies] Homo sapiens ssp. Denisova": {}
+    "9605 [genus] Homo": {
+        "9606 [species] Homo sapiens": {
+            "63221 [subspecies] Homo sapiens neanderthalensis": {
+            },
+            "741158 [subspecies] Homo sapiens subsp. 'Denisova'": {
+            }
+        }
+        "1425170 [species] Homo heidelbergensis": {
+        }
+    },
+    "239934 [genus] Akkermansia": {
+        "239935 [species] Akkermansia muciniphila": {
+            "349741 [no rank] Akkermansia muciniphila ATCC BAA-835": {
+            }
+        }
+        "512293 [no rank] environmental samples": {
+            "512294 [species] uncultured Akkermansia sp.": {
+            },
+            "1131822 [species] uncultured Akkermansia sp. SMG25": {
+            },
+            "1262691 [species] Akkermansia sp. CAG:344": {
+            },
+            "1263034 [species] Akkermansia muciniphila CAG:154": {
+            }
+        }
+        "1131336 [species] Akkermansia sp. KLE1605": {
+        }
+        "1574264 [species] Akkermansia sp. KLE1797": {
+        }
+        "1574265 [species] Akkermansia sp. KLE1798": {
+        }
+        "1638783 [species] Akkermansia sp. UNK.MGS-1": {
+        }
+        "1679444 [species] Akkermansia glycaniphila": {
+        }
+        "1755639 [species] Akkermansia sp. MC_55": {
+        }
+        "1872421 [species] Akkermansia sp.": {
+        }
+        "1896967 [species] Akkermansia sp. 54_46": {
+        }
+        "1929996 [species] Akkermansia sp. Phil8": {
+        }
+        "1945963 [species] Akkermansia sp. UBA3271": {
+        }
+        "1945964 [species] Akkermansia sp. UBA5128": {
+        }
+        "1945965 [species] Akkermansia sp. UBA7059": {
+        }
+        "1945966 [species] Akkermansia sp. UBA7090": {
+        }
+        "2478952 [species] Akkermansia sp. aa_0143": {
+        }
     }
-    "1425170 [species] Homo heidelbergensis": {}
-  },
-  "239934 [genus] Akkermansia": {
-    "239935 [species] Akkermansia muciniphila": {
-      "349741 [no rank] Akkermansia muciniphila ATCC BAA-835": {}
-    }
-    "512293 [no rank] environmental samples": {
-      "512294 [species] uncultured Akkermansia sp.": {},
-      "1131822 [species] uncultured Akkermansia sp. SMG25": {},
-      "1262691 [species] Akkermansia sp. CAG:344": {},
-      "1263034 [species] Akkermansia muciniphila CAG:154": {}
-    }
-    "1131336 [species] Akkermansia sp. KLE1605": {},
-    "1574264 [species] Akkermansia sp. KLE1797": {},
-    "1574265 [species] Akkermansia sp. KLE1798": {},
-    "1638783 [species] Akkermansia sp. UNK.MGS-1": {},
-    "1679444 [species] Akkermansia glycaniphila": {},
-    "1755639 [species] Akkermansia sp. MC_55": {},
-    "1896967 [species] Akkermansia sp. 54_46": {}
-  }
 }
 </code></pre>
 <p>Snapshot of taxonomy (taxid 1) in kate:
@@ -360,7 +842,23 @@ peak rss: 648.65 MB
 </ol>
 <h2 id="lineage">lineage</h2>
 <p>Usage</p>
-<pre><code>query lineage of given taxids
+<pre><code class="text">query lineage of given taxids
+
+Input:
+  - List of taxids, one taxid per line.
+  - Or tab-delimited format, please specify taxid field with flag -i/--taxid-field.
+  - Supporting (gzipped) file or STDIN.
+
+Output:
+  0. Input line.
+  1. Status code (optional with flag -c/--show-status-code)
+     - &quot;-1&quot; for queries not found in whole database.
+     - &quot;0&quot; for deleted taxids, provided by &quot;delnodes.dmp&quot;.
+     - New taxids for merged taxids, provided by &quot;merged.dmp&quot;.
+     - Taxids for these found in &quot;nodes.dmp&quot;.
+  2. Lineage, delimiter can be changed with flag -d/--delimiter.
+  3. Lineage taxids (optional with flag -t/--show-lineage-taxids)
+  4. Rank (optional with flag -r/--show-rank)
 
 Usage:
   taxonkit lineage [flags]
@@ -368,8 +866,9 @@ Usage:
 Flags:
   -d, --delimiter string      field delimiter in lineage (default &quot;;&quot;)
   -h, --help                  help for lineage
-  -t, --show-lineage-taxids   show lineage consisting of taxids
-  -r, --show-rank             show rank of taxids
+  -t, --show-lineage-taxids   appending lineage consisting of taxids
+  -r, --show-rank             appending rank of taxids
+  -c, --show-status-code      show status code between lineage
   -i, --taxid-field int       field index of taxid. data should be tab-separated (default 1)
 
 </code></pre>
@@ -378,24 +877,82 @@ Flags:
 <ol>
 <li>
 <p>Full lineage:</p>
-<pre><code># note that 10000000 is a fake taxid
-$ cat taxids.txt
+<pre><code># note that 123124124 is a fake taxid, 3 was deleted, 92489,1458427 were merged
+$ cat taxids.txt 
 9606
+9913
+376619
 349741
 239935
-11932
 314101
+11932
 1327037
-10000000
+123124124
+3
+92489
+1458427
 
-$ taxonkit lineage taxids.txt
+$ taxonkit lineage taxids.txt | tee lineage.txt
+14:27:14.600 [WARN] taxid 92489 was merged into 796334
+14:27:14.600 [WARN] taxid 1458427 was merged into 1458425
+14:27:14.600 [WARN] taxid 123124124 not found
+14:27:14.600 [WARN] taxid 3 was deleted
 9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Cetartiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus
+376619  cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS
 349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
 239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-10000000
+11932   Viruses;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+123124124
+3
+92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
+1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
+</code></pre>
+</li>
+<li>
+<p>Check deleted or merged taxids</p>
+<pre><code>$ taxonkit lineage --show-status-code taxids.txt | tee lineage.withcode.txt
+
+# valid
+$ cat lineage.withcode.txt | awk '$2 &gt; 0' | cut -f 1,2
+9606    9606
+9913    9913
+376619  376619
+349741  349741
+239935  239935
+314101  314101
+11932   11932
+1327037 1327037
+92489   796334
+1458427 1458425
+
+# merged
+$ cat lineage.withcode.txt | awk '$2 &gt; 0 &amp;&amp; $2 != $1' | cut -f 1,2
+
+# deleted
+cat lineage.withcode.txt | awk '$2 == 0' | cut -f 1
+3
+
+# invalid
+cat lineage.withcode.txt | awk '$2 &lt; 0' | cut -f 1
+123124124
+</code></pre>
+</li>
+<li>
+<p>Filter out invalid and deleted taxids, and *replace old taxids with new ones",
+  you may install [csvtk](https://github.com/shenwei356/csvtk.</p>
+<pre><code># input is one-column-taxid
+$ taxonkit lineage -c taxids.txt \
+    | awk '$2&gt;0' \
+    | cut -f 2-
+
+# taxids are in `$n`th field in a 4-columns tab-delimited file
+$ cat input.txt \
+    | taxonkit lineage -c -i 3 \
+    | csvtk filter2 -H -t -f '$5&gt;0' \
+    | csvtk -H -t cut -f -3
 </code></pre>
 </li>
 <li>
@@ -409,18 +966,27 @@ $ taxonkit lineage taxids.txt
 314101  species
 11932   species
 1327037 species
+123124124
+3
+92489   species
+1458427 species
 </code></pre>
 </li>
 <li>
 <p>Show lineage consisting of taxids:</p>
 <pre><code>$ taxonkit lineage -t taxids.txt
 9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
-349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835  131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
-239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila       131567;2;1783257;74201;203494;48461;1647988;239934;239935
-11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle        10239;35268;11632;35276;11749;11932
-314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B   131567;2;48479;314101
-1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y   10239;35237;28883;10699;196894;1327037
-10000000
+9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Cetartiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus  131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314145;91561;9845;35500;9895;27592;9903;9913
+376619  cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS 131567;2;1224;1236;72273;34064;262;263;119857;376619
+349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835    131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
+239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila 131567;2;1783257;74201;203494;48461;1647988;239934;239935
+314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B       131567;2;48479;314101
+11932   Viruses;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle  10239;2169561;11632;35276;11749;11932
+1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y   10239;28883;10699;196894;1327037
+123124124
+3
+92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae       131567;2;1224;1236;91347;1903409;551;796334
+1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei  131567;2;1224;28216;80840;80864;2490452;1458425
 </code></pre>
 <p>or read taxids from STDIN:</p>
 <pre><code>$ cat taxids.txt | taxonkit lineage
@@ -429,7 +995,7 @@ $ taxonkit lineage taxids.txt
 </ol>
 <h2 id="reformat">reformat</h2>
 <p>Usage</p>
-<pre><code>reformat lineage
+<pre><code class="text">reformat lineage
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -467,44 +1033,77 @@ Flags:
 <p>Examples:</p>
 <ol>
 <li>
-<p>Example lineage (produced by: <code>taxonkit lineage taxids.txt &gt; lineage.txt</code>)</p>
+<p>Example lineage (produced by: <code>taxonkit lineage taxids.txt | awk '$2!=""' &gt; lineage.txt</code>)</p>
 <pre><code>$ cat lineage.txt
 9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Cetartiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus
+376619  cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS
 349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
 239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+11932   Viruses;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
+1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 </code></pre>
 </li>
 <li>
 <p>Default output format (<code>"{k};{p};{c};{o};{f};{g};{s}"</code>)</p>
 <pre><code># reformated lineages are appended to the input data
-$ taxonkit reformat --lineage-field 2 lineage.txt
 $ taxonkit reformat lineage.txt
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens  Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+...
+239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 ...
 
-$ taxonkit reformat lineage.txt | cut -f 3
-Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
-Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Viruses;;;;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
-Viruses;;;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
+$ taxonkit reformat lineage.txt | tee lineage.txt.reformat
+
+$ cut -f 1,3 lineage.txt.reformat
+9606    Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+9913    Eukaryota;Chordata;Mammalia;;Bovidae;Bos;Bos taurus
+376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
+349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
+11932   Viruses;;;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+1327037 Viruses;;;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
+
+# aligned 
+$ cat lineage.txt \
+    | taxonkit reformat \
+    | cut -f 1,3 \
+    | sed -r 's/;/\t/g' \
+    | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
+    | csvtk pretty -t
+taxid     kindom      phylum            class                 order                family            genus                        species
+9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
+9913      Eukaryota   Chordata          Mammalia                                   Bovidae           Bos                          Bos taurus
+376619    Bacteria    Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
+349741    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+239935    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+314101    Bacteria                                                                                                                uncultured murine large bowel bacterium BAC 54B
+11932     Viruses                                             Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
+1327037   Viruses                                             Caudovirales         Siphoviridae                                   Croceibacter phage P2559Y
 </code></pre>
 </li>
 <li>
-<p>Show corresponding taxids of reformated lineage</p>
-<pre><code>$ cat lineage.txt | taxonkit reformat -t
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens       Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens     2759;7711;40674;9443;9604;9605;9606
-9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Cetartiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus     Eukaryota;Chordata;Mammalia;;Bovidae;Bos;Bos taurus     2759;7711;40674;;9895;9903;9913
-376619  cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS     Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis 2;1224;1236;72273;34064;262;263
-349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835   Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila 2;74201;203494;48461;1647988;239934;239935
-239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila     2;74201;203494;48461;1647988;239934;239935
-314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B    Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B   2;;;;;;314101
-11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle Viruses;;;;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle   10239;;;;11632;11749;11932
-1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y    Viruses;;;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y  10239;;;28883;10699;;1327037
+<p>Show corresponding taxids of reformated lineage (flag <code>-t/--show-lineage-taxids</code>)</p>
+<pre><code>$ cat lineage.txt \
+    | taxonkit reformat -t \
+    | cut -f 1,4 \
+    | sed -r 's/;/\t/g' \
+    | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
+    | csvtk pretty -t            
+taxid     kindom   phylum   class    order     family    genus     species
+9606      2759     7711     40674    9443      9604      9605      9606
+9913      2759     7711     40674              9895      9903      9913
+376619    2        1224     1236     72273     34064     262       263
+349741    2        74201    203494   48461     1647988   239934    239935
+239935    2        74201    203494   48461     1647988   239934    239935
+314101    2                                                        314101
+11932     10239                      2169561   11632     11749     11932
+1327037   10239                      28883     10699               1327037
+92489     2        1224     1236     91347     1903409   551       796334
+1458427   2        1224     28216    80840     80864     2490452   1458425
 </code></pre>
 </li>
 <li>
@@ -516,85 +1115,59 @@ Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Franci
 Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
-Viruses;__;__;__;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+Viruses;__;__;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
 Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
+Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
+Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 </code></pre>
 </li>
 <li>
 <p>Estimate and fill missing rank with original lineage information
-   (<strong>recommended</strong>, very useful for formating input data for
-   <a href="https://bitbucket.org/biobakery/biobakery/wiki/lefse">LEfSe</a>)</p>
-<pre><code>$ cat lineage.txt | taxonkit reformat -t -F &gt; lineage.txt.reformat.fill
-$ cat lineage.txt.reformat.fill \
-    | perl -pe 's/^/Taxid   : /; \
-        s/\t/\nLineage : /; \
-        s/\t/\nReformat: /; \
-        s/\t/\nTaxids  : /; \
-        print "\n";'
-
-Taxid   : 9606
-Lineage : cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
-Reformat: Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
-Taxids  : 2759;7711;40674;9443;9604;9605;9606
-
-Taxid   : 9913
-Lineage : cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Cetartiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus
-Reformat: Eukaryota;Chordata;Mammalia;unclassified Mammalia order;Bovidae;Bos;Bos taurus
-Taxids  : 2759;7711;40674;;9895;9903;9913
-
-Taxid   : 376619
-Lineage : cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS
-Reformat: Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
-Taxids  : 2;1224;1236;72273;34064;262;263
-
-Taxid   : 349741
-Lineage : cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-Reformat: Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Taxids  : 2;74201;203494;48461;1647988;239934;239935
-
-Taxid   : 239935
-Lineage : cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Reformat: Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Taxids  : 2;74201;203494;48461;1647988;239934;239935
-
-Taxid   : 314101
-Lineage : cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-Reformat: Bacteria;unclassified Bacteria phylum;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;uncultured murine large bowel bacterium BAC 54B
-Taxids  : 2;;;;;;314101
-
-Taxid   : 11932
-Lineage : Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-Reformat: Viruses;unclassified Viruses phylum;unclassified Viruses class;unclassified Viruses order;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-Taxids  : 10239;;;;11632;11749;11932
-
-Taxid   : 1327037
-Lineage : Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-Reformat: Viruses;unclassified Viruses phylum;unclassified Viruses class;Caudovirales;Siphoviridae;unclassified Siphoviridae genus;Croceibacter phage P2559Y
-Taxids  : 10239;;;28883;10699;;1327037
+  (<strong>experimental</strong>, very useful for formating input data for
+  <a href="https://bitbucket.org/biobakery/biobakery/wiki/lefse">LEfSe</a>).
+  You can change the prefix "unclassified" using flag <code>-p/--miss-rank-repl-prefix</code>.</p>
+<pre><code>$ cat lineage.txt \
+    | taxonkit reformat -F \
+    | cut -f 1,3 \
+    | sed -r 's/;/\t/g' \
+    | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
+    | csvtk pretty -t
+taxid     kindom      phylum                         class                         order                         family                         genus                             species
+9606      Eukaryota   Chordata                       Mammalia                      Primates                      Hominidae                      Homo                              Homo sapiens
+9913      Eukaryota   Chordata                       Mammalia                      unclassified Mammalia order   Bovidae                        Bos                               Bos taurus
+376619    Bacteria    Proteobacteria                 Gammaproteobacteria           Thiotrichales                 Francisellaceae                Francisella                       Francisella tularensis
+349741    Bacteria    Verrucomicrobia                Verrucomicrobiae              Verrucomicrobiales            Akkermansiaceae                Akkermansia                       Akkermansia muciniphila
+239935    Bacteria    Verrucomicrobia                Verrucomicrobiae              Verrucomicrobiales            Akkermansiaceae                Akkermansia                       Akkermansia muciniphila
+314101    Bacteria    unclassified Bacteria phylum   unclassified Bacteria class   unclassified Bacteria order   unclassified Bacteria family   unclassified Bacteria genus       uncultured murine large bowel bacterium BAC 54B
+11932     Viruses     unclassified Viruses phylum    unclassified Viruses class    Ortervirales                  Retroviridae                   Intracisternal A-particles        Mouse Intracisternal A-particle
+1327037   Viruses     unclassified Viruses phylum    unclassified Viruses class    Caudovirales                  Siphoviridae                   unclassified Siphoviridae genus   Croceibacter phage P2559Y
+92489     Bacteria    Proteobacteria                 Gammaproteobacteria           Enterobacterales              Erwiniaceae                    Erwinia                           Erwinia oleae
+1458427   Bacteria    Proteobacteria                 Betaproteobacteria            Burkholderiales               Comamonadaceae                 Serpentinomonas                   Serpentinomonas raichei
 </code></pre>
 </li>
 <li>
 <p>Support tab in format string</p>
-<pre><code>$ echo 9606 | taxonkit lineage | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}"
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens Eukaryota       Chordata        Mammalia        Primates        Hominidae  Homo    Homo sapiens
+<pre><code>$ echo 9606 | taxonkit lineage | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}" | csvtk cut -t -f -2
+9606    Eukaryota       Chordata        Mammalia        Primates        Hominidae       Homo    Homo sapiens
 </code></pre>
 </li>
 <li>
-<p>from taxid to 7-ranks lineage:</p>
+<p>From taxid to 7-ranks lineage:</p>
 <pre><code>$ cat taxids.txt | taxonkit lineage | taxonkit reformat
 </code></pre>
 </li>
 </ol>
 <h2 id="name2taxid">name2taxid</h2>
 <p>Usage</p>
-<pre><code>query taxid by taxon scientific name
+<pre><code class="text">query taxid by taxon scientific name
 
 Usage:
   taxonkit name2taxid [flags]
 
 Flags:
+  -h, --help             help for name2taxid
   -i, --name-field int   field index of name. data should be tab-separated (default 1)
-      --show-rank        show rank
+  -r, --show-rank        show rank
 
 </code></pre>
 
@@ -613,26 +1186,26 @@ Croceibacter phage P2559Y
 <li>
 <p>default</p>
 <pre><code># taxonkit name2taxid names.txt
-$ cat names.txt | taxonkit name2taxid
-Homo sapiens    9606
-Akkermansia muciniphila ATCC BAA-835    349741
-Akkermansia muciniphila 239935
-Mouse Intracisternal A-particle 11932
-Wei Shen
-uncultured murine large bowel bacterium BAC 54B 314101
-Croceibacter phage P2559Y       1327037
+$ cat names.txt | taxonkit name2taxid | csvtk pretty -t
+Homo sapiens                                      9606
+Akkermansia muciniphila ATCC BAA-835              349741
+Akkermansia muciniphila                           239935
+Mouse Intracisternal A-particle                   11932
+Wei Shen                                          
+uncultured murine large bowel bacterium BAC 54B   314101
+Croceibacter phage P2559Y                         1327037
 </code></pre>
 </li>
 <li>
 <p>show rank</p>
-<pre><code>$ cat names.txt | taxonkit name2taxid --show-rank
-Homo sapiens    9606    species
-Akkermansia muciniphila ATCC BAA-835    349741  no rank
-Akkermansia muciniphila 239935  species
-Mouse Intracisternal A-particle 11932   species
-Wei Shen
-uncultured murine large bowel bacterium BAC 54B 314101  species
-Croceibacter phage P2559Y       1327037 species
+<pre><code>$ cat names.txt | taxonkit name2taxid --show-rank | csvtk pretty -t
+Homo sapiens                                      9606
+Akkermansia muciniphila ATCC BAA-835              349741
+Akkermansia muciniphila                           239935
+Mouse Intracisternal A-particle                   11932
+Wei Shen                                          
+uncultured murine large bowel bacterium BAC 54B   314101
+Croceibacter phage P2559Y                         1327037
 </code></pre>
 </li>
 <li>
@@ -641,20 +1214,133 @@ Croceibacter phage P2559Y       1327037 species
 Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
 Akkermansia muciniphila ATCC BAA-835    349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
 Akkermansia muciniphila 239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-Mouse Intracisternal A-particle 11932   Viruses;Retro-transcribing viruses;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+Mouse Intracisternal A-particle 11932   Viruses;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
 Wei Shen
 uncultured murine large bowel bacterium BAC 54B 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-Croceibacter phage P2559Y       1327037 Viruses;dsDNA viruses, no RNA stage;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-
-$ cat names.txt | taxonkit name2taxid | taxonkit lineage --taxid-field 2 --show-lineage-taxids
-Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens        131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
-...
+Croceibacter phage P2559Y       1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
 </code></pre>
 </li>
 </ol>
+<h2 id="taxid-changelog">taxid-changelog</h2>
+<p>Usage</p>
+<pre><code class="text">create taxid changelog from dump archives
+
+Steps:
+
+    # dependencies:
+    #   rush - https://github.com/shenwei356/rush/
+
+    mkdir -p archive; cd archive;
+
+    # --------- download ---------
+
+    # option 1
+    # for fast network connection
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp*.zip
+
+    # option 2
+    # for bad network connection like mine
+    url=https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
+    wget $url -O - -o /dev/null \
+        | grep taxdmp | perl -ne '/(taxdmp_.+?.zip)/; print &quot;$1\n&quot;;' \
+        | rush -j 2 -v url=$url 'axel -n 5 {url}/{}' \
+            --immediate-output  -c -C download.rush
+
+    # --------- unzip ---------
+
+    ls taxdmp*.zip | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}'
+
+    # --------- create log ---------
+
+    cd ..
+    taxonkit taxid-changelog -i archive -o taxid-changelog.csv.gz --verbose
+
+Output format (CSV):
+
+    # fields        comments
+    taxid           # taxid
+    version         # version / time of archive, e.g, 2019-07-01
+    change          # change, values:
+                    #   NEW             newly added
+                    #   REUSE_DEL       deleted taxids being reused
+                    #   REUSE_MER       merged taxids being reused
+                    #   DELETE          deleted
+                    #   MERGE           merged into another taxid
+                    #   ABSORB          other taxids merged into this one
+                    #   CHANGE_NAME     scientific changed
+                    #   CHANGE_RANK     rank changed
+                    #   CHANGE_LIN_LIN  lineage taxids remain but lineage remain
+                    #   CHANGE_LIN_TAX  lineage taxids changed
+                    #   CHANGE_LIN_LEN  lineage length changed
+    change-value    # variable values for changes: 
+                    #   1) new taxid for MERGE
+                    #   2) merged taxids for ABSORB
+                    #   3) empty for others
+    name            # scientific name
+    rank            # rank
+    lineage         # full lineage of the taxid
+    lineage-taxids  # taxids of the lineage
+
+    # you can use csvtk to investigate them. e.g.,
+    csvtk grep -f taxid -p 1390515 taxid-changelog.csv.gz
+
+Usage:
+  taxonkit taxid-changelog [flags]
+
+Flags:
+  -i, --archive string   directory containing decompressed dumped archives
+  -h, --help             help for taxid-changelog
+
+</code></pre>
+
+<p>Example 1  (<em>E.coli</em> with taxid <code>562</code>)</p>
+<pre><code>$ pigz -cd taxid-changelog.csv.gz \
+    | csvtk grep -f taxid -p 562 \
+    | csvtk pretty
+taxid   version      change           change-value    name               rank      lineage                                                                                                                            lineage-taxids
+562     2014-08-01   NEW                              Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+562     2014-08-01   ABSORB           662101;662104   Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+562     2015-11-01   ABSORB           1637691         Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+562     2016-10-01   CHANGE_LIN_LIN                   Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli    131567;2;1224;1236;91347;543;561;562
+562     2018-06-01   ABSORB           469598          Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli    131567;2;1224;1236;91347;543;561;562
+
+# merged taxids
+$ pigz -cd taxid-changelog.csv.gz \
+    | csvtk grep -f taxid -p 662101,662104,1637691,469598 \
+    | csvtk pretty
+taxid     version      change           change-value   name                        rank      lineage                                                                                                                                     lineage-taxids
+469598    2014-08-01   NEW                             Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA   131567;2;1224;1236;91347;543;561;469598
+469598    2016-10-01   CHANGE_LIN_LIN                  Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
+469598    2018-06-01   MERGE            562            Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
+662101    2014-08-01   MERGE            562                                                                                                                                                                                              
+662104    2014-08-01   MERGE            562                                                                                                                                                                                              
+1637691   2015-04-01   DELETE                                                                                                                                                                                                            
+1637691   2015-05-01   REUSE_DEL                       Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
+1637691   2015-11-01   MERGE            562            Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
+</code></pre>
+<p>Example 2 (All subspecies and strain in <em>Akkermansia muciniphila</em> 239935)</p>
+<pre><code># species in Akkermansia
+$ taxonkit list --show-rank --show-name --ids 239935
+239935 [species] Akkermansia muciniphila
+  349741 [no rank] Akkermansia muciniphila ATCC BAA-835
+
+# check them all  
+$ pigz -cd taxid-changelog.csv.gz \
+    | csvtk grep -f taxid -P &lt;(taxonkit list --indent "" --ids 239935) \
+    | csvtk pretty
+taxid    version      change           change-value   name                                   rank      lineage                                                                                                                                                                                                         lineage-taxids
+239935   2014-08-01   NEW                             Akkermansia muciniphila                species   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Verrucomicrobiaceae;Akkermansia;Akkermansia muciniphila                                        131567;2;51290;74201;203494;48461;203557;239934;239935
+239935   2015-05-01   CHANGE_LIN_TAX                  Akkermansia muciniphila                species   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                            131567;2;51290;74201;203494;48461;1647988;239934;239935
+239935   2016-03-01   CHANGE_LIN_TAX                  Akkermansia muciniphila                species   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                                                   131567;2;1783257;74201;203494;48461;1647988;239934;239935
+239935   2016-05-01   ABSORB           1834199        Akkermansia muciniphila                species   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                                                   131567;2;1783257;74201;203494;48461;1647988;239934;239935
+349741   2014-08-01   NEW                             Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Verrucomicrobiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835   131567;2;51290;74201;203494;48461;203557;239934;239935;349741
+349741   2015-05-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835       131567;2;51290;74201;203494;48461;1647988;239934;239935;349741
+349741   2016-03-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
+</code></pre>
+<p><a href="https://github.com/shenwei356/taxid-changelog">More</a></p>
 <h2 id="genautocomplete">genautocomplete</h2>
 <p>Usage</p>
-<pre><code>generate shell autocompletion script
+<pre><code class="text">generate shell autocompletion script
 
 Note: The current version supports Bash only.
 This should work for *nix systems with Bash installed.
@@ -704,54 +1390,87 @@ s.setAttribute('data-timestamp', +new Date());
 })();
 </script>
 
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
-        
-    </div>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                
+                  
+                
+              
+              
+                
 
-    <footer class="col-md-12 text-center">
-        <hr>
-        <p>
-        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
-    </footer>
 
-    <script src="../js/jquery-1.10.2.min.js"></script>
-    <script src="../js/bootstrap-3.0.3.min.js"></script>
-    <script src="../js/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script>
-    var base_url = '..';
-    </script>
-    <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
-    <script src="../js/base.js"></script>
-    <script src="../search/main.js"></script>
-
-    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        From here you can search these documents. Enter your search terms below.
-                    </p>
-                    <form role="form">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                        </div>
-                    </form>
-                    <div id="mkdocs-search-results"></div>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
+              
+            </article>
+          </div>
         </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../download/" title="Download" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Download
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../tutorial/" title="Tutorial" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Tutorial
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
     </div>
-
-    </body>
-
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+    <script src="../assets/javascripts/application.6f02ae1b.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+    
+    
+      
+        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-28948626-9","bioinf.shenwei.me/taxonkit"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
+      
+    
+  </body>
 </html>
