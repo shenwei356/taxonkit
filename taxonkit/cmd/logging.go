@@ -1,4 +1,4 @@
-// Copyright © 2016 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2019 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ var log *logging.Logger
 
 var logFormat = logging.MustStringFormatter(
 	// `%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{id:03x}%{color:reset} %{message}`,
-	`%{color}[%{level:.4s}]%{color:reset} %{message}`,
+	`%{time:15:04:05.000} %{color}[%{level:.4s}]%{color:reset} %{message}`,
 )
 
 func init() {

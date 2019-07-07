@@ -1,4 +1,4 @@
-// Copyright © 2016 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2019 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// taxidlogCmd represents the fx2tab command
+// taxidlogCmd represents the taxid-changelog command
 var taxidlogCmd = &cobra.Command{
 	Use:   "taxid-changelog",
 	Short: "create taxid changelog from dump archives",
@@ -116,6 +116,7 @@ Output format (CSV):
 
 func init() {
 	RootCmd.AddCommand(taxidlogCmd)
+
 	taxidlogCmd.Flags().StringP("archive", "i", "", "directory containing decompressed dumped archives")
 }
 
@@ -138,8 +139,6 @@ const (
 
 func (c TaxidChangeCode) String() string {
 	switch c {
-	case TaxidUnchanged:
-		return "UNCHANGE"
 	case TaxidNew:
 		return "NEW"
 	case TaxidReuseDeleted:
@@ -162,6 +161,8 @@ func (c TaxidChangeCode) String() string {
 		return "CHANGE_LIN_TAX"
 	case TaxidLineageChangedLen:
 		return "CHANGE_LIN_LEN"
+	case TaxidUnchanged:
+		return "UNCHANGE"
 	}
 	return "UNDEFINED TaxidChangeCode"
 }
@@ -355,7 +356,7 @@ func createChangelog(config Config, path string, dirs []string) {
 							Change:        TaxidReuseMerged,
 							ChangeValue:   nil,
 						})
-						log.Infof("  merged taxid was reused: %d", taxid)
+						// log.Infof("  merged taxid was reused: %d", taxid)
 					} else {
 						// lineage changed
 						changeCode = linegeChangeType(lineageTaxids, prevChange.LineageTaxids, taxid2names, int16(version), prevChange.TaxidVersion)

@@ -1,4 +1,4 @@
-// Copyright © 2016 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2019 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,11 +33,27 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// lineageCmd represents the fx2tab command
+// lineageCmd represents the lineage command
 var lineageCmd = &cobra.Command{
 	Use:   "lineage",
 	Short: "query lineage of given taxids",
 	Long: `query lineage of given taxids
+
+Input:
+  - List of taxids, one taxid per line.
+  - Or tab-delimited format, please specify taxid field with flag -i/--taxid-field.
+  - Supporting (gzipped) file or STDIN.
+
+Output:
+  0. Input line.
+  1. Status code (optional with flag -c/--show-status-code)
+     - "-1" for queries not found in whole database.
+     - "0" for deleted taxids, provided by "delnodes.dmp".
+     - New taxids for merged taxids, provided by "merged.dmp".
+     - Taxids for these found in "nodes.dmp".
+  2. Lineage, delimiter can be changed with flag -d/--delimiter.
+  3. Lineage taxids (optional with flag -t/--show-lineage-taxids)
+  4. Rank (optional with flag -r/--show-rank)
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -48,6 +64,7 @@ var lineageCmd = &cobra.Command{
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
 		printRank := getFlagBool(cmd, "show-rank")
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
+		showCode := getFlagBool(cmd, "show-status-code")
 
 		files := getFileList(args)
 
@@ -59,11 +76,31 @@ var lineageCmd = &cobra.Command{
 		checkError(err)
 
 		var names map[int32]string
+		var delnodes map[int32]struct{}
+		var merged map[int32]int32
 
 		if config.Verbose {
+			log.Infof("parsing delnodes file: %s", config.NamesFile)
+		}
+
+		delnodes = getDelnodesMap(config.DelNodesFile, config.Threads, 10)
+
+		if config.Verbose {
+			log.Infof("%d delnodes parsed", len(delnodes))
+
+			log.Infof("parsing merged file: %s", config.NamesFile)
+		}
+
+		merged = getMergedNodesMap(config.MergedFile, config.Threads, 10)
+
+		if config.Verbose {
+			log.Infof("%d merged nodes parsed", len(merged))
+
 			log.Infof("parsing names file: %s", config.NamesFile)
 		}
+
 		names = getTaxonNames(config.NamesFile, config.Threads, 10)
+
 		if config.Verbose {
 			log.Infof("%d names parsed", len(names))
 
@@ -123,13 +160,30 @@ var lineageCmd = &cobra.Command{
 
 			lineage := []string{}
 			lineageInTaxid := []string{}
-			var child, parent int32
+			var child, parent, newtaxid int32
 			var ok bool
 			child = int32(id)
 			for true {
 				parent, ok = tree[child]
-				if !ok {
-					break
+				if !ok { // taxid not found
+					// check if it was deleted
+					if _, ok = delnodes[child]; ok {
+						// log
+						log.Warningf("taxid %d was deleted", child)
+						id = 0
+						break
+					}
+					// check if it was merged
+					if newtaxid, ok = merged[child]; ok {
+						// log
+						log.Warningf("taxid %d was merged into %d", child, newtaxid)
+						child = newtaxid
+						parent = tree[child]
+						id = int(child)
+					} else {
+						id = -1
+						break
+					}
 				}
 				lineage = append(lineage, names[child])
 				if printLineageInTaxid {
@@ -166,7 +220,12 @@ var lineageCmd = &cobra.Command{
 					t2l = data.(taxid2lineage)
 
 					buf.Reset()
-					buf.WriteString(t2l.line + "\t" + t2l.lineage)
+					buf.WriteString(t2l.line)
+
+					if showCode {
+						buf.WriteString(fmt.Sprintf("\t%d", t2l.taxid))
+					}
+					buf.WriteString("\t" + t2l.lineage)
 
 					if printLineageInTaxid {
 						buf.WriteString("\t" + t2l.lineageInTaxid)
@@ -191,8 +250,9 @@ var lineageCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(lineageCmd)
-	lineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show lineage consisting of taxids`)
-	lineageCmd.Flags().BoolP("show-rank", "r", false, `show rank of taxids`)
+	lineageCmd.Flags().BoolP("show-status-code", "c", false, "show status code between lineage")
+	lineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `appending lineage consisting of taxids`)
+	lineageCmd.Flags().BoolP("show-rank", "r", false, `appending rank of taxids`)
 	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. data should be tab-separated")
 	lineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in lineage")
 }

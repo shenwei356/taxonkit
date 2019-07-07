@@ -1,4 +1,4 @@
-# TaxonKit - A cross-platform and Efficient NCBI Taxonomy Toolkit
+# TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
 - **Documents:** [http://bioinf.shenwei.me/taxonkit](http://bioinf.shenwei.me/taxonkit)
 ([**Usage**](http://bioinf.shenwei.me/taxonkit/usage/),
@@ -17,11 +17,12 @@
 
 ## Subcommands
 
-- `list`    list taxon tree of given taxids
-- `lineage` query lineage of given taxids (supporting STDIN), performance benchmark ([details](bench/README.md)):
+- [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)    list taxon tree of given taxids
+- [`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage) query lineage of given taxids (supporting STDIN), performance benchmark ([details](bench/README.md)):
   ![](bench/bench.get_lineage.reformat.tsv.png)  
-- `reformat` reformat lineage (supporting STDIN)
-- `name2taxid` query taxid by taxon scientific name (supporting STDIN)
+- [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat) reformat lineage (supporting STDIN)
+- [`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid) query taxid by taxon scientific name (supporting STDIN)
+- [`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog) create taxid changelog from dump archives
 
 Misc
 

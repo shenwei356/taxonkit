@@ -1,4 +1,4 @@
-// Copyright © 2016 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2019 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.4.3"
+const VERSION = "0.5.0"
 
 // Config is the struct containing all global flags
 type Config struct {
@@ -43,6 +43,8 @@ type Config struct {
 	DataDir      string
 	NodesFile    string
 	NamesFile    string
+	DelNodesFile string
+	MergedFile   string
 	Verbose      bool
 	LineBuffered bool
 }
@@ -58,7 +60,7 @@ func getConfigs(cmd *cobra.Command) Config {
 	existed, err := pathutil.DirExists(dataDir)
 	checkError(err)
 	if !existed {
-		log.Errorf(`data directory not created. please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp" and "nodes.dmp" to %s`, dataDir)
+		log.Errorf(`data directory not created. please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp", "nodes.dmp", "delnodes.dmp", and "merged.dmp" to %s`, dataDir)
 	}
 
 	return Config{Threads: getFlagPositiveInt(cmd, "threads"),
@@ -66,6 +68,8 @@ func getConfigs(cmd *cobra.Command) Config {
 		DataDir:      dataDir,
 		NodesFile:    filepath.Join(dataDir, "nodes.dmp"),
 		NamesFile:    filepath.Join(dataDir, "names.dmp"),
+		DelNodesFile: filepath.Join(dataDir, "delnodes.dmp"),
+		MergedFile:   filepath.Join(dataDir, "merged.dmp"),
 		Verbose:      getFlagBool(cmd, "verbose"),
 		LineBuffered: getFlagBool(cmd, "line-buffered"),
 	}
@@ -302,21 +306,39 @@ var taxonParseFunc = func(line string) (interface{}, bool, error) {
 	return Taxon{Taxid: int32(child), Parent: int32(parent), Rank: items[4]}, true, nil
 }
 
-func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
-	type delNode int32
-	delnodesParseFunc := func(line string) (interface{}, bool, error) {
-		items := strings.Split(line, "\t")
-		if len(items) < 2 {
-			return nil, false, nil
-		}
-		id, e := strconv.Atoi(items[0])
-		if e != nil {
-			return nil, false, e
-		}
-		return delNode(id), true, nil
-	}
+type delNode int32
 
+var delnodesParseFunc = func(line string) (interface{}, bool, error) {
+	items := strings.Split(line, "\t")
+	if len(items) < 2 {
+		return nil, false, nil
+	}
+	id, e := strconv.Atoi(items[0])
+	if e != nil {
+		return nil, false, e
+	}
+	return delNode(id), true, nil
+}
+
+func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
 	taxids := make([]int32, 0, 100000)
+
+	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
+	checkError(err)
+	var taxid delNode
+	for chunk := range reader.Ch {
+		checkError(chunk.Err)
+
+		for _, data := range chunk.Data {
+			taxid = data.(delNode)
+			taxids = append(taxids, int32(taxid))
+		}
+	}
+	return taxids
+}
+
+func getDelnodesMap(file string, bufferSize int, chunkSize int) map[int32]struct{} {
+	taxids := make(map[int32]struct{}, 100000)
 
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
 	checkError(err)
@@ -327,34 +349,35 @@ func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
 
 		for _, data := range chunk.Data {
 			taxid = data.(delNode)
-			taxids = append(taxids, int32(taxid))
+			taxids[int32(taxid)] = struct{}{}
 		}
 	}
 
 	return taxids
 }
 
-func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
-	type mergedNodes [2]int32
-	delnodesParseFunc := func(line string) (interface{}, bool, error) {
-		items := strings.Split(line, "\t")
-		if len(items) < 4 {
-			return nil, false, nil
-		}
-		from, e := strconv.Atoi(items[0])
-		if e != nil {
-			return nil, false, e
-		}
-		to, e := strconv.Atoi(items[2])
-		if e != nil {
-			return nil, false, e
-		}
-		return mergedNodes([2]int32{int32(from), int32(to)}), true, nil
-	}
+type mergedNodes [2]int32
 
+var mergedParseFunc = func(line string) (interface{}, bool, error) {
+	items := strings.Split(line, "\t")
+	if len(items) < 4 {
+		return nil, false, nil
+	}
+	from, e := strconv.Atoi(items[0])
+	if e != nil {
+		return nil, false, e
+	}
+	to, e := strconv.Atoi(items[2])
+	if e != nil {
+		return nil, false, e
+	}
+	return mergedNodes([2]int32{int32(from), int32(to)}), true, nil
+}
+
+func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
 	merges := make([][2]int32, 0, 10000)
 
-	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
+	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, mergedParseFunc)
 	checkError(err)
 
 	var merge mergedNodes
@@ -364,6 +387,25 @@ func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
 		for _, data := range chunk.Data {
 			merge = data.(mergedNodes)
 			merges = append(merges, [2]int32(merge))
+		}
+	}
+
+	return merges
+}
+
+func getMergedNodesMap(file string, bufferSize int, chunkSize int) map[int32]int32 {
+	merges := make(map[int32]int32, 10000)
+
+	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, mergedParseFunc)
+	checkError(err)
+
+	var merge mergedNodes
+	for chunk := range reader.Ch {
+		checkError(chunk.Err)
+
+		for _, data := range chunk.Data {
+			merge = data.(mergedNodes)
+			merges[merge[0]] = merge[1]
 		}
 	}
 
