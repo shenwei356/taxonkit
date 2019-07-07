@@ -112,7 +112,8 @@ p <-
 #              size = 1.5, alpha = 0.6) +
   
   geom_text_repel(size = 5, max.iter = 200000) +
-  scale_color_wsj() +
+  # scale_color_wsj() +
+  scale_color_colorblind() +
   facet_wrap( ~ dataset, scales = "free_y") +
   # ylim(0, max(df$time)) +
   xlim(0, max(df$mem2)) +
