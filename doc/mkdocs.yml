@@ -2,13 +2,11 @@ site_name: TaxonKit - NCBI Taxonomy Toolkit
 pages:
 - Home: index.md
 - Download: download.md
-- Documents:
-    - Usage: usage.md
-    - Tutorial: tutorial.md
-    - Benchmark: /bench
+- Usage: usage.md
+- Tutorial: tutorial.md
+- Benchmark: /bench
 - Taxid-Changelog: https://github.com/shenwei356/taxid-changelog
-- Links:
-    - Wei Shen's Bioinformatic tools: bioinf.md
+- More tools: https://github.com/shenwei356
 
 theme:
     name: 'material'
