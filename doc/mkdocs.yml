@@ -11,7 +11,7 @@ pages:
 theme:
     name: 'material'
     palette:
-        primary: 'teal'
+        primary: 'cyan'
         accent: 'blue grey'
     logo:
         icon: 'school'
