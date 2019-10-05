@@ -1,3 +1,6 @@
+- [TaxonKit v0.5.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.5.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.5.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.5.1)
+    - `taxonkit version`: make checking update optional
 - [TaxonKit v0.5.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.5.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.5.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.5.0)
     - `taxonkit`: requiring delnodes.dmp and merged.dmp.
