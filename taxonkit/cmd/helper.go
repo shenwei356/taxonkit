@@ -34,7 +34,7 @@ import (
 )
 
 // VERSION of csvtk
-const VERSION = "0.5.0"
+const VERSION = "0.5.1"
 
 // Config is the struct containing all global flags
 type Config struct {
@@ -323,6 +323,15 @@ var delnodesParseFunc = func(line string) (interface{}, bool, error) {
 func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
 	taxids := make([]int32, 0, 100000)
 
+	existed, err := pathutil.Exists(file)
+	if err != nil {
+		checkError(err)
+	}
+	if !existed {
+		log.Warningf("delnodes file not found: %s, deleted taxids will not be checked", file)
+		return taxids
+	}
+
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
 	checkError(err)
 	var taxid delNode
@@ -339,6 +348,15 @@ func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
 
 func getDelnodesMap(file string, bufferSize int, chunkSize int) map[int32]struct{} {
 	taxids := make(map[int32]struct{}, 100000)
+
+	existed, err := pathutil.Exists(file)
+	if err != nil {
+		checkError(err)
+	}
+	if !existed {
+		log.Warningf("delnodes file not found: %s, deleted taxids will not be checked", file)
+		return taxids
+	}
 
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
 	checkError(err)
@@ -377,6 +395,15 @@ var mergedParseFunc = func(line string) (interface{}, bool, error) {
 func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
 	merges := make([][2]int32, 0, 10000)
 
+	existed, err := pathutil.Exists(file)
+	if err != nil {
+		checkError(err)
+	}
+	if !existed {
+		log.Warningf("merged file not found: %s, merged taxids will not be checked", file)
+		return merges
+	}
+
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, mergedParseFunc)
 	checkError(err)
 
@@ -395,6 +422,15 @@ func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
 
 func getMergedNodesMap(file string, bufferSize int, chunkSize int) map[int32]int32 {
 	merges := make(map[int32]int32, 10000)
+
+	existed, err := pathutil.Exists(file)
+	if err != nil {
+		checkError(err)
+	}
+	if !existed {
+		log.Warningf("merged file not found: %s, merged taxids will not be checked", file)
+		return merges
+	}
 
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, mergedParseFunc)
 	checkError(err)
