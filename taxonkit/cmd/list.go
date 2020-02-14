@@ -54,9 +54,30 @@ var listCmd = &cobra.Command{
 		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
 
-		var names map[int32]string
 		printName := getFlagBool(cmd, "show-name")
 		printRank := getFlagBool(cmd, "show-rank")
+
+		var names map[int32]string
+		var delnodes map[int32]struct{}
+		var merged map[int32]int32
+
+		if config.Verbose {
+			log.Infof("parsing delnodes file: %s", config.NamesFile)
+		}
+
+		delnodes = getDelnodesMap(config.DelNodesFile, config.Threads, 10)
+
+		if config.Verbose {
+			log.Infof("%d delnodes parsed", len(delnodes))
+
+			log.Infof("parsing merged file: %s", config.NamesFile)
+		}
+
+		merged = getMergedNodesMap(config.MergedFile, config.Threads, 10)
+
+		if config.Verbose {
+			log.Infof("%d merged nodes parsed", len(merged))
+		}
 
 		if printName {
 			if config.Verbose {
@@ -111,9 +132,22 @@ var listCmd = &cobra.Command{
 		if jsonFormat {
 			outfh.WriteString("{\n")
 		}
+		var newtaxid int32
 		for i, id := range ids {
 			if _, ok := tree[int32(id)]; !ok {
-				continue
+				// check if it was deleted
+				if _, ok = delnodes[int32(id)]; ok {
+					log.Warningf("taxid %d was deleted", child)
+					continue
+				}
+				// check if it was merged
+				if newtaxid, ok = merged[int32(id)]; ok {
+					log.Warningf("taxid %d was merged into %d", child, newtaxid)
+					id = int(newtaxid)
+				} else {
+					log.Warningf("taxid %d not found", child)
+					continue
+				}
 			}
 
 			level = 0
