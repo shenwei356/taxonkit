@@ -43,6 +43,7 @@ var name2taxidCmd = &cobra.Command{
 
 		printRank := getFlagBool(cmd, "show-rank")
 		field := getFlagPositiveInt(cmd, "name-field") - 1
+		limite2SciName := getFlagBool(cmd, "sci-name")
 
 		files := getFileList(args)
 
@@ -58,7 +59,7 @@ var name2taxidCmd = &cobra.Command{
 		if config.Verbose {
 			log.Infof("parsing names file: %s", config.NamesFile)
 		}
-		m = getTaxonName2Taxids(config.NamesFile, config.Threads, 10)
+		m = getTaxonName2Taxids(config.NamesFile, limite2SciName, config.Threads, 10)
 		if config.Verbose {
 			log.Infof("%d names parsed", len(m))
 		}
@@ -151,4 +152,5 @@ func init() {
 	RootCmd.AddCommand(name2taxidCmd)
 	name2taxidCmd.Flags().BoolP("show-rank", "r", false, `show rank`)
 	name2taxidCmd.Flags().IntP("name-field", "i", 1, "field index of name. data should be tab-separated")
+	name2taxidCmd.Flags().BoolP("sci-name", "s", false, "only searching scientific names")
 }
