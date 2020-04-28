@@ -277,7 +277,7 @@ func traverseTree(tree map[int32]map[int32]bool, parent int32,
 
 		if jsonFormat && ok {
 			outfh.WriteString(fmt.Sprintf("%s}", strings.Repeat(indent, level)))
-			if level > 2 && i < len(children)-1 {
+			if level > 1 && i < len(children)-1 {
 				outfh.WriteString(",")
 			}
 			outfh.WriteString("\n")
