@@ -1,12 +1,10 @@
 - [TaxonKit v0.6.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.6.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.6.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.6.0)
-    - `taxonkit name2taxid`: new flag `-s/--sci-name` for limiting to searching scientific names.
-- [TaxonKit v0.5.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.5.1)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.5.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.5.1)
-    - `taxonkit version`: make checking update optional
     - `taxonkit list`:
         - check merged and deleted taxids.
         - fix bug of json output. [#30](https://github.com/shenwei356/taxonkit/issues/30)
+    - `taxonkit name2taxid`: new flag `-s/--sci-name` for limiting to searching scientific names. [#29](https://github.com/shenwei356/taxonkit/issues/29)
+    - `taxonkit version`: make checking update optional
 - [TaxonKit v0.5.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.5.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.5.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.5.0)
     - `taxonkit`: requiring delnodes.dmp and merged.dmp.

@@ -1,4 +1,4 @@
-// Copyright © 2016-2019 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2020 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// VERSION of csvtk
+// VERSION of taxonkit
 const VERSION = "0.6.0"
 
 // Config is the struct containing all global flags
