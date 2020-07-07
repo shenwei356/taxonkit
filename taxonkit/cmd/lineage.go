@@ -63,6 +63,7 @@ Output:
 		delimiter := getFlagString(cmd, "delimiter")
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
 		printRank := getFlagBool(cmd, "show-rank")
+		printName := getFlagBool(cmd, "show-name")
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
 		showCode := getFlagBool(cmd, "show-status-code")
 
@@ -231,6 +232,9 @@ Output:
 					if printLineageInTaxid {
 						buf.WriteString("\t" + t2l.lineageInTaxid)
 					}
+					if printName {
+						buf.WriteString("\t" + names[t2l.taxid])
+					}
 					if printRank {
 						buf.WriteString("\t" + ranks[t2l.taxid])
 					}
@@ -254,6 +258,7 @@ func init() {
 	lineageCmd.Flags().BoolP("show-status-code", "c", false, "show status code between lineage")
 	lineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `appending lineage consisting of taxids`)
 	lineageCmd.Flags().BoolP("show-rank", "r", false, `appending rank of taxids`)
+	lineageCmd.Flags().BoolP("show-name", "n", false, `appending scientific name`)
 	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. data should be tab-separated")
 	lineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in lineage")
 }
