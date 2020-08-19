@@ -66,11 +66,16 @@ Output:
 		printName := getFlagBool(cmd, "show-name")
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
 		showCode := getFlagBool(cmd, "show-status-code")
+		noLineage := getFlagBool(cmd, "no-lineage")
 
 		files := getFileList(args)
 
 		if len(files) == 1 && isStdin(files[0]) && !xopen.IsStdin() {
 			checkError(fmt.Errorf("stdin not detected"))
+		}
+
+		if noLineage && !printRank && !printName {
+			checkError(fmt.Errorf("when given -L/--no-lineage, -n/--show-name or/and -r/--show-rank needed"))
 		}
 
 		outfh, err := xopen.Wopen(config.OutFile)
@@ -187,7 +192,12 @@ Output:
 						break
 					}
 				}
+
 				lineage = append(lineage, names[child])
+				if noLineage {
+					break
+				}
+
 				if printLineageInTaxid {
 					lineageInTaxid = append(lineageInTaxid, strconv.Itoa(int(child)))
 				}
@@ -227,9 +237,11 @@ Output:
 					if showCode {
 						buf.WriteString(fmt.Sprintf("\t%d", t2l.taxid))
 					}
-					buf.WriteString("\t" + t2l.lineage)
+					if !noLineage {
+						buf.WriteString("\t" + t2l.lineage)
+					}
 
-					if printLineageInTaxid {
+					if printLineageInTaxid && noLineage {
 						buf.WriteString("\t" + t2l.lineageInTaxid)
 					}
 					if printName {
@@ -261,4 +273,5 @@ func init() {
 	lineageCmd.Flags().BoolP("show-name", "n", false, `appending scientific name`)
 	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. data should be tab-separated")
 	lineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in lineage")
+	lineageCmd.Flags().BoolP("no-lineage", "L", false, "do not show lineage, when user just want names or/and ranks")
 }
