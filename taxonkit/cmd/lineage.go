@@ -241,7 +241,7 @@ Output:
 						buf.WriteString("\t" + t2l.lineage)
 					}
 
-					if printLineageInTaxid && noLineage {
+					if printLineageInTaxid && !noLineage {
 						buf.WriteString("\t" + t2l.lineageInTaxid)
 					}
 					if printName {
