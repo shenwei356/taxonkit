@@ -99,3 +99,7 @@ propose new functions or ask for help.
 ## License
 
 [MIT License](https://github.com/shenwei356/taxonkit/blob/master/LICENSE)
+
+## Starchart
+
+<img src="https://starchart.cc/shenwei356/taxonkit.svg" alt="Stargazers over time" style="max-width: 100%">
