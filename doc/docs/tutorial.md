@@ -44,9 +44,14 @@ Steps:
         # 6656 is the phylum Arthropoda
         # echo 6656 | taxonkit lineage | taxonkit reformat
         # 6656    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Protostomia;Ecdysozoa;Panarthropoda;Arthropoda    Eukaryota;Arthropoda;;;;;
+        
+        # 2    bacteria
+        # 4751 fungi
 
         # time: 3s
         taxonkit list --ids $id --indent "" > $id.taxid.txt
+        
+        # taxonkit list --ids 2,4751 --indent "" > $id.taxid.txt
 
         wc -l $id.taxid.txt
         # 518373 6656.taxid.txt
