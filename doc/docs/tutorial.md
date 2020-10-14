@@ -47,11 +47,12 @@ Steps:
         
         # 2    bacteria
         # 4751 fungi
+        # 10239 virus
 
         # time: 3s
         taxonkit list --ids $id --indent "" > $id.taxid.txt
         
-        # taxonkit list --ids 2,4751 --indent "" > $id.taxid.txt
+        # taxonkit list --ids 2,4751,10239 --indent "" > microbe.taxid.txt
 
         wc -l $id.taxid.txt
         # 518373 6656.taxid.txt
