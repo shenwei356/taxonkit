@@ -462,8 +462,14 @@ So you don't need to build blastdb for specific taxids now.</li>
 # echo 6656 | taxonkit lineage | taxonkit reformat
 # 6656    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Protostomia;Ecdysozoa;Panarthropoda;Arthropoda    Eukaryota;Arthropoda;;;;;
 
+# 2    bacteria
+# 4751 fungi
+# 10239 virus
+
 # time: 3s
 taxonkit list --ids $id --indent "" &gt; $id.taxid.txt
+
+# taxonkit list --ids 2,4751,10239 --indent "" &gt; microbe.taxid.txt
 
 wc -l $id.taxid.txt
 # 518373 6656.taxid.txt
