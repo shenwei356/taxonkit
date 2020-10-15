@@ -172,11 +172,12 @@ Steps:
             for f in $id.acc2taxid.txt.part_* ; do
                 echo $f
                 time pigz -cd nr.$id.with-taxid.part$i.fa.gz \
-                    | seqkit --quiet replace -k $f -p "^([^\-]+) " -r "{kv}-\$1 " -K -U -o nr.$id.with-taxid.part$(($i+1)).fa.gz;
-                rm nr.$id.with-taxid.part$i.fa.gz
+                    | seqkit replace -k $f -p "^([^\-]+?) " -r "{kv}-\$1 " -K -U -o nr.$id.with-taxid.part$(($i+1)).fa.gz;
+                /bin/rm nr.$id.with-taxid.part$i.fa.gz
                 i=$(($i+1));
             done
             mv nr.$id.with-taxid.part$i.fa.gz nr.$id.with-taxid.fa.gz
+            
             
             # =====================================================================
 
