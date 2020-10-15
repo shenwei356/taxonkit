@@ -13,6 +13,7 @@ Changes:
 - 2018-09-13 rewritten
 - 2018-12-22 providing faster method for step 3.1
 - 2019-01-07 add note of new blastdb version
+- 2020-10-14 update steps for huge number of accessions belong to high taxon level like bacteria.
 
 Data:
 
@@ -22,7 +23,7 @@ Data:
 Hardware in this tutorial
 
 - CPU: AMD 8-cores/16-threads 3.7Ghz
-- RAM: 32GB
+- RAM: 64GB
 - DISK:
     - Taxonomy files stores in NVMe SSD
     - blatdb files stores in 7200rpm HDD
@@ -32,7 +33,7 @@ Tools:
 - [blast+](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
 - [pigz](https://zlib.net/pigz/) (recommended, faster than gzip)
 - [taxonkit](https://bioinf.shenwei.me/taxonkit)
-- [seqkit](https://bioinf.shenwei.me/seqkit) (recommended)
+- [seqkit](https://bioinf.shenwei.me/seqkit) (recommended),  version >= 0.14.0
 - [rush](https://github.com/shenwei356/rush) (optional, for parallizing filtering sequence)
 
 Steps:
@@ -64,10 +65,11 @@ Steps:
             # time: 4min
             pigz -dc prot.accession2taxid.gz \
                 | csvtk grep -t -f taxid -P $id.taxid.txt \
-                | csvtk cut -t -f accession.version \
+                | csvtk cut -t -f accession.version,taxid \
                 | sed 1d \
-                > $id.acc.txt
-
+                > $id.acc2taxid.txt
+                
+            cut -f 1 $id.acc2taxid.txt > $id.acc.txt
 
             wc -l $id.acc.txt
             # 8174609 6656.acc.txt
@@ -109,12 +111,12 @@ Steps:
 
             # ---------------------------------------------------------------------
 
-            # methond 1)
+            # methond 1) (for cases where $id.acc.txt is not very huge)
             # time: 80min
             # perl one-liner is used to unfold records having mulitple accessions
-            cat <(echo) <(pigz -dc nr.fa.gz) \
+            time cat <(echo) <(pigz -dc nr.fa.gz) \
                 | perl -e 'BEGIN{ $/ = "\n>"; <>; } while(<>){s/>$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ />/) { print ">$_"; next; }; $h = ">$h"; while($h =~ />([^ ]+ .+?) ?(?=>|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print ">$h1\n$s";} } ' \
-                | seqkit grep --delete-matched -f $id.acc.txt -o nr.$id.fa.gz
+                | seqkit grep -f $id.acc.txt -o nr.$id.fa.gz
 
             # ---------------------------------------------------------------------
 
@@ -125,20 +127,57 @@ Steps:
             $ time seqkit split2 -p 15 nr.fa.gz
 
             # (2). parallize unfolding
-            $ cat unfold_blastdb_fa.sh
+            $ cat _unfold_blastdb_fa.sh
             #!/bin/sh
             perl -e 'BEGIN{ $/ = "\n>"; <>; } while(<>){s/>$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ />/) { print ">$_"; next; }; $h = ">$h"; while($h =~ />([^ ]+ .+?) ?(?=>|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print ">$h1\n$s";} } '
 
             # 10 min
-            ls nr.fa.gz.split/nr.part_*.fa.gz \
+            time ls nr.fa.gz.split/nr.part_*.fa.gz \
                 | rush -j 15 -v id=$id 'cat <(echo) <(pigz -dc {}) \
-                    | ./unfold_blastdb_fa.sh \
-                    | seqkit grep --delete-matched -f {id}.acc.txt -o nr.{id}.{%@nr\.(.+)$} '
+                    | ./_unfold_blastdb_fa.sh \
+                    | seqkit grep -f {id}.acc.txt -o nr.{id}.{%@nr\.(.+)$} '
 
             # (3). merge result
             cat nr.$id.part*.fa.gz > nr.$id.fa.gz
             rm nr.$id.part*.fa.gz
-
+            
+            # ---------------------------------------------------------------------
+            
+            # method 3) (**for huge $id.acc.txt file, e.g., bacteria)
+            
+            # (1). split ${id}.acc.txt into several parts. chunk size depends on lines and RAM (64G for me).
+            split -d -l 300000000 $id.acc.txt $id.acc.txt.part_
+            
+            # (2). filter
+            time ls $id.acc.txt.part_* \
+                | rush -j 1 --immediate-output -v id=$id \
+                    'echo {}; cat <(echo) <(pigz -dc nr.fa.gz ) \
+                    | ./_unfold_blastdb_fa.sh \
+                    | seqkit grep -f {} -o nr.{id}.{%@(part_.+)}.fa.gz '
+ 
+            # (3). merge
+            cat nr.$id.part*.fa.gz > nr.$id.fa.gz     
+            
+            # clean
+            rm nr.$id.part*.fa.gz
+            rm $id.acc.txt.part_
+            
+            
+            # (4). optionally adding taxid, you may edit replacement (-r) below
+            # split
+            time split -d -l 200000000 $id.acc2taxid.txt $id.acc2taxid.txt.part_
+            
+            ln -s nr.$id.fa.gz nr.$id.with-taxid.part0.fa.gz         
+            i=0
+            for f in $id.acc2taxid.txt.part_* ; do
+                echo $f
+                time pigz -cd nr.$id.with-taxid.part$i.fa.gz \
+                    | seqkit --quiet replace -k $f -p "^([^\-]+) " -r "{kv}-\$1 " -K -U -o nr.$id.with-taxid.part$(($i+1)).fa.gz;
+                rm nr.$id.with-taxid.part$i.fa.gz
+                i=$(($i+1));
+            done
+            mv nr.$id.with-taxid.part$i.fa.gz nr.$id.with-taxid.fa.gz
+            
             # =====================================================================
 
             # 3. counting sequences
