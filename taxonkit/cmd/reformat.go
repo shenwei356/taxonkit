@@ -131,17 +131,29 @@ column by flag "-t/--show-lineage-taxids".
 				return nil, false, fmt.Errorf("lineage-field (%d) out of range (%d):%s", field+1, len(data), line)
 			}
 
-			// names and weights
-			names2 := strings.Split(data[field], delimiter)
-			weights := make([]float32, len(names2))
-			var rank, srank string
+			// names
+			names := strings.Split(data[field], delimiter) // all names of full lineage
+			ranks := make([]string, len(names))
+			sranks := make([]string, len(names))
+
+			var rank, srank string   // lower case of name : name
+			var lname, plname string // lower case of name, rank and it's one-letter symbol
 			var ok bool
-			srank2name := make(map[string]string)
-			var currentWeight float32
-			name2Name := make(map[string]string, len(names2)) // lower case of name : name
-			var lname string
-			var plname string
-			for i, name := range names2 {
+
+			name2Name := make(map[string]string, len(names)) // lower case of name of parent
+			srank2idx := make(map[string]int)                // srank: index
+
+			// preprare replacements.
+			// find the orphan names and missing ranks
+			replacements := make(map[string]string, len(matches))
+			ireplacements := make(map[string]string, len(matches))
+
+			for _, match := range matches {
+				replacements[match[1]] = blank
+				ireplacements[match[1]] = iblank
+			}
+
+			for i, name := range names {
 				if name == "" {
 					continue
 				}
@@ -155,10 +167,10 @@ column by flag "-t/--show-lineage-taxids".
 					return line2flineage{line, "", ""}, true, nil
 				}
 
-				if i == 0 {
+				if i == 0 { // root node
 					rank = taxid2taxon[name2taxid[name]].Rank
 				} else {
-					plname = strings.ToLower(names2[i-1])
+					plname = strings.ToLower(names[i-1])
 					if _, ok = name2parent2taxid[name]; !ok {
 						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, name)
 						return line2flineage{line, "", ""}, true, nil
@@ -166,113 +178,47 @@ column by flag "-t/--show-lineage-taxids".
 						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, plname)
 						return line2flineage{line, "", ""}, true, nil
 					}
-					rank = taxid2taxon[name2parent2taxid[name][plname]].Rank
-				}
-				if rank != norank {
-					if srank, ok = rank2symbol[rank]; ok {
-						srank2name[srank] = name
-						weights[i] = symbol2weight[srank]
-						currentWeight = weights[i]
-					} else {
-						// log.Warningf("please contact author to add this rank to code: %s", rank)
-					}
-				} else {
-					currentWeight += 0.1
-					weights[i] = currentWeight
-				}
-			}
-			// preprare replacements.
-			// find the orphan names and missing ranks
-			replacements := make(map[string]string, len(matches))
-			ireplacements := make(map[string]string, len(matches))
-			if !fill {
-				for _, match := range matches {
-					replacements[match[1]] = blank
-					ireplacements[match[1]] = blank
-				}
-			}
-
-			orphans := make(map[string]float32)
-			orphansList := make([][2]string, 0, 20)
-			for i, name := range names2 {
-				if name == "" {
-					continue
-				}
-				name = strings.ToLower(name)
-
-				if i == 0 {
-					rank = taxid2taxon[name2taxid[name]].Rank
-				} else {
-					plname = strings.ToLower(names2[i-1])
+					// note that code below is computing rank of current name, not its parent.
 					rank = taxid2taxon[name2parent2taxid[name][plname]].Rank
 				}
 
 				if rank == norank {
-					orphans[name] = weights[i]
-					orphansList = append(orphansList, [2]string{name, plname})
-				} else {
-					replacements[rank2symbol[rank]] = name2Name[name]
-					if _, ok = outSranks[rank2symbol[rank]]; ok { // to be outputted
-						if i == 0 {
-							ireplacements[rank2symbol[rank]] = fmt.Sprintf("%d",
-								name2taxid[name])
-						} else {
-							ireplacements[rank2symbol[rank]] = fmt.Sprintf("%d",
-								name2parent2taxid[name][plname])
-						}
-					} else if rank == "" {
-						orphans[name] = weights[i]
-						orphansList = append(orphansList, [2]string{name, plname})
-					}
+					continue
+				}
+
+				ranks[i] = rank
+				if srank, ok = rank2symbol[rank]; ok {
+					replacements[srank] = name2Name[name]
+					srank2idx[srank] = i
+					sranks[i] = srank
 				}
 			}
 
 			if fill {
-				jj := -1
-				var hit bool
-				var lastRank string
-				var name, pname string
-				for i, srank := range outSranksList {
-					for j := int(symbol2weight[srank]); j >= 1; j-- {
-						if lname, ok = srank2name[srankList[j-1]]; ok {
-							lastRank = name2Name[lname]
-							break
-						}
+				var j, lastI int
+				var srank2 string
+				for _, srank = range srankList {
+					if srank == "" {
+						continue
 					}
 
-					hit = false
-					for j, n2p := range orphansList {
-						if j <= jj {
-							continue
-						}
-						name, pname = n2p[0], n2p[1]
-						if i == 0 {
-							if orphans[name] < symbol2weight[outSranksList[i]] {
-								hit = true
+					if _, ok = srank2idx[srank]; ok {
+						continue
+					}
+
+					// missing some ranks.
+					// find the nearst higher formal rank
+					for j, rank = range ranks {
+						srank2 = sranks[j]
+						if _, ok = srank2idx[srank2]; ok {
+							if symbol2weight[srank2] < symbol2weight[srank] {
+								lastI = j
+							} else {
+								break
 							}
-						} else if i == len(outSranksList)-1 {
-
-						} else if orphans[name] > symbol2weight[outSranksList[i-1]] &&
-							orphans[name] < symbol2weight[outSranksList[i+1]] {
-							hit = true
-						}
-
-						if hit {
-							replacements[srank] = name2Name[name]
-							ireplacements[srank] = fmt.Sprintf("%d", name2parent2taxid[name][pname])
-							jj = j
-							break
 						}
 					}
-					hit = false
-					if !hit {
-						if blank == "" {
-							replacements[srank] = fmt.Sprintf("%s%s %s", prefix, lastRank, symbol2rank[srank])
-						} else {
-							replacements[srank] = blank
-						}
-						ireplacements[srank] = iblank
-					}
+					replacements[srank] = fmt.Sprintf("%s%s %s", prefix, names[lastI], symbol2rank[srank])
 				}
 			}
 

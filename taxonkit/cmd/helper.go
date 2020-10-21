@@ -180,6 +180,8 @@ func getTaxonName2Taxids(file string, limit2SciName bool, bufferSize int, chunkS
 	return name2taxids
 }
 
+// some taxons from different rank may have same names,
+// so we use name and name of its parent to point to the right taxid.
 func getName2Parent2Taxid(fileNodes string,
 	fileNames string,
 	bufferSize int,

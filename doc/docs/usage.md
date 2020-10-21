@@ -3,14 +3,15 @@
 Table of Contents
 
 <!-- TOC -->
-- [Before use](#before-use)
-- [taxonkit](#taxonkit)
-- [list](#list)
-- [lineage](#lineage)
-- [reformat](#reformat)
-- [name2taxid](#name2taxid)
-- [taxid-changelog](#taxid-changelog)
-- [genautocomplete](#genautocomplete)
+- [Usage and Examples](#usage-and-examples)
+  - [Before use](#before-use)
+  - [taxonkit](#taxonkit)
+  - [list](#list)
+  - [lineage](#lineage)
+  - [reformat](#reformat)
+  - [name2taxid](#name2taxid)
+  - [taxid-changelog](#taxid-changelog)
+  - [genautocomplete](#genautocomplete)
 <!-- /TOC -->
 
 ## Before use
@@ -461,7 +462,7 @@ Examples:
 1. Default output format (`"{k};{p};{c};{o};{f};{g};{s}"`)
 
         # reformated lineages are appended to the input data
-        $ taxonkit reformat lineage.txt |
+        $ taxonkit reformat lineage.txt 
         ...
         239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila     Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
         ...
