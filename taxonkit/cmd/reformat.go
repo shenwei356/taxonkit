@@ -73,22 +73,9 @@ column by flag "-t/--show-lineage-taxids".
 			checkError(fmt.Errorf("placeholder of simplified rank not found in output format: %s", format))
 		}
 		matches := reRankPlaceHolder.FindAllStringSubmatch(format, -1)
-		outSranks := make(map[string]struct{})
-		outSranksList := []string{}
-		var currentWeight float32
-		var currentSymbol string
 		for _, match := range matches {
-			if weight, ok := symbol2weight[match[1]]; !ok {
+			if _, ok := symbol2rank[match[1]]; !ok {
 				checkError(fmt.Errorf("invalid placeholder: %s", match[0]))
-			} else {
-				if weight < currentWeight {
-					checkError(fmt.Errorf(`invalid placeholder order: {%s} {%s}. "%s" should be behind of "%s"`,
-						currentSymbol, match[1], symbol2rank[currentSymbol], symbol2rank[match[1]]))
-				}
-				outSranks[match[1]] = struct{}{}
-				outSranksList = append(outSranksList, match[1])
-				currentWeight = weight
-				currentSymbol = match[1]
 			}
 		}
 
@@ -189,6 +176,7 @@ column by flag "-t/--show-lineage-taxids".
 				ranks[i] = rank
 				if srank, ok = rank2symbol[rank]; ok {
 					replacements[srank] = name2Name[name]
+					ireplacements[srank] = fmt.Sprintf("%d", name2taxid[name])
 					srank2idx[srank] = i
 					sranks[i] = srank
 				}
