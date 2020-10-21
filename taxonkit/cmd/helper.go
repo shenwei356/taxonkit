@@ -454,6 +454,30 @@ func getMergedNodesMap(file string, bufferSize int, chunkSize int) map[int32]int
 	return merges
 }
 
+var rankList = []string{
+	"",
+	"superkingdom",
+	"phylum",
+	"class",
+	"order",
+	"family",
+	"genus",
+	"species",
+	"subspecies",
+}
+
+var srankList = []string{
+	"",
+	"k",
+	"p",
+	"c",
+	"o",
+	"f",
+	"g",
+	"s",
+	"S",
+}
+
 var rank2symbol = map[string]string{
 	"superkingdom": "k",
 	"phylum":       "p",

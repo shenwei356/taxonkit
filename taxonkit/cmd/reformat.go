@@ -194,7 +194,6 @@ column by flag "-t/--show-lineage-taxids".
 
 			orphans := make(map[string]float32)
 			orphansList := make([][2]string, 0, 20)
-			existedSranks := make(map[string]struct{})
 			for i, name := range names2 {
 				if name == "" {
 					continue
@@ -212,8 +211,8 @@ column by flag "-t/--show-lineage-taxids".
 					orphans[name] = weights[i]
 					orphansList = append(orphansList, [2]string{name, plname})
 				} else {
+					replacements[rank2symbol[rank]] = name2Name[name]
 					if _, ok = outSranks[rank2symbol[rank]]; ok { // to be outputted
-						replacements[rank2symbol[rank]] = name2Name[name]
 						if i == 0 {
 							ireplacements[rank2symbol[rank]] = fmt.Sprintf("%d",
 								name2taxid[name])
@@ -221,8 +220,6 @@ column by flag "-t/--show-lineage-taxids".
 							ireplacements[rank2symbol[rank]] = fmt.Sprintf("%d",
 								name2parent2taxid[name][plname])
 						}
-
-						existedSranks[rank2symbol[rank]] = struct{}{}
 					} else if rank == "" {
 						orphans[name] = weights[i]
 						orphansList = append(orphansList, [2]string{name, plname})
@@ -236,10 +233,13 @@ column by flag "-t/--show-lineage-taxids".
 				var lastRank string
 				var name, pname string
 				for i, srank := range outSranksList {
-					if _, ok = existedSranks[srank]; ok {
-						lastRank = replacements[srank]
-						continue
+					for j := int(symbol2weight[srank]); j >= 1; j-- {
+						if lname, ok = srank2name[srankList[j-1]]; ok {
+							lastRank = name2Name[lname]
+							break
+						}
 					}
+
 					hit = false
 					for j, n2p := range orphansList {
 						if j <= jj {
