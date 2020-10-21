@@ -2,7 +2,7 @@
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.6.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.6.1)
     - `taxonkit lineage`: 
         - new flag `-n/--show-name` for appending scientific name.
-        - new flag `no-lineage` for hide lineage, this is for fast retrieving names or/and ranks.
+        - new flag `-L/--no-lineage` for hide lineage, this is for fast retrieving names or/and ranks.
     - `taxonkit reformat`:
         - fix flag `-F/--fill-miss-rank`.
         - discard order restriction of rank symbols.
