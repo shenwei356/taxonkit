@@ -47,6 +47,7 @@ Steps:
         # 6656    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Protostomia;Ecdysozoa;Panarthropoda;Arthropoda    Eukaryota;Arthropoda;;;;;
         
         # 2    bacteria
+        # 2157 archaea
         # 4751 fungi
         # 10239 virus
 

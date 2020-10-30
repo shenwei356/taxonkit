@@ -27,7 +27,7 @@ And copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data direc
 ```text
 TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.6.0
+Version: 0.6.1
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -276,7 +276,9 @@ Usage:
 Flags:
   -d, --delimiter string      field delimiter in lineage (default ";")
   -h, --help                  help for lineage
+  -L, --no-lineage            do not show lineage, when user just want names or/and ranks
   -t, --show-lineage-taxids   appending lineage consisting of taxids
+  -n, --show-name             appending scientific name
   -r, --show-rank             appending rank of taxids
   -c, --show-status-code      show status code between lineage
   -i, --taxid-field int       field index of taxid. data should be tab-separated (default 1)
@@ -365,24 +367,22 @@ Examples
             | csvtk filter2 -H -t -f '$5>0' \
             | csvtk -H -t cut -f -3
 
-1. Show rank
+1. Only show name and rank
 
-        $ taxonkit lineage -r taxids.txt | cut -f 1,3 | csvtk pretty -t
-        9606        species
-        9913        species
-        376619      strain
-        349741      strain
-        239935      species
-        314101      species
-        11932       species
-        1327037     species
-        123124124   
-        3           
-        92489       species
-        1458427     species
-
-
-        
+        $ taxonkit lineage -r -n -L taxids.txt | csvtk pretty -t
+        9606        Homo sapiens                                      species
+        9913        Bos taurus                                        species
+        376619      Francisella tularensis subsp. holarctica LVS      strain
+        349741      Akkermansia muciniphila ATCC BAA-835              strain
+        239935      Akkermansia muciniphila                           species
+        314101      uncultured murine large bowel bacterium BAC 54B   species
+        11932       Mouse Intracisternal A-particle                   species
+        1327037     Croceibacter phage P2559Y                         species
+        123124124                                                     
+        3                                                             
+        92489       Erwinia oleae                                     species
+        1458427     Serpentinomonas raichei                           species
+   
 
 1. Show lineage consisting of taxids:
 
