@@ -518,6 +518,7 @@
 <!-- TOC -->
 
 <ul>
+<li><a href="#usage-and-examples">Usage and Examples</a></li>
 <li><a href="#before-use">Before use</a></li>
 <li><a href="#taxonkit">taxonkit</a></li>
 <li><a href="#list">list</a></li>
@@ -537,7 +538,7 @@
 <h2 id="taxonkit">taxonkit</h2>
 <pre><code class="text">TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.6.0
+Version: 0.6.1
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -779,7 +780,9 @@ Usage:
 Flags:
   -d, --delimiter string      field delimiter in lineage (default &quot;;&quot;)
   -h, --help                  help for lineage
+  -L, --no-lineage            do not show lineage, when user just want names or/and ranks
   -t, --show-lineage-taxids   appending lineage consisting of taxids
+  -n, --show-name             appending scientific name
   -r, --show-rank             appending rank of taxids
   -c, --show-status-code      show status code between lineage
   -i, --taxid-field int       field index of taxid. data should be tab-separated (default 1)
@@ -805,23 +808,23 @@ $ cat taxids.txt
 92489
 1458427
 
-$ taxonkit lineage taxids.txt | tee lineage.txt
-14:27:14.600 [WARN] taxid 92489 was merged into 796334
-14:27:14.600 [WARN] taxid 1458427 was merged into 1458425
-14:27:14.600 [WARN] taxid 123124124 not found
-14:27:14.600 [WARN] taxid 3 was deleted
+$ taxonkit lineage taxids.txt | tee lineage.txt 
+19:22:13.077 [WARN] taxid 92489 was merged into 796334
+19:22:13.077 [WARN] taxid 1458427 was merged into 1458425
+19:22:13.077 [WARN] taxid 123124124 not found
+19:22:13.077 [WARN] taxid 3 was deleted
 9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
 9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Artiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus
 376619  cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS
 349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
 239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-11932   Viruses;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+11932   Viruses;Riboviria;Pararnavirae;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+1327037 Viruses;Duplodnaviria;Heunggongvirae;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
 123124124
 3
 92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
-1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
+1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raicheisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 </code></pre>
 </li>
 <li>
@@ -871,37 +874,37 @@ $ cat input.txt \
 </code></pre>
 </li>
 <li>
-<p>Show rank</p>
-<pre><code>$ taxonkit lineage -r taxids.txt | cut -f 1,3
-9606    species
-9913    species
-376619  no rank
-349741  no rank
-239935  species
-314101  species
-11932   species
-1327037 species
-123124124
-3
-92489   species
-1458427 species
+<p>Only show name and rank</p>
+<pre><code>$ taxonkit lineage -r -n -L taxids.txt | csvtk pretty -t
+9606        Homo sapiens                                      species
+9913        Bos taurus                                        species
+376619      Francisella tularensis subsp. holarctica LVS      strain
+349741      Akkermansia muciniphila ATCC BAA-835              strain
+239935      Akkermansia muciniphila                           species
+314101      uncultured murine large bowel bacterium BAC 54B   species
+11932       Mouse Intracisternal A-particle                   species
+1327037     Croceibacter phage P2559Y                         species
+123124124                                                     
+3                                                             
+92489       Erwinia oleae                                     species
+1458427     Serpentinomonas raichei                           species
 </code></pre>
 </li>
 <li>
 <p>Show lineage consisting of taxids:</p>
 <pre><code>$ taxonkit lineage -t taxids.txt
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
-9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Artiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus     131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314145;91561;9845;35500;9895;27592;9903;9913
+9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens  131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314146;9443;376913;314293;9526;314295;9604;207598;9605;9606
+9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Artiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus   131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;40674;32525;9347;1437010;314145;91561;9845;35500;9895;27592;9903;9913
 376619  cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS     131567;2;1224;1236;72273;34064;262;263;119857;376619
-349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835        131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
-239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila     131567;2;1783257;74201;203494;48461;1647988;239934;239935
+349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835      131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
+239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila   131567;2;1783257;74201;203494;48461;1647988;239934;239935
 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B       131567;2;48479;314101
-11932   Viruses;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle    10239;2169561;11632;35276;11749;11932
-1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y   10239;28883;10699;196894;1327037
+11932   Viruses;Riboviria;Pararnavirae;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle    10239;2559587;2732397;2732409;2732514;2169561;11632;35276;11749;11932
+1327037 Viruses;Duplodnaviria;Heunggongvirae;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y   10239;2731341;2731360;2731618;2731619;28883;10699;196894;1327037
 123124124
 3
-92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae131567;2;1224;1236;91347;1903409;551;796334
-1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei      131567;2;1224;28216;80840;80864;2490452;1458425
+92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae       131567;2;1224;1236;91347;1903409;551;796334
+1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei    131567;2;1224;28216;80840;80864;2490452;1458425
 </code></pre>
 <p>or read taxids from STDIN:</p>
 <pre><code>$ cat taxids.txt | taxonkit lineage
@@ -956,8 +959,8 @@ Flags:
 349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
 239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-11932   Viruses;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+11932   Viruses;Riboviria;Pararnavirae;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+1327037 Viruses;Duplodnaviria;Heunggongvirae;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
 92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
 1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 </code></pre>
@@ -965,7 +968,7 @@ Flags:
 <li>
 <p>Default output format (<code>"{k};{p};{c};{o};{f};{g};{s}"</code>)</p>
 <pre><code># reformated lineages are appended to the input data
-$ taxonkit reformat lineage.txt |
+$ taxonkit reformat lineage.txt 
 ...
 239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila     Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 ...
@@ -980,8 +983,8 @@ $ cut -f 1,3 lineage.txt.reformat
 349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
-11932   Viruses;;;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-1327037 Viruses;;;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
+11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
 92489   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
 1458427 Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 
@@ -992,17 +995,17 @@ $ cat lineage.txt \
     | csvtk -H -t sep -f 2 -s ';' -R \
     | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
     | csvtk pretty -t
-taxid     kindom      phylum            class                 order                family            genus                        species
-9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
-9913      Eukaryota   Chordata          Mammalia              Artiodactyla         Bovidae           Bos                          Bos taurus
-376619    Bacteria    Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
-349741    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
-239935    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
-314101    Bacteria                                                                                                                uncultured murine large bowel bacterium BAC 54B
-11932     Viruses                                             Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
-1327037   Viruses                                             Caudovirales         Siphoviridae                                   Croceibacter phage P2559Y
-92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
-1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
+    taxid     kindom      phylum            class                 order                family            genus                        species
+    9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
+    9913      Eukaryota   Chordata          Mammalia              Artiodactyla         Bovidae           Bos                          Bos taurus
+    376619    Bacteria    Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
+    349741    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+    239935    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+    314101    Bacteria                                                                                                                uncultured murine large bowel bacterium BAC 54B
+    11932     Viruses     Artverviricota    Revtraviricetes       Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
+    1327037   Viruses     Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae                                   Croceibacter phage P2559Y
+    92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
+    1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
 </code></pre>
 </li>
 <li>
@@ -1013,28 +1016,30 @@ taxid     kindom      phylum            class                 order             
     | csvtk -H -t sep -f 2 -s ';' -R \
     | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
     | csvtk pretty -t            
-9606      2759     7711     40674    9443      9604      9605      9606
-9913      2759     7711     40674    91561     9895      9903      9913
-376619    2        1224     1236     72273     34064     262       263
-349741    2        74201    203494   48461     1647988   239934    239935
-239935    2        74201    203494   48461     1647988   239934    239935
-314101    2                                                        314101
-11932     10239                      2169561   11632     11749     11932
-1327037   10239                      28883     10699               1327037
-92489     2        1224     1236     91347     1903409   551       796334
-1458427   2        1224     28216    80840     80864     2490452   1458425
+taxid     kindom   phylum    class     order     family    genus     species
+9606      2759     7711      40674     9443      9604      9605      9606
+9913      2759     7711      40674     91561     9895      9903      9913
+376619    2        1224      1236      72273     34064     262       263
+349741    2        74201     203494    48461     1647988   239934    239935
+239935    2        74201     203494    48461     1647988   239934    239935
+314101    2                                                          314101
+11932     10239    2732409   2732514   2169561   11632     11749     11932
+1327037   10239    2731618   2731619   28883     10699               1327037
+92489     2        1224      1236      91347     1903409   551       796334
+1458427   2        1224      28216     80840     80864     2490452   1458425
 </code></pre>
 </li>
 <li>
 <p>Use custom symbols for unclassfied ranks</p>
 <pre><code>$ taxonkit reformat lineage.txt --miss-rank-repl "__" | cut -f 3
+Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
 Eukaryota;Chordata;Mammalia;Artiodactyla;Bovidae;Bos;Bos taurus
 Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
 Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
 Bacteria;__;__;__;__;__;uncultured murine large bowel bacterium BAC 54B
-Viruses;__;__;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-Viruses;__;__;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
+Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
 Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 </code></pre>
@@ -1057,15 +1062,39 @@ taxid     kindom      phylum                         class                      
 349741    Bacteria    Verrucomicrobia                Verrucomicrobiae              Verrucomicrobiales            Akkermansiaceae                Akkermansia                       Akkermansia muciniphila
 239935    Bacteria    Verrucomicrobia                Verrucomicrobiae              Verrucomicrobiales            Akkermansiaceae                Akkermansia                       Akkermansia muciniphila
 314101    Bacteria    unclassified Bacteria phylum   unclassified Bacteria class   unclassified Bacteria order   unclassified Bacteria family   unclassified Bacteria genus       uncultured murine large bowel bacterium BAC 54B
-11932     Viruses     unclassified Viruses phylum    unclassified Viruses class    Ortervirales                  Retroviridae                   Intracisternal A-particles        Mouse Intracisternal A-particle
-1327037   Viruses     unclassified Viruses phylum    unclassified Viruses class    Caudovirales                  Siphoviridae                   unclassified Siphoviridae genus   Croceibacter phage P2559Y
+11932     Viruses     Artverviricota                 Revtraviricetes               Ortervirales                  Retroviridae                   Intracisternal A-particles        Mouse Intracisternal A-particle
+1327037   Viruses     Uroviricota                    Caudoviricetes                Caudovirales                  Siphoviridae                   unclassified Siphoviridae genus   Croceibacter phage P2559Y
 92489     Bacteria    Proteobacteria                 Gammaproteobacteria           Enterobacterales              Erwiniaceae                    Erwinia                           Erwinia oleae
 1458427   Bacteria    Proteobacteria                 Betaproteobacteria            Burkholderiales               Comamonadaceae                 Serpentinomonas                   Serpentinomonas raichei
 </code></pre>
 </li>
 <li>
+<p>Only some ranks</p>
+<pre><code>$ cat lineage.txt \
+    | taxonkit reformat -F -f "{s};{p}"\
+    | csvtk -H -t cut -f 1,3 \
+    | csvtk -H -t sep -f 2 -s ';' -R \
+    | csvtk add-header -t -n taxid,species,phylum \
+    | csvtk pretty -t
+taxid     species                                           phylum
+9606      Homo sapiens                                      Chordata
+9913      Bos taurus                                        Chordata
+376619    Francisella tularensis                            Proteobacteria
+349741    Akkermansia muciniphila                           Verrucomicrobia
+239935    Akkermansia muciniphila                           Verrucomicrobia
+314101    uncultured murine large bowel bacterium BAC 54B   unclassified Bacteria phylum
+11932     Mouse Intracisternal A-particle                   Artverviricota
+1327037   Croceibacter phage P2559Y                         Uroviricota
+92489     Erwinia oleae                                     Proteobacteria
+1458427   Serpentinomonas raichei                           Proteobacteria
+</code></pre>
+</li>
+<li>
 <p>Support tab in format string</p>
-<pre><code>$ echo 9606 | taxonkit lineage | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}" | csvtk cut -t -f -2
+<pre><code>$ echo 9606 \
+    | taxonkit lineage \
+    | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}" \
+    | csvtk cut -t -f -2
 9606    Eukaryota       Chordata        Mammalia        Primates        Hominidae       Homo    Homo sapiens
 </code></pre>
 </li>
