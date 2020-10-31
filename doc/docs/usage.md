@@ -27,7 +27,7 @@ And copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data direc
 ```text
 TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.6.1
+Version: 0.6.2
 
 Author: Wei Shen <shenwei356@gmail.com>
 
