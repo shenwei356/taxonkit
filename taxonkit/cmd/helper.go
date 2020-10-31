@@ -34,7 +34,7 @@ import (
 )
 
 // VERSION of taxonkit
-const VERSION = "0.6.1"
+const VERSION = "0.6.2"
 
 // Config is the struct containing all global flags
 type Config struct {

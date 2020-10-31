@@ -176,7 +176,11 @@ column by flag "-t/--show-lineage-taxids".
 				ranks[i] = rank
 				if srank, ok = rank2symbol[rank]; ok {
 					replacements[srank] = name2Name[name]
-					ireplacements[srank] = fmt.Sprintf("%d", name2taxid[name])
+					if i == 0 {
+						ireplacements[srank] = fmt.Sprintf("%d", name2taxid[name])
+					} else {
+						ireplacements[srank] = fmt.Sprintf("%d", name2parent2taxid[name][plname])
+					}
 					srank2idx[srank] = i
 					sranks[i] = srank
 				}
