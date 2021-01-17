@@ -1,4 +1,4 @@
-// Copyright © 2016-2020 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2021 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,18 @@ import (
 // name2taxidCmd represents the fx2tab command
 var name2taxidCmd = &cobra.Command{
 	Use:   "name2taxid",
-	Short: "query taxid by taxon scientific name",
-	Long: `query taxid by taxon scientific name
+	Short: "Convert scientific names to taxIDs",
+	Long: `Convert scientific names to taxIDs
+
+Attention:
+
+  1. Some taxIDs share the same scientific names, e.g, Drosophila.
+     These input lines are duplicated with multiple taxIDs.
+
+    $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L
+    Drosophila      7215    genus
+    Drosophila      32281   subgenus
+    Drosophila      2081351 genus
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {

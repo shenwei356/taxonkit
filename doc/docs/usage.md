@@ -93,7 +93,7 @@ Examples
 
 1. Default usage
 
-        :::sh
+        
         $ taxonkit list --ids 9605,239934
         9605
           9606
@@ -187,7 +187,7 @@ Examples
             1945966 [species] Akkermansia sp. UBA7090
             2478952 [species] Akkermansia sp. aa_0143
 
-    **Performance:** Time and memory usage for whole taxon tree:
+    **Performance:** Time and memory usage for whole taxonomy tree:
 
         $ # emptying the buffers cache
         $ su -c "free && sync && echo 3 > /proc/sys/vm/drop_caches && free"
@@ -658,6 +658,19 @@ Example data
         uncultured murine large bowel bacterium BAC 54B 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
         Croceibacter phage P2559Y       1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
 
+1. **Some taxIDs share the same scientific names**, e.g, Drosophila.
+
+        $ echo Drosophila \
+            | taxonkit name2taxid \
+            | taxonkit lineage -i 2 -r \
+            | taxonkit reformat -i 3 \
+            | csvtk cut -H -t -f 1,2,4,5 \
+            | csvtk pretty -t
+        Drosophila   7215      genus      Eukaryota;Arthropoda;Insecta;Diptera;Drosophilidae;Drosophila;
+        Drosophila   32281     subgenus   Eukaryota;Arthropoda;Insecta;Diptera;Drosophilidae;Drosophila;
+        Drosophila   2081351   genus      Eukaryota;Basidiomycota;Agaricomycetes;Agaricales;Psathyrellaceae;Drosophila;
+
+        
 ## taxid-changelog
 
 Usage

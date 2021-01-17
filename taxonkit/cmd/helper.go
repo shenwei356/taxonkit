@@ -1,4 +1,4 @@
-// Copyright © 2016-2020 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2021 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -49,6 +49,10 @@ type Config struct {
 	LineBuffered bool
 }
 
+func errDataNotFound(dataDir string) {
+	checkError(fmt.Errorf(`taxonomy data not found, please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp", "nodes.dmp", "delnodes.dmp", and "merged.dmp" to %s`, dataDir))
+}
+
 func getConfigs(cmd *cobra.Command) Config {
 	var val, dataDir string
 	if val = os.Getenv("TAXONKIT_DB"); val != "" {
@@ -60,16 +64,35 @@ func getConfigs(cmd *cobra.Command) Config {
 	existed, err := pathutil.DirExists(dataDir)
 	checkError(err)
 	if !existed {
-		log.Errorf(`data directory not created. please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp", "nodes.dmp", "delnodes.dmp", and "merged.dmp" to %s`, dataDir)
+		checkError(os.MkdirAll(dataDir, 0777))
+		errDataNotFound(dataDir)
 	}
+
+	nodesFile := filepath.Join(dataDir, "nodes.dmp")
+	existed, err = pathutil.Exists(nodesFile)
+	checkError(err)
+	if !existed {
+		errDataNotFound(dataDir)
+	}
+
+	namesFile := filepath.Join(dataDir, "names.dmp")
+	existed, err = pathutil.Exists(namesFile)
+	checkError(err)
+	if !existed {
+		errDataNotFound(dataDir)
+	}
+
+	delNodesFile := filepath.Join(dataDir, "delnodes.dmp")
+	mergedFile := filepath.Join(dataDir, "merged.dmp")
 
 	return Config{Threads: getFlagPositiveInt(cmd, "threads"),
 		OutFile:      getFlagString(cmd, "out-file"),
 		DataDir:      dataDir,
-		NodesFile:    filepath.Join(dataDir, "nodes.dmp"),
-		NamesFile:    filepath.Join(dataDir, "names.dmp"),
-		DelNodesFile: filepath.Join(dataDir, "delnodes.dmp"),
-		MergedFile:   filepath.Join(dataDir, "merged.dmp"),
+		NodesFile:    nodesFile,
+		NamesFile:    namesFile,
+		DelNodesFile: delNodesFile,
+		MergedFile:   mergedFile,
+
 		Verbose:      getFlagBool(cmd, "verbose"),
 		LineBuffered: getFlagBool(cmd, "line-buffered"),
 	}
@@ -104,6 +127,11 @@ type Taxon struct {
 	Rank   string
 }
 
+// ChunkSize is the chunk Size for breader
+var ChunkSize = 100
+
+var mapInitialSize = 8 << 10
+
 var nameParseFunc = func(line string) (interface{}, bool, error) {
 	items := strings.Split(line, "\t")
 	if len(items) < 7 {
@@ -134,16 +162,19 @@ var nameParseFunc2 = func(line string) (interface{}, bool, error) {
 	return Taxon{Taxid: int32(id), Name: items[2]}, true, nil
 }
 
+// taxid -> name
 func getTaxonNames(file string, bufferSize int, chunkSize int) map[int32]string {
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
 	checkError(err)
 
+	taxid2name := make(map[int32]string, mapInitialSize)
+
 	var taxon Taxon
-	taxid2name := make(map[int32]string)
+	var data interface{}
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
-		for _, data := range chunk.Data {
+		for _, data = range chunk.Data {
 			taxon = data.(Taxon)
 			taxid2name[taxon.Taxid] = taxon.Name
 		}
@@ -151,6 +182,7 @@ func getTaxonNames(file string, bufferSize int, chunkSize int) map[int32]string 
 	return taxid2name
 }
 
+// names -> []taxid
 func getTaxonName2Taxids(file string, limit2SciName bool, bufferSize int, chunkSize int) map[string][]int32 {
 	var reader *breader.BufferedReader
 	var err error
@@ -161,20 +193,23 @@ func getTaxonName2Taxids(file string, limit2SciName bool, bufferSize int, chunkS
 	}
 	checkError(err)
 
+	name2taxids := make(map[string][]int32, mapInitialSize)
+
 	var taxon Taxon
-	name2taxids := make(map[string][]int32)
+	var data interface{}
 	var ok bool
 	var name string
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
-		for _, data := range chunk.Data {
+		for _, data = range chunk.Data {
 			taxon = data.(Taxon)
 			name = strings.ToLower(taxon.Name)
 			if _, ok = name2taxids[name]; !ok {
-				name2taxids[name] = make([]int32, 0, 1)
+				name2taxids[name] = []int32{taxon.Taxid}
+			} else {
+				name2taxids[name] = append(name2taxids[name], taxon.Taxid)
 			}
-			name2taxids[name] = append(name2taxids[name], taxon.Taxid)
 		}
 	}
 	return name2taxids
@@ -182,22 +217,25 @@ func getTaxonName2Taxids(file string, limit2SciName bool, bufferSize int, chunkS
 
 // some taxons from different rank may have same names,
 // so we use name and name of its parent to point to the right taxid.
-func getName2Parent2Taxid(fileNodes string,
+func getName2Parent2Taxid(
+	fileNodes string,
 	fileNames string,
 	bufferSize int,
-	chunkSize int) (
+	chunkSize int,
+) (
 	taxid2taxon map[int32]*Taxon,
 	name2parent2taxid map[string]map[string]int32,
-	name2taxid map[string]int32) {
+	name2taxid map[string]int32,
+) {
 
-	// taxid -> rank, taxid -> parentid
+	taxid2taxon = make(map[int32]*Taxon, mapInitialSize)
+
+	name2parent2taxid = make(map[string]map[string]int32, mapInitialSize)
+
+	name2taxid = make(map[string]int32, mapInitialSize) // not accurate
+
 	reader, err := breader.NewBufferedReader(fileNodes, bufferSize, chunkSize, taxonParseFunc)
 	checkError(err)
-
-	// 2000000 comes from $(wc -l nodes.dmp)
-	taxid2taxon = make(map[int32]*Taxon, 2000000)
-	name2parent2taxid = make(map[string]map[string]int32, 2000000)
-	name2taxid = make(map[string]int32, 2000000) // not accurate
 
 	// taxid -> rank, taxid -> parentid
 	var taxon Taxon
@@ -222,7 +260,7 @@ func getName2Parent2Taxid(fileNodes string,
 	checkError(err)
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
-		for _, data := range chunk.Data {
+		for _, data = range chunk.Data {
 			taxon = data.(Taxon)
 			taxid2taxon[taxon.Taxid].Name = taxon.Name
 		}
@@ -230,27 +268,40 @@ func getName2Parent2Taxid(fileNodes string,
 
 	// name -> parent-name -> taxid
 	var name, pname string
+	var _n2i map[string]int32
 	for taxid, taxon := range taxid2taxon {
 		name = strings.ToLower(taxon.Name)
 		pname = strings.ToLower(taxid2taxon[taxid2taxon[taxid].Parent].Name)
-		if _, ok = name2parent2taxid[name]; !ok {
-			name2parent2taxid[name] = make(map[string]int32, 1)
+		if _n2i, ok = name2parent2taxid[name]; !ok {
+			name2parent2taxid[name] = map[string]int32{pname: taxid}
+		} else {
+			_n2i[pname] = taxid
 		}
-		name2parent2taxid[name][pname] = taxid
+
 		name2taxid[name] = taxid
 	}
 	return
 }
 
-func getTaxid2Lineage(fileNodes string, fileNames string, bufferSize int, chunkSize int) (map[int32][]int32, map[int32]string, map[int32]string) {
+// taxid -> lineage
+func getTaxid2Lineage(fileNodes string,
+	fileNames string,
+	bufferSize int,
+	chunkSize int,
+) (
+	map[int32][]int32, // taxid2lineageTaxids
+	map[int32]string, // taxid2name
+	map[int32]string, // taxid2rank
+) {
 	var names map[int32]string
 	names = getTaxonNames(fileNames, bufferSize, chunkSize)
 
 	reader, err := breader.NewBufferedReader(fileNodes, bufferSize, chunkSize, taxonParseFunc)
 	checkError(err)
 
-	tree := make(map[int32]int32)
-	ranks := make(map[int32]string)
+	tree := make(map[int32]int32, mapInitialSize)
+	ranks := make(map[int32]string, mapInitialSize)
+
 	var taxon Taxon
 	var child, parent int32
 	var n int64
@@ -268,12 +319,12 @@ func getTaxid2Lineage(fileNodes string, fileNames string, bufferSize int, chunkS
 		}
 	}
 
-	taxid2lineageTaxids := make(map[int32][]int32, 10000)
+	taxid2lineageTaxids := make(map[int32][]int32, mapInitialSize)
 
 	var ok bool
 	var i, j int
 	for taxid := range tree {
-		lineageTaxids := []int32{}
+		lineageTaxids := make([]int32, 0, 8)
 		child = taxid
 		for true {
 			parent, ok = tree[child]
@@ -288,7 +339,8 @@ func getTaxid2Lineage(fileNodes string, fileNames string, bufferSize int, chunkS
 			}
 			child = parent
 		}
-		// reverse lineageTaxids
+
+		// reverse lineageTaxids in place
 		for i = len(lineageTaxids)/2 - 1; i >= 0; i-- {
 			j = len(lineageTaxids) - 1 - i
 			lineageTaxids[i], lineageTaxids[j] = lineageTaxids[j], lineageTaxids[i]
@@ -329,7 +381,7 @@ var delnodesParseFunc = func(line string) (interface{}, bool, error) {
 }
 
 func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
-	taxids := make([]int32, 0, 100000)
+	taxids := make([]int32, 0, 1<<10)
 
 	existed, err := pathutil.Exists(file)
 	if err != nil {
@@ -343,10 +395,11 @@ func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
 	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
 	checkError(err)
 	var taxid delNode
+	var data interface{}
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
-		for _, data := range chunk.Data {
+		for _, data = range chunk.Data {
 			taxid = data.(delNode)
 			taxids = append(taxids, int32(taxid))
 		}
@@ -355,7 +408,7 @@ func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
 }
 
 func getDelnodesMap(file string, bufferSize int, chunkSize int) map[int32]struct{} {
-	taxids := make(map[int32]struct{}, 100000)
+	taxids := make(map[int32]struct{}, 1<<10)
 
 	existed, err := pathutil.Exists(file)
 	if err != nil {
@@ -370,10 +423,11 @@ func getDelnodesMap(file string, bufferSize int, chunkSize int) map[int32]struct
 	checkError(err)
 
 	var taxid delNode
+	var data interface{}
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
-		for _, data := range chunk.Data {
+		for _, data = range chunk.Data {
 			taxid = data.(delNode)
 			taxids[int32(taxid)] = struct{}{}
 		}
@@ -382,6 +436,7 @@ func getDelnodesMap(file string, bufferSize int, chunkSize int) map[int32]struct
 	return taxids
 }
 
+// [from, to]
 type mergedNodes [2]int32
 
 var mergedParseFunc = func(line string) (interface{}, bool, error) {
@@ -401,7 +456,7 @@ var mergedParseFunc = func(line string) (interface{}, bool, error) {
 }
 
 func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
-	merges := make([][2]int32, 0, 10000)
+	merges := make([][2]int32, 0, 1<<10)
 
 	existed, err := pathutil.Exists(file)
 	if err != nil {
@@ -416,10 +471,11 @@ func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
 	checkError(err)
 
 	var merge mergedNodes
+	var data interface{}
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
-		for _, data := range chunk.Data {
+		for _, data = range chunk.Data {
 			merge = data.(mergedNodes)
 			merges = append(merges, [2]int32(merge))
 		}
@@ -429,7 +485,7 @@ func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
 }
 
 func getMergedNodesMap(file string, bufferSize int, chunkSize int) map[int32]int32 {
-	merges := make(map[int32]int32, 10000)
+	merges := make(map[int32]int32, 1<<10)
 
 	existed, err := pathutil.Exists(file)
 	if err != nil {
@@ -444,10 +500,11 @@ func getMergedNodesMap(file string, bufferSize int, chunkSize int) map[int32]int
 	checkError(err)
 
 	var merge mergedNodes
+	var data interface{}
 	for chunk := range reader.Ch {
 		checkError(chunk.Err)
 
-		for _, data := range chunk.Data {
+		for _, data = range chunk.Data {
 			merge = data.(mergedNodes)
 			merges[merge[0]] = merge[1]
 		}

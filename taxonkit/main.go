@@ -1,4 +1,4 @@
-// Copyright © 2016-2020 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2021 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,21 @@
 package main
 
 import (
-	// "runtime/pprof"
-
 	"github.com/shenwei356/taxonkit/taxonkit/cmd"
 )
 
+// "runtime/pprof"
+
 func main() {
-	// go tool pprof ./taxonkit pprof
-	// f, _ := os.Create("pprof")
-	// pprof.StartCPUProfile(f)
-	// defer pprof.StopCPUProfile()
+	// go tool pprof -http=:8080 cpu.pprof
+	// defer profile.Start(profile.CPUProfile, profile.ProfilePath(".")).Stop()
+
+	// go tool trace -http=:8080 trace.out
+	// defer profile.Start(profile.TraceProfile, profile.ProfilePath(".")).Stop()
+
+	// go tool pprof -http=:8080 mem.pprof
+	// defer profile.Start(profile.MemProfile, profile.MemProfileRate(1), profile.ProfilePath(".")).Stop()
+	// defer profile.Start(profile.MemProfile, profile.ProfilePath(".")).Stop()
 
 	cmd.Execute()
-
-	// go tool pprof --alloc_space ./taxonkit mprof
-	// f2, _ := os.Create("mprof")
-	// pprof.WriteHeapProfile(f2)
-	// defer f2.Close()
 }

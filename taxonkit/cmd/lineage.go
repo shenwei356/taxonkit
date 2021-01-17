@@ -1,4 +1,4 @@
-// Copyright © 2016-2020 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2021 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,24 +36,27 @@ import (
 // lineageCmd represents the lineage command
 var lineageCmd = &cobra.Command{
 	Use:   "lineage",
-	Short: "query lineage of given taxids",
-	Long: `query lineage of given taxids
+	Short: "Query taxonomic lineage of given taxIDs",
+	Long: `Query taxonomic lineage of given taxIDs
 
 Input:
-  - List of taxids, one taxid per line.
-  - Or tab-delimited format, please specify taxid field with flag -i/--taxid-field.
+
+  - List of taxIDs, one taxID per line.
+  - Or tab-delimited format, please specify taxID field 
+    with flag -i/--taxid-field (default 1).
   - Supporting (gzipped) file or STDIN.
 
 Output:
-  0. Input line.
-  1. Status code (optional with flag -c/--show-status-code)
+
+  1. Input line data.
+  2. (Optional) Status code (-c/--show-status-code), values:
      - "-1" for queries not found in whole database.
-     - "0" for deleted taxids, provided by "delnodes.dmp".
-     - New taxids for merged taxids, provided by "merged.dmp".
+     - "0" for deleted taxIDs, provided by "delnodes.dmp".
+     - New taxIDs for merged taxIDs, provided by "merged.dmp".
      - Taxids for these found in "nodes.dmp".
-  2. Lineage, delimiter can be changed with flag -d/--delimiter.
-  3. Lineage taxids (optional with flag -t/--show-lineage-taxids)
-  4. Rank (optional with flag -r/--show-rank)
+  3. Lineage, delimiter can be changed with flag -d/--delimiter.
+  4. (Optional) Lineage in taxIDs (-t/--show-lineage-taxids)
+  5. (Optional) Rank (-r/--show-rank)
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -116,7 +119,11 @@ Output:
 		checkError(err)
 
 		tree := make(map[int32]int32)
-		ranks := make(map[int32]string)
+		var ranks map[int32]string
+		if printRank {
+			ranks = make(map[int32]string)
+		}
+
 		var taxon Taxon
 		var child, parent int32
 		var n int64
@@ -129,7 +136,10 @@ Output:
 				child, parent = taxon.Taxid, taxon.Parent
 
 				tree[child] = parent
-				ranks[child] = taxon.Rank
+				if printRank {
+					ranks[child] = taxon.Rank
+				}
+
 				n++
 			}
 		}
@@ -164,7 +174,7 @@ Output:
 				return taxid2lineage{line, -1, "", ""}, true, nil
 			}
 
-			lineage := []string{}
+			lineage := make([]string, 0, 16)
 			lineageInTaxid := []string{}
 			var child, parent, newtaxid int32
 			var ok bool
@@ -235,7 +245,7 @@ Output:
 					buf.WriteString(t2l.line)
 
 					if showCode {
-						buf.WriteString(fmt.Sprintf("\t%d", t2l.taxid))
+						buf.WriteString("\t" + strconv.Itoa(int(t2l.taxid)))
 					}
 					if !noLineage {
 						buf.WriteString("\t" + t2l.lineage)
@@ -267,11 +277,11 @@ Output:
 
 func init() {
 	RootCmd.AddCommand(lineageCmd)
-	lineageCmd.Flags().BoolP("show-status-code", "c", false, "show status code between lineage")
+	lineageCmd.Flags().BoolP("show-status-code", "c", false, "show status code before lineage")
 	lineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `appending lineage consisting of taxids`)
 	lineageCmd.Flags().BoolP("show-rank", "r", false, `appending rank of taxids`)
 	lineageCmd.Flags().BoolP("show-name", "n", false, `appending scientific name`)
-	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. data should be tab-separated")
+	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. input data should be tab-separated")
 	lineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in lineage")
 	lineageCmd.Flags().BoolP("no-lineage", "L", false, "do not show lineage, when user just want names or/and ranks")
 }

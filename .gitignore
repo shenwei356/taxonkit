@@ -36,3 +36,5 @@ doc/site
 taxonkit/archive
 taxonkit/*.gz
 test.*
+*Rplots.pdf
+*.lineage

@@ -1,4 +1,4 @@
-// Copyright © 2016-2020 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2021 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -38,8 +38,8 @@ import (
 // taxidlogCmd represents the taxid-changelog command
 var taxidlogCmd = &cobra.Command{
 	Use:   "taxid-changelog",
-	Short: "create taxid changelog from dump archives",
-	Long: `create taxid changelog from dump archives
+	Short: "Create taxID changelog from dump archives",
+	Long: `Create taxID changelog from dump archives
 
 Steps:
 
@@ -55,7 +55,7 @@ Steps:
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp*.zip
 
     # option 2
-    # for bad network connection like mine
+    # for slow network connection
     url=https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
     wget $url -O - -o /dev/null \
         | grep taxdmp | perl -ne '/(taxdmp_.+?.zip)/; print "$1\n";' \
@@ -272,9 +272,9 @@ func createChangelog(config Config, path string, dirs []string) {
 	}()
 
 	// taxid -> change-code -> []changes
-	data := make(map[int32][]TaxidChange, 100000)
+	data := make(map[int32][]TaxidChange, 1<<10)
 
-	allMerges := make(map[int32]int32, 100000)
+	allMerges := make(map[int32]int32, 1<<10)
 
 	// version -> taxid -> name
 	taxid2names := make(map[int16]map[int32]string, len(dirs))

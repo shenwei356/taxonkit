@@ -1,4 +1,4 @@
-// Copyright © 2016-2020 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2021 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,8 +34,20 @@ import (
 // listCmd represents the fx2tab command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "list taxon tree of given taxids",
-	Long: `list taxon tree of given taxids
+	Short: "List taxonomic tree of given taxIDs",
+	Long: `List taxonomic tree of given taxIDs
+
+Examples:
+
+    $ taxonkit list --ids 9606 -n -r --indent "    "
+    9606 [species] Homo sapiens
+        63221 [subspecies] Homo sapiens neanderthalensis
+        741158 [subspecies] Homo sapiens subsp. 'Denisova'
+
+    $ taxonkit list --ids 9606 --indent ""
+    9606
+    63221
+    741158
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -65,7 +77,7 @@ var listCmd = &cobra.Command{
 			log.Infof("parsing delnodes file: %s", config.NamesFile)
 		}
 
-		delnodes = getDelnodesMap(config.DelNodesFile, config.Threads, 10)
+		delnodes = getDelnodesMap(config.DelNodesFile, config.Threads, ChunkSize)
 
 		if config.Verbose {
 			log.Infof("%d delnodes parsed", len(delnodes))
@@ -73,7 +85,7 @@ var listCmd = &cobra.Command{
 			log.Infof("parsing merged file: %s", config.NamesFile)
 		}
 
-		merged = getMergedNodesMap(config.MergedFile, config.Threads, 10)
+		merged = getMergedNodesMap(config.MergedFile, config.Threads, ChunkSize)
 
 		if config.Verbose {
 			log.Infof("%d merged nodes parsed", len(merged))
@@ -83,7 +95,7 @@ var listCmd = &cobra.Command{
 			if config.Verbose {
 				log.Infof("parsing names file: %s", config.NamesFile)
 			}
-			names = getTaxonNames(config.NamesFile, config.Threads, 10)
+			names = getTaxonNames(config.NamesFile, config.Threads, ChunkSize)
 			if config.Verbose {
 				log.Infof("%d names parsed", len(names))
 			}
@@ -208,7 +220,7 @@ var listCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(listCmd)
 
-	listCmd.Flags().StringP("ids", "", "", "taxid(s), multiple values should be separated by comma")
+	listCmd.Flags().StringP("ids", "", "", "taxID(s), multiple values should be separated by comma")
 	listCmd.Flags().StringP("indent", "", "  ", "indent")
 	listCmd.Flags().BoolP("show-rank", "r", false, `output rank`)
 	listCmd.Flags().BoolP("show-name", "n", false, `output scientific name`)

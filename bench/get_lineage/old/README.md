@@ -2,7 +2,7 @@
 
 ## Data set
 
-- [NCBI taxonomy](ftp://ftp.ncbi.nih.gov/taxonomy), version 2019-07-01
+- [NCBI taxonomy](ftp://ftp.ncbi.nih.gov/taxonomy), version 2021-01-01
 
 - taxids
     - small.txt (n=13)
