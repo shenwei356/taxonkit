@@ -29,10 +29,12 @@ import (
 	"runtime"
 	"sort"
 	"strings"
+	"sync"
 
 	"github.com/shenwei356/util/pathutil"
 	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
+	"github.com/twotwotwo/sorts"
 )
 
 // taxidlogCmd represents the taxid-changelog command
@@ -294,19 +296,44 @@ func createChangelog(config Config, path string, dirs []string) {
 	var toRecord bool
 	for version, dir := range dirs {
 		if config.Verbose {
-			log.Infof("parsing archive (%3d/%3d): %s", version+1, len(dirs), dir)
+			log.Infof("parsing archive (%2d / %2d): %s", version+1, len(dirs), dir)
 		}
-
-		// -------------- checking newly added and lineage-changed taxids --------------
 
 		if config.Verbose {
-			log.Infof("  parsing names.dmp & nodes.dmp")
+			log.Infof("  loading data ...")
 		}
 
-		taxid2lineageTaxids, taxid2name, taxid2rank := getTaxid2Lineage(
-			filepath.Join(path, dir, "nodes.dmp"), filepath.Join(path, dir, "names.dmp"),
-			config.Threads, 10,
-		)
+		var taxid2lineageTaxids map[int32][]int32
+		var taxid2rank map[int32]string
+		var taxid2name map[int32]string
+		var delTaxids []int32
+		var merges [][2]int32
+
+		var wg sync.WaitGroup
+		wg.Add(4)
+		go func() {
+			taxid2lineageTaxids, taxid2rank = getTaxid2LineageTaxids(filepath.Join(path, dir, "nodes.dmp"))
+			wg.Done()
+		}()
+		go func() {
+			taxid2name = getTaxonNames(filepath.Join(path, dir, "names.dmp"))
+			wg.Done()
+		}()
+		go func() {
+			delTaxids = getDelnodes(filepath.Join(path, dir, "delnodes.dmp"))
+			wg.Done()
+		}()
+		go func() {
+			merges = getMergedNodes(filepath.Join(path, dir, "merged.dmp"))
+			wg.Done()
+		}()
+		wg.Wait()
+
+		// -------------- checking newly added and lineage-changed taxids --------------
+		if config.Verbose {
+			log.Infof("  checking newly added and lineage-changed taxids")
+		}
+
 		taxid2names[int16(version)] = taxid2name
 		taxid2ranks[int16(version)] = taxid2rank
 
@@ -399,10 +426,9 @@ func createChangelog(config Config, path string, dirs []string) {
 		// -------------- checking deleted taxids --------------
 
 		if config.Verbose {
-			log.Infof("  parsing delnodes.dmp")
+			log.Infof("  checking deleted taxids")
 		}
 
-		delTaxids := getDelnodes(filepath.Join(path, dir, "delnodes.dmp"))
 		for _, taxid := range delTaxids {
 			if changes, ok = data[taxid]; !ok { // first record
 				data[taxid] = make([]TaxidChange, 0, 1)
@@ -432,9 +458,8 @@ func createChangelog(config Config, path string, dirs []string) {
 		// -------------- checking merged taxids --------------
 
 		if config.Verbose {
-			log.Infof("  parsing merged.dmp")
+			log.Infof("  checking merged taxids")
 		}
-		merges := getMergedNodes(filepath.Join(path, dir, "merged.dmp"))
 
 		for _, merge := range merges {
 			from, to = merge[0], merge[1]
@@ -539,7 +564,7 @@ func createChangelog(config Config, path string, dirs []string) {
 		changes = data[int32(taxid)]
 
 		// sort by version and then change
-		sort.Sort(TaxidChanges(changes))
+		sorts.Quicksort(TaxidChanges(changes))
 
 		for _, c = range changes {
 			items = make([]string, 0, len(header))

@@ -69,7 +69,7 @@ Attention:
 		if config.Verbose {
 			log.Infof("parsing names file: %s", config.NamesFile)
 		}
-		m = getTaxonName2Taxids(config.NamesFile, limite2SciName, config.Threads, 10)
+		m = getTaxonName2Taxids(config.NamesFile, limite2SciName)
 		if config.Verbose {
 			log.Infof("%d names parsed", len(m))
 		}
