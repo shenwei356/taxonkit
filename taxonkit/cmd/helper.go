@@ -21,15 +21,18 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/shenwei356/breader"
 	"github.com/shenwei356/util/pathutil"
+	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
 )
 
@@ -132,8 +135,13 @@ var ChunkSize = 100
 
 var mapInitialSize = 8 << 10
 
+var poolStringSliceL8 = &sync.Pool{New: func() interface{} {
+	return make([]string, 8)
+}}
 var nameParseFunc = func(line string) (interface{}, bool, error) {
-	items := strings.Split(line, "\t")
+	// items := strings.SplitN(line, "\t", 8)
+	items := poolStringSliceL8.Get().([]string)
+	stringSplitN(line, "\t", 8, &items)
 	if len(items) < 7 {
 		return nil, false, nil
 	}
@@ -144,11 +152,13 @@ var nameParseFunc = func(line string) (interface{}, bool, error) {
 	if e != nil {
 		return nil, false, e
 	}
-	return Taxon{Taxid: int32(id), Name: items[2]}, true, nil
+	taxon := Taxon{Taxid: int32(id), Name: items[2]}
+	poolStringSliceL8.Put(items)
+	return taxon, true, nil
 }
 
 var nameParseFunc2 = func(line string) (interface{}, bool, error) {
-	items := strings.Split(line, "\t")
+	items := strings.SplitN(line, "\t", 8)
 	if len(items) < 7 {
 		return nil, false, nil
 	}
@@ -163,22 +173,35 @@ var nameParseFunc2 = func(line string) (interface{}, bool, error) {
 }
 
 // taxid -> name
-func getTaxonNames(file string, bufferSize int, chunkSize int) map[int32]string {
-	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, nameParseFunc)
+func getTaxonNames(file string) map[int32]string {
+	fh, err := xopen.Ropen(file)
 	checkError(err)
 
 	taxid2name := make(map[int32]string, mapInitialSize)
 
-	var taxon Taxon
-	var data interface{}
-	for chunk := range reader.Ch {
-		checkError(chunk.Err)
+	items := make([]string, 8)
 
-		for _, data = range chunk.Data {
-			taxon = data.(Taxon)
-			taxid2name[taxon.Taxid] = taxon.Name
+	scanner := bufio.NewScanner(fh)
+	var id int
+	for scanner.Scan() {
+		stringSplitN(scanner.Text(), "\t", 8, &items)
+		if len(items) < 7 {
+			continue
 		}
+		if items[6] != "scientific name" {
+			continue
+		}
+		id, err = strconv.Atoi(items[0])
+		if err != nil {
+			continue
+		}
+
+		taxid2name[int32(id)] = items[2]
 	}
+	if err := scanner.Err(); err != nil {
+		checkError(err)
+	}
+
 	return taxid2name
 }
 
@@ -242,7 +265,6 @@ func getName2Parent2Taxid(
 	var data interface{}
 	var ok bool
 	for chunk := range reader.Ch {
-		checkError(chunk.Err)
 		for _, data = range chunk.Data {
 			taxon = data.(Taxon)
 			// clone
@@ -294,7 +316,7 @@ func getTaxid2Lineage(fileNodes string,
 	map[int32]string, // taxid2rank
 ) {
 	var names map[int32]string
-	names = getTaxonNames(fileNames, bufferSize, chunkSize)
+	names = getTaxonNames(fileNames)
 
 	reader, err := breader.NewBufferedReader(fileNodes, bufferSize, chunkSize, taxonParseFunc)
 	checkError(err)
@@ -350,8 +372,13 @@ func getTaxid2Lineage(fileNodes string,
 	return taxid2lineageTaxids, names, ranks
 }
 
+var poolStringSliceL6 = &sync.Pool{New: func() interface{} {
+	return make([]string, 6)
+}}
 var taxonParseFunc = func(line string) (interface{}, bool, error) {
-	items := strings.SplitN(line, "\t", 6)
+	// items := strings.SplitN(line, "\t", 6)
+	items := poolStringSliceL6.Get().([]string)
+	stringSplitN(line, "\t", 6, &items)
 	if len(items) < 6 {
 		return nil, false, nil
 	}
@@ -363,24 +390,59 @@ var taxonParseFunc = func(line string) (interface{}, bool, error) {
 	if e != nil {
 		return nil, false, e
 	}
-	return Taxon{Taxid: int32(child), Parent: int32(parent), Rank: items[4]}, true, nil
+
+	taxon := Taxon{Taxid: int32(child), Parent: int32(parent), Rank: items[4]}
+	poolStringSliceL6.Put(items)
+	return taxon, true, nil
 }
 
-type delNode int32
+func getNodes(file string, recordRank bool) (map[int32]int32, map[int32]string) {
+	tree := make(map[int32]int32, mapInitialSize)
+	var ranks map[int32]string
+	if recordRank {
+		ranks = make(map[int32]string, mapInitialSize)
+	}
 
-var delnodesParseFunc = func(line string) (interface{}, bool, error) {
-	items := strings.Split(line, "\t")
-	if len(items) < 2 {
-		return nil, false, nil
+	fh, err := xopen.Ropen(file)
+	checkError(err)
+
+	items := make([]string, 6)
+	scanner := bufio.NewScanner(fh)
+	var _child, _parent int
+	var child, parent int32
+	var rank string
+	for scanner.Scan() {
+		stringSplitN(scanner.Text(), "\t", 6, &items)
+		if len(items) < 6 {
+			continue
+		}
+
+		_child, err = strconv.Atoi(items[0])
+		if err != nil {
+			continue
+		}
+
+		_parent, err = strconv.Atoi(items[2])
+		if err != nil {
+			continue
+		}
+		child, parent, rank = int32(_child), int32(_parent), items[4]
+
+		// ----------------------------------
+
+		tree[child] = parent
+		if recordRank {
+			ranks[child] = rank
+		}
 	}
-	id, e := strconv.Atoi(items[0])
-	if e != nil {
-		return nil, false, e
+	if err := scanner.Err(); err != nil {
+		checkError(err)
 	}
-	return delNode(id), true, nil
+
+	return tree, ranks
 }
 
-func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
+func getDelnodes(file string) []int32 {
 	taxids := make([]int32, 0, 1<<10)
 
 	existed, err := pathutil.Exists(file)
@@ -392,22 +454,33 @@ func getDelnodes(file string, bufferSize int, chunkSize int) []int32 {
 		return taxids
 	}
 
-	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
+	fh, err := xopen.Ropen(file)
 	checkError(err)
-	var taxid delNode
-	var data interface{}
-	for chunk := range reader.Ch {
-		checkError(chunk.Err)
 
-		for _, data = range chunk.Data {
-			taxid = data.(delNode)
-			taxids = append(taxids, int32(taxid))
+	items := make([]string, 2)
+
+	scanner := bufio.NewScanner(fh)
+	var id int
+	for scanner.Scan() {
+		stringSplitN(scanner.Text(), "\t", 2, &items)
+		if len(items) < 2 {
+			continue
 		}
+		id, err = strconv.Atoi(items[0])
+		if err != nil {
+			continue
+		}
+
+		taxids = append(taxids, int32(id))
 	}
+	if err := scanner.Err(); err != nil {
+		checkError(err)
+	}
+
 	return taxids
 }
 
-func getDelnodesMap(file string, bufferSize int, chunkSize int) map[int32]struct{} {
+func getDelnodesMap(file string) map[int32]struct{} {
 	taxids := make(map[int32]struct{}, 1<<10)
 
 	existed, err := pathutil.Exists(file)
@@ -419,18 +492,27 @@ func getDelnodesMap(file string, bufferSize int, chunkSize int) map[int32]struct
 		return taxids
 	}
 
-	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, delnodesParseFunc)
+	fh, err := xopen.Ropen(file)
 	checkError(err)
 
-	var taxid delNode
-	var data interface{}
-	for chunk := range reader.Ch {
-		checkError(chunk.Err)
+	items := make([]string, 2)
 
-		for _, data = range chunk.Data {
-			taxid = data.(delNode)
-			taxids[int32(taxid)] = struct{}{}
+	scanner := bufio.NewScanner(fh)
+	var id int
+	for scanner.Scan() {
+		stringSplitN(scanner.Text(), "\t", 2, &items)
+		if len(items) < 2 {
+			continue
 		}
+		id, err = strconv.Atoi(items[0])
+		if err != nil {
+			continue
+		}
+
+		taxids[int32(id)] = struct{}{}
+	}
+	if err := scanner.Err(); err != nil {
+		checkError(err)
 	}
 
 	return taxids
@@ -440,7 +522,7 @@ func getDelnodesMap(file string, bufferSize int, chunkSize int) map[int32]struct
 type mergedNodes [2]int32
 
 var mergedParseFunc = func(line string) (interface{}, bool, error) {
-	items := strings.Split(line, "\t")
+	items := strings.SplitN(line, "\t", 4)
 	if len(items) < 4 {
 		return nil, false, nil
 	}
@@ -455,7 +537,7 @@ var mergedParseFunc = func(line string) (interface{}, bool, error) {
 	return mergedNodes([2]int32{int32(from), int32(to)}), true, nil
 }
 
-func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
+func getMergedNodes(file string) [][2]int32 {
 	merges := make([][2]int32, 0, 1<<10)
 
 	existed, err := pathutil.Exists(file)
@@ -467,24 +549,37 @@ func getMergedNodes(file string, bufferSize int, chunkSize int) [][2]int32 {
 		return merges
 	}
 
-	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, mergedParseFunc)
+	fh, err := xopen.Ropen(file)
 	checkError(err)
 
-	var merge mergedNodes
-	var data interface{}
-	for chunk := range reader.Ch {
-		checkError(chunk.Err)
+	items := make([]string, 4)
 
-		for _, data = range chunk.Data {
-			merge = data.(mergedNodes)
-			merges = append(merges, [2]int32(merge))
+	scanner := bufio.NewScanner(fh)
+	var from, to int
+	for scanner.Scan() {
+		stringSplitN(scanner.Text(), "\t", 4, &items)
+		if len(items) < 4 {
+			continue
 		}
+		from, err = strconv.Atoi(items[0])
+		if err != nil {
+			continue
+		}
+		to, err = strconv.Atoi(items[2])
+		if err != nil {
+			continue
+		}
+
+		merges = append(merges, [2]int32{int32(from), int32(to)})
+	}
+	if err := scanner.Err(); err != nil {
+		checkError(err)
 	}
 
 	return merges
 }
 
-func getMergedNodesMap(file string, bufferSize int, chunkSize int) map[int32]int32 {
+func getMergedNodesMap(file string) map[int32]int32 {
 	merges := make(map[int32]int32, 1<<10)
 
 	existed, err := pathutil.Exists(file)
@@ -496,18 +591,31 @@ func getMergedNodesMap(file string, bufferSize int, chunkSize int) map[int32]int
 		return merges
 	}
 
-	reader, err := breader.NewBufferedReader(file, bufferSize, chunkSize, mergedParseFunc)
+	fh, err := xopen.Ropen(file)
 	checkError(err)
 
-	var merge mergedNodes
-	var data interface{}
-	for chunk := range reader.Ch {
-		checkError(chunk.Err)
+	items := make([]string, 4)
 
-		for _, data = range chunk.Data {
-			merge = data.(mergedNodes)
-			merges[merge[0]] = merge[1]
+	scanner := bufio.NewScanner(fh)
+	var from, to int
+	for scanner.Scan() {
+		stringSplitN(scanner.Text(), "\t", 4, &items)
+		if len(items) < 4 {
+			continue
 		}
+		from, err = strconv.Atoi(items[0])
+		if err != nil {
+			continue
+		}
+		to, err = strconv.Atoi(items[2])
+		if err != nil {
+			continue
+		}
+
+		merges[int32(from)] = int32(to)
+	}
+	if err := scanner.Err(); err != nil {
+		checkError(err)
 	}
 
 	return merges

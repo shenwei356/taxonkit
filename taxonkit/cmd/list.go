@@ -21,12 +21,14 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"runtime"
 	"sort"
+	"strconv"
 	"strings"
+	"sync"
 
-	"github.com/shenwei356/breader"
 	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
 )
@@ -69,58 +71,54 @@ Examples:
 		printName := getFlagBool(cmd, "show-name")
 		printRank := getFlagBool(cmd, "show-rank")
 
+		// -------------------- load data ----------------------
+
 		var names map[int32]string
 		var delnodes map[int32]struct{}
 		var merged map[int32]int32
+		var tree map[int32]map[int32]bool // different from that in lineage.go
+		var ranks map[int32]string
 
-		if config.Verbose {
-			log.Infof("parsing delnodes file: %s", config.NamesFile)
-		}
+		var wg sync.WaitGroup
 
-		delnodes = getDelnodesMap(config.DelNodesFile, config.Threads, ChunkSize)
+		wg.Add(1)
+		go func() {
+			_, _, names, delnodes, merged = loadData(config, false, false)
+			wg.Done()
+		}()
 
-		if config.Verbose {
-			log.Infof("%d delnodes parsed", len(delnodes))
+		wg.Add(1)
+		go func() {
+			tree = make(map[int32]map[int32]bool, mapInitialSize)
+			ranks = make(map[int32]string, mapInitialSize)
 
-			log.Infof("parsing merged file: %s", config.NamesFile)
-		}
+			fh, err := xopen.Ropen(config.NodesFile)
+			checkError(err)
 
-		merged = getMergedNodesMap(config.MergedFile, config.Threads, ChunkSize)
+			items := make([]string, 6)
+			scanner := bufio.NewScanner(fh)
+			var _child, _parent int
+			var child, parent int32
+			var rank string
+			var ok bool
+			for scanner.Scan() {
+				stringSplitN(scanner.Text(), "\t", 6, &items)
+				if len(items) < 6 {
+					continue
+				}
 
-		if config.Verbose {
-			log.Infof("%d merged nodes parsed", len(merged))
-		}
+				_child, err = strconv.Atoi(items[0])
+				if err != nil {
+					continue
+				}
 
-		if printName {
-			if config.Verbose {
-				log.Infof("parsing names file: %s", config.NamesFile)
-			}
-			names = getTaxonNames(config.NamesFile, config.Threads, ChunkSize)
-			if config.Verbose {
-				log.Infof("%d names parsed", len(names))
-			}
-		}
+				_parent, err = strconv.Atoi(items[2])
+				if err != nil {
+					continue
+				}
+				child, parent, rank = int32(_child), int32(_parent), items[4]
 
-		if config.Verbose {
-			log.Infof("parsing nodes file: %s", config.NodesFile)
-		}
-
-		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
-		checkError(err)
-
-		tree := make(map[int32]map[int32]bool)
-		ranks := make(map[int32]string)
-		var taxon Taxon
-		var child, parent int32
-		var ok bool
-		var n int64
-		var data interface{}
-		for chunk := range reader.Ch {
-			checkError(chunk.Err)
-
-			for _, data = range chunk.Data {
-				taxon = data.(Taxon)
-				child, parent = taxon.Taxid, taxon.Parent
+				// ----------------------------------
 
 				if _, ok = tree[parent]; !ok {
 					tree[parent] = make(map[int32]bool)
@@ -130,21 +128,25 @@ Examples:
 					tree[child] = make(map[int32]bool)
 				}
 				if printRank {
-					ranks[child] = taxon.Rank
+					ranks[child] = rank
 				}
-				n++
 			}
-		}
+			if err := scanner.Err(); err != nil {
+				checkError(err)
+			}
+			wg.Done()
+		}()
 
-		if config.Verbose {
-			log.Infof("%d nodes parsed", n)
-		}
+		wg.Wait()
+
+		// -------------------- load data ----------------------
 
 		var level int
 		if jsonFormat {
 			outfh.WriteString("{\n")
 		}
 		var newtaxid int32
+		var child int32
 		for i, id := range ids {
 			if _, ok := tree[int32(id)]; !ok {
 				// check if it was deleted

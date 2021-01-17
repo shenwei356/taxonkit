@@ -81,72 +81,19 @@ Output:
 			checkError(fmt.Errorf("when given -L/--no-lineage, -n/--show-name or/and -r/--show-rank needed"))
 		}
 
-		outfh, err := xopen.Wopen(config.OutFile)
-		checkError(err)
+		// -------------------- load data ----------------------
 
+		var tree map[int32]int32
+		var ranks map[int32]string
 		var names map[int32]string
 		var delnodes map[int32]struct{}
 		var merged map[int32]int32
+		tree, ranks, names, delnodes, merged = loadData(config, true, printRank)
 
-		if config.Verbose {
-			log.Infof("parsing delnodes file: %s", config.NamesFile)
-		}
+		// -------------------- load data ----------------------
 
-		delnodes = getDelnodesMap(config.DelNodesFile, config.Threads, 10)
-
-		if config.Verbose {
-			log.Infof("%d delnodes parsed", len(delnodes))
-
-			log.Infof("parsing merged file: %s", config.NamesFile)
-		}
-
-		merged = getMergedNodesMap(config.MergedFile, config.Threads, 10)
-
-		if config.Verbose {
-			log.Infof("%d merged nodes parsed", len(merged))
-
-			log.Infof("parsing names file: %s", config.NamesFile)
-		}
-
-		names = getTaxonNames(config.NamesFile, config.Threads, 10)
-
-		if config.Verbose {
-			log.Infof("%d names parsed", len(names))
-
-			log.Infof("parsing nodes file: %s", config.NodesFile)
-		}
-		reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
+		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
-
-		tree := make(map[int32]int32)
-		var ranks map[int32]string
-		if printRank {
-			ranks = make(map[int32]string)
-		}
-
-		var taxon Taxon
-		var child, parent int32
-		var n int64
-		var data interface{}
-		for chunk := range reader.Ch {
-			checkError(chunk.Err)
-
-			for _, data = range chunk.Data {
-				taxon = data.(Taxon)
-				child, parent = taxon.Taxid, taxon.Parent
-
-				tree[child] = parent
-				if printRank {
-					ranks[child] = taxon.Rank
-				}
-
-				n++
-			}
-		}
-
-		if config.Verbose {
-			log.Infof("%d nodes parsed", n)
-		}
 
 		type taxid2lineage struct {
 			line           string

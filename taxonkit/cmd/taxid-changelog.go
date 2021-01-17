@@ -402,7 +402,7 @@ func createChangelog(config Config, path string, dirs []string) {
 			log.Infof("  parsing delnodes.dmp")
 		}
 
-		delTaxids := getDelnodes(filepath.Join(path, dir, "delnodes.dmp"), config.Threads, 10)
+		delTaxids := getDelnodes(filepath.Join(path, dir, "delnodes.dmp"))
 		for _, taxid := range delTaxids {
 			if changes, ok = data[taxid]; !ok { // first record
 				data[taxid] = make([]TaxidChange, 0, 1)
@@ -434,7 +434,7 @@ func createChangelog(config Config, path string, dirs []string) {
 		if config.Verbose {
 			log.Infof("  parsing merged.dmp")
 		}
-		merges := getMergedNodes(filepath.Join(path, dir, "merged.dmp"), config.Threads, 10)
+		merges := getMergedNodes(filepath.Join(path, dir, "merged.dmp"))
 
 		for _, merge := range merges {
 			from, to = merge[0], merge[1]
