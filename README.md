@@ -14,6 +14,21 @@
 - [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of taxids, including taxids deletion, new adding, merge, reuse, and rank/name changes.
 - **[Please cite](#citation):** [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
 
+## Features
+
+1. **Easy to install**
+   - **Statically linked executable binaries for multiple platforms** (Linux/Windows/macOS,x86/amd64/arm64)
+     ([download](http://bioinf.shenwei.me/taxonkit/download/))
+   - **Light weight and out-of-the-box, no dependencies, no compilation, no configuration**
+     ([download](http://bioinf.shenwei.me/taxonkit/download/))
+2. **Easy to use**   
+   - **Supporting [Bash-completion](#bash-completion)**
+   - **Fast** (see [benchmark](#benchmark)), **multiple-CPUs supported**
+   - **Well documented usage and examples** (detailed [usage](http://bioinf.shenwei.me/taxonkit/usage/))
+   - **Supporting STDIN and gzipped input/output file, easy being used in pipe**
+3. **Versatile commands**   
+   - [Usage and examples](http://bioinf.shenwei.me/taxonkit/usage/)
+
 ## Subcommands
 
 - [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)    List taxonomic tree of given taxIDs
