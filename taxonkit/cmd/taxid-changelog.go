@@ -122,20 +122,33 @@ func init() {
 	taxidlogCmd.Flags().StringP("archive", "i", "", "directory containing decompressed dumped archives")
 }
 
+// TaxidChangeCode represents code of taxid change type
 type TaxidChangeCode int32
 
 const (
+	// TaxidUnchanged means taxid not changed
 	TaxidUnchanged TaxidChangeCode = iota
+	// TaxidNew means a new taxid
 	TaxidNew
+	// TaxidReuseDeleted means deleted taxids are reused again
 	TaxidReuseDeleted
+	// TaxidReuseMerged means merged taxids are reused again
 	TaxidReuseMerged
+	// TaxidDelete means a taxid is deleted
 	TaxidDelete
+	// TaxidMerge means a taxid is merged into another taxid
 	TaxidMerge
+	// TaxidAbsorb means another taxid is merged into this one
 	TaxidAbsorb
-	TaxidNameChanged       // scientific name changed
-	TaxidRankChanged       // rank changed
-	TaxidLineageChangedLin // lineage taxids remain, but lineage changed
-	TaxidLineageChangedTax // lineage taxids changed
+	// TaxidNameChanged means scientific name is changed
+	TaxidNameChanged
+	// TaxidRankChanged means the rank is changed
+	TaxidRankChanged
+	// TaxidLineageChangedLin means lineage taxids remain, but lineage changed
+	TaxidLineageChangedLin
+	// TaxidLineageChangedTax means lineage taxids changed
+	TaxidLineageChangedTax
+	// TaxidLineageChangedLen means number of lineage taxids changed
 	TaxidLineageChangedLen // number of lineage taxids changed
 )
 
@@ -193,6 +206,7 @@ func linegeChangeType(a, b []int32, taxid2names map[int16]map[int32]string, va, 
 	return TaxidUnchanged
 }
 
+// TaxidChange means a taxid change record
 type TaxidChange struct {
 	Version       int16
 	TaxidVersion  int16
@@ -201,6 +215,7 @@ type TaxidChange struct {
 	ChangeValue   []int32
 }
 
+// TaxidChanges represents a list of TaxidChange
 type TaxidChanges []TaxidChange
 
 func (changes TaxidChanges) Len() int { return len(changes) }
