@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
+	"sync"
 
 	"github.com/shenwei356/breader"
 	"github.com/shenwei356/xopen"
@@ -66,39 +67,39 @@ Attention:
 
 		var m map[string][]int32
 
-		if config.Verbose {
-			log.Infof("parsing names file: %s", config.NamesFile)
-		}
-		m = getTaxonName2Taxids(config.NamesFile, limite2SciName)
-		if config.Verbose {
-			log.Infof("%d names parsed", len(m))
-		}
+		var wg sync.WaitGroup
+		wg.Add(1)
+
+		go func() {
+			if config.Verbose {
+				log.Infof("parsing names file: %s", config.NamesFile)
+			}
+			m = getTaxonName2Taxids(config.NamesFile, limite2SciName)
+			if config.Verbose {
+				log.Infof("%d names parsed", len(m))
+			}
+			wg.Done()
+		}()
 
 		var ranks map[int32]string
+
 		if printRank {
-			if config.Verbose {
-				log.Infof("parsing nodes file: %s", config.NodesFile)
-			}
-			reader, err := breader.NewBufferedReader(config.NodesFile, config.Threads, 10, taxonParseFunc)
-			checkError(err)
-
-			ranks = make(map[int32]string)
-			var taxon Taxon
-			var n int64
-			for chunk := range reader.Ch {
-				checkError(chunk.Err)
-
-				for _, data := range chunk.Data {
-					taxon = data.(Taxon)
-					ranks[taxon.Taxid] = taxon.Rank
-					n++
+			wg.Add(1)
+			go func() {
+				if config.Verbose {
+					log.Infof("parsing nodes file: %s", config.NodesFile)
 				}
-			}
-
-			if config.Verbose {
-				log.Infof("%d nodes parsed", n)
-			}
+				ranks = getRanks(config.NodesFile)
+				if config.Verbose {
+					log.Infof("%d nodes parsed", len(ranks))
+				}
+				wg.Done()
+			}()
 		}
+
+		wg.Wait()
+
+		// ----------------------------------------------------------
 
 		type line2taxids struct {
 			line   string

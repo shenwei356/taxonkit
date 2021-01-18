@@ -108,6 +108,9 @@ func loadData(config Config, loadTree bool, recordRank bool) (
 func getTaxonNames(file string) map[int32]string {
 	fh, err := xopen.Ropen(file)
 	checkError(err)
+	defer func() {
+		checkError(fh.Close())
+	}()
 
 	taxid2name := make(map[int32]string, mapInitialSize)
 
@@ -183,6 +186,44 @@ func getNodes(file string, recordRank bool) (map[int32]int32, map[int32]string) 
 	}
 
 	return tree, ranks
+}
+
+func getRanks(file string) map[int32]string {
+	ranks := make(map[int32]string, mapInitialSize)
+
+	fh, err := xopen.Ropen(file)
+	checkError(err)
+	defer func() {
+		checkError(fh.Close())
+	}()
+
+	items := make([]string, 6)
+	scanner := bufio.NewScanner(fh)
+	var _child int
+	var child int32
+	var rank string
+	for scanner.Scan() {
+		stringSplitN(scanner.Text(), "\t", 6, &items)
+		if len(items) < 6 {
+			continue
+		}
+
+		_child, err = strconv.Atoi(items[0])
+		if err != nil {
+			continue
+		}
+
+		child, rank = int32(_child), items[4]
+
+		// ----------------------------------
+
+		ranks[child] = rank
+	}
+	if err := scanner.Err(); err != nil {
+		checkError(err)
+	}
+
+	return ranks
 }
 
 func getDelnodes(file string) []int32 {

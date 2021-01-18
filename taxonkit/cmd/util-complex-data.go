@@ -24,9 +24,12 @@ import (
 	"bufio"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/shenwei356/xopen"
 )
+
+// ----------------------------------  name2taxid ---------------------------
 
 // names -> []taxid
 func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]int32 {
@@ -81,7 +84,9 @@ func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]int32 {
 	return name2taxids
 }
 
-// taxid -> lineage
+// ----------------------------------  taxid-changelog ---------------------------
+
+// taxid -> lineageTaxids
 func getTaxid2LineageTaxids(fileNodes string) (
 	map[int32][]int32, // taxid2lineageTaxids
 	map[int32]string, // taxid2rank
@@ -121,4 +126,136 @@ func getTaxid2LineageTaxids(fileNodes string) (
 		taxid2lineageTaxids[taxid] = lineageTaxids
 	}
 	return taxid2lineageTaxids, ranks
+}
+
+// ----------------------------------  reformat ---------------------------
+
+// Taxon represents a taxonomic node
+type Taxon struct {
+	Taxid  int32
+	Parent int32
+	Name   string
+	Rank   string
+}
+
+// some taxons from different rank may have same names,
+// so we use name and name of its parent to point to the right taxid.
+func getName2Parent2Taxid(config Config) (
+	map[int32]*Taxon,
+	map[string]map[string]int32,
+	map[string]int32,
+) {
+
+	taxid2taxon := make(map[int32]*Taxon, mapInitialSize)
+
+	// ------------------------------------------------------
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	// taxid -> name
+
+	var taxid2name map[int32]string
+	go func() {
+
+		if config.Verbose {
+			log.Infof("parsing names file: %s", config.NamesFile)
+		}
+		taxid2name = getTaxonNames(config.NamesFile)
+		if config.Verbose {
+			log.Infof("%d names parsed", len(taxid2name))
+		}
+		wg.Done()
+	}()
+
+	// taxid -> taxon
+
+	go func() {
+		if config.Verbose {
+			log.Infof("parsing nodes file: %s", config.NodesFile)
+		}
+		fh, err := xopen.Ropen(config.NodesFile)
+		checkError(err)
+
+		items := make([]string, 6)
+		scanner := bufio.NewScanner(fh)
+		var _child, _parent int
+		var child, parent int32
+		var rank string
+		for scanner.Scan() {
+			stringSplitN(scanner.Text(), "\t", 6, &items)
+			if len(items) < 6 {
+				continue
+			}
+
+			_child, err = strconv.Atoi(items[0])
+			if err != nil {
+				continue
+			}
+
+			_parent, err = strconv.Atoi(items[2])
+			if err != nil {
+				continue
+			}
+			child, parent, rank = int32(_child), int32(_parent), items[4]
+
+			// ----------------------------------
+
+			taxid2taxon[child] = &Taxon{
+				Taxid:  child,
+				Parent: parent,
+				// Name:   "",
+				Rank: rank,
+			}
+		}
+		if err := scanner.Err(); err != nil {
+			checkError(err)
+		}
+
+		checkError(fh.Close())
+
+		if config.Verbose {
+			log.Infof("%d nodes parsed", len(taxid2taxon))
+		}
+
+		wg.Done()
+	}()
+
+	wg.Wait()
+
+	// ------------------------------------------------------
+
+	if config.Verbose {
+		log.Infof(" create links: child name -> parent name -> taxid")
+	}
+
+	name2parent2taxid := make(map[string]map[string]int32, len(taxid2taxon))
+
+	name2taxid := make(map[string]int32, len(taxid2taxon)) // not accurate
+
+	// name -> parent-name -> taxid
+
+	var _name, name, pname string
+	var _n2i map[string]int32
+	var ok bool
+	for taxid, taxon := range taxid2taxon {
+		_name = taxid2name[taxid]
+		taxon.Name = _name
+
+		name = strings.ToLower(_name)
+		pname = strings.ToLower(taxid2name[taxid2taxon[taxid].Parent])
+
+		if _n2i, ok = name2parent2taxid[name]; !ok {
+			name2parent2taxid[name] = map[string]int32{pname: taxid}
+		} else {
+			_n2i[pname] = taxid
+		}
+
+		name2taxid[name] = taxid
+	}
+
+	if config.Verbose {
+		log.Infof("created links: child name -> parent name -> taxid")
+	}
+	return taxid2taxon, name2parent2taxid, name2taxid
 }

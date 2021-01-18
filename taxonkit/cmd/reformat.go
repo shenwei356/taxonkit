@@ -34,8 +34,8 @@ import (
 // flineageCmd represents the fx2tab command
 var flineageCmd = &cobra.Command{
 	Use:   "reformat",
-	Short: "reformat lineage",
-	Long: `reformat lineage
+	Short: "Reformat lineage",
+	Long: `Reformat lineage
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -51,7 +51,7 @@ Output format can be formated by flag --format, available placeholders:
 Output format can contains some escape charactors like "\t".
 
 This command appends reformated lineage to the input line.
-The corresponding taxids of reformated lineage can be provided as another
+The corresponding taxIDs of reformated lineage can be provided as another
 column by flag "-t/--show-lineage-taxids".
 
 `,
@@ -88,15 +88,7 @@ column by flag "-t/--show-lineage-taxids".
 		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
 
-		if config.Verbose {
-			log.Infof("parsing names (%s) and nodes file (%s)", config.NamesFile, config.NodesFile)
-		}
-
-		taxid2taxon, name2parent2taxid, name2taxid := getName2Parent2Taxid(config.NodesFile, config.NamesFile, config.Threads, 20)
-
-		if config.Verbose {
-			log.Infof("%d nodes parsed", len(taxid2taxon))
-		}
+		taxid2taxon, name2parent2taxid, name2taxid := getName2Parent2Taxid(config)
 
 		type line2flineage struct {
 			line      string
