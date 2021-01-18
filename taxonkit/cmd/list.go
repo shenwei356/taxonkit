@@ -73,11 +73,11 @@ Examples:
 
 		// -------------------- load data ----------------------
 
-		var names map[int32]string
-		var delnodes map[int32]struct{}
-		var merged map[int32]int32
-		var tree map[int32]map[int32]bool // different from that in lineage.go
-		var ranks map[int32]string
+		var names map[uint32]string
+		var delnodes map[uint32]struct{}
+		var merged map[uint32]uint32
+		var tree map[uint32]map[uint32]bool // different from that in lineage.go
+		var ranks map[uint32]string
 
 		var wg sync.WaitGroup
 
@@ -89,8 +89,8 @@ Examples:
 
 		wg.Add(1)
 		go func() {
-			tree = make(map[int32]map[int32]bool, mapInitialSize)
-			ranks = make(map[int32]string, mapInitialSize)
+			tree = make(map[uint32]map[uint32]bool, mapInitialSize)
+			ranks = make(map[uint32]string, mapInitialSize)
 
 			fh, err := xopen.Ropen(config.NodesFile)
 			checkError(err)
@@ -98,7 +98,7 @@ Examples:
 			items := make([]string, 6)
 			scanner := bufio.NewScanner(fh)
 			var _child, _parent int
-			var child, parent int32
+			var child, parent uint32
 			var rank string
 			var ok bool
 			for scanner.Scan() {
@@ -116,16 +116,16 @@ Examples:
 				if err != nil {
 					continue
 				}
-				child, parent, rank = int32(_child), int32(_parent), items[4]
+				child, parent, rank = uint32(_child), uint32(_parent), items[4]
 
 				// ----------------------------------
 
 				if _, ok = tree[parent]; !ok {
-					tree[parent] = make(map[int32]bool)
+					tree[parent] = make(map[uint32]bool)
 				}
 				tree[parent][child] = false
 				if _, ok = tree[child]; !ok {
-					tree[child] = make(map[int32]bool)
+					tree[child] = make(map[uint32]bool)
 				}
 				if printRank {
 					ranks[child] = rank
@@ -145,17 +145,17 @@ Examples:
 		if jsonFormat {
 			outfh.WriteString("{\n")
 		}
-		var newtaxid int32
-		var child int32
+		var newtaxid uint32
+		var child uint32
 		for i, id := range ids {
-			if _, ok := tree[int32(id)]; !ok {
+			if _, ok := tree[uint32(id)]; !ok {
 				// check if it was deleted
-				if _, ok = delnodes[int32(id)]; ok {
+				if _, ok = delnodes[uint32(id)]; ok {
 					log.Warningf("taxid %d was deleted", child)
 					continue
 				}
 				// check if it was merged
-				if newtaxid, ok = merged[int32(id)]; ok {
+				if newtaxid, ok = merged[uint32(id)]; ok {
 					log.Warningf("taxid %d was merged into %d", child, newtaxid)
 					id = int(newtaxid)
 				} else {
@@ -177,10 +177,10 @@ Examples:
 			outfh.WriteString(fmt.Sprintf("%d", id))
 
 			if printRank {
-				outfh.WriteString(fmt.Sprintf(" [%s]", ranks[int32(id)]))
+				outfh.WriteString(fmt.Sprintf(" [%s]", ranks[uint32(id)]))
 			}
 			if printName {
-				outfh.WriteString(fmt.Sprintf(" %s", names[int32(id)]))
+				outfh.WriteString(fmt.Sprintf(" %s", names[uint32(id)]))
 			}
 
 			level = 0
@@ -193,7 +193,7 @@ Examples:
 				outfh.Flush()
 			}
 
-			traverseTree(tree, int32(id), outfh, indent, level+1, names,
+			traverseTree(tree, uint32(id), outfh, indent, level+1, names,
 				printName, ranks, printRank, jsonFormat, config)
 
 			if jsonFormat {
@@ -229,10 +229,10 @@ func init() {
 	listCmd.Flags().BoolP("json", "", false, `output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor`)
 }
 
-func traverseTree(tree map[int32]map[int32]bool, parent int32,
+func traverseTree(tree map[uint32]map[uint32]bool, parent uint32,
 	outfh *xopen.Writer, indent string, level int,
-	names map[int32]string, printName bool,
-	ranks map[int32]string, printRank bool,
+	names map[uint32]string, printName bool,
+	ranks map[uint32]string, printRank bool,
 	jsonFormat bool, config Config) {
 	if _, ok := tree[parent]; !ok {
 		return
@@ -247,9 +247,9 @@ func traverseTree(tree map[int32]map[int32]bool, parent int32,
 	}
 	sort.Ints(children)
 
-	var child int32
+	var child uint32
 	for i, c := range children {
-		child = int32(c)
+		child = uint32(c)
 		if tree[parent][child] {
 			continue
 		}

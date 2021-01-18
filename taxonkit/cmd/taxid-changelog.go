@@ -123,7 +123,7 @@ func init() {
 }
 
 // TaxidChangeCode represents code of taxid change type
-type TaxidChangeCode int32
+type TaxidChangeCode uint32
 
 const (
 	// TaxidUnchanged means taxid not changed
@@ -182,7 +182,7 @@ func (c TaxidChangeCode) String() string {
 	return "UNDEFINED TaxidChangeCode"
 }
 
-func linegeChangeType(a, b []int32, taxid2names map[int16]map[int32]string, va, vb int16) TaxidChangeCode {
+func linegeChangeType(a, b []uint32, taxid2names map[int16]map[uint32]string, va, vb int16) TaxidChangeCode {
 	if (a == nil) != (b == nil) {
 		return TaxidLineageChangedLen
 	}
@@ -211,8 +211,8 @@ type TaxidChange struct {
 	Version       int16
 	TaxidVersion  int16
 	Change        TaxidChangeCode
-	LineageTaxids []int32
-	ChangeValue   []int32
+	LineageTaxids []uint32
+	ChangeValue   []uint32
 }
 
 // TaxidChanges represents a list of TaxidChange
@@ -238,7 +238,7 @@ func (changes TaxidChanges) Less(i, j int) bool {
 func (c TaxidChange) String() string {
 	var buf bytes.Buffer
 	var tmp []string
-	var tid int32
+	var tid uint32
 	var i int
 
 	// version
@@ -289,15 +289,15 @@ func createChangelog(config Config, path string, dirs []string) {
 	}()
 
 	// taxid -> change-code -> []changes
-	data := make(map[int32][]TaxidChange, 1<<10)
+	data := make(map[uint32][]TaxidChange, 1<<10)
 
-	allMerges := make(map[int32]int32, 1<<10)
+	allMerges := make(map[uint32]uint32, 1<<10)
 
 	// version -> taxid -> name
-	taxid2names := make(map[int16]map[int32]string, len(dirs))
+	taxid2names := make(map[int16]map[uint32]string, len(dirs))
 
 	// version -> taxid -> rank
-	taxid2ranks := make(map[int16]map[int32]string, len(dirs))
+	taxid2ranks := make(map[int16]map[uint32]string, len(dirs))
 
 	// versions
 	sort.Strings(dirs)
@@ -307,7 +307,7 @@ func createChangelog(config Config, path string, dirs []string) {
 	var changes []TaxidChange
 	var prevChange *TaxidChange
 	var changeCode TaxidChangeCode
-	var from, to, prevTo int32
+	var from, to, prevTo uint32
 	var toRecord bool
 	for version, dir := range dirs {
 		if config.Verbose {
@@ -318,11 +318,11 @@ func createChangelog(config Config, path string, dirs []string) {
 			log.Infof("  loading data ...")
 		}
 
-		var taxid2lineageTaxids map[int32][]int32
-		var taxid2rank map[int32]string
-		var taxid2name map[int32]string
-		var delTaxids []int32
-		var merges [][2]int32
+		var taxid2lineageTaxids map[uint32][]uint32
+		var taxid2rank map[uint32]string
+		var taxid2name map[uint32]string
+		var delTaxids []uint32
+		var merges [][2]uint32
 
 		var wg sync.WaitGroup
 		wg.Add(4)
@@ -504,7 +504,7 @@ func createChangelog(config Config, path string, dirs []string) {
 					LineageTaxids: nil,
 					TaxidVersion:  -1,
 					Change:        TaxidMerge,
-					ChangeValue:   []int32{to},
+					ChangeValue:   []uint32{to},
 				})
 			} else {
 				prevChange = &changes[len(changes)-1]
@@ -514,7 +514,7 @@ func createChangelog(config Config, path string, dirs []string) {
 					LineageTaxids: prevChange.LineageTaxids, // using lineage of previous record
 					TaxidVersion:  prevChange.TaxidVersion,
 					Change:        TaxidMerge,
-					ChangeValue:   []int32{to},
+					ChangeValue:   []uint32{to},
 				})
 			}
 
@@ -528,7 +528,7 @@ func createChangelog(config Config, path string, dirs []string) {
 					LineageTaxids: nil,
 					TaxidVersion:  -1,
 					Change:        TaxidAbsorb,
-					ChangeValue:   []int32{from},
+					ChangeValue:   []uint32{from},
 				})
 			} else {
 				prevChange = &changes[len(changes)-1]
@@ -542,7 +542,7 @@ func createChangelog(config Config, path string, dirs []string) {
 						LineageTaxids: taxid2lineageTaxids[to],
 						TaxidVersion:  int16(version),
 						Change:        TaxidAbsorb,
-						ChangeValue:   []int32{from},
+						ChangeValue:   []uint32{from},
 					})
 				}
 			}
@@ -556,9 +556,9 @@ func createChangelog(config Config, path string, dirs []string) {
 
 	var c TaxidChange
 	var tmp, items []string
-	var tid int32
+	var tid uint32
 	var i int
-	var taxid2name map[int32]string
+	var taxid2name map[uint32]string
 
 	// sorting taxids
 	if config.Verbose {
@@ -576,7 +576,7 @@ func createChangelog(config Config, path string, dirs []string) {
 		log.Infof("write to file: %s", config.OutFile)
 	}
 	for _, taxid := range taxids {
-		changes = data[int32(taxid)]
+		changes = data[uint32(taxid)]
 
 		// sort by version and then change
 		sorts.Quicksort(TaxidChanges(changes))
@@ -610,14 +610,14 @@ func createChangelog(config Config, path string, dirs []string) {
 			// name
 
 			if c.TaxidVersion >= 0 {
-				items = append(items, taxid2names[c.TaxidVersion][int32(taxid)])
+				items = append(items, taxid2names[c.TaxidVersion][uint32(taxid)])
 			} else {
 				items = append(items, "")
 			}
 
 			// rank
 			if c.TaxidVersion >= 0 {
-				items = append(items, taxid2ranks[c.TaxidVersion][int32(taxid)])
+				items = append(items, taxid2ranks[c.TaxidVersion][uint32(taxid)])
 			} else {
 				items = append(items, "")
 			}

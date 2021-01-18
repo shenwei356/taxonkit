@@ -32,14 +32,14 @@ import (
 // ----------------------------------  name2taxid ---------------------------
 
 // names -> []taxid
-func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]int32 {
+func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]uint32 {
 	fh, err := xopen.Ropen(file)
 	checkError(err)
 	defer func() {
 		checkError(fh.Close())
 	}()
 
-	name2taxids := make(map[string][]int32, mapInitialSize)
+	name2taxids := make(map[string][]uint32, mapInitialSize)
 
 	items := make([]string, 8)
 	scanner := bufio.NewScanner(fh)
@@ -71,9 +71,9 @@ func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]int32 {
 
 		name = strings.ToLower(name)
 		if _, ok = name2taxids[name]; !ok {
-			name2taxids[name] = []int32{int32(id)}
+			name2taxids[name] = []uint32{uint32(id)}
 		} else {
-			name2taxids[name] = append(name2taxids[name], int32(id))
+			name2taxids[name] = append(name2taxids[name], uint32(id))
 		}
 
 	}
@@ -88,21 +88,21 @@ func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]int32 {
 
 // taxid -> lineageTaxids
 func getTaxid2LineageTaxids(fileNodes string) (
-	map[int32][]int32, // taxid2lineageTaxids
-	map[int32]string, // taxid2rank
+	map[uint32][]uint32, // taxid2lineageTaxids
+	map[uint32]string, // taxid2rank
 ) {
-	var tree map[int32]int32
-	var ranks map[int32]string
+	var tree map[uint32]uint32
+	var ranks map[uint32]string
 
 	tree, ranks = getNodes(fileNodes, true)
 
-	taxid2lineageTaxids := make(map[int32][]int32, mapInitialSize)
+	taxid2lineageTaxids := make(map[uint32][]uint32, mapInitialSize)
 
 	var ok bool
 	var i, j int
-	var child, parent int32
+	var child, parent uint32
 	for taxid := range tree {
-		lineageTaxids := make([]int32, 0, 8)
+		lineageTaxids := make([]uint32, 0, 8)
 		child = taxid
 		for true {
 			parent, ok = tree[child]
@@ -132,8 +132,8 @@ func getTaxid2LineageTaxids(fileNodes string) (
 
 // Taxon represents a taxonomic node
 type Taxon struct {
-	Taxid  int32
-	Parent int32
+	Taxid  uint32
+	Parent uint32
 	Name   string
 	Rank   string
 }
@@ -141,12 +141,12 @@ type Taxon struct {
 // some taxons from different rank may have same names,
 // so we use name and name of its parent to point to the right taxid.
 func getName2Parent2Taxid(config Config) (
-	map[int32]*Taxon,
-	map[string]map[string]int32,
-	map[string]int32,
+	map[uint32]*Taxon,
+	map[string]map[string]uint32,
+	map[string]uint32,
 ) {
 
-	taxid2taxon := make(map[int32]*Taxon, mapInitialSize)
+	taxid2taxon := make(map[uint32]*Taxon, mapInitialSize)
 
 	// ------------------------------------------------------
 
@@ -155,7 +155,7 @@ func getName2Parent2Taxid(config Config) (
 
 	// taxid -> name
 
-	var taxid2name map[int32]string
+	var taxid2name map[uint32]string
 	go func() {
 
 		if config.Verbose {
@@ -180,7 +180,7 @@ func getName2Parent2Taxid(config Config) (
 		items := make([]string, 6)
 		scanner := bufio.NewScanner(fh)
 		var _child, _parent int
-		var child, parent int32
+		var child, parent uint32
 		var rank string
 		for scanner.Scan() {
 			stringSplitN(scanner.Text(), "\t", 6, &items)
@@ -197,7 +197,7 @@ func getName2Parent2Taxid(config Config) (
 			if err != nil {
 				continue
 			}
-			child, parent, rank = int32(_child), int32(_parent), items[4]
+			child, parent, rank = uint32(_child), uint32(_parent), items[4]
 
 			// ----------------------------------
 
@@ -229,14 +229,14 @@ func getName2Parent2Taxid(config Config) (
 		log.Infof(" create links: child name -> parent name -> taxid")
 	}
 
-	name2parent2taxid := make(map[string]map[string]int32, len(taxid2taxon))
+	name2parent2taxid := make(map[string]map[string]uint32, len(taxid2taxon))
 
-	name2taxid := make(map[string]int32, len(taxid2taxon)) // not accurate
+	name2taxid := make(map[string]uint32, len(taxid2taxon)) // not accurate
 
 	// name -> parent-name -> taxid
 
 	var _name, name, pname string
-	var _n2i map[string]int32
+	var _n2i map[string]uint32
 	var ok bool
 	for taxid, taxon := range taxid2taxon {
 		_name = taxid2name[taxid]
@@ -246,7 +246,7 @@ func getName2Parent2Taxid(config Config) (
 		pname = strings.ToLower(taxid2name[taxid2taxon[taxid].Parent])
 
 		if _n2i, ok = name2parent2taxid[name]; !ok {
-			name2parent2taxid[name] = map[string]int32{pname: taxid}
+			name2parent2taxid[name] = map[string]uint32{pname: taxid}
 		} else {
 			_n2i[pname] = taxid
 		}

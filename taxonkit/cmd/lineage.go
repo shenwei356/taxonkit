@@ -83,11 +83,11 @@ Output:
 
 		// -------------------- load data ----------------------
 
-		var tree map[int32]int32
-		var ranks map[int32]string
-		var names map[int32]string
-		var delnodes map[int32]struct{}
-		var merged map[int32]int32
+		var tree map[uint32]uint32
+		var ranks map[uint32]string
+		var names map[uint32]string
+		var delnodes map[uint32]struct{}
+		var merged map[uint32]uint32
 		tree, ranks, names, delnodes, merged = loadData(config, true, printRank)
 
 		// -------------------- load data ----------------------
@@ -97,7 +97,7 @@ Output:
 
 		type taxid2lineage struct {
 			line           string
-			taxid          int32
+			taxid          uint32
 			lineage        string
 			lineageInTaxid string
 		}
@@ -114,18 +114,18 @@ Output:
 			}
 
 			if data[field] == "" {
-				return taxid2lineage{line, -1, "", ""}, true, nil
+				return taxid2lineage{line, 0, "", ""}, true, nil
 			}
 			id, e := strconv.Atoi(data[field])
 			if e != nil {
-				return taxid2lineage{line, -1, "", ""}, true, nil
+				return taxid2lineage{line, 0, "", ""}, true, nil
 			}
 
 			lineage := make([]string, 0, 16)
 			lineageInTaxid := []string{}
-			var child, parent, newtaxid int32
+			var child, parent, newtaxid uint32
 			var ok bool
-			child = int32(id)
+			child = uint32(id)
 			for true {
 				parent, ok = tree[child]
 				if !ok { // taxid not found
@@ -163,7 +163,7 @@ Output:
 				}
 				child = parent
 			}
-			child = int32(id)
+			child = uint32(id)
 			if printLineageInTaxid {
 				return taxid2lineage{line, child,
 					strings.Join(stringutil.ReverseStringSlice(lineage), delimiter),

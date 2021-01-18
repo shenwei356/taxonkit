@@ -32,18 +32,18 @@ import (
 var mapInitialSize = 8 << 10
 
 func loadData(config Config, loadTree bool, recordRank bool) (
-	map[int32]int32,
-	map[int32]string,
-	map[int32]string,
-	map[int32]struct{},
-	map[int32]int32,
+	map[uint32]uint32,
+	map[uint32]string,
+	map[uint32]string,
+	map[uint32]struct{},
+	map[uint32]uint32,
 ) {
 
-	var tree map[int32]int32
-	var ranks map[int32]string
-	var names map[int32]string
-	var delnodes map[int32]struct{}
-	var merged map[int32]int32
+	var tree map[uint32]uint32
+	var ranks map[uint32]string
+	var names map[uint32]string
+	var delnodes map[uint32]struct{}
+	var merged map[uint32]uint32
 
 	var wg sync.WaitGroup
 
@@ -105,14 +105,14 @@ func loadData(config Config, loadTree bool, recordRank bool) (
 }
 
 // taxid -> name
-func getTaxonNames(file string) map[int32]string {
+func getTaxonNames(file string) map[uint32]string {
 	fh, err := xopen.Ropen(file)
 	checkError(err)
 	defer func() {
 		checkError(fh.Close())
 	}()
 
-	taxid2name := make(map[int32]string, mapInitialSize)
+	taxid2name := make(map[uint32]string, mapInitialSize)
 
 	items := make([]string, 8)
 	scanner := bufio.NewScanner(fh)
@@ -130,7 +130,7 @@ func getTaxonNames(file string) map[int32]string {
 			continue
 		}
 
-		taxid2name[int32(id)] = items[2]
+		taxid2name[uint32(id)] = items[2]
 	}
 	if err := scanner.Err(); err != nil {
 		checkError(err)
@@ -139,11 +139,11 @@ func getTaxonNames(file string) map[int32]string {
 	return taxid2name
 }
 
-func getNodes(file string, recordRank bool) (map[int32]int32, map[int32]string) {
-	tree := make(map[int32]int32, mapInitialSize)
-	var ranks map[int32]string
+func getNodes(file string, recordRank bool) (map[uint32]uint32, map[uint32]string) {
+	tree := make(map[uint32]uint32, mapInitialSize)
+	var ranks map[uint32]string
 	if recordRank {
-		ranks = make(map[int32]string, mapInitialSize)
+		ranks = make(map[uint32]string, mapInitialSize)
 	}
 
 	fh, err := xopen.Ropen(file)
@@ -155,7 +155,7 @@ func getNodes(file string, recordRank bool) (map[int32]int32, map[int32]string) 
 	items := make([]string, 6)
 	scanner := bufio.NewScanner(fh)
 	var _child, _parent int
-	var child, parent int32
+	var child, parent uint32
 	var rank string
 	for scanner.Scan() {
 		stringSplitN(scanner.Text(), "\t", 6, &items)
@@ -172,7 +172,7 @@ func getNodes(file string, recordRank bool) (map[int32]int32, map[int32]string) 
 		if err != nil {
 			continue
 		}
-		child, parent, rank = int32(_child), int32(_parent), items[4]
+		child, parent, rank = uint32(_child), uint32(_parent), items[4]
 
 		// ----------------------------------
 
@@ -188,8 +188,8 @@ func getNodes(file string, recordRank bool) (map[int32]int32, map[int32]string) 
 	return tree, ranks
 }
 
-func getRanks(file string) map[int32]string {
-	ranks := make(map[int32]string, mapInitialSize)
+func getRanks(file string) map[uint32]string {
+	ranks := make(map[uint32]string, mapInitialSize)
 
 	fh, err := xopen.Ropen(file)
 	checkError(err)
@@ -200,7 +200,7 @@ func getRanks(file string) map[int32]string {
 	items := make([]string, 6)
 	scanner := bufio.NewScanner(fh)
 	var _child int
-	var child int32
+	var child uint32
 	var rank string
 	for scanner.Scan() {
 		stringSplitN(scanner.Text(), "\t", 6, &items)
@@ -213,7 +213,7 @@ func getRanks(file string) map[int32]string {
 			continue
 		}
 
-		child, rank = int32(_child), items[4]
+		child, rank = uint32(_child), items[4]
 
 		// ----------------------------------
 
@@ -226,8 +226,8 @@ func getRanks(file string) map[int32]string {
 	return ranks
 }
 
-func getDelnodes(file string) []int32 {
-	taxids := make([]int32, 0, 1<<10)
+func getDelnodes(file string) []uint32 {
+	taxids := make([]uint32, 0, 1<<10)
 
 	existed, err := pathutil.Exists(file)
 	if err != nil {
@@ -258,7 +258,7 @@ func getDelnodes(file string) []int32 {
 			continue
 		}
 
-		taxids = append(taxids, int32(id))
+		taxids = append(taxids, uint32(id))
 	}
 	if err := scanner.Err(); err != nil {
 		checkError(err)
@@ -267,8 +267,8 @@ func getDelnodes(file string) []int32 {
 	return taxids
 }
 
-func getDelnodesMap(file string) map[int32]struct{} {
-	taxids := make(map[int32]struct{}, 1<<10)
+func getDelnodesMap(file string) map[uint32]struct{} {
+	taxids := make(map[uint32]struct{}, 1<<10)
 
 	existed, err := pathutil.Exists(file)
 	if err != nil {
@@ -299,7 +299,7 @@ func getDelnodesMap(file string) map[int32]struct{} {
 			continue
 		}
 
-		taxids[int32(id)] = struct{}{}
+		taxids[uint32(id)] = struct{}{}
 	}
 	if err := scanner.Err(); err != nil {
 		checkError(err)
@@ -308,8 +308,8 @@ func getDelnodesMap(file string) map[int32]struct{} {
 	return taxids
 }
 
-func getMergedNodes(file string) [][2]int32 {
-	merges := make([][2]int32, 0, 1<<10)
+func getMergedNodes(file string) [][2]uint32 {
+	merges := make([][2]uint32, 0, 1<<10)
 
 	existed, err := pathutil.Exists(file)
 	if err != nil {
@@ -344,7 +344,7 @@ func getMergedNodes(file string) [][2]int32 {
 			continue
 		}
 
-		merges = append(merges, [2]int32{int32(from), int32(to)})
+		merges = append(merges, [2]uint32{uint32(from), uint32(to)})
 	}
 	if err := scanner.Err(); err != nil {
 		checkError(err)
@@ -353,8 +353,8 @@ func getMergedNodes(file string) [][2]int32 {
 	return merges
 }
 
-func getMergedNodesMap(file string) map[int32]int32 {
-	merges := make(map[int32]int32, 1<<10)
+func getMergedNodesMap(file string) map[uint32]uint32 {
+	merges := make(map[uint32]uint32, 1<<10)
 
 	existed, err := pathutil.Exists(file)
 	if err != nil {
@@ -389,7 +389,7 @@ func getMergedNodesMap(file string) map[int32]int32 {
 			continue
 		}
 
-		merges[int32(from)] = int32(to)
+		merges[uint32(from)] = uint32(to)
 	}
 	if err := scanner.Err(); err != nil {
 		checkError(err)

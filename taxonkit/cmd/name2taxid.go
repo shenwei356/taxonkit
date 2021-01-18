@@ -65,7 +65,7 @@ Attention:
 		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
 
-		var m map[string][]int32
+		var m map[string][]uint32
 
 		var wg sync.WaitGroup
 		wg.Add(1)
@@ -81,7 +81,7 @@ Attention:
 			wg.Done()
 		}()
 
-		var ranks map[int32]string
+		var ranks map[uint32]string
 
 		if printRank {
 			wg.Add(1)
@@ -103,7 +103,7 @@ Attention:
 
 		type line2taxids struct {
 			line   string
-			taxids []int32
+			taxids []uint32
 		}
 
 		fn := func(line string) (interface{}, bool, error) {
@@ -118,7 +118,7 @@ Attention:
 			return line2taxids{line, m[strings.ToLower(data[field])]}, true, nil
 		}
 
-		var taxid int32
+		var taxid uint32
 		for _, file := range files {
 			reader, err := breader.NewBufferedReader(file, config.Threads, 10, fn)
 			checkError(err)
