@@ -25,11 +25,13 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 
 	"github.com/shenwei356/util/pathutil"
 	"github.com/spf13/cobra"
+	"github.com/twotwotwo/sorts"
 )
 
 func isStdin(file string) bool {
@@ -54,6 +56,11 @@ func errDataNotFound(dataDir string) {
 }
 
 func getConfigs(cmd *cobra.Command) Config {
+	threads := getFlagPositiveInt(cmd, "threads")
+
+	runtime.GOMAXPROCS(threads)
+	sorts.MaxProcs = threads
+
 	var val, dataDir string
 	if val = os.Getenv("TAXONKIT_DB"); val != "" {
 		dataDir = val
@@ -85,7 +92,8 @@ func getConfigs(cmd *cobra.Command) Config {
 	delNodesFile := filepath.Join(dataDir, "delnodes.dmp")
 	mergedFile := filepath.Join(dataDir, "merged.dmp")
 
-	return Config{Threads: getFlagPositiveInt(cmd, "threads"),
+	return Config{
+		Threads:      threads,
 		OutFile:      getFlagString(cmd, "out-file"),
 		DataDir:      dataDir,
 		NodesFile:    nodesFile,

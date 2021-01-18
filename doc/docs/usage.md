@@ -10,6 +10,7 @@ Table of Contents
   - [lineage](#lineage)
   - [reformat](#reformat)
   - [name2taxid](#name2taxid)
+  - [filter](#filter)
   - [taxid-changelog](#taxid-changelog)
   - [genautocomplete](#genautocomplete)
 <!-- /TOC -->
@@ -27,12 +28,13 @@ And copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data direc
 ```text
 TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.6.2
+Version: 0.7.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
 Source code: https://github.com/shenwei356/taxonkit
 Documents  : https://bioinf.shenwei.me/taxonkit
+Citation   : https://www.biorxiv.org/content/early/2019/01/08/513523
 
 Dataset:
 
@@ -49,13 +51,14 @@ Usage:
   taxonkit [command]
 
 Available Commands:
+  filter          Filter taxIDs by taxonomic rank range
   genautocomplete generate shell autocompletion script
   help            Help about any command
-  lineage         query lineage of given taxids
-  list            list taxon tree of given taxids
-  name2taxid      query taxid by taxon scientific name
-  reformat        reformat lineage
-  taxid-changelog create taxid changelog from dump archives
+  lineage         Query taxonomic lineage of given taxIDs
+  list            List taxonomic tree of given taxIDs
+  name2taxid      Convert scientific names to taxIDs
+  reformat        Reformat lineage in canonical ranks
+  taxid-changelog Create taxID changelog from dump archives
   version         print version information and check for update
 
 Flags:
@@ -63,10 +66,8 @@ Flags:
   -h, --help              help for taxonkit
       --line-buffered     use line buffering on output, i.e., immediately writing to stdin/file for every line of output
   -o, --out-file string   out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
-  -j, --threads int       number of CPUs. 2 is enough (default value: 1 for single-CPU PC, 2 for others) (default 2)
+  -j, --threads int       number of CPUs. 4 is enough (default 4)
       --verbose           print verbose information
-
-Use "taxonkit [command] --help" for more information about a command
 
 ```
 
@@ -75,15 +76,28 @@ Use "taxonkit [command] --help" for more information about a command
 Usage
 
 ```text
-list taxon tree of given taxids
+List taxonomic tree of given taxIDs
+
+Examples:
+
+    $ taxonkit list --ids 9606 -n -r --indent "    "
+    9606 [species] Homo sapiens
+        63221 [subspecies] Homo sapiens neanderthalensis
+        741158 [subspecies] Homo sapiens subsp. 'Denisova'
+
+    $ taxonkit list --ids 9606 --indent ""
+    9606
+    63221
+    741158
 
 Usage:
   taxonkit list [flags]
 
 Flags:
-      --ids string      taxid(s), multiple values should be separated by comma
-      --indent string   indent (default "  ")
-      --json            output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor
+  -h, --help            help for list
+  -i, --ids string      taxID(s), multiple values should be separated by comma
+  -I, --indent string   indent (default "  ")
+  -J, --json            output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor
   -n, --show-name       output scientific name
   -r, --show-rank       output rank
 
@@ -91,31 +105,31 @@ Flags:
 
 Examples
 
-1. Default usage
+1. Default usage.
 
         
         $ taxonkit list --ids 9605,239934
         9605
-          9606
+        9606
             63221
             741158
-          1425170
+        1425170
+        2665952
+            2665953
 
         239934
-          239935
+        239935
             349741
-          512293
+        512293
             512294
             1131822
             1262691
             1263034
-          1131336
-          1574264
-          1574265
-          1638783
-          1679444
-          1755639
-          1896967
+        1679444
+        2608915
+            1131336
+        ...
+
 
 1. Removing indent. The list could be used to extract sequences from BLAST database with `blastdbcmd` (see [tutorial](http://bioinf.shenwei.me/taxonkit/tutorial/))
 
@@ -125,6 +139,8 @@ Examples
         63221
         741158
         1425170
+        2665952
+        2665953
 
         239934
         239935
@@ -134,13 +150,8 @@ Examples
         1131822
         1262691
         1263034
-        1131336
-        1574264
-        1574265
-        1638783
         1679444
-        1755639
-        1896967
+        ...
 
 
     **Performance:** Time and memory usage for whole taxon tree:
@@ -149,11 +160,15 @@ Examples
         $ su -c "free && sync && echo 3 > /proc/sys/vm/drop_caches && free"
 
         $ memusg -t taxonkit list --ids 1 --indent "" --verbose > t0.txt
-        13:52:58.905 [INFO] parsing nodes file: /home/shenwei/.taxonkit/nodes.dmp
-        13:53:01.449 [INFO] 2121511 nodes parsed
+        21:05:01.782 [INFO] parsing merged file: /home/shenwei/.taxonkit/names.dmp
+        21:05:01.782 [INFO] parsing names file: /home/shenwei/.taxonkit/names.dmp
+        21:05:01.782 [INFO] parsing delnodes file: /home/shenwei/.taxonkit/names.dmp
+        21:05:01.816 [INFO] 61023 merged nodes parsed
+        21:05:01.889 [INFO] 437929 delnodes parsed
+        21:05:03.178 [INFO] 2303979 names parsed
 
-        elapsed time: 4.088s
-        peak rss: 441.95 MB
+        elapsed time: 3.290s
+        peak rss: 742.77 MB
 
 1. Adding names
 
@@ -163,29 +178,22 @@ Examples
                 63221 [subspecies] Homo sapiens neanderthalensis
                 741158 [subspecies] Homo sapiens subsp. 'Denisova'
             1425170 [species] Homo heidelbergensis
+            2665952 [no rank] environmental samples
+                2665953 [species] Homo sapiens environmental sample
 
         239934 [genus] Akkermansia
             239935 [species] Akkermansia muciniphila
-                349741 [no rank] Akkermansia muciniphila ATCC BAA-835
+                349741 [strain] Akkermansia muciniphila ATCC BAA-835
             512293 [no rank] environmental samples
                 512294 [species] uncultured Akkermansia sp.
                 1131822 [species] uncultured Akkermansia sp. SMG25
                 1262691 [species] Akkermansia sp. CAG:344
                 1263034 [species] Akkermansia muciniphila CAG:154
-            1131336 [species] Akkermansia sp. KLE1605
-            1574264 [species] Akkermansia sp. KLE1797
-            1574265 [species] Akkermansia sp. KLE1798
-            1638783 [species] Akkermansia sp. UNK.MGS-1
             1679444 [species] Akkermansia glycaniphila
-            1755639 [species] Akkermansia sp. MC_55
-            1872421 [species] Akkermansia sp.
-            1896967 [species] Akkermansia sp. 54_46
-            1929996 [species] Akkermansia sp. Phil8
-            1945963 [species] Akkermansia sp. UBA3271
-            1945964 [species] Akkermansia sp. UBA5128
-            1945965 [species] Akkermansia sp. UBA7059
-            1945966 [species] Akkermansia sp. UBA7090
-            2478952 [species] Akkermansia sp. aa_0143
+            2608915 [no rank] unclassified Akkermansia
+                1131336 [species] Akkermansia sp. KLE1605
+                1574264 [species] Akkermansia sp. KLE1797
+        ...
 
     **Performance:** Time and memory usage for whole taxonomy tree:
 
@@ -193,10 +201,10 @@ Examples
         $ su -c "free && sync && echo 3 > /proc/sys/vm/drop_caches && free"
 
         $ memusg -t taxonkit list --show-rank --show-name --ids 1 > t1.txt
-        elapsed time: 8.785s
-        peak rss: 1.17 GB
+        elapsed time: 5.341s
+        peak rss: 1.04 GB
 
-1. Output in JSON format, so you can easily collapse and uncollapse taxonomy tree in modern text editor.
+1. Output in JSON format, you can easily collapse and uncollapse taxonomy tree in modern text editor.
 
         $ taxonkit list --show-rank --show-name --indent "    " --ids 9605,239934 --json
         {
@@ -252,23 +260,41 @@ Examples
 Usage
 
 ```text
-query lineage of given taxids
+Query taxonomic lineage of given taxIDs
 
 Input:
-  - List of taxids, one taxid per line.
-  - Or tab-delimited format, please specify taxid field with flag -i/--taxid-field.
+
+  - List of taxIDs, one taxID per line.
+  - Or tab-delimited format, please specify taxID field 
+    with flag -i/--taxid-field (default 1).
   - Supporting (gzipped) file or STDIN.
 
 Output:
-  0. Input line.
-  1. Status code (optional with flag -c/--show-status-code)
+
+  1. Input line data.
+  2. (Optional) Status code (-c/--show-status-code), values:
      - "-1" for queries not found in whole database.
-     - "0" for deleted taxids, provided by "delnodes.dmp".
-     - New taxids for merged taxids, provided by "merged.dmp".
+     - "0" for deleted taxIDs, provided by "delnodes.dmp".
+     - New taxIDs for merged taxIDs, provided by "merged.dmp".
      - Taxids for these found in "nodes.dmp".
-  2. Lineage, delimiter can be changed with flag -d/--delimiter.
-  3. Lineage taxids (optional with flag -t/--show-lineage-taxids)
-  4. Rank (optional with flag -r/--show-rank)
+  3. Lineage, delimiter can be changed with flag -d/--delimiter.
+  4. (Optional) Lineage in taxIDs (-t/--show-lineage-taxids)
+  5. (Optional) Rank (-r/--show-rank)
+
+Filter out invalid and deleted taxids, and replace merged 
+taxids with new ones:
+    
+    # input is one-column-taxid
+    $ taxonkit lineage -c taxids.txt \
+        | awk '$2>0' \
+        | cut -f 2-
+        
+    # taxids are in 3rd field in a 4-columns tab-delimited file,
+    # for $5, where 5 = 4 + 1.
+    $ cat input.txt \
+        | taxonkit lineage -c -i 3 \
+        | csvtk filter2 -H -t -f '$5>0' \
+        | csvtk -H -t cut -f -3
 
 Usage:
   taxonkit lineage [flags]
@@ -280,8 +306,8 @@ Flags:
   -t, --show-lineage-taxids   appending lineage consisting of taxids
   -n, --show-name             appending scientific name
   -r, --show-rank             appending rank of taxids
-  -c, --show-status-code      show status code between lineage
-  -i, --taxid-field int       field index of taxid. data should be tab-separated (default 1)
+  -c, --show-status-code      show status code before lineage
+  -i, --taxid-field int       field index of taxid. input data should be tab-separated (default 1)
 
 ```
 
@@ -323,7 +349,7 @@ Examples
         92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
         1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raicheisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 
-1. Check deleted or merged taxids
+1. Checking deleted or merged taxids
     
         $ taxonkit lineage --show-status-code taxids.txt | tee lineage.withcode.txt
         
@@ -353,7 +379,7 @@ Examples
         $ cat lineage.withcode.txt | awk '$2 < 0' | cut -f 1
         123124124
 
-1. **Filter out invalid and deleted taxids, and *replace old taxids with new ones"**,
+1. **Filter out invalid and deleted taxids, and *replace merged taxids with new ones"**,
   you may install [csvtk](https://github.com/shenwei356/csvtk.
     
         # input is one-column-taxid
@@ -361,15 +387,17 @@ Examples
             | awk '$2>0' \
             | cut -f 2-
             
-        # taxids are in `$n`th field in a 4-columns tab-delimited file
+        # taxids are in 3rd field in a 4-columns tab-delimited file,
+        # for $5, where 5 = 4 + 1.
         $ cat input.txt \
             | taxonkit lineage -c -i 3 \
             | csvtk filter2 -H -t -f '$5>0' \
             | csvtk -H -t cut -f -3
 
-1. Only show name and rank
+1. Only show name and rank.
 
-        $ taxonkit lineage -r -n -L taxids.txt | csvtk pretty -t
+        $ taxonkit lineage -r -n -L taxids.txt \
+            | csvtk pretty -t
         9606        Homo sapiens                                      species
         9913        Bos taurus                                        species
         376619      Francisella tularensis subsp. holarctica LVS      strain
@@ -409,7 +437,7 @@ Examples
 Usage
 
 ```text
-reformat lineage
+Reformat lineage in canonical ranks
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -425,7 +453,7 @@ Output format can be formated by flag --format, available placeholders:
 Output format can contains some escape charactors like "\t".
 
 This command appends reformated lineage to the input line.
-The corresponding taxids of reformated lineage can be provided as another
+The corresponding taxIDs of reformated lineage can be provided as another
 column by flag "-t/--show-lineage-taxids".
 
 Usage:
@@ -446,7 +474,7 @@ Flags:
 
 Examples:
 
-1. Example lineage (produced by: `taxonkit lineage taxids.txt | awk '$2!=""' > lineage.txt`)
+1. Example lineage (produced by: `taxonkit lineage taxids.txt | awk '$2!=""' > lineage.txt`).
 
         $ cat lineage.txt
         9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
@@ -460,7 +488,7 @@ Examples:
         92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
         1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 
-1. Default output format (`"{k};{p};{c};{o};{f};{g};{s}"`)
+1. Default output format (`"{k};{p};{c};{o};{f};{g};{s}"`).
 
         # reformated lineages are appended to the input data
         $ taxonkit reformat lineage.txt 
@@ -490,6 +518,7 @@ Examples:
             | csvtk -H -t sep -f 2 -s ';' -R \
             | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
             | csvtk pretty -t
+            
             taxid     kindom      phylum            class                 order                family            genus                        species
             9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
             9913      Eukaryota   Chordata          Mammalia              Artiodactyla         Bovidae           Bos                          Bos taurus
@@ -509,7 +538,8 @@ Examples:
             | csvtk -H -t cut -f 1,4 \
             | csvtk -H -t sep -f 2 -s ';' -R \
             | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
-            | csvtk pretty -t            
+            | csvtk pretty -t   
+            
         taxid     kindom   phylum    class     order     family    genus     species
         9606      2759     7711      40674     9443      9604      9605      9606
         9913      2759     7711      40674     91561     9895      9903      9913
@@ -548,6 +578,7 @@ Examples:
             | csvtk -H -t sep -f 2 -s ';' -R \
             | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
             | csvtk pretty -t
+            
         taxid     kindom      phylum                         class                         order                         family                         genus                             species
         9606      Eukaryota   Chordata                       Mammalia                      Primates                      Hominidae                      Homo                              Homo sapiens
         9913      Eukaryota   Chordata                       Mammalia                      Artiodactyla                  Bovidae                        Bos                               Bos taurus
@@ -560,7 +591,7 @@ Examples:
         92489     Bacteria    Proteobacteria                 Gammaproteobacteria           Enterobacterales              Erwiniaceae                    Erwinia                           Erwinia oleae
         1458427   Bacteria    Proteobacteria                 Betaproteobacteria            Burkholderiales               Comamonadaceae                 Serpentinomonas                   Serpentinomonas raichei
 
-1. Only some ranks
+1. Only some ranks.
 
         $ cat lineage.txt \
             | taxonkit reformat -F -f "{s};{p}"\
@@ -568,6 +599,7 @@ Examples:
             | csvtk -H -t sep -f 2 -s ';' -R \
             | csvtk add-header -t -n taxid,species,phylum \
             | csvtk pretty -t
+            
         taxid     species                                           phylum
         9606      Homo sapiens                                      Chordata
         9913      Bos taurus                                        Chordata
@@ -598,7 +630,17 @@ Examples:
 Usage
 
 ```text
-query taxid by taxon scientific name
+Convert scientific names to taxIDs
+
+Attention:
+
+  1. Some taxIDs share the same scientific names, e.g, Drosophila.
+     These input lines are duplicated with multiple taxIDs.
+
+    $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L
+    Drosophila      7215    genus
+    Drosophila      32281   subgenus
+    Drosophila      2081351 genus
 
 Usage:
   taxonkit name2taxid [flags]
@@ -624,7 +666,7 @@ Example data
     uncultured murine large bowel bacterium BAC 54B
     Croceibacter phage P2559Y
 
-1. default
+1. Default.
 
         # taxonkit name2taxid names.txt
         $ cat names.txt | taxonkit name2taxid | csvtk pretty -t
@@ -636,18 +678,18 @@ Example data
         uncultured murine large bowel bacterium BAC 54B   314101
         Croceibacter phage P2559Y                         1327037
 
-1. show rank
+1. Show rank.
 
         $ cat names.txt | taxonkit name2taxid --show-rank | csvtk pretty -t
-        Homo sapiens                                      9606
-        Akkermansia muciniphila ATCC BAA-835              349741
-        Akkermansia muciniphila                           239935
-        Mouse Intracisternal A-particle                   11932
-        Wei Shen                                          
-        uncultured murine large bowel bacterium BAC 54B   314101
-        Croceibacter phage P2559Y                         1327037
+        Homo sapiens                                      9606      species
+        Akkermansia muciniphila ATCC BAA-835              349741    strain
+        Akkermansia muciniphila                           239935    species
+        Mouse Intracisternal A-particle                   11932     species
+        Wei Shen                                                    
+        uncultured murine large bowel bacterium BAC 54B   314101    species
+        Croceibacter phage P2559Y                         1327037   species
 
-1. from name to lineage
+1. From name to lineage.
 
         $ cat names.txt | taxonkit name2taxid | taxonkit lineage --taxid-field 2
         Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
@@ -670,13 +712,113 @@ Example data
         Drosophila   32281     subgenus   Eukaryota;Arthropoda;Insecta;Diptera;Drosophilidae;Drosophila;
         Drosophila   2081351   genus      Eukaryota;Basidiomycota;Agaricomycetes;Agaricales;Psathyrellaceae;Drosophila;
 
+## filter
+
+Usage
+
+```text
+Filter taxIDs by taxonomic rank range
+
+Attentions:
+  1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
+     used along with -E/--equal-to which values can be different.
+  2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can give
+     your list by -r/--rank-file, the format specification is below.
+  3. TaxIDss with no rank will be discarded.
+
+Rank file:
+  1. Blank lines or lines starting with "#" are ignored.
+  2. Ranks are in decending order and case ignored.
+  3. Ranks with same order should be in one line separated with comma (",", no space).
+  4. Ranks without order should be assigning a prefix symbol "!" for each rank.
+
+Usage:
+  taxonkit filter [flags]
+
+Flags:
+  -B, --black-list strings   black list of ranks to discard (default [no rank,clade])
+  -N, --discard-noranks      discard ranks without order, type "taxonkit filter --help" for details
+  -R, --discard-root         discard root taxid, defined by --root-taxid
+  -E, --equal-to string      output taxIDs with rank equal to a rank
+  -h, --help                 help for filter
+  -H, --higher-than string   output taxIDs with rank higher than a rank, exclusive with --lower-than
+      --list-order           list defined ranks in order
+      --list-ranks           list ordered ranks in taxonomy database
+  -L, --lower-than string    output taxIDs with rank lower than a rank, exclusive with --higher-than
+  -r, --rank-file string     user-defined ordered taxonomic ranks, type "taxonkit filter --help" for details
+      --root-taxid uint32    root taxid (default 1)
+  -i, --taxid-field int      field index of taxid. input data should be tab-separated (default 1)
+
+```
+
+Examples
+
+1. Example data
+
+        $ echo 349741 | taxonkit lineage -t | cut -f 3 | sed 's/;/\n/g' > taxids2.txt
         
+        $ cat taxids2.txt
+        131567
+        2
+        1783257
+        74201
+        203494
+        48461
+        1647988
+        239934
+        239935
+        349741
+        
+        
+        $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+        131567    no rank        cellular organisms
+        2         superkingdom   cellular organisms;Bacteria
+        1783257   clade          cellular organisms;Bacteria;PVC group
+        74201     phylum         cellular organisms;Bacteria;PVC group;Verrucomicrobia
+        203494    class          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae
+        48461     order          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales
+        1647988   family         cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae
+        239934    genus          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia
+        239935    species        cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        349741    strain         cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+
+1. Filter certain rank (`-E/--equal-to`)
+
+        $ cat taxids2.txt \
+            | taxonkit filter -E Phylum \
+            | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+        74201   phylum   cellular organisms;Bacteria;PVC group;Verrucomicrobia
+        
+1. Lower than a rank (`-L/--lower-than`)
+
+        $ cat taxids2.txt \
+            | taxonkit filter -L genus \
+            | taxonkit lineage -r -n -L | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+        239935   species   Akkermansia muciniphila
+        349741   strain    Akkermansia muciniphila ATCC BAA-835
+
+1. Higher than a rank (`-H/--higher-than`), note that "no rank" and "clade" have no rank and be filter out by default.
+
+        $ cat taxids2.txt \
+            | taxonkit filter -H phylum \
+            | taxonkit lineage -r -n -L | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+        2   superkingdom   Bacteria
+
+1. Combine of `-L/-H` with `-E`.
+
+        $ cat taxids2.txt \
+            | taxonkit filter -L genus -E genus  \
+            | taxonkit lineage -r -n -L | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+        239934   genus     Akkermansia
+        239935   species   Akkermansia muciniphila
+        349741   strain    Akkermansia muciniphila ATCC BAA-835
+            
 ## taxid-changelog
 
 Usage
 
 ```text
-create taxid changelog from dump archives
+Create taxID changelog from dump archives
 
 Steps:
 
@@ -692,7 +834,7 @@ Steps:
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp*.zip
 
     # option 2
-    # for bad network connection like mine
+    # for slow network connection
     url=https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
     wget $url -O - -o /dev/null \
         | grep taxdmp | perl -ne '/(taxdmp_.+?.zip)/; print "$1\n";' \
@@ -743,55 +885,75 @@ Usage:
 Flags:
   -i, --archive string   directory containing decompressed dumped archives
   -h, --help             help for taxid-changelog
-
+  
 ```
 
-Example 1  (*E.coli* with taxid `562`)
+[Details](https://github.com/shenwei356/taxid-changelog)
 
-    $ pigz -cd taxid-changelog.csv.gz \
-        | csvtk grep -f taxid -p 562 \
-        | csvtk pretty
-    taxid   version      change           change-value    name               rank      lineage                                                                                                                            lineage-taxids
-    562     2014-08-01   NEW                              Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
-    562     2014-08-01   ABSORB           662101;662104   Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
-    562     2015-11-01   ABSORB           1637691         Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
-    562     2016-10-01   CHANGE_LIN_LIN                   Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli    131567;2;1224;1236;91347;543;561;562
-    562     2018-06-01   ABSORB           469598          Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli    131567;2;1224;1236;91347;543;561;562
+1. Example 1  (*E.coli* with taxid `562`)
 
-    # merged taxids
-    $ pigz -cd taxid-changelog.csv.gz \
-        | csvtk grep -f taxid -p 662101,662104,1637691,469598 \
-        | csvtk pretty
-    taxid     version      change           change-value   name                        rank      lineage                                                                                                                                     lineage-taxids
-    469598    2014-08-01   NEW                             Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA   131567;2;1224;1236;91347;543;561;469598
-    469598    2016-10-01   CHANGE_LIN_LIN                  Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
-    469598    2018-06-01   MERGE            562            Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
-    662101    2014-08-01   MERGE            562                                                                                                                                                                                              
-    662104    2014-08-01   MERGE            562                                                                                                                                                                                              
-    1637691   2015-04-01   DELETE                                                                                                                                                                                                            
-    1637691   2015-05-01   REUSE_DEL                       Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
-    1637691   2015-11-01   MERGE            562            Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
+        $ pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -p 562 \
+            | csvtk pretty
+        taxid   version      change           change-value    name               rank      lineage                                                                                                                            lineage-taxids
+        562     2014-08-01   NEW                              Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+        562     2014-08-01   ABSORB           662101;662104   Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+        562     2015-11-01   ABSORB           1637691         Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+        562     2016-10-01   CHANGE_LIN_LIN                   Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli    131567;2;1224;1236;91347;543;561;562
+        562     2018-06-01   ABSORB           469598          Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli    131567;2;1224;1236;91347;543;561;562
 
+        # merged taxids
+        $ pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -p 662101,662104,1637691,469598 \
+            | csvtk pretty
+        taxid     version      change           change-value   name                        rank      lineage                                                                                                                                     lineage-taxids
+        469598    2014-08-01   NEW                             Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA   131567;2;1224;1236;91347;543;561;469598
+        469598    2016-10-01   CHANGE_LIN_LIN                  Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
+        469598    2018-06-01   MERGE            562            Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
+        662101    2014-08-01   MERGE            562                                                                                                                                                                                              
+        662104    2014-08-01   MERGE            562                                                                                                                                                                                              
+        1637691   2015-04-01   DELETE                                                                                                                                                                                                            
+        1637691   2015-05-01   REUSE_DEL                       Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
+        1637691   2015-11-01   MERGE            562            Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
 
-Example 2 (All subspecies and strain in *Akkermansia muciniphila* 239935)
+1. Example 2 (SARS-CoV-2).
 
-    # species in Akkermansia
-    $ taxonkit list --show-rank --show-name --ids 239935
-    239935 [species] Akkermansia muciniphila
-      349741 [no rank] Akkermansia muciniphila ATCC BAA-835
-    
-    # check them all  
-    $ pigz -cd taxid-changelog.csv.gz \
-        | csvtk grep -f taxid -P <(taxonkit list --indent "" --ids 239935) \
-        | csvtk pretty                                                                                                                                                   lineage-taxids
-    taxid    version      change           change-value   name                                   rank      lineage                                                                                                                                                                                                         lineage-taxids
-    239935   2014-08-01   NEW                             Akkermansia muciniphila                species   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Verrucomicrobiaceae;Akkermansia;Akkermansia muciniphila                                        131567;2;51290;74201;203494;48461;203557;239934;239935
-    239935   2015-05-01   CHANGE_LIN_TAX                  Akkermansia muciniphila                species   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                            131567;2;51290;74201;203494;48461;1647988;239934;239935
-    239935   2016-03-01   CHANGE_LIN_TAX                  Akkermansia muciniphila                species   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                                                   131567;2;1783257;74201;203494;48461;1647988;239934;239935
-    239935   2016-05-01   ABSORB           1834199        Akkermansia muciniphila                species   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                                                   131567;2;1783257;74201;203494;48461;1647988;239934;239935
-    349741   2014-08-01   NEW                             Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Verrucomicrobiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835   131567;2;51290;74201;203494;48461;203557;239934;239935;349741
-    349741   2015-05-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835       131567;2;51290;74201;203494;48461;1647988;239934;239935;349741
-    349741   2016-03-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
+        $ time pigz -cd taxid-changelog.csv.gz \
+                | csvtk grep -f taxid -p 2697049 \
+                | csvtk pretty
+        taxid     version      change           change-value   name                                              rank      lineage                                                                                                                                                                                                                                                        lineage-taxids
+        2697049   2020-02-01   NEW                             Wuhan seafood market pneumonia virus              species   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;unclassified Betacoronavirus;Wuhan seafood market pneumonia virus                                                                                               10239;2559587;76804;2499399;11118;2501931;694002;696098;2697049
+        2697049   2020-03-01   CHANGE_NAME                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+        2697049   2020-03-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+        2697049   2020-03-01   CHANGE_LIN_LEN                  Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+        2697049   2020-06-01   CHANGE_LIN_LEN                  Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+        2697049   2020-07-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   isolate   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+        2697049   2020-08-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+        
+        real    0m7.644s
+        user    0m16.749s
+        sys     0m3.985s
+
+2. Example 3 (All subspecies and strain in *Akkermansia muciniphila* 239935)
+
+        # species in Akkermansia
+        $ taxonkit list --show-rank --show-name --indent "    " --ids 239935
+        239935 [species] Akkermansia muciniphila
+            349741 [strain] Akkermansia muciniphila ATCC BAA-835
+        
+        # check them all  
+        $ pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -P <(taxonkit list --indent "" --ids 239935) \
+            | csvtk pretty                                                                                                                                                   lineage-taxids
+        taxid    version      change           change-value   name                                   rank      lineage                                                                                                                                                                                                         lineage-taxids
+        239935   2014-08-01   NEW                             Akkermansia muciniphila                species   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Verrucomicrobiaceae;Akkermansia;Akkermansia muciniphila                                        131567;2;51290;74201;203494;48461;203557;239934;239935
+        239935   2015-05-01   CHANGE_LIN_TAX                  Akkermansia muciniphila                species   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                            131567;2;51290;74201;203494;48461;1647988;239934;239935
+        239935   2016-03-01   CHANGE_LIN_TAX                  Akkermansia muciniphila                species   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                                                   131567;2;1783257;74201;203494;48461;1647988;239934;239935
+        239935   2016-05-01   ABSORB           1834199        Akkermansia muciniphila                species   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                                                   131567;2;1783257;74201;203494;48461;1647988;239934;239935
+        349741   2014-08-01   NEW                             Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Verrucomicrobiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835   131567;2;51290;74201;203494;48461;203557;239934;239935;349741
+        349741   2015-05-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835       131567;2;51290;74201;203494;48461;1647988;239934;239935;349741
+        349741   2016-03-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
+        349741   2020-07-01   CHANGE_RANK                     Akkermansia muciniphila ATCC BAA-835   strain    cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
 
 [More](https://github.com/shenwei356/taxid-changelog)
     
@@ -800,7 +962,7 @@ Example 2 (All subspecies and strain in *Akkermansia muciniphila* 239935)
 Usage
 
 ```text
-generate shell autocompletion script
+Generate shell autocompletion script
 
 Note: The current version supports Bash only.
 This should work for *nix systems with Bash installed.

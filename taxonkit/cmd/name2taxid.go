@@ -22,7 +22,6 @@ package cmd
 
 import (
 	"fmt"
-	"runtime"
 	"strings"
 	"sync"
 
@@ -50,7 +49,6 @@ Attention:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
-		runtime.GOMAXPROCS(config.Threads)
 
 		printRank := getFlagBool(cmd, "show-rank")
 		field := getFlagPositiveInt(cmd, "name-field") - 1
@@ -64,6 +62,7 @@ Attention:
 
 		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
+		defer outfh.Close()
 
 		var m map[string][]uint32
 
@@ -154,8 +153,6 @@ Attention:
 				}
 			}
 		}
-
-		defer outfh.Close()
 	},
 }
 

@@ -26,7 +26,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
-	"runtime"
 	"sort"
 	"strings"
 	"sync"
@@ -104,7 +103,6 @@ Output format (CSV):
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
-		runtime.GOMAXPROCS(config.Threads)
 
 		archivePath := getFlagString(cmd, "archive")
 		if archivePath == "" {
@@ -279,7 +277,6 @@ func (c TaxidChange) String() string {
 func createChangelog(config Config, path string, dirs []string) {
 	outfh, err := xopen.Wopen(config.OutFile)
 	checkError(err)
-
 	defer outfh.Close()
 
 	writer := csv.NewWriter(outfh)

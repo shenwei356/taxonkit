@@ -16,12 +16,12 @@
 
 ## Subcommands
 
-- [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)    list taxon tree of given taxids
-- [`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage) query lineage of given taxids (supporting STDIN), performance benchmark ([details](bench/README.md)):
-  ![](bench/bench.get_lineage.reformat.tsv.png)  
-- [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat) reformat lineage (supporting STDIN)
-- [`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid) query taxid by taxon scientific name (supporting STDIN)
-- [`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog) create taxid changelog from dump archives
+- [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)    List taxonomic tree of given taxIDs
+- [`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage) Query taxonomic lineage of given taxIDs
+- [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat) Reformat lineage in canonical ranks
+- [`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid) Convert scientific names to taxIDs
+- [`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter) Filter taxIDs by taxonomic rank range
+- [`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog) Create taxID changelog from dump archives
 
 Misc
 
@@ -91,7 +91,7 @@ If you use TaxonKit in your work, please cite [the preprint](https://www.biorxiv
 
 ## Contact
 
-Email me for any problem when using taxonkit. shenwei356(at)gmail.com
+Email me for any problem when using TaxonKit. shenwei356(at)gmail.com
 
 [Create an issue](https://github.com/shenwei356/taxonkit/issues) to report bugs,
 propose new functions or ask for help.

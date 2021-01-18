@@ -34,7 +34,7 @@ import (
 var genautocompleteCmd = &cobra.Command{
 	Use:   "genautocomplete",
 	Short: "generate shell autocompletion script",
-	Long: `generate shell autocompletion script
+	Long: `Generate shell autocompletion script
 
 Note: The current version supports Bash only.
 This should work for *nix systems with Bash installed.

@@ -82,7 +82,7 @@ Dataset:
 		defaultThreads = 4
 	}
 
-	RootCmd.PersistentFlags().IntP("threads", "j", defaultThreads, "number of CPUs. 4 is enough (default value: 1 for single-CPU PC, 2 for others)")
+	RootCmd.PersistentFlags().IntP("threads", "j", defaultThreads, "number of CPUs. 4 is enough")
 	RootCmd.PersistentFlags().StringP("out-file", "o", "-", `out file ("-" for stdout, suffix .gz for gzipped out)`)
 	RootCmd.PersistentFlags().StringP("data-dir", "", defaulDataDir, "directory containing nodes.dmp and names.dmp")
 	RootCmd.PersistentFlags().BoolP("verbose", "", false, "print verbose information")

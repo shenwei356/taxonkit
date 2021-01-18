@@ -23,7 +23,6 @@ package cmd
 import (
 	"bufio"
 	"fmt"
-	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -54,7 +53,6 @@ Examples:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
-		runtime.GOMAXPROCS(config.Threads)
 
 		ids := getFlagTaxonIDs(cmd, "ids")
 		indent := getFlagString(cmd, "indent")
@@ -67,6 +65,7 @@ Examples:
 
 		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
+		defer outfh.Close()
 
 		printName := getFlagBool(cmd, "show-name")
 		printRank := getFlagBool(cmd, "show-rank")
@@ -214,19 +213,17 @@ Examples:
 				outfh.Flush()
 			}
 		}
-
-		defer outfh.Close()
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(listCmd)
 
-	listCmd.Flags().StringP("ids", "", "", "taxID(s), multiple values should be separated by comma")
-	listCmd.Flags().StringP("indent", "", "  ", "indent")
+	listCmd.Flags().StringP("ids", "i", "", "taxID(s), multiple values should be separated by comma")
+	listCmd.Flags().StringP("indent", "I", "  ", "indent")
 	listCmd.Flags().BoolP("show-rank", "r", false, `output rank`)
 	listCmd.Flags().BoolP("show-name", "n", false, `output scientific name`)
-	listCmd.Flags().BoolP("json", "", false, `output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor`)
+	listCmd.Flags().BoolP("json", "J", false, `output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor`)
 }
 
 func traverseTree(tree map[uint32]map[uint32]bool, parent uint32,

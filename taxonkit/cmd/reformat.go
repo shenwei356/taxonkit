@@ -22,7 +22,6 @@ package cmd
 
 import (
 	"fmt"
-	"runtime"
 	"strings"
 
 	"github.com/shenwei356/breader"
@@ -34,8 +33,8 @@ import (
 // flineageCmd represents the fx2tab command
 var flineageCmd = &cobra.Command{
 	Use:   "reformat",
-	Short: "Reformat lineage",
-	Long: `Reformat lineage
+	Short: "Reformat lineage in canonical ranks",
+	Long: `Reformat lineage in canonical ranks
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -57,7 +56,6 @@ column by flag "-t/--show-lineage-taxids".
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
-		runtime.GOMAXPROCS(config.Threads)
 
 		format := getFlagString(cmd, "format")
 		delimiter := getFlagString(cmd, "delimiter")
@@ -87,6 +85,7 @@ column by flag "-t/--show-lineage-taxids".
 
 		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
+		defer outfh.Close()
 
 		taxid2taxon, name2parent2taxid, name2taxid := getName2Parent2Taxid(config)
 
@@ -238,8 +237,6 @@ column by flag "-t/--show-lineage-taxids".
 				}
 			}
 		}
-
-		defer outfh.Close()
 	},
 }
 

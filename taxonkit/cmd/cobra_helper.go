@@ -164,3 +164,9 @@ func getFlagStringSlice(cmd *cobra.Command, flag string) []string {
 	checkError(err)
 	return value
 }
+
+func getFlagUint32(cmd *cobra.Command, flag string) uint32 {
+	value, err := cmd.Flags().GetUint32(flag)
+	checkError(err)
+	return value
+}

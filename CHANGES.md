@@ -1,5 +1,6 @@
 - [TaxonKit v0.7.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.0total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.0)
+    - new command `taxonkit filter`: 
     - 2-3X faster taxonomy data loading.
 - [TaxonKit v0.6.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.6.2)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.6.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.6.2)

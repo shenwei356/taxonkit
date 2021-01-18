@@ -23,7 +23,6 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"runtime"
 	"strconv"
 	"strings"
 
@@ -58,10 +57,24 @@ Output:
   4. (Optional) Lineage in taxIDs (-t/--show-lineage-taxids)
   5. (Optional) Rank (-r/--show-rank)
 
+Filter out invalid and deleted taxids, and replace merged 
+taxids with new ones:
+    
+    # input is one-column-taxid
+    $ taxonkit lineage -c taxids.txt \
+        | awk '$2>0' \
+        | cut -f 2-
+        
+    # taxids are in 3rd field in a 4-columns tab-delimited file,
+    # for $5, where 5 = 4 + 1.
+    $ cat input.txt \
+        | taxonkit lineage -c -i 3 \
+        | csvtk filter2 -H -t -f '$5>0' \
+        | csvtk -H -t cut -f -3
+
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
-		runtime.GOMAXPROCS(config.Threads)
 
 		delimiter := getFlagString(cmd, "delimiter")
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
@@ -94,12 +107,14 @@ Output:
 
 		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
+		defer outfh.Close()
 
 		type taxid2lineage struct {
 			line           string
 			taxid          uint32
 			lineage        string
 			lineageInTaxid string
+			notFound       bool
 		}
 
 		fn := func(line string) (interface{}, bool, error) {
@@ -109,16 +124,16 @@ Output:
 			}
 
 			data := strings.Split(line, "\t")
-			if len(data) < field+1 {
+			if len(data) <= field {
 				field = len(data) - 1
 			}
 
 			if data[field] == "" {
-				return taxid2lineage{line, 0, "", ""}, true, nil
+				return taxid2lineage{line, 0, "", "", false}, true, nil
 			}
 			id, e := strconv.Atoi(data[field])
 			if e != nil {
-				return taxid2lineage{line, 0, "", ""}, true, nil
+				return taxid2lineage{line, 0, "", "", false}, true, nil
 			}
 
 			lineage := make([]string, 0, 16)
@@ -126,6 +141,7 @@ Output:
 			var child, parent, newtaxid uint32
 			var ok bool
 			child = uint32(id)
+			var notFound bool
 			for true {
 				parent, ok = tree[child]
 				if !ok { // taxid not found
@@ -144,8 +160,9 @@ Output:
 						parent = tree[child]
 						id = int(child)
 					} else {
-						id = -1
+						id = 0
 						log.Warningf("taxid %d not found", child)
+						notFound = true
 						break
 					}
 				}
@@ -168,11 +185,13 @@ Output:
 				return taxid2lineage{line, child,
 					strings.Join(stringutil.ReverseStringSlice(lineage), delimiter),
 					strings.Join(stringutil.ReverseStringSlice(lineageInTaxid), delimiter),
+					notFound,
 				}, true, nil
 			}
 			return taxid2lineage{line, child,
 				strings.Join(stringutil.ReverseStringSlice(lineage), delimiter),
 				"",
+				notFound,
 			}, true, nil
 		}
 
@@ -192,7 +211,11 @@ Output:
 					buf.WriteString(t2l.line)
 
 					if showCode {
-						buf.WriteString("\t" + strconv.Itoa(int(t2l.taxid)))
+						if t2l.notFound {
+							buf.WriteString("\t-1")
+						} else {
+							buf.WriteString("\t" + strconv.Itoa(int(t2l.taxid)))
+						}
 					}
 					if !noLineage {
 						buf.WriteString("\t" + t2l.lineage)
@@ -218,7 +241,6 @@ Output:
 			}
 		}
 
-		defer outfh.Close()
 	},
 }
 
