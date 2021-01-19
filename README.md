@@ -31,11 +31,12 @@
 
 ## Subcommands
 
-- [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)    List taxonomic tree of given taxIDs
+- [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)    List taxonomic subtrees of given taxIDs
 - [`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage) Query taxonomic lineage of given taxIDs
 - [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat) Reformat lineage in canonical ranks
 - [`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid) Convert scientific names to taxIDs
 - [`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter) Filter taxIDs by taxonomic rank range
+- [`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca) Compute lowest common ancestor (LCA) for taxIDs
 - [`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog) Create taxID changelog from dump archives
 
 Misc

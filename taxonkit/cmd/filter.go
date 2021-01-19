@@ -40,6 +40,7 @@ var filterCmd = &cobra.Command{
 	Long: `Filter taxIDs by taxonomic rank range
 
 Attentions:
+
   1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
      used along with -E/--equal-to which values can be different.
   2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can give
@@ -47,6 +48,7 @@ Attentions:
   3. TaxIDss with no rank will be discarded.
 
 Rank file:
+
   1. Blank lines or lines starting with "#" are ignored.
   2. Ranks are in decending order and case ignored.
   3. Ranks with same order should be in one line separated with comma (",", no space).
@@ -162,7 +164,7 @@ Rank file:
 			checkError(err)
 
 			var line string
-			items := make([]string, 8)
+			var items []string
 
 			scanner := bufio.NewScanner(fh)
 			var _taxid int

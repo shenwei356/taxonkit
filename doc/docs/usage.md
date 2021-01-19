@@ -55,7 +55,7 @@ Available Commands:
   genautocomplete generate shell autocompletion script
   help            Help about any command
   lineage         Query taxonomic lineage of given taxIDs
-  list            List taxonomic tree of given taxIDs
+  list            List taxonomic subtrees of given taxIDs
   name2taxid      Convert scientific names to taxIDs
   reformat        Reformat lineage in canonical ranks
   taxid-changelog Create taxID changelog from dump archives
@@ -76,7 +76,7 @@ Flags:
 Usage
 
 ```text
-List taxonomic tree of given taxIDs
+List taxonomic subtrees of given taxIDs
 
 Examples:
 
@@ -720,6 +720,7 @@ Usage
 Filter taxIDs by taxonomic rank range
 
 Attentions:
+
   1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
      used along with -E/--equal-to which values can be different.
   2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can give
@@ -727,6 +728,7 @@ Attentions:
   3. TaxIDss with no rank will be discarded.
 
 Rank file:
+
   1. Blank lines or lines starting with "#" are ignored.
   2. Ranks are in decending order and case ignored.
   3. Ranks with same order should be in one line separated with comma (",", no space).
@@ -812,7 +814,99 @@ Examples
         239934   genus     Akkermansia
         239935   species   Akkermansia muciniphila
         349741   strain    Akkermansia muciniphila ATCC BAA-835
-            
+
+## lca
+
+Usage
+
+```text
+Compute lowest common ancestor (LCA) for taxIDs
+
+Attention:
+
+  1. This command computes LCA taxID for a list of taxIDs 
+     in a field ("-i/--taxids-field) of tab-delimited file or STDIN.
+  2. TaxIDs should have the same separater ("-s/--separater"),
+     single charactor separater is prefered.
+  3. Empty lines or lines without valid taxIDs in the field are omitted.
+  4. If some taxIDs are not found in database, it returns 0.
+  
+Examples:
+
+    $ echo 239934, 239935, 349741 | taxonkit lca  -s ", "
+    239934, 239935, 349741  239934
+
+    $ echo 239934  239935  349741 9606  | taxonkit lca
+    239934 239935 349741 9606       131567
+
+Usage:
+  taxonkit lca [flags]
+
+Flags:
+  -h, --help               help for lca
+  -s, --separater string   separater for taxIDs (default " ")
+  -D, --skip-deleted       skip deleted taxIDs and compute with left ones
+  -U, --skip-unfound       skip unfound taxIDs and compute with left ones
+  -i, --taxids-field int   field index of taxid. input data should be tab-separated (default 1)
+
+```
+
+Examples:
+
+1. Example data
+
+        $ taxonkit list --ids 9605 -nr --indent "    "
+        9605 [genus] Homo
+            9606 [species] Homo sapiens
+                63221 [subspecies] Homo sapiens neanderthalensis
+                741158 [subspecies] Homo sapiens subsp. 'Denisova'
+            1425170 [species] Homo heidelbergensis
+            2665952 [no rank] environmental samples
+                2665953 [species] Homo sapiens environmental sample
+
+1. Simple one
+
+        $ echo 63221 2665953 | taxonkit lca
+        63221 2665953   9605
+        
+1. Custom field (`-i/--taxids-field`) and separater (`-s/--separater`).
+
+        $ echo -ne "a\t63221,2665953\nb\t63221, 741158\n"
+        a       63221,2665953
+        b       63221, 741158
+        
+        $ echo -ne "a\t63221,2665953\nb\t63221, 741158\n" \
+            | taxonkit lca -i 2 -s ","
+        a       63221,2665953   9605
+        b       63221, 741158   9606
+        
+1. Merged taxIDs.
+
+        # merged
+        $ echo 92487 92488 92489 | taxonkit lca
+        10:08:26.578 [WARN] taxid 92489 was merged into 796334
+        92487 92488 92489       1236
+        
+1. Deleted taxIDs, you can ommit theses and continue compute with left onces with (`-D/--skip-deleted`).
+
+        $ echo 1 2 3 | taxonkit lca 
+        10:30:17.678 [WARN] taxid 3 not found
+        1 2 3   0
+        
+        $ time  echo 1 2 3 | taxonkit lca -D
+        10:29:31.828 [WARN] taxid 3 was deleted
+        1 2 3   1
+
+1. TaxIDs not found in database, you can ommit theses and continue compute with left onces with (`-U/--skip-unfound`).
+
+        $ echo 61021 61022 11111111 | taxonkit lca
+        10:31:44.929 [WARN] taxid 11111111 not found
+        61021 61022 11111111    0
+        
+        $ echo 61021 61022 11111111 | taxonkit lca -U
+        10:32:02.772 [WARN] taxid 11111111 not found
+        61021 61022 11111111    2628496
+
 ## taxid-changelog
 
 Usage

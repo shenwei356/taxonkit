@@ -35,8 +35,8 @@ import (
 // listCmd represents the fx2tab command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List taxonomic tree of given taxIDs",
-	Long: `List taxonomic tree of given taxIDs
+	Short: "List taxonomic subtrees of given taxIDs",
+	Long: `List taxonomic subtrees of given taxIDs
 
 Examples:
 

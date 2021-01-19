@@ -27,6 +27,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/shenwei356/unikmer"
 	"github.com/shenwei356/util/pathutil"
@@ -81,25 +82,44 @@ func loadTaxonomy(opt *Config, withRank bool) *unikmer.Taxonomy {
 
 	var existed bool
 
-	// err = t.LoadDeletedNodesFromNCBI(filepath.Join(opt.DataDir, "delnodes.dmp"))
-	// if err != nil {
-	// 	checkError(fmt.Errorf("err on loading Taxonomy nodes: %s", err))
-	// }
+	var wg sync.WaitGroup
+	wg.Add(2)
 
-	existed, err = pathutil.Exists(filepath.Join(opt.DataDir, "merged.dmp"))
-	if err != nil {
-		checkError(fmt.Errorf("err on checking file merged.dmp: %s", err))
-	}
-	if existed {
-		err = t.LoadMergedNodesFromNCBI(filepath.Join(opt.DataDir, "merged.dmp"))
+	go func() {
+		defer wg.Done()
+		existed, err = pathutil.Exists(filepath.Join(opt.DataDir, "delnodes.dmp"))
 		if err != nil {
-			checkError(fmt.Errorf("err on loading Taxonomy merged nodes: %s", err))
+			checkError(fmt.Errorf("err on checking file merged.dmp: %s", err))
 		}
-	}
+		if existed {
+			err = t.LoadDeletedNodesFromNCBI(filepath.Join(opt.DataDir, "delnodes.dmp"))
+			if err != nil {
+				checkError(fmt.Errorf("err on loading Taxonomy nodes: %s", err))
+			}
+		}
+		if opt.Verbose {
+			log.Infof("%d deleted nodes loaded", len(t.DelNodes))
+		}
+	}()
 
-	if opt.Verbose {
-		log.Infof("%d merged nodes loaded", len(t.MergeNodes))
-	}
+	go func() {
+		defer wg.Done()
+		existed, err = pathutil.Exists(filepath.Join(opt.DataDir, "merged.dmp"))
+		if err != nil {
+			checkError(fmt.Errorf("err on checking file merged.dmp: %s", err))
+		}
+		if existed {
+			err = t.LoadMergedNodesFromNCBI(filepath.Join(opt.DataDir, "merged.dmp"))
+			if err != nil {
+				checkError(fmt.Errorf("err on loading Taxonomy merged nodes: %s", err))
+			}
+		}
+		if opt.Verbose {
+			log.Infof("%d merged nodes loaded", len(t.MergeNodes))
+		}
+	}()
+
+	wg.Wait()
 
 	t.CacheLCA()
 
