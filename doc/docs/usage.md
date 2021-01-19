@@ -798,14 +798,18 @@ Examples
 
         $ cat taxids2.txt \
             | taxonkit filter -E Phylum \
-            | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+            | taxonkit lineage -r \
+            | csvtk -Ht cut -f 1,3,2 \
+            | csvtk pretty -t
         74201   phylum   cellular organisms;Bacteria;PVC group;Verrucomicrobia
         
 1. Lower than a rank (`-L/--lower-than`)
 
         $ cat taxids2.txt \
             | taxonkit filter -L genus \
-            | taxonkit lineage -r -n -L | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+            | taxonkit lineage -r -n -L \
+            | csvtk -Ht cut -f 1,3,2 \
+            | csvtk pretty -t
         239935   species   Akkermansia muciniphila
         349741   strain    Akkermansia muciniphila ATCC BAA-835
 
@@ -813,14 +817,18 @@ Examples
 
         $ cat taxids2.txt \
             | taxonkit filter -H phylum \
-            | taxonkit lineage -r -n -L | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+            | taxonkit lineage -r -n -L \
+            | csvtk -Ht cut -f 1,3,2 \
+            | csvtk pretty -t
         2   superkingdom   Bacteria
 
 1. Combine of `-L/-H` with `-E`.
 
         $ cat taxids2.txt \
             | taxonkit filter -L genus -E genus  \
-            | taxonkit lineage -r -n -L | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+            | taxonkit lineage -r -n -L \
+            | csvtk -Ht cut -f 1,3,2 \
+            | csvtk pretty -t
         239934   genus     Akkermansia
         239935   species   Akkermansia muciniphila
         349741   strain    Akkermansia muciniphila ATCC BAA-835

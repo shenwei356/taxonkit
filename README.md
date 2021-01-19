@@ -52,7 +52,7 @@
 
 Subcommand                                                                    |Function
 :-----------------------------------------------------------------------------|:----------------------------------------------
-[`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)                      |List taxonomic subtrees of given taxIDs
+[`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)                      |List taxonomic subtrees (taxIDs) bellow given taxIDs
 [`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage)                |Query taxonomic lineage of given taxIDs
 [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat)              |Reformat lineage in canonical ranks
 [`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid)          |Convert scientific names to taxIDs
