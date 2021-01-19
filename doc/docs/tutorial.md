@@ -26,7 +26,7 @@ Hardware in this tutorial
 - RAM: 64GB
 - DISK:
     - Taxonomy files stores in NVMe SSD
-    - blatdb files stores in 7200rpm HDD
+    - blastdb files stores in 7200rpm HDD
 
 Tools:
 
