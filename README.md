@@ -11,8 +11,26 @@
 [![Github Releases](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/total.svg?maxAge=3600)](https://bioinf.shenwei.me/taxonkit/download/)
 [![Cross-platform](https://img.shields.io/badge/platform-any-ec2eb4.svg?style=flat)](https://bioinf.shenwei.me/taxonkit/download/)
 [![Anaconda Cloud](	https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit)
-- [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of taxids, including taxids deletion, new adding, merge, reuse, and rank/name changes.
+- [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of taxIDss, including deletion, new adding, merge, reuse, and rank/name changes.
 - **[Please cite](#citation):** [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
+
+
+## Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Features](#features)
+- [Subcommands](#subcommands)
+- [Dataset](#dataset)
+- [Installation](#installation)
+- [Bash-completion](#bash-completion)
+- [Citation](#citation)
+- [Contact](#contact)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 ## Features
 
@@ -21,8 +39,9 @@
      ([download](http://bioinf.shenwei.me/taxonkit/download/))
    - **Light weight and out-of-the-box, no dependencies, no compilation, no configuration**
      ([download](http://bioinf.shenwei.me/taxonkit/download/))
+   - **No database building**, just download [NCBI taxonomy data](ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz) and compress to `$HOME/.taxonkit`
 2. **Easy to use**   
-   - **Supporting [Bash-completion](#bash-completion)**
+   - **Supporting [bash-completion](#bash-completion)**
    - **Fast** (see [benchmark](#benchmark)), **multiple-CPUs supported**
    - **Well documented usage and examples** (detailed [usage](http://bioinf.shenwei.me/taxonkit/usage/))
    - **Supporting STDIN and gzipped input/output file, easy being used in pipe**
@@ -31,18 +50,34 @@
 
 ## Subcommands
 
-- [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)    List taxonomic subtrees of given taxIDs
-- [`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage) Query taxonomic lineage of given taxIDs
-- [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat) Reformat lineage in canonical ranks
-- [`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid) Convert scientific names to taxIDs
-- [`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter) Filter taxIDs by taxonomic rank range
-- [`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca) Compute lowest common ancestor (LCA) for taxIDs
-- [`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog) Create taxID changelog from dump archives
+Subcommand                                                                    |Function
+:-----------------------------------------------------------------------------|:----------------------------------------------
+[`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)                      |List taxonomic subtrees of given taxIDs
+[`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage)                |Query taxonomic lineage of given taxIDs
+[`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat)              |Reformat lineage in canonical ranks
+[`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid)          |Convert scientific names to taxIDs
+[`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter)                  |Filter taxIDs by taxonomic rank range
+[`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca)                        |Compute lowest common ancestor (LCA) for taxIDs
+[`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog)|Create taxID changelog from dump archives 
+`version`                                                                     |Print version information and check for update
+`genautocomplete`                                                             |Generate shell autocompletion script
 
-Misc
 
-- `version`   print version information and check for update
-- `genautocomplete` generate shell autocompletion script
+## Dataset
+
+1. Download and decompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+2. Copy `names.dmp`, `nodes.dmp`, `delnodes.dmp` and `merged.dmp` to data directory: `$HOME/.taxonkit`,
+e.g., `/home/shenwei/.taxonkit` ,
+3. Optionally copy to some other directories, and later you can refer to using flag `--data-dir`,
+or environment variable `TAXONKIT_DB`.
+
+All-in-one command:
+
+    wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+    tar -zxvf taxdump.tar.gz
+    
+    mkdir -p $HOME/.taxonkit
+    cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 
 ## Installation
 
@@ -68,7 +103,7 @@ And then:
 
             mkdir -p $HOME/bin/; cp taxonkit $HOME/bin/
 
-1. **For windows**, just copy `taxonkit.exe` to `C:\WINDOWS\system32`.
+1. **For Windows**, just copy `taxonkit.exe` to `C:\WINDOWS\system32`.
 
 #### Method 2: Install via conda  (latest stable version) [![Install-with-conda](https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg)](https://bioinf.shenwei.me/taxonkit/download/) [![Anaconda Cloud](https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit) [![downloads](https://anaconda.org/bioconda/taxonkit/badges/downloads.svg)](https://anaconda.org/bioconda/taxonkit)
 
@@ -106,8 +141,6 @@ Howto:
 If you use TaxonKit in your work, please cite [the preprint](https://www.biorxiv.org/content/early/2019/01/08/513523).
 
 ## Contact
-
-Email me for any problem when using TaxonKit. shenwei356(at)gmail.com
 
 [Create an issue](https://github.com/shenwei356/taxonkit/issues) to report bugs,
 propose new functions or ask for help.
