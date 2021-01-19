@@ -9,17 +9,17 @@ pages:
 - More tools: https://github.com/shenwei356
 
 theme:
-    name: 'material'
+    name: material
     palette:
-        primary: 'cyan'
-        accent: 'blue grey'
-    logo:
-        icon: 'school'
-    favicon: 'files/favicon.ico'
+        primary: cyan
+        accent: blue grey
+    icon:
+        logon: material/school
+    favicon: files/favicon.ico
     feature:
         tabs: false
 extra:
-  manifest: 'manifest.webmanifest'
+  manifest: manifest.webmanifest
   
 arkdown_extensions:
   - admonition

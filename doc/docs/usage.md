@@ -11,17 +11,26 @@ Table of Contents
   - [reformat](#reformat)
   - [name2taxid](#name2taxid)
   - [filter](#filter)
+  - [lca](#lca)
   - [taxid-changelog](#taxid-changelog)
   - [genautocomplete](#genautocomplete)
 <!-- /TOC -->
 
 ## Before use
 
-Please download and uncompress these files:
+1. Download and decompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+2. Copy `names.dmp`, `nodes.dmp`, `delnodes.dmp` and `merged.dmp` to data directory: `$HOME/.taxonkit`,
+e.g., `/home/shenwei/.taxonkit` ,
+3. Optionally copy to some other directories, and later you can refer to using flag `--data-dir`,
+or environment variable `TAXONKIT_DB`.
 
-- [ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz](ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz)
+All-in-one command:
 
-And copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data directory: "$HOME/.taxonkit".
+    wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+    tar -zxvf taxdump.tar.gz
+    
+    mkdir -p $HOME/.taxonkit
+    cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 
 ## taxonkit
 
@@ -54,6 +63,7 @@ Available Commands:
   filter          Filter taxIDs by taxonomic rank range
   genautocomplete generate shell autocompletion script
   help            Help about any command
+  lca             Compute lowest common ancestor (LCA) for taxIDs
   lineage         Query taxonomic lineage of given taxIDs
   list            List taxonomic subtrees of given taxIDs
   name2taxid      Convert scientific names to taxIDs

@@ -1,5 +1,146 @@
 # Tutorial
 
+
+## Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Parsing kraken/bracken result](#parsing-krakenbraken-result)
+- [Stats](#stats)
+- [Making nr blastdb for specific taxids](#making-nr-blastdb-for-specific-taxids)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
+## Parsing kraken/bracken result
+
+Example Data.
+
+    $ head -n 10  test_bracken_species.kreport 
+    100.00  11430773        0       R       1       root
+    92.12   10530410        0       R1      131567    cellular organisms
+    92.06   10522651        0       D       2           Bacteria
+    92.04   10520821        0       P       1224          Proteobacteria
+    92.02   10518133        0       C       1236            Gammaproteobacteria
+    92.00   10516208        0       O       91347             Enterobacterales
+    91.81   10494626        0       F       543                 Enterobacteriaceae
+    86.73   9914368 0       G       561                   Escherichia
+    84.84   9698064 9698064 S       562                     Escherichia coli
+    0.93    106494  106494  S       208962                  Escherichia albertii
+
+Save taxon proportion and taxid, and get lineage, name and rank.
+
+    $ time cat test_bracken_species.kreport \
+        | csvtk cut -Ht -f 1,5 \
+        | taxonkit lineage -i 2 -n -r \
+        | csvtk cut -Ht -f 1,2,5,4,3 \
+        | head -n 10 
+        
+    100.00  1       no rank root    root
+    92.12   131567  no rank cellular organisms      cellular organisms
+    92.06   2       superkingdom    Bacteria        cellular organisms;Bacteria
+    92.04   1224    phylum  Proteobacteria  cellular organisms;Bacteria;Proteobacteria
+    92.02   1236    class   Gammaproteobacteria     cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria
+    92.00   91347   order   Enterobacterales        cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales
+    91.81   543     family  Enterobacteriaceae      cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae
+    86.73   561     genus   Escherichia     cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia
+    84.84   562     species Escherichia coli        cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+    0.93    208962  species Escherichia albertii    cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia albertii
+
+    real    0m1.426s
+    user    0m2.993s
+    sys     0m0.260s
+
+Only save species or lower level and get lineage in format of "superkingdom phylum class order family genus species".
+
+    $ time cat test_bracken_species.kreport \
+        | csvtk cut -Ht -f 1,5 \
+        | taxonkit filter -E species -L species -i 2 \
+        | taxonkit lineage -i 2 -n -r \
+        | taxonkit reformat -i 3 -f "{k};{p};{c};{o};{f};{g};{s}" \
+        | csvtk cut -Ht -f 1,2,5,4,6 \
+        | csvtk add-header -t -n abundance,taxid,rank,name,lineage \
+        | head -n 10 \
+        | csvtk pretty -t
+        
+    abundance   taxid     name      rank                     lineage
+    84.84       562       species   Escherichia coli         Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+    0.93        208962    species   Escherichia albertii     Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia albertii
+    0.90        564       species   Escherichia fergusonii   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia fergusonii
+    0.05        2725997   species   Escherichia sp. SCLE84   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. SCLE84
+    0.00        2044467   species   Escherichia sp. E4742    Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. E4742
+    0.01        1499973   species   Escherichia marmotae     Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia marmotae
+    2.68        621       species   Shigella boydii          Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella boydii
+    0.04        622       species   Shigella dysenteriae     Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella dysenteriae
+    0.98        28901     species   Salmonella enterica      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Salmonella;Salmonella enterica
+
+    real    0m4.142s
+    user    0m12.874s
+    sys     0m0.808s
+
+## Stats
+
+You can change the taxID of interest.
+
+1. Count of ranks
+
+        $ time taxonkit list --ids 1 \
+            | taxonkit lineage -L -r \
+            | csvtk freq -H -t -f 2 -nr \
+            | csvtk pretty -t
+        
+        species            1879659
+        no rank            222743
+        genus              96625
+        strain             44483
+        subspecies         25174
+        family             9492
+        varietas           8524
+        subfamily          3050
+        tribe              2213
+        order              1660
+        subgenus           1618
+        isolate            1319
+        serotype           1216
+        clade              886
+        superfamily        865
+        forma specialis    741
+        forma              564
+        subtribe           508
+        section            437
+        class              429
+        suborder           372
+        species group      330
+        phylum             272
+        subclass           156
+        serogroup          138
+        infraorder         130
+        species subgroup   124
+        superorder         55
+        subphylum          33
+        parvorder          26
+        subsection         21
+        genotype           20
+        infraclass         18
+        biotype            17
+        morph              12
+        kingdom            11
+        series             9
+        superclass         6
+        cohort             5
+        pathogroup         5
+        subvariety         5
+        superkingdom       4
+        subcohort          3
+        subkingdom         1
+        superphylum        1
+
+        real    0m3.663s
+        user    0m15.897s
+        sys     0m1.010s
+
+
 ## Making nr blastdb for specific taxids
 
 Attention:
@@ -46,12 +187,12 @@ Steps:
         # echo 6656 | taxonkit lineage | taxonkit reformat
         # 6656    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Protostomia;Ecdysozoa;Panarthropoda;Arthropoda    Eukaryota;Arthropoda;;;;;
         
-        # 2    bacteria
-        # 2157 archaea
-        # 4751 fungi
+        # 2     bacteria
+        # 2157  archaea
+        # 4751  fungi
         # 10239 virus
 
-        # time: 3s
+        # time: 2s
         taxonkit list --ids $id --indent "" > $id.taxid.txt
         
         # taxonkit list --ids 2,4751,10239 --indent "" > microbe.taxid.txt
@@ -144,7 +285,7 @@ Steps:
             
             # ---------------------------------------------------------------------
             
-            # method 3) (**for huge $id.acc.txt file, e.g., bacteria)
+            # method 3) (for huge $id.acc.txt file, e.g., bacteria)
             
             # (1). split ${id}.acc.txt into several parts. chunk size depends on lines and RAM (64G for me).
             split -d -l 300000000 $id.acc.txt $id.acc.txt.part_
