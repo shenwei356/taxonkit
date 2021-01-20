@@ -470,6 +470,7 @@ Usage:
   taxonkit reformat [flags]
 
 Flags:
+  -P, --add-prefix                     add prefix for all ranks, single prefix for a rank is defined by flag --prefix-X
   -d, --delimiter string               field delimiter in input lineage (default ";")
   -F, --fill-miss-rank                 fill missing rank with original lineage information (experimental)
   -f, --format string                  output format, placeholders of rank are needed (default "{k};{p};{c};{o};{f};{g};{s}")
@@ -478,6 +479,14 @@ Flags:
   -r, --miss-rank-repl string          replacement string for missing rank, if given "", "unclassified xxx xxx" will used, where "unclassified " is settable by flag -p/--miss-rank-repl-prefix
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
   -R, --miss-taxid-repl string         replacement string for missing taxid
+      --prefix-S string                prefix for subspecies (default "S__")
+      --prefix-c string                prefix for class (default "c__")
+      --prefix-f string                prefix for family (default "f__")
+      --prefix-g string                prefix for genus (default "g__")
+      --prefix-k string                prefix for superkingdom (default "k__")
+      --prefix-o string                prefix for order (default "o__")
+      --prefix-p string                prefix for phylum (default "p__")
+      --prefix-s string                prefix for species (default "s__")
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
 
 ```
@@ -541,6 +550,24 @@ Examples:
             92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
             1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
 
+            
+1. Add prefix.
+
+
+        $ cat lineage.txt \
+            | taxonkit reformat -P \
+            | csvtk -H -t cut -f 1,3 
+        9606    k__Eukaryota;p__Chordata;c__Mammalia;o__Primates;f__Hominidae;g__Homo;s__Homo sapiens
+        9913    k__Eukaryota;p__Chordata;c__Mammalia;o__Artiodactyla;f__Bovidae;g__Bos;s__Bos taurus
+        376619  k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Thiotrichales;f__Francisellaceae;g__Francisella;s__Francisella tularensis
+        349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+        239935  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+        314101  k__Bacteria;p__;c__;o__;f__;g__;s__uncultured murine large bowel bacterium BAC 54B
+        11932   k__Viruses;p__Artverviricota;c__Revtraviricetes;o__Ortervirales;f__Retroviridae;g__Intracisternal A-particles;s__Mouse Intracisternal A-particle
+        1327037 k__Viruses;p__Uroviricota;c__Caudoviricetes;o__Caudovirales;f__Siphoviridae;g__;s__Croceibacter phage P2559Y
+        92489   k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Enterobacterales;f__Erwiniaceae;g__Erwinia;s__Erwinia oleae
+        1458427 k__Bacteria;p__Proteobacteria;c__Betaproteobacteria;o__Burkholderiales;f__Comamonadaceae;g__Serpentinomonas;s__Serpentinomonas raichei
+            
 1. Show corresponding taxids of reformated lineage (flag `-t/--show-lineage-taxids`)
 
         $ cat lineage.txt \

@@ -66,6 +66,26 @@ column by flag "-t/--show-lineage-taxids".
 		field := getFlagPositiveInt(cmd, "lineage-field") - 1
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
 
+		addPrefix := getFlagBool(cmd, "add-prefix")
+		prefixK := getFlagString(cmd, "prefix-k")
+		prefixP := getFlagString(cmd, "prefix-p")
+		prefixC := getFlagString(cmd, "prefix-c")
+		prefixO := getFlagString(cmd, "prefix-o")
+		prefixF := getFlagString(cmd, "prefix-f")
+		prefixG := getFlagString(cmd, "prefix-g")
+		prefixs := getFlagString(cmd, "prefix-s")
+		prefixS := getFlagString(cmd, "prefix-S")
+
+		prefixes := map[string]string{
+			"k": prefixK,
+			"p": prefixP,
+			"c": prefixC,
+			"o": prefixO,
+			"f": prefixF,
+			"g": prefixG,
+			"s": prefixs,
+			"S": prefixS,
+		}
 		// check format
 		if !reRankPlaceHolder.MatchString(format) {
 			checkError(fmt.Errorf("placeholder of simplified rank not found in output format: %s", format))
@@ -208,7 +228,11 @@ column by flag "-t/--show-lineage-taxids".
 			flineage := format
 			iflineage := format
 			for srank, re := range reRankPlaceHolders {
-				flineage = re.ReplaceAllString(flineage, replacements[srank])
+				if addPrefix {
+					flineage = re.ReplaceAllString(flineage, prefixes[srank]+replacements[srank])
+				} else {
+					flineage = re.ReplaceAllString(flineage, replacements[srank])
+				}
 				iflineage = re.ReplaceAllString(iflineage, ireplacements[srank])
 			}
 
@@ -251,4 +275,14 @@ func init() {
 	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "fill missing rank with original lineage information (experimental)")
 	flineageCmd.Flags().IntP("lineage-field", "i", 2, "field index of lineage. data should be tab-separated")
 	flineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)
+
+	flineageCmd.Flags().BoolP("add-prefix", "P", false, `add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X`)
+	flineageCmd.Flags().StringP("prefix-k", "", "k__", `prefix for superkingdom`)
+	flineageCmd.Flags().StringP("prefix-p", "", "p__", `prefix for phylum`)
+	flineageCmd.Flags().StringP("prefix-c", "", "c__", `prefix for class`)
+	flineageCmd.Flags().StringP("prefix-o", "", "o__", `prefix for order`)
+	flineageCmd.Flags().StringP("prefix-f", "", "f__", `prefix for family`)
+	flineageCmd.Flags().StringP("prefix-g", "", "g__", `prefix for genus`)
+	flineageCmd.Flags().StringP("prefix-s", "", "s__", `prefix for species`)
+	flineageCmd.Flags().StringP("prefix-S", "", "S__", `prefix for subspecies`)
 }

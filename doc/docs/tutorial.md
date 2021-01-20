@@ -6,12 +6,63 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Formating lineage](#formating-lineage)
 - [Parsing kraken/bracken result](#parsing-krakenbraken-result)
-- [Stats](#stats)
+- [Summaries of taxonomy data](#summaries-of-taxonomy-data)
 - [Making nr blastdb for specific taxids](#making-nr-blastdb-for-specific-taxids)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## Formating lineage
+
+Example data.
+
+    $ cat taxids3.txt
+    376619
+    349741
+    239935
+    314101
+    11932
+    1327037
+    
+Format to seven-level ranks ("superkingdom phylum class order family genus species").
+
+    $ cat taxids3.txt \
+        | taxonkit lineage \
+        | taxonkit reformat \
+        | cut -f 1,3
+    376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
+    349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+    239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+    314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
+    11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+    1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
+    
+Fill missing ranks and add prefixes.
+
+    $ cat taxids3.txt \
+        | taxonkit lineage \
+        | taxonkit reformat -F -P \
+        | cut -f 1,3
+    376619  k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Thiotrichales;f__Francisellaceae;g__Francisella;s__Francisella tularensis
+    349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+    239935  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+    314101  k__Bacteria;p__unclassified Bacteria phylum;c__unclassified Bacteria class;o__unclassified Bacteria order;f__unclassified Bacteria family;g__unclassified Bacteria genus;s__uncultured murine large bowel bacterium BAC 54B
+    11932   k__Viruses;p__Artverviricota;c__Revtraviricetes;o__Ortervirales;f__Retroviridae;g__Intracisternal A-particles;s__Mouse Intracisternal A-particle
+    1327037 k__Viruses;p__Uroviricota;c__Caudoviricetes;o__Caudovirales;f__Siphoviridae;g__unclassified Siphoviridae genus;s__Croceibacter phage P2559Y
+
+Single prefix of a rank can be set with flag like `--prefix-k`.
+
+    $ cat taxids3.txt \
+        | taxonkit lineage \
+        | taxonkit reformat -F -P --prefix-k "d__" \
+        | cut -f 1,3
+    376619  d__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Thiotrichales;f__Francisellaceae;g__Francisella;s__Francisella tularensis
+    349741  d__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+    239935  d__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+    314101  d__Bacteria;p__unclassified Bacteria phylum;c__unclassified Bacteria class;o__unclassified Bacteria order;f__unclassified Bacteria family;g__unclassified Bacteria genus;s__uncultured murine large bowel bacterium BAC 54B
+    11932   d__Viruses;p__Artverviricota;c__Revtraviricetes;o__Ortervirales;f__Retroviridae;g__Intracisternal A-particles;s__Mouse Intracisternal A-particle
+    1327037 d__Viruses;p__Uroviricota;c__Caudoviricetes;o__Caudovirales;f__Siphoviridae;g__unclassified Siphoviridae genus;s__Croceibacter phage P2559Y
 
 ## Parsing kraken/bracken result
 
@@ -79,7 +130,7 @@ Only save species or lower level and get lineage in format of "superkingdom phyl
     user    0m12.874s
     sys     0m0.808s
 
-## Stats
+## Summaries of taxonomy data
 
 You can change the taxID of interest.
 
