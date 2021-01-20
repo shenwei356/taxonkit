@@ -551,7 +551,7 @@ Examples:
             1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
 
             
-1. Add prefix.
+1. Add prefix (`-P/--add-prefix`).
 
 
         $ cat lineage.txt \

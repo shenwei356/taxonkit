@@ -6,12 +6,115 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Summaries of taxonomy data](#summaries-of-taxonomy-data)
 - [Formating lineage](#formating-lineage)
 - [Parsing kraken/bracken result](#parsing-krakenbraken-result)
-- [Summaries of taxonomy data](#summaries-of-taxonomy-data)
 - [Making nr blastdb for specific taxids](#making-nr-blastdb-for-specific-taxids)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Summaries of taxonomy data
+
+You can change the taxID of interest.
+
+1. Rank counts of common categories.
+
+        $ echo Archaea Bacteria Eukaryota Fungi Metazoa Viridiplantae \
+            | rush -D ' ' -T b \
+                'taxonkit list --ids $(echo {} | taxonkit name2taxid | cut -f 2) \
+                    | sed 1d \
+                    | taxonkit filter -i 2 -E genus -L genus \
+                    | taxonkit lineage -L -r \
+                    | csvtk freq -H -t -f 2 -nr \
+                    > stats.{}.tsv '
+                    
+        $ csvtk -t join --outer-join stats.*.tsv \
+            | csvtk add-header -t -n "rank,$(ls stats.*.tsv | rush -k 'echo {@stats.(.+).tsv}' | paste -sd, )" \
+            | csvtk csv2md -t
+    
+    [Similar data on NCBI Taxonomy](https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=statistics&uncultured=hide&unspecified=hide)
+    
+    rank            |Archaea|Bacteria|Eukaryota|Fungi |Metazoa|Viridiplantae
+    :---------------|:------|:-------|:--------|:-----|:------|:------------
+    species         |12482  |460940  |1349648  |156908|957297 |191026
+    strain          |354    |40643   |3486     |2352  |33     |50
+    genus           |205    |4112    |90882    |6844  |64148  |16202
+    isolate         |7      |503     |809      |76    |17     |3
+    species group   |2      |77      |251      |22    |214    |5
+    serotype        |       |218     |         |      |       |
+    serogroup       |       |136     |         |      |       |
+    subsection      |       |        |21       |      |       |21
+    subspecies      |       |632     |24523    |158   |17043  |7212
+    forma specialis |       |521     |220      |179   |33     |1
+    species subgroup|       |23      |101      |      |101    |
+    biotype         |       |7       |10       |      |       |
+    morph           |       |        |12       |3     |4      |5
+    section         |       |        |437      |37    |2      |398
+    genotype        |       |        |12       |      |       |12
+    series          |       |        |9        |      |5      |4
+    varietas        |       |25      |8499     |1100  |2      |7188
+    forma           |       |4       |560      |185   |6      |315
+    subgenus        |       |1       |1558     |10    |1414   |112
+    pathogroup      |       |5       |         |      |       |
+    subvariety      |       |        |5        |      |       |5
+        
+1. Count of all ranks
+
+        $ time taxonkit list --ids 1 \
+            | taxonkit lineage -L -r \
+            | csvtk freq -H -t -f 2 -nr \
+            | csvtk pretty -t
+        
+        species            1879659
+        no rank            222743
+        genus              96625
+        strain             44483
+        subspecies         25174
+        family             9492
+        varietas           8524
+        subfamily          3050
+        tribe              2213
+        order              1660
+        subgenus           1618
+        isolate            1319
+        serotype           1216
+        clade              886
+        superfamily        865
+        forma specialis    741
+        forma              564
+        subtribe           508
+        section            437
+        class              429
+        suborder           372
+        species group      330
+        phylum             272
+        subclass           156
+        serogroup          138
+        infraorder         130
+        species subgroup   124
+        superorder         55
+        subphylum          33
+        parvorder          26
+        subsection         21
+        genotype           20
+        infraclass         18
+        biotype            17
+        morph              12
+        kingdom            11
+        series             9
+        superclass         6
+        cohort             5
+        pathogroup         5
+        subvariety         5
+        superkingdom       4
+        subcohort          3
+        subkingdom         1
+        superphylum        1
+
+        real    0m3.663s
+        user    0m15.897s
+        sys     0m1.010s
+
 
 ## Formating lineage
 
@@ -129,67 +232,6 @@ Only save species or lower level and get lineage in format of "superkingdom phyl
     real    0m4.142s
     user    0m12.874s
     sys     0m0.808s
-
-## Summaries of taxonomy data
-
-You can change the taxID of interest.
-
-1. Count of ranks
-
-        $ time taxonkit list --ids 1 \
-            | taxonkit lineage -L -r \
-            | csvtk freq -H -t -f 2 -nr \
-            | csvtk pretty -t
-        
-        species            1879659
-        no rank            222743
-        genus              96625
-        strain             44483
-        subspecies         25174
-        family             9492
-        varietas           8524
-        subfamily          3050
-        tribe              2213
-        order              1660
-        subgenus           1618
-        isolate            1319
-        serotype           1216
-        clade              886
-        superfamily        865
-        forma specialis    741
-        forma              564
-        subtribe           508
-        section            437
-        class              429
-        suborder           372
-        species group      330
-        phylum             272
-        subclass           156
-        serogroup          138
-        infraorder         130
-        species subgroup   124
-        superorder         55
-        subphylum          33
-        parvorder          26
-        subsection         21
-        genotype           20
-        infraclass         18
-        biotype            17
-        morph              12
-        kingdom            11
-        series             9
-        superclass         6
-        cohort             5
-        pathogroup         5
-        subvariety         5
-        superkingdom       4
-        subcohort          3
-        subkingdom         1
-        superphylum        1
-
-        real    0m3.663s
-        user    0m15.897s
-        sys     0m1.010s
 
 
 ## Making nr blastdb for specific taxids
