@@ -84,9 +84,9 @@ Output format (CSV):
                     #   DELETE          deleted
                     #   MERGE           merged into another taxid
                     #   ABSORB          other taxids merged into this one
-                    #   CHANGE_NAME     scientific changed
+                    #   CHANGE_NAME     scientific name changed
                     #   CHANGE_RANK     rank changed
-                    #   CHANGE_LIN_LIN  lineage taxids remain but lineage remain
+                    #   CHANGE_LIN_LIN  lineage taxids remain but lineage changed
                     #   CHANGE_LIN_TAX  lineage taxids changed
                     #   CHANGE_LIN_LEN  lineage length changed
     change-value    # variable values for changes: 

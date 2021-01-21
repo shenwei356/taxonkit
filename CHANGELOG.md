@@ -1,10 +1,10 @@
 - [TaxonKit v0.7.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.0)
-    - `taxonkit`: 2-3X faster taxonomy data loading.
-    - new command `taxonkit filter`: filtering taxIDs by taxonomic rank range. [#32](https://github.com/shenwei356/taxonkit/issues/32)
+    - `taxonkit`: **2-3X faster taxonomy data loading**.
+    - new command `taxonkit filter`: **filtering taxIDs by taxonomic rank range**. [#32](https://github.com/shenwei356/taxonkit/issues/32)
     - new command `taxonkit lca`: Computing lowest common ancestor (LCA) for taxIDs.
     - `taxonkit reformat`:
-        - new flag `-P/--add-prefix`: add prefixes for all ranks, single prefix for a rank is defined by flag `--prefix-X`, where `X` may be `k`, `p`, `c`, `o`, `f`, `s`, `S`.
+        - new flag `-P/--add-prefix`: **add prefixes for all ranks**, single prefix for a rank is defined by flag `--prefix-X`, where `X` may be `k`, `p`, `c`, `o`, `f`, `s`, `S`.
         - new flag `-T/--trim`: do not fill missing rank lower than current rank.
     - `taxonkit list`: do not duplicate root node.
 - [TaxonKit v0.6.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.6.2)

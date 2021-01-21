@@ -38,7 +38,7 @@
 ## Features
 
 - **Easy to install** ([download](http://bioinf.shenwei.me/taxonkit/download/))
-    - Statically linked executable binaries for multiple platforms (Linux/Windows/macOS, x86/amd64/arm64) 
+    - Statically linked executable binaries for multiple platforms (Linux/Windows/macOS, amd64/arm64) 
     - Light weight and out-of-the-box, no dependencies, no compilation, no configuration*
     - No database building, just download [NCBI taxonomy data](ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz) and uncompress to `$HOME/.taxonkit`
 - **Easy to use** ([usages and examples](http://bioinf.shenwei.me/taxonkit/usage/))
@@ -70,7 +70,7 @@ Subcommand                                                                    |F
 
 1. Getting full lineage for given taxIDs
 
-   <img src="bench/get_lineage/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" />
+   <img src="bench/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" />
 
 ## Dataset
 
