@@ -91,10 +91,10 @@ p <-
     )
   ) +
   
-  geom_hline(aes(yintercept = time_mean, color = app), size = 0.25, alpha = 0.4) +
-  geom_vline(aes(xintercept = mem_mean, color = app), size = 0.25, alpha = 0.4) +
+  geom_hline(aes(yintercept = time_mean, color = app), size = 0.3, alpha = 0.4) +
+  geom_vline(aes(xintercept = mem_mean, color = app), size = 0.3, alpha = 0.4) +
   
-  geom_point(size = 3.5) +
+  geom_point(size = 2) +
   
 #   geom_errorbar(width = 20,  size = 1, alpha = 1) +
 #   geom_errorbarh(height = 20/max(df$mem2)*max(df$time), 
@@ -111,7 +111,7 @@ p <-
 #                           ymin=NULL, ymax=NULL),
 #              size = 1.5, alpha = 0.6) +
   
-  geom_text_repel(size = 5, max.iter = 200000) +
+  geom_text_repel(size = 4.5, max.iter = 200000) +
   # scale_color_wsj() +
   scale_color_colorblind() +
   facet_wrap( ~ dataset, scales = "free_y") +
@@ -123,39 +123,42 @@ p <-
   xlab(paste("Peak Memory (", unit, ")", sep = "")) +
   labs(color = args$labcolor, shape = args$labshape)
 
+size <- 0.7
+color <- "grey25"
 p <- p +
   theme_bw() +
   theme(
-    panel.border = element_rect(color = "black", size = 1),
+    panel.border = element_rect(color = color, size =size),
     panel.background = element_blank(),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    plot.margin = unit(c(0.1,0.4,0.1,0.1),"cm"),
-    # axis.ticks.y = element_line(size = 0.6),
-    # axis.ticks.x = element_line(size = 0.6),
-    # axis.line.x = element_line(colour = "black", size = 0.6),
-    # axis.line.y = element_line(colour = "black", size = 0.6),
+    # plot.margin = unit(c(0.1,0.4,0.1,0.1),"cm"),
     
+    axis.ticks.y = element_line(size = size, color = color),
+    axis.ticks.x = element_line(size = size, color = color),
+    # axis.line.x = element_line(colour = color, size = size),
+    # axis.line.y = element_line(colour = color, size = size),
+    axis.text.x = element_text(size = 10, color = "grey30"),
+    axis.text.y = element_text(size = 10, color = "grey30"),
+    axis.title = element_text(size = 12, color= "grey20"),
     
     strip.background = element_rect(
-      colour = "white", fill = "white",
-      size = 0.2
+      colour = "grey90", fill = "grey90", size = size 
     ),
+    strip.text = element_text(size = 12, color = "grey30"),
     
-    legend.text = element_text(size = 14),
-    # legend.position = c(args$lx,args$ly),
     legend.position = "none",
-    # legend.background = element_rect(fill = "transparent"),
-    # legend.key.size = unit(0.6, "cm"),
-    # legend.key = element_blank(),
-    # legend.text.align = 0,
-    # legend.box.just = "left",
-    # strip.text.x = element_text(angle = 0, hjust = 0),
+    legend.key = element_blank(),
+    legend.direction = "vertical",
+    legend.text = element_text(size = 11),
+    legend.title = element_text(size = 11),
+    legend.background = element_rect(fill = "transparent"),
+    legend.margin = margin(0.1, 0.1, 0.1, 0.1, unit = "cm"),
     
     text = element_text(
-      size = 14, family = "arial", face = "bold"
+      size = 12, family = "arial"
     ),
-    plot.title = element_text(size = 15)
+    plot.title = element_text(size = 12)
   )
 
 if (grepl("tiff?$", args$outfile, perl = TRUE, ignore.case = TRUE)) {

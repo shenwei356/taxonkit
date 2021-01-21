@@ -11,6 +11,9 @@ for taxid in sys.stdin:
     taxid = taxid.strip()
     
     lineage = handler.lineage_name(taxid, reverse=True)
-    lineage_s = "; ".join(lineage)
+    
+    lineage_s = ""
+    if len(lineage) > 0:
+        lineage_s = "; ".join(lineage)
     
     print("{}\t{}".format(taxid, lineage_s))
