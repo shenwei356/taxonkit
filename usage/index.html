@@ -1,14 +1,10 @@
 
-
-
-
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
-      <meta http-equiv="x-ua-compatible" content="ie=edge">
       
         <meta name="description" content="TaxonKit - NCBI Taxonomy Toolkit">
       
@@ -17,26 +13,8 @@
         <meta name="author" content="shenwei356">
       
       
-        <meta name="lang:clipboard.copy" content="Copy to clipboard">
-      
-        <meta name="lang:clipboard.copied" content="Copied to clipboard">
-      
-        <meta name="lang:search.language" content="en">
-      
-        <meta name="lang:search.pipeline.stopwords" content="True">
-      
-        <meta name="lang:search.pipeline.trimmer" content="True">
-      
-        <meta name="lang:search.result.none" content="No matching documents">
-      
-        <meta name="lang:search.result.one" content="1 matching document">
-      
-        <meta name="lang:search.result.other" content="# matching documents">
-      
-        <meta name="lang:search.tokenizer" content="[\s\-]+">
-      
       <link rel="shortcut icon" href="../files/favicon.ico">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.3">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.4">
     
     
       
@@ -44,129 +22,117 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.adb8469c.css">
-      
-        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
-      
+      <link rel="stylesheet" href="../assets/stylesheets/main.15aa0b43.min.css">
       
         
+        <link rel="stylesheet" href="../assets/stylesheets/palette.75751829.min.css">
         
-        <meta name="theme-color" content="#00bcd4">
+          
+          
+          <meta name="theme-color" content="#00bdd6">
+        
       
     
     
-      <script src="../assets/javascripts/modernizr.86422ebf.js"></script>
-    
     
       
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
       
     
-    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
     
-      <link rel="manifest" type="application/manifest+json" href="../manifest.webmanifest" crossorigin="use-credentials">
+      <link rel="manifest" href="../manifest.webmanifest" crossorigin="use-credentials">
     
     
     
       
         
-<script>
-  window.ga = window.ga || function() {
-    (ga.q = ga.q || []).push(arguments)
-  }
-  ga.l = +new Date
-  /* Setup integration and send page view */
-  ga("create", "UA-28948626-9", "bioinf.shenwei.me/taxonkit")
-  ga("set", "anonymizeIp", true)
-  ga("send", "pageview")
-  /* Register handler to log search on blur */
-  document.addEventListener("DOMContentLoaded", () => {
-    if (document.forms.search) {
-      var query = document.forms.search.query
-      query.addEventListener("blur", function() {
-        if (this.value) {
-          var path = document.location.pathname;
-          ga("send", "pageview", path + "?q=" + this.value)
-        }
-      })
-    }
-  })
-</script>
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-28948626-9","bioinf.shenwei.me/taxonkit"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}),document.addEventListener("DOMContentSwitch",function(){ga("send","pageview",document.location.pathname)})</script>
 <script async src="https://www.google-analytics.com/analytics.js"></script>
       
     
     
   </head>
   
-    
-    
-    <body dir="ltr" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
   
-    <svg class="md-svg">
-      <defs>
-        
-        
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
-        
-      </defs>
-    </svg>
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
+      
+  
+    
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
-    
-      <a href="#usage-and-examples" tabindex="0" class="md-skip">
-        Skip to content
-      </a>
-    
-    
-      <header class="md-header" data-md-component="header">
-  <nav class="md-header-nav md-grid">
-    <div class="md-flex">
-      <div class="md-flex__cell md-flex__cell--shrink">
-        <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" aria-label="TaxonKit - NCBI Taxonomy Toolkit" class="md-header-nav__button md-logo">
-          
-            <i class="md-icon">school</i>
-          
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#usage-and-examples" class="md-skip">
+          Skip to content
         </a>
-      </div>
-      <div class="md-flex__cell md-flex__cell--shrink">
-        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
-      </div>
-      <div class="md-flex__cell md-flex__cell--stretch">
-        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          
-            <span class="md-header-nav__topic">
-              TaxonKit - NCBI Taxonomy Toolkit
-            </span>
-            <span class="md-header-nav__topic">
-              
-                Usage
-              
-            </span>
-          
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-header-nav__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            TaxonKit - NCBI Taxonomy Toolkit
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              Usage
+            
+          </span>
         </div>
       </div>
-      <div class="md-flex__cell md-flex__cell--shrink">
-        
-          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-          
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
-      <label class="md-icon md-search__icon" for="__search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
-        &#xE5CD;
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
       </button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result">
+        <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Type to start searching
+            Initializing search
           </div>
           <ol class="md-search-result__list"></ol>
         </div>
@@ -174,71 +140,60 @@
     </div>
   </div>
 </div>
+    
+    
+      <div class="md-header-nav__source">
         
-      </div>
-      
-        <div class="md-flex__cell md-flex__cell--shrink">
-          <div class="md-header-nav__source">
-            
-
-
-  
-
-<a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-source="github">
-  
-    <div class="md-source__icon">
-      <svg viewBox="0 0 24 24" width="24" height="24">
-        <use xlink:href="#__github" width="24" height="24"></use>
-      </svg>
-    </div>
-  
+<a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
   <div class="md-source__repository">
     GitHub
   </div>
 </a>
-          </div>
-        </div>
-      
-    </div>
+      </div>
+    
   </nav>
 </header>
     
-    <div class="md-container">
+    <div class="md-container" data-md-component="container">
+      
       
         
       
-      
-      <main class="md-main" role="main">
-        <div class="md-main__inner md-grid" data-md-component="container">
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" data-md-level="0">
-  <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-nav__button md-logo">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-nav__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit">
       
-        <i class="md-icon">school</i>
-      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
     </a>
     TaxonKit - NCBI Taxonomy Toolkit
   </label>
   
     <div class="md-nav__source">
       
-
-
-  
-
-<a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-source="github">
-  
-    <div class="md-source__icon">
-      <svg viewBox="0 0 24 24" width="24" height="24">
-        <use xlink:href="#__github" width="24" height="24"></use>
-      </svg>
-    </div>
-  
+<a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
   <div class="md-source__repository">
     GitHub
   </div>
@@ -252,8 +207,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href=".." title="Home" class="md-nav__link">
+    <a href=".." class="md-nav__link">
       Home
     </a>
   </li>
@@ -264,8 +220,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../download/" title="Download" class="md-nav__link">
+    <a href="../download/" class="md-nav__link">
       Download
     </a>
   </li>
@@ -275,32 +232,37 @@
       
       
 
+
   
 
 
   <li class="md-nav__item md-nav__item--active">
     
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
       
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
         Usage
+        <span class="md-nav__icon md-icon"></span>
       </label>
     
-    <a href="./" title="Usage" class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       Usage
     </a>
     
       
-<nav class="md-nav md-nav--secondary">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
     
   
   
-    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
@@ -346,6 +308,20 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    filter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lca" class="md-nav__link">
+    lca
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#taxid-changelog" class="md-nav__link">
     taxid-changelog
   </a>
@@ -358,10 +334,6 @@
   </a>
   
 </li>
-      
-      
-      
-      
       
     </ul>
   
@@ -375,8 +347,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../tutorial/" title="Tutorial" class="md-nav__link">
+    <a href="../tutorial/" class="md-nav__link">
       Tutorial
     </a>
   </li>
@@ -387,8 +360,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="/bench" title="Benchmark" class="md-nav__link">
+    <a href="/bench/" class="md-nav__link">
       Benchmark
     </a>
   </li>
@@ -399,8 +373,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="https://github.com/shenwei356/taxid-changelog" title="Taxid-Changelog" class="md-nav__link">
+    <a href="https://github.com/shenwei356/taxid-changelog" class="md-nav__link">
       Taxid-Changelog
     </a>
   </li>
@@ -411,8 +386,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="https://github.com/shenwei356" title="More tools" class="md-nav__link">
+    <a href="https://github.com/shenwei356" class="md-nav__link">
       More tools
     </a>
   </li>
@@ -425,17 +401,21 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
-<nav class="md-nav md-nav--secondary">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
     
   
   
-    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
@@ -481,6 +461,20 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    filter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lca" class="md-nav__link">
+    lca
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#taxid-changelog" class="md-nav__link">
     taxid-changelog
   </a>
@@ -493,10 +487,6 @@
   </a>
   
 </li>
-      
-      
-      
-      
       
     </ul>
   
@@ -510,13 +500,14 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/shenwei356/taxonkit/edit/master/docs/usage.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/shenwei356/taxonkit/edit/master/docs/usage.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
                 
                 
                 <h1 id="usage-and-examples">Usage and Examples</h1>
 <p>Table of Contents</p>
 <!-- TOC -->
-
 <ul>
 <li><a href="#usage-and-examples">Usage and Examples</a></li>
 <li><a href="#before-use">Before use</a></li>
@@ -525,25 +516,38 @@
 <li><a href="#lineage">lineage</a></li>
 <li><a href="#reformat">reformat</a></li>
 <li><a href="#name2taxid">name2taxid</a></li>
+<li><a href="#filter">filter</a></li>
+<li><a href="#lca">lca</a></li>
 <li><a href="#taxid-changelog">taxid-changelog</a></li>
-<li><a href="#genautocomplete">genautocomplete</a>
-<!-- /TOC --></li>
+<li><a href="#genautocomplete">genautocomplete</a></li>
 </ul>
-<h2 id="before-use">Before use</h2>
-<p>Please download and uncompress these files:</p>
-<ul>
-<li><a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz">ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz</a></li>
-</ul>
-<p>And copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data directory: "$HOME/.taxonkit".</p>
-<h2 id="taxonkit">taxonkit</h2>
-<pre><code class="text">TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
+<!-- /TOC -->
 
-Version: 0.6.2
+<h2 id="before-use">Before use</h2>
+<ol>
+<li>Download and decompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
+<li>Copy <code>names.dmp</code>, <code>nodes.dmp</code>, <code>delnodes.dmp</code> and <code>merged.dmp</code> to data directory: <code>$HOME/.taxonkit</code>,
+e.g., <code>/home/shenwei/.taxonkit</code> ,</li>
+<li>Optionally copy to some other directories, and later you can refer to using flag <code>--data-dir</code>,
+or environment variable <code>TAXONKIT_DB</code>.</li>
+</ol>
+<p>All-in-one command:</p>
+<pre><code>wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+tar -zxvf taxdump.tar.gz
+
+mkdir -p $HOME/.taxonkit
+cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
+</code></pre>
+<h2 id="taxonkit">taxonkit</h2>
+<pre><code class="language-text">TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
+
+Version: 0.7.0
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
 Source code: https://github.com/shenwei356/taxonkit
 Documents  : https://bioinf.shenwei.me/taxonkit
+Citation   : https://www.biorxiv.org/content/early/2019/01/08/513523
 
 Dataset:
 
@@ -560,13 +564,15 @@ Usage:
   taxonkit [command]
 
 Available Commands:
+  filter          Filter taxIDs by taxonomic rank range
   genautocomplete generate shell autocompletion script
   help            Help about any command
-  lineage         query lineage of given taxids
-  list            list taxon tree of given taxids
-  name2taxid      query taxid by taxon scientific name
-  reformat        reformat lineage
-  taxid-changelog create taxid changelog from dump archives
+  lca             Compute lowest common ancestor (LCA) for taxIDs
+  lineage         Query taxonomic lineage of given taxIDs
+  list            List taxonomic subtrees of given taxIDs
+  name2taxid      Convert scientific names to taxIDs
+  reformat        Reformat lineage in canonical ranks
+  taxid-changelog Create taxID changelog from dump archives
   version         print version information and check for update
 
 Flags:
@@ -574,56 +580,63 @@ Flags:
   -h, --help              help for taxonkit
       --line-buffered     use line buffering on output, i.e., immediately writing to stdin/file for every line of output
   -o, --out-file string   out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
-  -j, --threads int       number of CPUs. 2 is enough (default value: 1 for single-CPU PC, 2 for others) (default 2)
+  -j, --threads int       number of CPUs. 4 is enough (default 4)
       --verbose           print verbose information
 
-Use &quot;taxonkit [command] --help&quot; for more information about a command
-
 </code></pre>
-
 <h2 id="list">list</h2>
 <p>Usage</p>
-<pre><code class="text">list taxon tree of given taxids
+<pre><code class="language-text">List taxonomic subtrees of given taxIDs
+
+Examples:
+
+    $ taxonkit list --ids 9606 -n -r --indent &quot;    &quot;
+    9606 [species] Homo sapiens
+        63221 [subspecies] Homo sapiens neanderthalensis
+        741158 [subspecies] Homo sapiens subsp. 'Denisova'
+
+    $ taxonkit list --ids 9606 --indent &quot;&quot;
+    9606
+    63221
+    741158
 
 Usage:
   taxonkit list [flags]
 
 Flags:
-      --ids string      taxid(s), multiple values should be separated by comma
-      --indent string   indent (default &quot;  &quot;)
-      --json            output in JSON format. you can save the result in file with suffix &quot;.json&quot; and open with modern text editor
+  -h, --help            help for list
+  -i, --ids string      taxID(s), multiple values should be separated by comma
+  -I, --indent string   indent (default &quot;  &quot;)
+  -J, --json            output in JSON format. you can save the result in file with suffix &quot;.json&quot; and open with modern text editor
   -n, --show-name       output scientific name
   -r, --show-rank       output rank
 
 </code></pre>
-
 <p>Examples</p>
 <ol>
 <li>
-<p>Default usage</p>
-<pre><code>:::sh
-$ taxonkit list --ids 9605,239934
+<p>Default usage.</p>
+<pre><code>$ taxonkit list --ids 9605,239934
 9605
-  9606
+9606
     63221
     741158
-  1425170
+1425170
+2665952
+    2665953
 
 239934
-  239935
+239935
     349741
-  512293
+512293
     512294
     1131822
     1262691
     1263034
-  1131336
-  1574264
-  1574265
-  1638783
-  1679444
-  1755639
-  1896967
+1679444
+2608915
+    1131336
+...
 </code></pre>
 </li>
 <li>
@@ -634,6 +647,8 @@ $ taxonkit list --ids 9605,239934
 63221
 741158
 1425170
+2665952
+2665953
 
 239934
 239935
@@ -643,24 +658,23 @@ $ taxonkit list --ids 9605,239934
 1131822
 1262691
 1263034
-1131336
-1574264
-1574265
-1638783
 1679444
-1755639
-1896967
+...
 </code></pre>
 <p><strong>Performance:</strong> Time and memory usage for whole taxon tree:</p>
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
 $ memusg -t taxonkit list --ids 1 --indent "" --verbose &gt; t0.txt
-13:52:58.905 [INFO] parsing nodes file: /home/shenwei/.taxonkit/nodes.dmp
-13:53:01.449 [INFO] 2121511 nodes parsed
+21:05:01.782 [INFO] parsing merged file: /home/shenwei/.taxonkit/names.dmp
+21:05:01.782 [INFO] parsing names file: /home/shenwei/.taxonkit/names.dmp
+21:05:01.782 [INFO] parsing delnodes file: /home/shenwei/.taxonkit/names.dmp
+21:05:01.816 [INFO] 61023 merged nodes parsed
+21:05:01.889 [INFO] 437929 delnodes parsed
+21:05:03.178 [INFO] 2303979 names parsed
 
-elapsed time: 4.088s
-peak rss: 441.95 MB
+elapsed time: 3.290s
+peak rss: 742.77 MB
 </code></pre>
 </li>
 <li>
@@ -671,41 +685,34 @@ peak rss: 441.95 MB
         63221 [subspecies] Homo sapiens neanderthalensis
         741158 [subspecies] Homo sapiens subsp. 'Denisova'
     1425170 [species] Homo heidelbergensis
+    2665952 [no rank] environmental samples
+        2665953 [species] Homo sapiens environmental sample
 
 239934 [genus] Akkermansia
     239935 [species] Akkermansia muciniphila
-        349741 [no rank] Akkermansia muciniphila ATCC BAA-835
+        349741 [strain] Akkermansia muciniphila ATCC BAA-835
     512293 [no rank] environmental samples
         512294 [species] uncultured Akkermansia sp.
         1131822 [species] uncultured Akkermansia sp. SMG25
         1262691 [species] Akkermansia sp. CAG:344
         1263034 [species] Akkermansia muciniphila CAG:154
-    1131336 [species] Akkermansia sp. KLE1605
-    1574264 [species] Akkermansia sp. KLE1797
-    1574265 [species] Akkermansia sp. KLE1798
-    1638783 [species] Akkermansia sp. UNK.MGS-1
     1679444 [species] Akkermansia glycaniphila
-    1755639 [species] Akkermansia sp. MC_55
-    1872421 [species] Akkermansia sp.
-    1896967 [species] Akkermansia sp. 54_46
-    1929996 [species] Akkermansia sp. Phil8
-    1945963 [species] Akkermansia sp. UBA3271
-    1945964 [species] Akkermansia sp. UBA5128
-    1945965 [species] Akkermansia sp. UBA7059
-    1945966 [species] Akkermansia sp. UBA7090
-    2478952 [species] Akkermansia sp. aa_0143
+    2608915 [no rank] unclassified Akkermansia
+        1131336 [species] Akkermansia sp. KLE1605
+        1574264 [species] Akkermansia sp. KLE1797
+...
 </code></pre>
-<p><strong>Performance:</strong> Time and memory usage for whole taxon tree:</p>
+<p><strong>Performance:</strong> Time and memory usage for whole taxonomy tree:</p>
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
 $ memusg -t taxonkit list --show-rank --show-name --ids 1 &gt; t1.txt
-elapsed time: 8.785s
-peak rss: 1.17 GB
+elapsed time: 5.341s
+peak rss: 1.04 GB
 </code></pre>
 </li>
 <li>
-<p>Output in JSON format, so you can easily collapse and uncollapse taxonomy tree in modern text editor.</p>
+<p>Output in JSON format, you can easily collapse and uncollapse taxonomy tree in modern text editor.</p>
 <pre><code>$ taxonkit list --show-rank --show-name --indent "    " --ids 9605,239934 --json
 {
     "9605 [genus] Homo": {
@@ -756,23 +763,41 @@ peak rss: 1.17 GB
 </ol>
 <h2 id="lineage">lineage</h2>
 <p>Usage</p>
-<pre><code class="text">query lineage of given taxids
+<pre><code class="language-text">Query taxonomic lineage of given taxIDs
 
 Input:
-  - List of taxids, one taxid per line.
-  - Or tab-delimited format, please specify taxid field with flag -i/--taxid-field.
+
+  - List of taxIDs, one taxID per line.
+  - Or tab-delimited format, please specify taxID field 
+    with flag -i/--taxid-field (default 1).
   - Supporting (gzipped) file or STDIN.
 
 Output:
-  0. Input line.
-  1. Status code (optional with flag -c/--show-status-code)
+
+  1. Input line data.
+  2. (Optional) Status code (-c/--show-status-code), values:
      - &quot;-1&quot; for queries not found in whole database.
-     - &quot;0&quot; for deleted taxids, provided by &quot;delnodes.dmp&quot;.
-     - New taxids for merged taxids, provided by &quot;merged.dmp&quot;.
+     - &quot;0&quot; for deleted taxIDs, provided by &quot;delnodes.dmp&quot;.
+     - New taxIDs for merged taxIDs, provided by &quot;merged.dmp&quot;.
      - Taxids for these found in &quot;nodes.dmp&quot;.
-  2. Lineage, delimiter can be changed with flag -d/--delimiter.
-  3. Lineage taxids (optional with flag -t/--show-lineage-taxids)
-  4. Rank (optional with flag -r/--show-rank)
+  3. Lineage, delimiter can be changed with flag -d/--delimiter.
+  4. (Optional) Lineage in taxIDs (-t/--show-lineage-taxids)
+  5. (Optional) Rank (-r/--show-rank)
+
+Filter out invalid and deleted taxids, and replace merged 
+taxids with new ones:
+
+    # input is one-column-taxid
+    $ taxonkit lineage -c taxids.txt \
+        | awk '$2&gt;0' \
+        | cut -f 2-
+
+    # taxids are in 3rd field in a 4-columns tab-delimited file,
+    # for $5, where 5 = 4 + 1.
+    $ cat input.txt \
+        | taxonkit lineage -c -i 3 \
+        | csvtk filter2 -H -t -f '$5&gt;0' \
+        | csvtk -H -t cut -f -3
 
 Usage:
   taxonkit lineage [flags]
@@ -784,11 +809,10 @@ Flags:
   -t, --show-lineage-taxids   appending lineage consisting of taxids
   -n, --show-name             appending scientific name
   -r, --show-rank             appending rank of taxids
-  -c, --show-status-code      show status code between lineage
-  -i, --taxid-field int       field index of taxid. data should be tab-separated (default 1)
+  -c, --show-status-code      show status code before lineage
+  -i, --taxid-field int       field index of taxid. input data should be tab-separated (default 1)
 
 </code></pre>
-
 <p>Examples</p>
 <ol>
 <li>
@@ -828,7 +852,7 @@ $ taxonkit lineage taxids.txt | tee lineage.txt
 </code></pre>
 </li>
 <li>
-<p>Check deleted or merged taxids</p>
+<p>Checking deleted or merged taxids</p>
 <pre><code>$ taxonkit lineage --show-status-code taxids.txt | tee lineage.withcode.txt
 
 # valid
@@ -859,14 +883,15 @@ $ cat lineage.withcode.txt | awk '$2 &lt; 0' | cut -f 1
 </code></pre>
 </li>
 <li>
-<p><strong>Filter out invalid and deleted taxids, and *replace old taxids with new ones"</strong>,
+<p><strong>Filter out invalid and deleted taxids, and *replace merged taxids with new ones"</strong>,
   you may install [csvtk](https://github.com/shenwei356/csvtk.</p>
 <pre><code># input is one-column-taxid
 $ taxonkit lineage -c taxids.txt \
     | awk '$2&gt;0' \
     | cut -f 2-
 
-# taxids are in `$n`th field in a 4-columns tab-delimited file
+# taxids are in 3rd field in a 4-columns tab-delimited file,
+# for $5, where 5 = 4 + 1.
 $ cat input.txt \
     | taxonkit lineage -c -i 3 \
     | csvtk filter2 -H -t -f '$5&gt;0' \
@@ -874,8 +899,9 @@ $ cat input.txt \
 </code></pre>
 </li>
 <li>
-<p>Only show name and rank</p>
-<pre><code>$ taxonkit lineage -r -n -L taxids.txt | csvtk pretty -t
+<p>Only show name and rank.</p>
+<pre><code>$ taxonkit lineage -r -n -L taxids.txt \
+    | csvtk pretty -t
 9606        Homo sapiens                                      species
 9913        Bos taurus                                        species
 376619      Francisella tularensis subsp. holarctica LVS      strain
@@ -913,7 +939,7 @@ $ cat input.txt \
 </ol>
 <h2 id="reformat">reformat</h2>
 <p>Usage</p>
-<pre><code class="text">reformat lineage
+<pre><code class="language-text">Reformat lineage in canonical ranks
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -929,29 +955,38 @@ Output format can be formated by flag --format, available placeholders:
 Output format can contains some escape charactors like &quot;\t&quot;.
 
 This command appends reformated lineage to the input line.
-The corresponding taxids of reformated lineage can be provided as another
+The corresponding taxIDs of reformated lineage can be provided as another
 column by flag &quot;-t/--show-lineage-taxids&quot;.
 
 Usage:
   taxonkit reformat [flags]
 
 Flags:
+  -P, --add-prefix                     add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X
   -d, --delimiter string               field delimiter in input lineage (default &quot;;&quot;)
   -F, --fill-miss-rank                 fill missing rank with original lineage information (experimental)
   -f, --format string                  output format, placeholders of rank are needed (default &quot;{k};{p};{c};{o};{f};{g};{s}&quot;)
   -h, --help                           help for reformat
   -i, --lineage-field int              field index of lineage. data should be tab-separated (default 2)
-  -r, --miss-rank-repl string          replacement string for missing rank, if given &quot;&quot;, &quot;unclassified xxx xxx&quot; will used, where &quot;unclassified &quot; is settable by flag -p/--miss-rank-repl-prefix
+  -r, --miss-rank-repl string          replacement string for missing rank
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default &quot;unclassified &quot;)
   -R, --miss-taxid-repl string         replacement string for missing taxid
+      --prefix-S string                prefix for subspecies, used with flag -P/--add-prefix (default &quot;S__&quot;)
+      --prefix-c string                prefix for class, used with flag -P/--add-prefix (default &quot;c__&quot;)
+      --prefix-f string                prefix for family, used with flag -P/--add-prefix (default &quot;f__&quot;)
+      --prefix-g string                prefix for genus, used with flag -P/--add-prefix (default &quot;g__&quot;)
+      --prefix-k string                prefix for superkingdom, used with flag -P/--add-prefix (default &quot;k__&quot;)
+      --prefix-o string                prefix for order, used with flag -P/--add-prefix (default &quot;o__&quot;)
+      --prefix-p string                prefix for phylum, used with flag -P/--add-prefix (default &quot;p__&quot;)
+      --prefix-s string                prefix for species, used with flag -P/--add-prefix (default &quot;s__&quot;)
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
+  -T, --trim                           do not fill missing rank lower than current rank
 
 </code></pre>
-
 <p>Examples:</p>
 <ol>
 <li>
-<p>Example lineage (produced by: <code>taxonkit lineage taxids.txt | awk '$2!=""' &gt; lineage.txt</code>)</p>
+<p>Example lineage (produced by: <code>taxonkit lineage taxids.txt | awk '$2!=""' &gt; lineage.txt</code>).</p>
 <pre><code>$ cat lineage.txt
 9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
 9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Artiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus
@@ -966,7 +1001,7 @@ Flags:
 </code></pre>
 </li>
 <li>
-<p>Default output format (<code>"{k};{p};{c};{o};{f};{g};{s}"</code>)</p>
+<p>Default output format (<code>"{k};{p};{c};{o};{f};{g};{s}"</code>).</p>
 <pre><code># reformated lineages are appended to the input data
 $ taxonkit reformat lineage.txt 
 ...
@@ -995,6 +1030,7 @@ $ cat lineage.txt \
     | csvtk -H -t sep -f 2 -s ';' -R \
     | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
     | csvtk pretty -t
+
     taxid     kindom      phylum            class                 order                family            genus                        species
     9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
     9913      Eukaryota   Chordata          Mammalia              Artiodactyla         Bovidae           Bos                          Bos taurus
@@ -1009,13 +1045,31 @@ $ cat lineage.txt \
 </code></pre>
 </li>
 <li>
+<p>Add prefix (<code>-P/--add-prefix</code>).</p>
+<pre><code>$ cat lineage.txt \
+    | taxonkit reformat -P \
+    | csvtk -H -t cut -f 1,3 
+9606    k__Eukaryota;p__Chordata;c__Mammalia;o__Primates;f__Hominidae;g__Homo;s__Homo sapiens
+9913    k__Eukaryota;p__Chordata;c__Mammalia;o__Artiodactyla;f__Bovidae;g__Bos;s__Bos taurus
+376619  k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Thiotrichales;f__Francisellaceae;g__Francisella;s__Francisella tularensis
+349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+239935  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
+314101  k__Bacteria;p__;c__;o__;f__;g__;s__uncultured murine large bowel bacterium BAC 54B
+11932   k__Viruses;p__Artverviricota;c__Revtraviricetes;o__Ortervirales;f__Retroviridae;g__Intracisternal A-particles;s__Mouse Intracisternal A-particle
+1327037 k__Viruses;p__Uroviricota;c__Caudoviricetes;o__Caudovirales;f__Siphoviridae;g__;s__Croceibacter phage P2559Y
+92489   k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Enterobacterales;f__Erwiniaceae;g__Erwinia;s__Erwinia oleae
+1458427 k__Bacteria;p__Proteobacteria;c__Betaproteobacteria;o__Burkholderiales;f__Comamonadaceae;g__Serpentinomonas;s__Serpentinomonas raichei
+</code></pre>
+</li>
+<li>
 <p>Show corresponding taxids of reformated lineage (flag <code>-t/--show-lineage-taxids</code>)</p>
 <pre><code>$ cat lineage.txt \
     | taxonkit reformat -t \
     | csvtk -H -t cut -f 1,4 \
     | csvtk -H -t sep -f 2 -s ';' -R \
     | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
-    | csvtk pretty -t            
+    | csvtk pretty -t
+
 taxid     kindom   phylum    class     order     family    genus     species
 9606      2759     7711      40674     9443      9604      9605      9606
 9913      2759     7711      40674     91561     9895      9903      9913
@@ -1030,8 +1084,8 @@ taxid     kindom   phylum    class     order     family    genus     species
 </code></pre>
 </li>
 <li>
-<p>Use custom symbols for unclassfied ranks</p>
-<pre><code>$ taxonkit reformat lineage.txt --miss-rank-repl "__" | cut -f 3
+<p>Use custom symbols for unclassfied ranks (<code>-r/--miss-rank-repl</code>)</p>
+<pre><code>$ taxonkit reformat lineage.txt -r "__"  | cut -f 3
 Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
 Eukaryota;Chordata;Mammalia;Artiodactyla;Bovidae;Bos;Bos taurus
 Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
@@ -1042,11 +1096,23 @@ Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal 
 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
 Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
+
+$ taxonkit reformat lineage.txt -r Unassigned | cut -f 3
+Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+Eukaryota;Chordata;Mammalia;Artiodactyla;Bovidae;Bos;Bos taurus
+Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
+Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+Bacteria;Unassigned;Unassigned;Unassigned;Unassigned;Unassigned;uncultured murine large bowel bacterium BAC 54B
+Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;Unassigned;Croceibacter phage P2559Y
+Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
+Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 </code></pre>
 </li>
 <li>
-<p>Estimate and fill missing rank with original lineage information
-  (<code>-F, --fill-miss-rank</code>, <strong>experimental</strong>, very useful for formating input data for
+<p><strong>Estimate and fill missing rank with original lineage information</strong>
+  (<code>-F, --fill-miss-rank</code>, very useful for formating input data for
   <a href="https://bitbucket.org/biobakery/biobakery/wiki/lefse">LEfSe</a>).
   You can change the prefix "unclassified" using flag <code>-p/--miss-rank-repl-prefix</code>.</p>
 <pre><code>$ cat lineage.txt \
@@ -1055,6 +1121,7 @@ Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpen
     | csvtk -H -t sep -f 2 -s ';' -R \
     | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
     | csvtk pretty -t
+
 taxid     kindom      phylum                         class                         order                         family                         genus                             species
 9606      Eukaryota   Chordata                       Mammalia                      Primates                      Hominidae                      Homo                              Homo sapiens
 9913      Eukaryota   Chordata                       Mammalia                      Artiodactyla                  Bovidae                        Bos                               Bos taurus
@@ -1069,13 +1136,14 @@ taxid     kindom      phylum                         class                      
 </code></pre>
 </li>
 <li>
-<p>Only some ranks</p>
+<p>Only some ranks.</p>
 <pre><code>$ cat lineage.txt \
     | taxonkit reformat -F -f "{s};{p}"\
     | csvtk -H -t cut -f 1,3 \
     | csvtk -H -t sep -f 2 -s ';' -R \
     | csvtk add-header -t -n taxid,species,phylum \
     | csvtk pretty -t
+
 taxid     species                                           phylum
 9606      Homo sapiens                                      Chordata
 9913      Bos taurus                                        Chordata
@@ -1090,12 +1158,51 @@ taxid     species                                           phylum
 </code></pre>
 </li>
 <li>
+<p><strong>For some taxids which rank is higher than the lowest rank in <code>-f/--format</code>, use <code>-T/--trim</code> to avoid fill missing rank lower than current rank</strong>.</p>
+<pre><code>$ echo -ne "2\n239934\n239935\n" \
+    | taxonkit lineage \
+    | taxonkit reformat -T \
+    | sed -r "s/;+$//" \
+    | csvtk -H -t cut -f 1,3 
+2       Bacteria
+239934  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia
+239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+</code></pre>
+</li>
+<li>
 <p>Support tab in format string</p>
 <pre><code>$ echo 9606 \
     | taxonkit lineage \
     | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}" \
     | csvtk cut -t -f -2
 9606    Eukaryota       Chordata        Mammalia        Primates        Hominidae       Homo    Homo sapiens
+</code></pre>
+</li>
+<li>
+<p>List seven-level lineage for all taxIDs.</p>
+<pre><code># replace empty taxon with "Unassigned"
+$ taxonkit list --ids 1 \
+    | taxonkit lineage \
+    | taxonkit reformat -r Unassigned 
+    | gzip -c &gt; all.lineage.tsv.gz
+
+# tab-delimited seven-levels
+$ taxonkit list --ids 1 \
+    | taxonkit lineage \
+    | taxonkit reformat -r Unassigned -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" \
+    | csvtk cut -H -t -f -2 \
+    | head -n 5 \
+    | csvtk pretty -t
+
+# Fill and trim
+$ memusg -t -s ' taxonkit list --ids 1 \
+    | taxonkit lineage \
+    | taxonkit reformat -F -T \
+    | sed -r "s/;+$//" \
+    | gzip -c &gt; all.lineage.tsv.gz '
+
+elapsed time: 19.930s
+peak rss: 6.25 GB
 </code></pre>
 </li>
 <li>
@@ -1106,7 +1213,17 @@ taxid     species                                           phylum
 </ol>
 <h2 id="name2taxid">name2taxid</h2>
 <p>Usage</p>
-<pre><code class="text">query taxid by taxon scientific name
+<pre><code class="language-text">Convert scientific names to taxIDs
+
+Attention:
+
+  1. Some taxIDs share the same scientific names, e.g, Drosophila.
+     These input lines are duplicated with multiple taxIDs.
+
+    $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L
+    Drosophila      7215    genus
+    Drosophila      32281   subgenus
+    Drosophila      2081351 genus
 
 Usage:
   taxonkit name2taxid [flags]
@@ -1118,7 +1235,6 @@ Flags:
   -r, --show-rank        show rank
 
 </code></pre>
-
 <p>Examples</p>
 <p>Example data</p>
 <pre><code>$ cat names.txt
@@ -1132,7 +1248,7 @@ Croceibacter phage P2559Y
 </code></pre>
 <ol>
 <li>
-<p>default</p>
+<p>Default.</p>
 <pre><code># taxonkit name2taxid names.txt
 $ cat names.txt | taxonkit name2taxid | csvtk pretty -t
 Homo sapiens                                      9606
@@ -1145,19 +1261,19 @@ Croceibacter phage P2559Y                         1327037
 </code></pre>
 </li>
 <li>
-<p>show rank</p>
+<p>Show rank.</p>
 <pre><code>$ cat names.txt | taxonkit name2taxid --show-rank | csvtk pretty -t
-Homo sapiens                                      9606
-Akkermansia muciniphila ATCC BAA-835              349741
-Akkermansia muciniphila                           239935
-Mouse Intracisternal A-particle                   11932
-Wei Shen                                          
-uncultured murine large bowel bacterium BAC 54B   314101
-Croceibacter phage P2559Y                         1327037
+Homo sapiens                                      9606      species
+Akkermansia muciniphila ATCC BAA-835              349741    strain
+Akkermansia muciniphila                           239935    species
+Mouse Intracisternal A-particle                   11932     species
+Wei Shen                                                    
+uncultured murine large bowel bacterium BAC 54B   314101    species
+Croceibacter phage P2559Y                         1327037   species
 </code></pre>
 </li>
 <li>
-<p>from name to lineage</p>
+<p>From name to lineage.</p>
 <pre><code>$ cat names.txt | taxonkit name2taxid | taxonkit lineage --taxid-field 2
 Homo sapiens    9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
 Akkermansia muciniphila ATCC BAA-835    349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
@@ -1168,10 +1284,230 @@ uncultured murine large bowel bacterium BAC 54B 314101  cellular organisms;Bacte
 Croceibacter phage P2559Y       1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
 </code></pre>
 </li>
+<li>
+<p><strong>Some taxIDs share the same scientific names</strong>, e.g, Drosophila.</p>
+<pre><code>$ echo Drosophila \
+    | taxonkit name2taxid \
+    | taxonkit lineage -i 2 -r \
+    | taxonkit reformat -i 3 \
+    | csvtk cut -H -t -f 1,2,4,5 \
+    | csvtk pretty -t
+Drosophila   7215      genus      Eukaryota;Arthropoda;Insecta;Diptera;Drosophilidae;Drosophila;
+Drosophila   32281     subgenus   Eukaryota;Arthropoda;Insecta;Diptera;Drosophilidae;Drosophila;
+Drosophila   2081351   genus      Eukaryota;Basidiomycota;Agaricomycetes;Agaricales;Psathyrellaceae;Drosophila;
+</code></pre>
+</li>
+</ol>
+<h2 id="filter">filter</h2>
+<p>Usage</p>
+<pre><code class="language-text">Filter taxIDs by taxonomic rank range
+
+Attentions:
+
+  1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
+     used along with -E/--equal-to which values can be different.
+  2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can give
+     your list by -r/--rank-file, the format specification is below.
+  3. TaxIDss with no rank will be discarded.
+
+Rank file:
+
+  1. Blank lines or lines starting with &quot;#&quot; are ignored.
+  2. Ranks are in decending order and case ignored.
+  3. Ranks with same order should be in one line separated with comma (&quot;,&quot;, no space).
+  4. Ranks without order should be assigning a prefix symbol &quot;!&quot; for each rank.
+
+Usage:
+  taxonkit filter [flags]
+
+Flags:
+  -B, --black-list strings   black list of ranks to discard (default [no rank,clade])
+  -N, --discard-noranks      discard ranks without order, type &quot;taxonkit filter --help&quot; for details
+  -R, --discard-root         discard root taxid, defined by --root-taxid
+  -E, --equal-to string      output taxIDs with rank equal to a rank
+  -h, --help                 help for filter
+  -H, --higher-than string   output taxIDs with rank higher than a rank, exclusive with --lower-than
+      --list-order           list defined ranks in order
+      --list-ranks           list ordered ranks in taxonomy database
+  -L, --lower-than string    output taxIDs with rank lower than a rank, exclusive with --higher-than
+  -r, --rank-file string     user-defined ordered taxonomic ranks, type &quot;taxonkit filter --help&quot; for details
+      --root-taxid uint32    root taxid (default 1)
+  -i, --taxid-field int      field index of taxid. input data should be tab-separated (default 1)
+
+</code></pre>
+<p>Examples</p>
+<ol>
+<li>
+<p>Example data</p>
+<pre><code>$ echo 349741 | taxonkit lineage -t | cut -f 3 | sed 's/;/\n/g' &gt; taxids2.txt
+
+$ cat taxids2.txt
+131567
+2
+1783257
+74201
+203494
+48461
+1647988
+239934
+239935
+349741
+
+$ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+131567    no rank        cellular organisms
+2         superkingdom   cellular organisms;Bacteria
+1783257   clade          cellular organisms;Bacteria;PVC group
+74201     phylum         cellular organisms;Bacteria;PVC group;Verrucomicrobia
+203494    class          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae
+48461     order          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales
+1647988   family         cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae
+239934    genus          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia
+239935    species        cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+349741    strain         cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+</code></pre>
+</li>
+<li>
+<p>Filter certain rank (<code>-E/--equal-to</code>)</p>
+<pre><code>$ cat taxids2.txt \
+    | taxonkit filter -E Phylum \
+    | taxonkit lineage -r \
+    | csvtk -Ht cut -f 1,3,2 \
+    | csvtk pretty -t
+74201   phylum   cellular organisms;Bacteria;PVC group;Verrucomicrobia
+</code></pre>
+</li>
+<li>
+<p>Lower than a rank (<code>-L/--lower-than</code>)</p>
+<pre><code>$ cat taxids2.txt \
+    | taxonkit filter -L genus \
+    | taxonkit lineage -r -n -L \
+    | csvtk -Ht cut -f 1,3,2 \
+    | csvtk pretty -t
+239935   species   Akkermansia muciniphila
+349741   strain    Akkermansia muciniphila ATCC BAA-835
+</code></pre>
+</li>
+<li>
+<p>Higher than a rank (<code>-H/--higher-than</code>), note that "no rank" and "clade" have no rank and be filter out by default.</p>
+<pre><code>$ cat taxids2.txt \
+    | taxonkit filter -H phylum \
+    | taxonkit lineage -r -n -L \
+    | csvtk -Ht cut -f 1,3,2 \
+    | csvtk pretty -t
+2   superkingdom   Bacteria
+</code></pre>
+</li>
+<li>
+<p>Combine of <code>-L/-H</code> with <code>-E</code>.</p>
+<pre><code>$ cat taxids2.txt \
+    | taxonkit filter -L genus -E genus  \
+    | taxonkit lineage -r -n -L \
+    | csvtk -Ht cut -f 1,3,2 \
+    | csvtk pretty -t
+239934   genus     Akkermansia
+239935   species   Akkermansia muciniphila
+349741   strain    Akkermansia muciniphila ATCC BAA-835
+</code></pre>
+</li>
+</ol>
+<h2 id="lca">lca</h2>
+<p>Usage</p>
+<pre><code class="language-text">Compute lowest common ancestor (LCA) for taxIDs
+
+Attention:
+
+  1. This command computes LCA taxID for a list of taxIDs 
+     in a field (&quot;-i/--taxids-field) of tab-delimited file or STDIN.
+  2. TaxIDs should have the same separater (&quot;-s/--separater&quot;),
+     single charactor separater is prefered.
+  3. Empty lines or lines without valid taxIDs in the field are omitted.
+  4. If some taxIDs are not found in database, it returns 0.
+
+Examples:
+
+    $ echo 239934, 239935, 349741 | taxonkit lca  -s &quot;, &quot;
+    239934, 239935, 349741  239934
+
+    $ echo 239934  239935  349741 9606  | taxonkit lca
+    239934 239935 349741 9606       131567
+
+Usage:
+  taxonkit lca [flags]
+
+Flags:
+  -h, --help               help for lca
+  -s, --separater string   separater for taxIDs (default &quot; &quot;)
+  -D, --skip-deleted       skip deleted taxIDs and compute with left ones
+  -U, --skip-unfound       skip unfound taxIDs and compute with left ones
+  -i, --taxids-field int   field index of taxid. input data should be tab-separated (default 1)
+
+</code></pre>
+<p>Examples:</p>
+<ol>
+<li>
+<p>Example data</p>
+<pre><code>$ taxonkit list --ids 9605 -nr --indent "    "
+9605 [genus] Homo
+    9606 [species] Homo sapiens
+        63221 [subspecies] Homo sapiens neanderthalensis
+        741158 [subspecies] Homo sapiens subsp. 'Denisova'
+    1425170 [species] Homo heidelbergensis
+    2665952 [no rank] environmental samples
+        2665953 [species] Homo sapiens environmental sample
+</code></pre>
+</li>
+<li>
+<p>Simple one</p>
+<pre><code>$ echo 63221 2665953 | taxonkit lca
+63221 2665953   9605
+</code></pre>
+</li>
+<li>
+<p>Custom field (<code>-i/--taxids-field</code>) and separater (<code>-s/--separater</code>).</p>
+<pre><code>$ echo -ne "a\t63221,2665953\nb\t63221, 741158\n"
+a       63221,2665953
+b       63221, 741158
+
+$ echo -ne "a\t63221,2665953\nb\t63221, 741158\n" \
+    | taxonkit lca -i 2 -s ","
+a       63221,2665953   9605
+b       63221, 741158   9606
+</code></pre>
+</li>
+<li>
+<p>Merged taxIDs.</p>
+<pre><code># merged
+$ echo 92487 92488 92489 | taxonkit lca
+10:08:26.578 [WARN] taxid 92489 was merged into 796334
+92487 92488 92489       1236
+</code></pre>
+</li>
+<li>
+<p>Deleted taxIDs, you can ommit theses and continue compute with left onces with (<code>-D/--skip-deleted</code>).</p>
+<pre><code>$ echo 1 2 3 | taxonkit lca 
+10:30:17.678 [WARN] taxid 3 not found
+1 2 3   0
+
+$ time  echo 1 2 3 | taxonkit lca -D
+10:29:31.828 [WARN] taxid 3 was deleted
+1 2 3   1
+</code></pre>
+</li>
+<li>
+<p>TaxIDs not found in database, you can ommit theses and continue compute with left onces with (<code>-U/--skip-unfound</code>).</p>
+<pre><code>$ echo 61021 61022 11111111 | taxonkit lca
+10:31:44.929 [WARN] taxid 11111111 not found
+61021 61022 11111111    0
+
+$ echo 61021 61022 11111111 | taxonkit lca -U
+10:32:02.772 [WARN] taxid 11111111 not found
+61021 61022 11111111    2628496
+</code></pre>
+</li>
 </ol>
 <h2 id="taxid-changelog">taxid-changelog</h2>
 <p>Usage</p>
-<pre><code class="text">create taxid changelog from dump archives
+<pre><code class="language-text">Create taxID changelog from dump archives
 
 Steps:
 
@@ -1187,7 +1523,7 @@ Steps:
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/taxdmp*.zip
 
     # option 2
-    # for bad network connection like mine
+    # for slow network connection
     url=https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
     wget $url -O - -o /dev/null \
         | grep taxdmp | perl -ne '/(taxdmp_.+?.zip)/; print &quot;$1\n&quot;;' \
@@ -1215,7 +1551,7 @@ Output format (CSV):
                     #   DELETE          deleted
                     #   MERGE           merged into another taxid
                     #   ABSORB          other taxids merged into this one
-                    #   CHANGE_NAME     scientific changed
+                    #   CHANGE_NAME     scientific name changed
                     #   CHANGE_RANK     rank changed
                     #   CHANGE_LIN_LIN  lineage taxids remain but lineage remain
                     #   CHANGE_LIN_TAX  lineage taxids changed
@@ -1240,7 +1576,9 @@ Flags:
   -h, --help             help for taxid-changelog
 
 </code></pre>
-
+<p><a href="https://github.com/shenwei356/taxid-changelog">Details</a></p>
+<ol>
+<li>
 <p>Example 1  (<em>E.coli</em> with taxid <code>562</code>)</p>
 <pre><code>$ pigz -cd taxid-changelog.csv.gz \
     | csvtk grep -f taxid -p 562 \
@@ -1266,11 +1604,32 @@ taxid     version      change           change-value   name                     
 1637691   2015-05-01   REUSE_DEL                       Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
 1637691   2015-11-01   MERGE            562            Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
 </code></pre>
-<p>Example 2 (All subspecies and strain in <em>Akkermansia muciniphila</em> 239935)</p>
+</li>
+<li>
+<p>Example 2 (SARS-CoV-2).</p>
+<pre><code>$ time pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f taxid -p 2697049 \
+        | csvtk pretty
+taxid     version      change           change-value   name                                              rank      lineage                                                                                                                                                                                                                                                        lineage-taxids
+2697049   2020-02-01   NEW                             Wuhan seafood market pneumonia virus              species   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;unclassified Betacoronavirus;Wuhan seafood market pneumonia virus                                                                                               10239;2559587;76804;2499399;11118;2501931;694002;696098;2697049
+2697049   2020-03-01   CHANGE_NAME                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+2697049   2020-03-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+2697049   2020-03-01   CHANGE_LIN_LEN                  Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+2697049   2020-06-01   CHANGE_LIN_LEN                  Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+2697049   2020-07-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   isolate   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+2697049   2020-08-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+
+real    0m7.644s
+user    0m16.749s
+sys     0m3.985s
+</code></pre>
+</li>
+<li>
+<p>Example 3 (All subspecies and strain in <em>Akkermansia muciniphila</em> 239935)</p>
 <pre><code># species in Akkermansia
-$ taxonkit list --show-rank --show-name --ids 239935
+$ taxonkit list --show-rank --show-name --indent "    " --ids 239935
 239935 [species] Akkermansia muciniphila
-  349741 [no rank] Akkermansia muciniphila ATCC BAA-835
+    349741 [strain] Akkermansia muciniphila ATCC BAA-835
 
 # check them all  
 $ pigz -cd taxid-changelog.csv.gz \
@@ -1284,11 +1643,14 @@ taxid    version      change           change-value   name                      
 349741   2014-08-01   NEW                             Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Verrucomicrobiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835   131567;2;51290;74201;203494;48461;203557;239934;239935;349741
 349741   2015-05-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835       131567;2;51290;74201;203494;48461;1647988;239934;239935;349741
 349741   2016-03-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
+349741   2020-07-01   CHANGE_RANK                     Akkermansia muciniphila ATCC BAA-835   strain    cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
 </code></pre>
+</li>
+</ol>
 <p><a href="https://github.com/shenwei356/taxid-changelog">More</a></p>
 <h2 id="genautocomplete">genautocomplete</h2>
 <p>Usage</p>
-<pre><code class="text">generate shell autocompletion script
+<pre><code class="language-text">Generate shell autocompletion script
 
 Note: The current version supports Bash only.
 This should work for *nix systems with Bash installed.
@@ -1316,9 +1678,7 @@ Flags:
       --type string   autocompletion type (currently only bash supported) (default &quot;bash&quot;)
 
 </code></pre>
-
 <div id="disqus_thread"></div>
-
 <script>
 
 /**
@@ -1337,11 +1697,7 @@ s.setAttribute('data-timestamp', +new Date());
 (d.head || d.body).appendChild(s);
 })();
 </script>
-
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                
-                  
-                
                 
               
               
@@ -1358,34 +1714,34 @@ s.setAttribute('data-timestamp', +new Date());
 <footer class="md-footer">
   
     <div class="md-footer-nav">
-      <nav class="md-footer-nav__inner md-grid">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../download/" title="Download" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+          <a href="../download/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
                 Download
-              </span>
+              </div>
             </div>
           </a>
         
         
-          <a href="../tutorial/" title="Tutorial" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
+          <a href="../tutorial/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
                 Tutorial
-              </span>
+              </div>
             </div>
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
             </div>
           </a>
         
@@ -1396,11 +1752,10 @@ s.setAttribute('data-timestamp', +new Date());
     <div class="md-footer-meta__inner md-grid">
       <div class="md-footer-copyright">
         
-        powered by
-        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
-        and
+        Made with
         <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs</a>
+          Material for MkDocs
+        </a>
       </div>
       
     </div>
@@ -1409,9 +1764,18 @@ s.setAttribute('data-timestamp', +new Date());
       
     </div>
     
-      <script src="../assets/javascripts/application.c33a9706.js"></script>
+      <script src="../assets/javascripts/vendor.93c04032.min.js"></script>
+      <script src="../assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.8c7e0a7e.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
       
     
   </body>
