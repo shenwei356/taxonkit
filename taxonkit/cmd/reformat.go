@@ -22,6 +22,7 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/shenwei356/breader"
@@ -75,6 +76,8 @@ column by flag "-t/--show-lineage-taxids".
 		prefixG := getFlagString(cmd, "prefix-g")
 		prefixs := getFlagString(cmd, "prefix-s")
 		prefixS := getFlagString(cmd, "prefix-S")
+
+		trim := getFlagBool(cmd, "trim")
 
 		prefixes := map[string]string{
 			"k": prefixK,
@@ -144,13 +147,21 @@ column by flag "-t/--show-lineage-taxids".
 			// preprare replacements.
 			// find the orphan names and missing ranks
 			replacements := make(map[string]string, len(matches))
-			ireplacements := make(map[string]string, len(matches))
+
+			var ireplacements map[string]string
+			if printLineageInTaxid {
+				ireplacements = make(map[string]string, len(matches))
+			}
 
 			for _, match := range matches {
 				replacements[match[1]] = blank
-				ireplacements[match[1]] = iblank
+				if printLineageInTaxid {
+					ireplacements[match[1]] = iblank
+				}
 			}
 
+			var taxid uint32
+			var maxRankWeight float32
 			for i, name := range names {
 				if name == "" {
 					continue
@@ -166,19 +177,19 @@ column by flag "-t/--show-lineage-taxids".
 				}
 
 				if i == 0 { // root node
-					rank = taxid2taxon[name2taxid[name]].Rank
+					taxid = name2taxid[name]
 				} else {
 					plname = strings.ToLower(names[i-1])
 					if _, ok = name2parent2taxid[name]; !ok {
 						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, name)
 						return line2flineage{line, "", ""}, true, nil
-					} else if _, ok = name2parent2taxid[name][plname]; !ok {
+					} else if taxid, ok = name2parent2taxid[name][plname]; !ok {
 						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, plname)
 						return line2flineage{line, "", ""}, true, nil
 					}
-					// note that code below is computing rank of current name, not its parent.
-					rank = taxid2taxon[name2parent2taxid[name][plname]].Rank
 				}
+				// note that code below is computing rank of current name, not its parent.
+				rank = taxid2taxon[taxid].Rank
 
 				if rank == norank {
 					continue
@@ -187,13 +198,15 @@ column by flag "-t/--show-lineage-taxids".
 				ranks[i] = rank
 				if srank, ok = rank2symbol[rank]; ok {
 					replacements[srank] = name2Name[name]
-					if i == 0 {
-						ireplacements[srank] = fmt.Sprintf("%d", name2taxid[name])
-					} else {
-						ireplacements[srank] = fmt.Sprintf("%d", name2parent2taxid[name][plname])
+					if printLineageInTaxid {
+						ireplacements[srank] = strconv.Itoa(int(taxid))
 					}
 					srank2idx[srank] = i
 					sranks[i] = srank
+
+					if trim && symbol2weight[srank] > maxRankWeight {
+						maxRankWeight = symbol2weight[srank]
+					}
 				}
 			}
 
@@ -206,6 +219,10 @@ column by flag "-t/--show-lineage-taxids".
 					}
 
 					if _, ok = srank2idx[srank]; ok {
+						continue
+					}
+
+					if trim && symbol2weight[srank] > maxRankWeight {
 						continue
 					}
 
@@ -226,28 +243,37 @@ column by flag "-t/--show-lineage-taxids".
 			}
 
 			flineage := format
-			iflineage := format
+			var iflineage string
+
+			if printLineageInTaxid {
+				iflineage = format
+			}
+
 			for srank, re := range reRankPlaceHolders {
 				if addPrefix {
 					flineage = re.ReplaceAllString(flineage, prefixes[srank]+replacements[srank])
 				} else {
 					flineage = re.ReplaceAllString(flineage, replacements[srank])
 				}
-				iflineage = re.ReplaceAllString(iflineage, ireplacements[srank])
+
+				if printLineageInTaxid {
+					iflineage = re.ReplaceAllString(iflineage, ireplacements[srank])
+				}
 			}
 
 			return line2flineage{line, unescape(flineage), unescape(iflineage)}, true, nil
 		}
 
 		for _, file := range files {
-			reader, err := breader.NewBufferedReader(file, config.Threads, 10, fn)
+			reader, err := breader.NewBufferedReader(file, config.Threads, 128, fn)
 			checkError(err)
 
 			var l2s line2flineage
+			var data interface{}
 			for chunk := range reader.Ch {
 				checkError(chunk.Err)
 
-				for _, data := range chunk.Data {
+				for _, data = range chunk.Data {
 					l2s = data.(line2flineage)
 
 					if printLineageInTaxid {
@@ -285,4 +311,6 @@ func init() {
 	flineageCmd.Flags().StringP("prefix-g", "", "g__", `prefix for genus`)
 	flineageCmd.Flags().StringP("prefix-s", "", "s__", `prefix for species`)
 	flineageCmd.Flags().StringP("prefix-S", "", "S__", `prefix for subspecies`)
+
+	flineageCmd.Flags().BoolP("trim", "T", false, "do not fill missing rank lower than current rank")
 }
