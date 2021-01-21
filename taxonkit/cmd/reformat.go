@@ -220,6 +220,8 @@ column by flag "-t/--show-lineage-taxids".
 					if trim && symbol2weight[srank] > maxRankWeight {
 						maxRankWeight = symbol2weight[srank]
 					}
+				} else {
+					sranks = append(sranks, "")
 				}
 			}
 
@@ -315,7 +317,7 @@ func init() {
 
 	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholders of rank are needed")
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
-	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank, if given "", "unclassified xxx xxx" will used, where "unclassified " is settable by flag -p/--miss-rank-repl-prefix`)
+	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank`)
 	flineageCmd.Flags().StringP("miss-rank-repl-prefix", "p", "unclassified ", `prefix for estimated taxon level`)
 	flineageCmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
 	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "fill missing rank with original lineage information (experimental)")
@@ -323,14 +325,14 @@ func init() {
 	flineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)
 
 	flineageCmd.Flags().BoolP("add-prefix", "P", false, `add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X`)
-	flineageCmd.Flags().StringP("prefix-k", "", "k__", `prefix for superkingdom`)
-	flineageCmd.Flags().StringP("prefix-p", "", "p__", `prefix for phylum`)
-	flineageCmd.Flags().StringP("prefix-c", "", "c__", `prefix for class`)
-	flineageCmd.Flags().StringP("prefix-o", "", "o__", `prefix for order`)
-	flineageCmd.Flags().StringP("prefix-f", "", "f__", `prefix for family`)
-	flineageCmd.Flags().StringP("prefix-g", "", "g__", `prefix for genus`)
-	flineageCmd.Flags().StringP("prefix-s", "", "s__", `prefix for species`)
-	flineageCmd.Flags().StringP("prefix-S", "", "S__", `prefix for subspecies`)
+	flineageCmd.Flags().StringP("prefix-k", "", "k__", `prefix for superkingdom, used with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-p", "", "p__", `prefix for phylum, used with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-c", "", "c__", `prefix for class, used with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-o", "", "o__", `prefix for order, used with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-f", "", "f__", `prefix for family, used with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-g", "", "g__", `prefix for genus, used with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-s", "", "s__", `prefix for species, used with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-S", "", "S__", `prefix for subspecies, used with flag -P/--add-prefix`)
 
 	flineageCmd.Flags().BoolP("trim", "T", false, "do not fill missing rank lower than current rank")
 }

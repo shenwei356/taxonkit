@@ -27,9 +27,9 @@ for f in taxids.*.txt; do
     memusg -t -H /usr/bin/python3 get_lineage.ete.py < $f > $out
     check $out
 
-    # echo == taxadb
-    # echo data: $f
-    # out=$f.taxadb.lineage
-    # memusg -t -H python3 get_lineage.taxadb.py < $f > $out
-    # check $out
+    echo == taxadb
+    echo data: $f
+    out=$f.taxadb.lineage
+    memusg -t -H /usr/bin/python3 get_lineage.taxadb.py < $f > $out
+    check $out
 done

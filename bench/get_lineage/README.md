@@ -2,9 +2,11 @@
 
 ## Data set
 
-- [NCBI taxonomy](ftp://ftp.ncbi.nih.gov/taxonomy), version 2021-01-17
+- [NCBI taxonomy](ftp://ftp.ncbi.nih.gov/taxonomy), version 2021-01-21
 
-- taxids
+- TaxIDs. Root node `1` is removed. 
+  And These data should be updated along with NCBI taxonomy dataset, 
+  because `taxadb` does not handle merged taxiIDs.
     - small.txt (n=20)
 
             cut -f 1 nodes.dmp | csvtk sample -H -p 0.00002 \
@@ -26,6 +28,11 @@
 - taxadb, version: [0.12.0](https://pypi.org/project/taxadb/0.12.0)
 - TaxonKit, version: [0.6.2](https://github.com/shenwei356/taxonkit/releases/tag/0.6.2)
 - BioPython, version: [1.78](https://pypi.org/project/biopython/1.78/)
+
+Not used tools without direct function of getting full lineage
+
+- [opensci/taxadb](https://github.com/ropensci/taxadb)
+- [ncbi-taxonomist](https://ncbi-taxonomist.readthedocs.io/en/latest/)
 
 
 ## Installation and Configurations
@@ -58,7 +65,7 @@
 
 Scripts/Command as listed below.
 Python scripts were written followed to the official documents,
-and parallelized querying were not used, including taxonkit.
+and **parallelized querying were not used, including TaxonKit**.
 
     ETE             get_lineage.ete.py
     Biopython       get_lineage.biopython.py
@@ -86,25 +93,18 @@ Running benchmark:
 Checking result:
 
     md5sum *.lineage
-    f7a31ab739f896fade1cf0808c2f374c  taxids.big.txt.ete.lineage
-    f7a31ab739f896fade1cf0808c2f374c  taxids.big.txt.taxadb.lineage
-    25947a23dd76e236c3740e0403c4050a  taxids.big.txt.taxonkit.lineage
-    0704aa45fe5e4bfb16491820cb3bf6bf  taxids.medium.txt.ete.lineage
-    0704aa45fe5e4bfb16491820cb3bf6bf  taxids.medium.txt.taxadb.lineage
-    0704aa45fe5e4bfb16491820cb3bf6bf  taxids.medium.txt.taxonkit.lineage
-    7fa77b023f69d3b5dfa45be88b624799  taxids.small.txt.ete.lineage
-    7fa77b023f69d3b5dfa45be88b624799  taxids.small.txt.taxadb.lineage
-    7fa77b023f69d3b5dfa45be88b624799  taxids.small.txt.taxonkit.lineage
+    4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.ete.lineage
+    4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxadb.lineage
+    4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxonkit.lineage
+    4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.ete.lineage
+    4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxadb.lineage
+    4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxonkit.lineage
+    c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.ete.lineage
+    c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxadb.lineage
+    c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxonkit.lineage
 
 
-    diff taxids.big.txt.ete.lineage taxids.big.txt.taxonkit.lineage
-    1c1
-    < 1
-    ---
-    > 1     root
-
-The only difference in `taxids.big.txt.taxonkit.lineage` is
-taxonkit returns "root" for taxid 1, while the others return nothing.
+Note that taxonkit returns "root" for taxid 1, while the others return nothing.
 
 Plotting benchmark result. 
 R libraries `dplyr`, `ggplot2`, `scales`, `ggthemes`, `ggrepel` are needed.

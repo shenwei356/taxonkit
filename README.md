@@ -1,6 +1,6 @@
 # TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-<img src="taxonkit.jpg" alt="taxonkit" style="max-width: 80%" align="center" />
+<img src="taxonkit.jpg" alt="taxonkit" width="600" align="center" />
 
 - **Documents:** [https://bioinf.shenwei.me/taxonkit](https://bioinf.shenwei.me/taxonkit)
 ([**Usage**](https://bioinf.shenwei.me/taxonkit/usage/),
@@ -24,6 +24,7 @@
 
 - [Features](#features)
 - [Subcommands](#subcommands)
+- [Benchmark](#benchmark)
 - [Dataset](#dataset)
 - [Installation](#installation)
 - [Bash-completion](#bash-completion)
@@ -36,19 +37,20 @@
 
 ## Features
 
-1. **Easy to install**
-   - **Statically linked executable binaries for multiple platforms** (Linux/Windows/macOS,x86/amd64/arm64)
-     ([download](http://bioinf.shenwei.me/taxonkit/download/))
-   - **Light weight and out-of-the-box, no dependencies, no compilation, no configuration**
-     ([download](http://bioinf.shenwei.me/taxonkit/download/))
-   - **No database building**, just download [NCBI taxonomy data](ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz) and compress to `$HOME/.taxonkit`
-2. **Easy to use**   
-   - **Supporting [bash-completion](#bash-completion)**
-   - **Fast** (see [benchmark](#benchmark)), **multiple-CPUs supported**
-   - **Well documented usage and examples** (detailed [usage](http://bioinf.shenwei.me/taxonkit/usage/))
-   - **Supporting STDIN and gzipped input/output file, easy being used in pipe**
-3. **Versatile commands**   
-   - [Usage and examples](http://bioinf.shenwei.me/taxonkit/usage/)
+- **Easy to install** ([download](http://bioinf.shenwei.me/taxonkit/download/))
+    - Statically linked executable binaries for multiple platforms (Linux/Windows/macOS, x86/amd64/arm64) 
+    - Light weight and out-of-the-box, no dependencies, no compilation, no configuration*
+    - No database building, just download [NCBI taxonomy data](ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz) and uncompress to `$HOME/.taxonkit`
+- **Easy to use** ([usages and examples](http://bioinf.shenwei.me/taxonkit/usage/))
+    - Supporting [bash-completion](#bash-completion)
+    - Fast (see [benchmark](#benchmark)), multiple-CPUs supported, most operations cost 2-10s.
+    - Detailed usages and examples
+    - Supporting STDIN and (gzipped) input/output file, easily integrated in pipe
+- **Versatile commands** 
+    - [Usage and examples](http://bioinf.shenwei.me/taxonkit/usage/)
+    - Featured command: [tracking monthly changelog of all taxIDs](https://github.com/shenwei356/taxid-changelog)
+    - Featured command: [reformating lineage into format of seven-level ("superkingdom, phylum, class, order, family, genus, species"](https://bioinf.shenwei.me/taxonkit/usage/#reformat)
+    - Featured command: [filtering taxiDs by rank range](http://bioinf.shenwei.me/taxonkit/usage/#filter), e.g., genus or lower ranks.
 
 ## Subcommands
 
@@ -64,6 +66,11 @@ Subcommand                                                                    |F
 `version`                                                                     |Print version information and check for update
 `genautocomplete`                                                             |Generate shell autocompletion script
 
+## Benchmark
+
+1. Getting full lineage for given taxIDs
+
+   <img src="bench/get_lineage/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" />
 
 ## Dataset
 

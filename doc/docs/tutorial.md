@@ -140,6 +140,21 @@ Format to seven-level ranks ("superkingdom phylum class order family genus speci
     314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
     11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
     1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
+
+    
+Replace missing ranks with `Unassigned` and output tab-delimited format.
+
+    $ cat taxids3.txt \
+        | taxonkit lineage \
+        | taxonkit reformat -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" \
+        | cut -f 1,3-9 \
+        | csvtk pretty -t 
+    376619    Bacteria   Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
+    349741    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+    239935    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+    314101    Bacteria   Unassigned        Unassigned            Unassigned           Unassigned        Unassigned                   uncultured murine large bowel bacterium BAC 54B
+    11932     Viruses    Artverviricota    Revtraviricetes       Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
+    1327037   Viruses    Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae      Unassigned                   Croceibacter phage P2559Y
     
 Fill missing ranks and add prefixes.
 
@@ -167,6 +182,7 @@ Single prefix of a rank can be set with flag like `--prefix-k`.
     11932   d__Viruses;p__Artverviricota;c__Revtraviricetes;o__Ortervirales;f__Retroviridae;g__Intracisternal A-particles;s__Mouse Intracisternal A-particle
     1327037 d__Viruses;p__Uroviricota;c__Caudoviricetes;o__Caudovirales;f__Siphoviridae;g__unclassified Siphoviridae genus;s__Croceibacter phage P2559Y
 
+    
 ## Parsing kraken/bracken result
 
 Example Data.

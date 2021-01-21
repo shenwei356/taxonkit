@@ -470,24 +470,25 @@ Usage:
   taxonkit reformat [flags]
 
 Flags:
-  -P, --add-prefix                     add prefix for all ranks, single prefix for a rank is defined by flag --prefix-X
+  -P, --add-prefix                     add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X
   -d, --delimiter string               field delimiter in input lineage (default ";")
   -F, --fill-miss-rank                 fill missing rank with original lineage information (experimental)
   -f, --format string                  output format, placeholders of rank are needed (default "{k};{p};{c};{o};{f};{g};{s}")
   -h, --help                           help for reformat
   -i, --lineage-field int              field index of lineage. data should be tab-separated (default 2)
-  -r, --miss-rank-repl string          replacement string for missing rank, if given "", "unclassified xxx xxx" will used, where "unclassified " is settable by flag -p/--miss-rank-repl-prefix
+  -r, --miss-rank-repl string          replacement string for missing rank
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
   -R, --miss-taxid-repl string         replacement string for missing taxid
-      --prefix-S string                prefix for subspecies (default "S__")
-      --prefix-c string                prefix for class (default "c__")
-      --prefix-f string                prefix for family (default "f__")
-      --prefix-g string                prefix for genus (default "g__")
-      --prefix-k string                prefix for superkingdom (default "k__")
-      --prefix-o string                prefix for order (default "o__")
-      --prefix-p string                prefix for phylum (default "p__")
-      --prefix-s string                prefix for species (default "s__")
+      --prefix-S string                prefix for subspecies, used with flag -P/--add-prefix (default "S__")
+      --prefix-c string                prefix for class, used with flag -P/--add-prefix (default "c__")
+      --prefix-f string                prefix for family, used with flag -P/--add-prefix (default "f__")
+      --prefix-g string                prefix for genus, used with flag -P/--add-prefix (default "g__")
+      --prefix-k string                prefix for superkingdom, used with flag -P/--add-prefix (default "k__")
+      --prefix-o string                prefix for order, used with flag -P/--add-prefix (default "o__")
+      --prefix-p string                prefix for phylum, used with flag -P/--add-prefix (default "p__")
+      --prefix-s string                prefix for species, used with flag -P/--add-prefix (default "s__")
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
+  -T, --trim                           do not fill missing rank lower than current rank
 
 ```
 
@@ -550,9 +551,8 @@ Examples:
             92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
             1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
 
-            
-1. Add prefix (`-P/--add-prefix`).
 
+1. Add prefix (`-P/--add-prefix`).
 
         $ cat lineage.txt \
             | taxonkit reformat -P \
@@ -567,7 +567,8 @@ Examples:
         1327037 k__Viruses;p__Uroviricota;c__Caudoviricetes;o__Caudovirales;f__Siphoviridae;g__;s__Croceibacter phage P2559Y
         92489   k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Enterobacterales;f__Erwiniaceae;g__Erwinia;s__Erwinia oleae
         1458427 k__Bacteria;p__Proteobacteria;c__Betaproteobacteria;o__Burkholderiales;f__Comamonadaceae;g__Serpentinomonas;s__Serpentinomonas raichei
-            
+
+        
 1. Show corresponding taxids of reformated lineage (flag `-t/--show-lineage-taxids`)
 
         $ cat lineage.txt \
@@ -590,9 +591,9 @@ Examples:
         1458427   2        1224      28216     80840     80864     2490452   1458425
 
 
-1. Use custom symbols for unclassfied ranks
+1. Use custom symbols for unclassfied ranks (`-r/--miss-rank-repl`)
 
-        $ taxonkit reformat lineage.txt --miss-rank-repl "__" | cut -f 3
+        $ taxonkit reformat lineage.txt -r "__"  | cut -f 3
         Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
         Eukaryota;Chordata;Mammalia;Artiodactyla;Bovidae;Bos;Bos taurus
         Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
@@ -603,9 +604,22 @@ Examples:
         Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;__;Croceibacter phage P2559Y
         Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
         Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
+        
+        $ taxonkit reformat lineage.txt -r Unassigned | cut -f 3
+        Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+        Eukaryota;Chordata;Mammalia;Artiodactyla;Bovidae;Bos;Bos taurus
+        Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        Bacteria;Unassigned;Unassigned;Unassigned;Unassigned;Unassigned;uncultured murine large bowel bacterium BAC 54B
+        Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
+        Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;Unassigned;Croceibacter phage P2559Y
+        Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
+        Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
+            
 
-1. Estimate and fill missing rank with original lineage information
-  (`-F, --fill-miss-rank`, **experimental**, very useful for formating input data for
+1. **Estimate and fill missing rank with original lineage information**
+  (`-F, --fill-miss-rank`, very useful for formating input data for
   [LEfSe](https://bitbucket.org/biobakery/biobakery/wiki/lefse)).
   You can change the prefix "unclassified" using flag `-p/--miss-rank-repl-prefix`.
 
@@ -649,7 +663,17 @@ Examples:
         92489     Erwinia oleae                                     Proteobacteria
         1458427   Serpentinomonas raichei                           Proteobacteria
 
-        
+1. **For some taxids which rank is higher than the lowest rank in `-f/--format`, use `-T/--trim` to avoid fill missing rank lower than current rank**.
+
+        $ echo -ne "2\n239934\n239935\n" \
+            | taxonkit lineage \
+            | taxonkit reformat -T \
+            | sed -r "s/;+$//" \
+            | csvtk -H -t cut -f 1,3 
+        2       Bacteria
+        239934  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia
+        239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+
 1. Support tab in format string
 
         $ echo 9606 \
@@ -657,6 +681,33 @@ Examples:
             | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}" \
             | csvtk cut -t -f -2
         9606    Eukaryota       Chordata        Mammalia        Primates        Hominidae       Homo    Homo sapiens
+
+1. List seven-level lineage for all taxIDs.
+
+        # replace empty taxon with "Unassigned"
+        $ taxonkit list --ids 1 \
+            | taxonkit lineage \
+            | taxonkit reformat -r Unassigned 
+            | gzip -c > all.lineage.tsv.gz
+        
+        # tab-delimited seven-levels
+        $ taxonkit list --ids 1 \
+            | taxonkit lineage \
+            | taxonkit reformat -r Unassigned -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" \
+            | csvtk cut -H -t -f -2 \
+            | head -n 5 \
+            | csvtk pretty -t
+        
+        # Fill and trim
+        $ memusg -t -s ' taxonkit list --ids 1 \
+            | taxonkit lineage \
+            | taxonkit reformat -F -T \
+            | sed -r "s/;+$//" \
+            | gzip -c > all.lineage.tsv.gz '
+        
+        elapsed time: 19.930s
+        peak rss: 6.25 GB
+
 
 1. From taxid to 7-ranks lineage:
 

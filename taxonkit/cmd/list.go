@@ -119,10 +119,13 @@ Examples:
 
 				// ----------------------------------
 
-				if _, ok = tree[parent]; !ok {
-					tree[parent] = make(map[uint32]bool)
+				if child > 1 {
+					if _, ok = tree[parent]; !ok {
+						tree[parent] = make(map[uint32]bool)
+					}
+					tree[parent][child] = false
 				}
-				tree[parent][child] = false
+
 				if _, ok = tree[child]; !ok {
 					tree[child] = make(map[uint32]bool)
 				}
@@ -226,11 +229,19 @@ func init() {
 	listCmd.Flags().BoolP("json", "J", false, `output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor`)
 }
 
-func traverseTree(tree map[uint32]map[uint32]bool, parent uint32,
-	outfh *xopen.Writer, indent string, level int,
-	names map[uint32]string, printName bool,
-	ranks map[uint32]string, printRank bool,
-	jsonFormat bool, config Config) {
+func traverseTree(
+	tree map[uint32]map[uint32]bool,
+	parent uint32,
+	outfh *xopen.Writer,
+	indent string,
+	level int,
+	names map[uint32]string,
+	printName bool,
+	ranks map[uint32]string,
+	printRank bool,
+	jsonFormat bool,
+	config Config,
+) {
 	if _, ok := tree[parent]; !ok {
 		return
 	}
