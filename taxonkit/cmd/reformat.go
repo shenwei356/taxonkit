@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/shenwei356/breader"
 	"github.com/shenwei356/util/stringutil"
@@ -119,6 +120,11 @@ column by flag "-t/--show-lineage-taxids".
 		}
 
 		unescape := stringutil.UnEscaper()
+
+		var poolStrings = &sync.Pool{New: func() interface{} {
+			return make([]string, 0, 32)
+		}}
+
 		fn := func(line string) (interface{}, bool, error) {
 			if len(line) == 0 || line[0] == '#' {
 				return nil, false, nil
@@ -134,15 +140,20 @@ column by flag "-t/--show-lineage-taxids".
 
 			// names
 			names := strings.Split(data[field], delimiter) // all names of full lineage
-			ranks := make([]string, len(names))
-			sranks := make([]string, len(names))
+
+			// ranks := make([]string, len(names))
+			ranks := poolStrings.Get().([]string)
+
+			// sranks := make([]string, len(names))
+			sranks := poolStrings.Get().([]string)
 
 			var rank, srank string   // lower case of name : name
 			var lname, plname string // lower case of name, rank and it's one-letter symbol
 			var ok bool
 
 			name2Name := make(map[string]string, len(names)) // lower case of name of parent
-			srank2idx := make(map[string]int)                // srank: index
+
+			srank2idx := make(map[string]int) // srank: index
 
 			// preprare replacements.
 			// find the orphan names and missing ranks
@@ -195,14 +206,16 @@ column by flag "-t/--show-lineage-taxids".
 					continue
 				}
 
-				ranks[i] = rank
+				// ranks[i] = rank
+				ranks = append(ranks, rank)
 				if srank, ok = rank2symbol[rank]; ok {
 					replacements[srank] = name2Name[name]
 					if printLineageInTaxid {
 						ireplacements[srank] = strconv.Itoa(int(taxid))
 					}
 					srank2idx[srank] = i
-					sranks[i] = srank
+					// sranks[i] = srank
+					sranks = append(sranks, srank)
 
 					if trim && symbol2weight[srank] > maxRankWeight {
 						maxRankWeight = symbol2weight[srank]
@@ -238,7 +251,8 @@ column by flag "-t/--show-lineage-taxids".
 							}
 						}
 					}
-					replacements[srank] = fmt.Sprintf("%s%s %s", prefix, names[lastI], symbol2rank[srank])
+					replacements[srank] = prefix + names[lastI] + " " + symbol2rank[srank]
+					// replacements[srank] = fmt.Sprintf("%s%s %s", prefix, names[lastI], symbol2rank[srank])
 				}
 			}
 
@@ -261,11 +275,17 @@ column by flag "-t/--show-lineage-taxids".
 				}
 			}
 
+			// recycle
+			ranks = ranks[:0]
+			poolStrings.Put(ranks)
+			sranks = sranks[:0]
+			poolStrings.Put(sranks)
+
 			return line2flineage{line, unescape(flineage), unescape(iflineage)}, true, nil
 		}
 
 		for _, file := range files {
-			reader, err := breader.NewBufferedReader(file, config.Threads, 128, fn)
+			reader, err := breader.NewBufferedReader(file, config.Threads, 64, fn)
 			checkError(err)
 
 			var l2s line2flineage
@@ -277,9 +297,9 @@ column by flag "-t/--show-lineage-taxids".
 					l2s = data.(line2flineage)
 
 					if printLineageInTaxid {
-						outfh.WriteString(fmt.Sprintf("%s\t%s\t%s\n", l2s.line, l2s.flineage, l2s.iflineage))
+						outfh.WriteString(l2s.line + "\t" + l2s.flineage + "\t" + l2s.iflineage + "\n")
 					} else {
-						outfh.WriteString(fmt.Sprintf("%s\t%s\n", l2s.line, l2s.flineage))
+						outfh.WriteString(l2s.line + "\t" + l2s.flineage + "\n")
 					}
 					if config.LineBuffered {
 						outfh.Flush()
