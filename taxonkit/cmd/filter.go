@@ -266,6 +266,7 @@ func init() {
 
 	filterCmd.Flags().BoolP("discard-noranks", "N", false, `discard ranks without order, type "taxonkit filter --help" for details`)
 	filterCmd.Flags().StringSliceP("black-list", "B", []string{}, `black list of ranks to discard, e.g., '"no rank", "clade"'`)
+
 	filterCmd.Flags().BoolP("discard-root", "R", false, `discard root taxid, defined by --root-taxid`)
 	filterCmd.Flags().Uint32P("root-taxid", "", 1, `root taxid`)
 
