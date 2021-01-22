@@ -206,10 +206,11 @@ func (f *rankFilter) isPassed(rank string) (bool, error) {
 
 	var pass bool
 
-	order, ok := f.rankOrder[rank]
-	if !ok {
-		return false, fmt.Errorf("rank order not defined in rank file: %s", rank)
-	}
+	order, _ := f.rankOrder[rank]
+	// order, ok := f.rankOrder[rank]
+	// if !ok {
+	// 	return false, fmt.Errorf("rank order not defined in rank file: %s", rank)
+	// }
 
 	if f.limitEqual {
 		if f.oEqual == order {
@@ -334,7 +335,7 @@ const defaultRanksText = `
 #     1. Blank lines or lines starting with "#" are ignored.
 #     2. Ranks are in decending order and case ignored.
 #     3. Ranks with same order should be in one line separated with comma (",", no space).
-#     4. Ranks without order should be assigning a prefix symbol "!" for each rank.
+#     4. Ranks without order should be assigned a prefix symbol "!" for each rank.
 # 
 # Deault ranks reference from https://en.wikipedia.org/wiki/Taxonomic_rank ,
 # and contains some ranks from NCIB Taxonomy database.

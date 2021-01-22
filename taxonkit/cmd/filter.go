@@ -43,16 +43,18 @@ Attentions:
 
   1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
      used along with -E/--equal-to which values can be different.
-  2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can give
+  2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can use
      your list by -r/--rank-file, the format specification is below.
-  3. TaxIDss with no rank will be discarded.
+  3. All ranks in taxonomy database should be defined in rank file.
+  4. TaxIDs with no rank can be optionally discarded by -N/--discard-noranks.
+  5. Futher ranks can be removed with black list via -B/--black-list.
 
 Rank file:
 
   1. Blank lines or lines starting with "#" are ignored.
   2. Ranks are in decending order and case ignored.
   3. Ranks with same order should be in one line separated with comma (",", no space).
-  4. Ranks without order should be assigning a prefix symbol "!" for each rank.
+  4. Ranks without order should be assigned a prefix symbol "!" for each rank.
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -89,6 +91,15 @@ Rank file:
 
 		rankOrder, noRanks, err := readRankOrder(config, rankFile)
 		checkError(errors.Wrap(err, rankFile))
+
+		noRanksList := make([]string, 0, len(noRanks))
+		for r := range noRanks {
+			noRanksList = append(noRanksList, r)
+		}
+
+		if config.Verbose {
+			log.Infof("ranks without order: %s", strings.Join(noRanksList, ", "))
+		}
 
 		if listOrder {
 			orders := make([]stringutil.StringCount, 0, len(rankOrder))
@@ -150,6 +161,27 @@ Rank file:
 				fmt.Printf("%s\n", order.Key)
 			}
 			return
+		}
+
+		tmp := make([]string, 0, len(blackListRanks))
+		for _, r := range blackListRanks {
+			if r == "" {
+				continue
+			}
+			tmp = append(tmp, strings.ToLower(r))
+			blackListRanks = tmp
+		}
+
+		if config.Verbose {
+			if discardNoRank {
+				log.Debugf("ranks without order will be discarded: %s", strings.Join(noRanksList, ", "))
+			}
+			if discardRoot {
+				log.Debugf("root rank without order will be discarded")
+			}
+			if len(blackListRanks) > 0 {
+				log.Debugf("ranks in black list will be discarded: %s", strings.Join(blackListRanks, ", "))
+			}
 		}
 
 		filter, err := newRankFilter(taxondb.Ranks, rankOrder, noRanks, lower, higher, equal, blackListRanks, discardNoRank)
@@ -229,11 +261,11 @@ func init() {
 	RootCmd.AddCommand(filterCmd)
 
 	filterCmd.Flags().StringP("rank-file", "r", "", `user-defined ordered taxonomic ranks, type "taxonkit filter --help" for details`)
-	filterCmd.Flags().BoolP("list-order", "", false, "list defined ranks in order")
-	filterCmd.Flags().BoolP("list-ranks", "", false, "list ordered ranks in taxonomy database")
+	filterCmd.Flags().BoolP("list-order", "", false, `list user defined ranks in order, from "$HOME/.taxonkit/ranks.txt"`)
+	filterCmd.Flags().BoolP("list-ranks", "", false, `list ordered ranks in taxonomy database, sorted in user defined order`)
 
 	filterCmd.Flags().BoolP("discard-noranks", "N", false, `discard ranks without order, type "taxonkit filter --help" for details`)
-	filterCmd.Flags().StringSliceP("black-list", "B", []string{"no rank", "clade"}, `black list of ranks to discard`)
+	filterCmd.Flags().StringSliceP("black-list", "B", []string{}, `black list of ranks to discard, e.g., '"no rank", "clade"'`)
 	filterCmd.Flags().BoolP("discard-root", "R", false, `discard root taxid, defined by --root-taxid`)
 	filterCmd.Flags().Uint32P("root-taxid", "", 1, `root taxid`)
 
