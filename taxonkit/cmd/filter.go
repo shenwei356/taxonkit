@@ -62,7 +62,10 @@ Rank file:
 
 		files := getFileList(args)
 
-		if len(files) == 1 && isStdin(files[0]) && !xopen.IsStdin() {
+		listOrder := getFlagBool(cmd, "list-order")
+		listRanks := getFlagBool(cmd, "list-ranks")
+
+		if !(listOrder || listRanks) && len(files) == 1 && isStdin(files[0]) && !xopen.IsStdin() {
 			checkError(fmt.Errorf("stdin not detected"))
 		}
 
@@ -77,9 +80,6 @@ Rank file:
 		higher := strings.ToLower(getFlagString(cmd, "higher-than"))
 		lower := strings.ToLower(getFlagString(cmd, "lower-than"))
 		equal := strings.ToLower(getFlagString(cmd, "equal-to"))
-
-		listOrder := getFlagBool(cmd, "list-order")
-		listRanks := getFlagBool(cmd, "list-ranks")
 
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
 
