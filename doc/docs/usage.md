@@ -479,14 +479,14 @@ Flags:
   -r, --miss-rank-repl string          replacement string for missing rank
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
   -R, --miss-taxid-repl string         replacement string for missing taxid
-      --prefix-S string                prefix for subspecies, used with flag -P/--add-prefix (default "S__")
-      --prefix-c string                prefix for class, used with flag -P/--add-prefix (default "c__")
-      --prefix-f string                prefix for family, used with flag -P/--add-prefix (default "f__")
-      --prefix-g string                prefix for genus, used with flag -P/--add-prefix (default "g__")
-      --prefix-k string                prefix for superkingdom, used with flag -P/--add-prefix (default "k__")
-      --prefix-o string                prefix for order, used with flag -P/--add-prefix (default "o__")
-      --prefix-p string                prefix for phylum, used with flag -P/--add-prefix (default "p__")
-      --prefix-s string                prefix for species, used with flag -P/--add-prefix (default "s__")
+      --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix (default "S__")
+      --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default "c__")
+      --prefix-f string                prefix for family, used along with flag -P/--add-prefix (default "f__")
+      --prefix-g string                prefix for genus, used along with flag -P/--add-prefix (default "g__")
+      --prefix-k string                prefix for superkingdom, used along with flag -P/--add-prefix (default "k__")
+      --prefix-o string                prefix for order, used along with flag -P/--add-prefix (default "o__")
+      --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default "p__")
+      --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default "s__")
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
   -T, --trim                           do not fill missing rank lower than current rank
 

@@ -1,9 +1,9 @@
 - [TaxonKit v0.7.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.1)
     - `taxonkit filter`: 
-        - disable unnecessary stdin check. [#36](https://github.com/shenwei356/taxonkit/issues/36)
-        - better handling of black list, empty default value: "no rank" and "clade". [#37](https://github.com/shenwei356/taxonkit/issues/37)
-        - and you need use `-N/--discard-noranks` to explicitly filter out "no rank", "clade".
+        - disable unnecessary stdin check when using flag `--list-order` or `--list-ranks`. [#36](https://github.com/shenwei356/taxonkit/issues/36)
+        - better handling of black list, empty default value: "no rank" and "clade". And you need use `-N/--discard-noranks` to explicitly filter out "no rank", "clade". [#37](https://github.com/shenwei356/taxonkit/issues/37)
+        - update help message. Thanks @standage for improve this command! [#38](https://github.com/shenwei356/taxonkit/issues/38)
 - [TaxonKit v0.7.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.0)
     - `taxonkit`: **2-3X faster taxonomy data loading**.

@@ -15,7 +15,7 @@
 [![Anaconda Cloud](	https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit)
 - [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of taxIDss, including deletion, new adding, merge, reuse, and rank/name changes.
 - **[Please cite](#citation):** [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
-
+- [pytaxonkit](https://github.com/bioforensics/pytaxonkit), Python bindings for TaxonKit.
 
 ## Table of Contents
 
