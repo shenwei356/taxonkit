@@ -34,6 +34,8 @@ import (
 )
 
 type rankFilter struct {
+	taxondb *unikmer.Taxonomy
+
 	dbRanks   map[string]interface{}
 	rankOrder map[string]int
 
@@ -52,9 +54,10 @@ type rankFilter struct {
 	noRanks    map[string]interface{}
 	blackLists map[string]interface{}
 
-	discardNorank bool
+	discardNorank   bool
+	saveKnownNoRank bool
 
-	cache map[string]bool
+	cache map[uint32]bool
 }
 
 func loadTaxonomy(opt *Config, withRank bool) *unikmer.Taxonomy {
@@ -126,8 +129,8 @@ func loadTaxonomy(opt *Config, withRank bool) *unikmer.Taxonomy {
 	return t
 }
 
-func newRankFilter(dbRanks map[string]interface{}, rankOrder map[string]int, noRanks map[string]interface{},
-	lower string, higher string, equals []string, blackList []string, discardNorank bool) (*rankFilter, error) {
+func newRankFilter(taxondb *unikmer.Taxonomy, rankOrder map[string]int, noRanks map[string]interface{},
+	lower string, higher string, equals []string, blackList []string, discardNorank bool, saveKnownNoRank bool) (*rankFilter, error) {
 
 	if lower != "" && higher != "" {
 		return nil, fmt.Errorf("higher and lower can't be simultaneous given")
@@ -137,17 +140,21 @@ func newRankFilter(dbRanks map[string]interface{}, rankOrder map[string]int, noR
 	for _, r := range blackList {
 		blackListMap[r] = struct{}{}
 	}
+	dbRanks := taxondb.Ranks
 	f := &rankFilter{
-		dbRanks:       dbRanks,
-		rankOrder:     rankOrder,
-		lower:         lower,
-		higher:        higher,
-		equals:        equals,
-		noRanks:       noRanks,
-		blackLists:    blackListMap,
-		discardNorank: discardNorank,
-		cache:         make(map[string]bool, 1024),
+		taxondb:         taxondb,
+		dbRanks:         dbRanks,
+		rankOrder:       rankOrder,
+		lower:           lower,
+		higher:          higher,
+		equals:          equals,
+		noRanks:         noRanks,
+		blackLists:      blackListMap,
+		discardNorank:   discardNorank,
+		saveKnownNoRank: saveKnownNoRank,
+		cache:           make(map[uint32]bool, 1024),
 	}
+
 	var err error
 	if lower != "" {
 		f.oLower, err = getRankOrder(dbRanks, rankOrder, lower)
@@ -190,26 +197,61 @@ func getRankOrder(dbRanks map[string]interface{}, rankOrder map[string]int, rank
 	return rankOrder[rank], nil
 }
 
-func (f *rankFilter) isPassed(rank string) (bool, error) {
-	rank = strings.ToLower(rank)
-
-	if v, ok := f.cache[rank]; ok {
-		return v, nil
-	}
-
-	if f.discardNorank {
-		if _, ok := f.noRanks[rank]; ok {
-			f.cache[rank] = false
-			return false, nil
-		}
-	}
-
-	if _, ok := f.blackLists[rank]; ok {
-		f.cache[rank] = false
+func (f *rankFilter) isPassed(taxid uint32) (bool, error) {
+	rank := f.taxondb.Rank(taxid)
+	if rank == "" {
 		return false, nil
 	}
 
+	rank = strings.ToLower(rank)
+
+	if v, ok := f.cache[taxid]; ok {
+		return v, nil
+	}
+
+	if _, ok := f.blackLists[rank]; ok {
+		f.cache[taxid] = false
+		return false, nil
+	}
+
+	var isNoRank bool
+	_, ok := f.noRanks[rank]
+	if ok {
+		if f.discardNorank {
+			isNoRank = true
+			if !f.saveKnownNoRank {
+				f.cache[taxid] = false
+				return false, nil
+			}
+		}
+	}
+
 	var pass bool
+
+	if isNoRank && f.limitLower && f.saveKnownNoRank {
+		nodes := f.taxondb.Nodes
+		var _rank string
+		var _ok bool
+		var _order int
+
+		parent := nodes[taxid]
+		for {
+			if parent == 1 {
+				f.cache[taxid] = false
+				return false, nil
+			}
+
+			_rank = f.taxondb.Rank(parent)
+			_order, _ok = f.rankOrder[_rank]
+			if _ok {
+				pass = _order <= f.oLower
+
+				f.cache[taxid] = pass
+				return pass, nil
+			}
+			parent = nodes[parent]
+		}
+	}
 
 	order, _ := f.rankOrder[rank]
 	// order, ok := f.rankOrder[rank]
@@ -235,7 +277,7 @@ func (f *rankFilter) isPassed(rank string) (bool, error) {
 		pass = true // no any filter
 	}
 
-	f.cache[rank] = pass
+	f.cache[taxid] = pass
 	return pass, nil
 }
 

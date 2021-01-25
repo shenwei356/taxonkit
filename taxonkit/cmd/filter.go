@@ -46,8 +46,11 @@ Attentions:
   2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can use
      your list by -r/--rank-file, the format specification is below.
   3. All ranks in taxonomy database should be defined in rank file.
-  4. TaxIDs with no rank can be optionally discarded by -N/--discard-noranks.
-  5. Futher ranks can be removed with black list via -B/--black-list.
+  4. Ranks can be removed with black list via -B/--black-list.
+  5. TaxIDs with no rank can be optionally discarded by -N/--discard-noranks.
+  6. But when filtering with -L/--lower-than, you can use
+    -n/--save-predictable-norank to save some special ranks without order,
+    where rank of the closest higher node is still lower than rank cutoff.
 
 Rank file:
 
@@ -74,6 +77,11 @@ Rank file:
 		rankFile := getFlagString(cmd, "rank-file")
 
 		discardNoRank := getFlagBool(cmd, "discard-noranks")
+		saveNorank := getFlagBool(cmd, "save-predictable-norank")
+		if saveNorank {
+			discardNoRank = true
+		}
+
 		blackListRanks := getFlagStringSlice(cmd, "black-list")
 
 		rootTaxid := getFlagUint32(cmd, "root-taxid")
@@ -188,7 +196,7 @@ Rank file:
 			}
 		}
 
-		filter, err := newRankFilter(taxondb.Ranks, rankOrder, noRanks, lower, higher, equals, blackListRanks, discardNoRank)
+		filter, err := newRankFilter(taxondb, rankOrder, noRanks, lower, higher, equals, blackListRanks, discardNoRank, saveNorank)
 		checkError(err)
 
 		outfh, err := xopen.Wopen(config.OutFile)
@@ -205,7 +213,6 @@ Rank file:
 			scanner := bufio.NewScanner(fh)
 			var _taxid int
 			var taxid uint32
-			var rank string
 			var pass bool
 			for scanner.Scan() {
 				line = strings.Trim(scanner.Text(), "\r\n ")
@@ -235,12 +242,7 @@ Rank file:
 					continue
 				}
 
-				rank = taxondb.Rank(taxid)
-				if rank == "" {
-					continue
-				}
-
-				pass, err = filter.isPassed(rank)
+				pass, err = filter.isPassed(taxid)
 				if err != nil {
 					checkError(err)
 				}
@@ -268,7 +270,8 @@ func init() {
 	filterCmd.Flags().BoolP("list-order", "", false, `list user defined ranks in order, from "$HOME/.taxonkit/ranks.txt"`)
 	filterCmd.Flags().BoolP("list-ranks", "", false, `list ordered ranks in taxonomy database, sorted in user defined order`)
 
-	filterCmd.Flags().BoolP("discard-noranks", "N", false, `discard ranks without order, type "taxonkit filter --help" for details`)
+	filterCmd.Flags().BoolP("discard-noranks", "N", false, `discard all ranks without order, type "taxonkit filter --help" for details`)
+	filterCmd.Flags().BoolP("save-predictable-norank", "n", false, `do not discard some special ranks without order when using -L, where rank of the closest higher node is still lower than rank cutoff`)
 	filterCmd.Flags().StringSliceP("black-list", "B", []string{}, `black list of ranks to discard, e.g., '-B "no rank" -B "clade"`)
 
 	filterCmd.Flags().BoolP("discard-root", "R", false, `discard root taxid, defined by --root-taxid`)

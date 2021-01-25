@@ -2,8 +2,10 @@
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.2)
     - `taxonkit filter`:
         - flag `-E/--equal-to` supports multiple values.
+        - new flag `-n/--save-predictable-norank`: do not discard some special ranks without order when using -L, where rank of the closest higher node is still lower than rank cutoff.
     - `taxonkit reformat`:
         - **new placeholder `{t}` for `subspecies/strain`, `{T}` for `strain`**. Thanks @wqssf102 for feedback.
+        - new flag `-S/--pseudo-strain` for using the node with lowest rank as strain name, only if which rank is lower than "species" and not "subpecies" nor "strain". 
 - [TaxonKit v0.7.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.1)
     - `taxonkit filter`: 

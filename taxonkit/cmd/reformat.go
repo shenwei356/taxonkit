@@ -52,6 +52,11 @@ Output format can be formated by flag --format, available placeholders:
     {S}: subspecies
     {T}: strain
 
+When these's no nodes of rank "subspecies" nor "stain",
+you can switch -S/--pseudo-strain to use the node with lowest rank
+as subspecies/strain name, if which rank is lower than "species". 
+This flag affects {t}, {S}, {T}.
+    
 Output format can contains some escape charactors like "\t".
 
 This command appends reformated lineage to the input line.
@@ -68,6 +73,7 @@ column by flag "-t/--show-lineage-taxids".
 		prefix := getFlagString(cmd, "miss-rank-repl-prefix")
 		iblank := getFlagString(cmd, "miss-taxid-repl")
 		fill := getFlagBool(cmd, "fill-miss-rank")
+		pseudoStrain := getFlagBool(cmd, "pseudo-strain")
 		field := getFlagPositiveInt(cmd, "lineage-field") - 1
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
 
@@ -131,6 +137,8 @@ column by flag "-t/--show-lineage-taxids".
 		var poolStrings = &sync.Pool{New: func() interface{} {
 			return make([]string, 0, 32)
 		}}
+
+		weightOfSpecies := symbol2weight["s"]
 
 		fn := func(line string) (interface{}, bool, error) {
 			if len(line) == 0 || line[0] == '#' {
@@ -251,6 +259,9 @@ column by flag "-t/--show-lineage-taxids".
 			}
 
 			if fill {
+				_, hasRankSubspecies := srank2idx["S"]
+				_, hasRankStrain := srank2idx["T"]
+
 				var j, lastI int
 				var srank2 string
 				for _, srank = range srankList {
@@ -278,6 +289,15 @@ column by flag "-t/--show-lineage-taxids".
 							}
 						}
 					}
+
+					if pseudoStrain {
+						if symbol2weight[srank] > weightOfSpecies && // lower than species
+							!(hasRankSubspecies || hasRankStrain) { // does not have strain or subspecies
+							replacements[srank] = names[len(names)-1]
+							continue
+						}
+					}
+
 					replacements[srank] = prefix + names[lastI] + " " + symbol2rank[srank]
 					// replacements[srank] = fmt.Sprintf("%s%s %s", prefix, names[lastI], symbol2rank[srank])
 				}
@@ -345,7 +365,10 @@ func init() {
 	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank`)
 	flineageCmd.Flags().StringP("miss-rank-repl-prefix", "p", "unclassified ", `prefix for estimated taxon level`)
 	flineageCmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
-	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "fill missing rank with original lineage information (experimental)")
+
+	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "fill missing rank with lineage information of the next higher rank")
+	flineageCmd.Flags().BoolP("pseudo-strain", "S", false, `use the node with lowest rank as strain name, only if which rank is lower than "species" and not "subpecies" nor "strain". This flag affects {t}, {S}, {T}`)
+
 	flineageCmd.Flags().IntP("lineage-field", "i", 2, "field index of lineage. data should be tab-separated")
 	flineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)
 
