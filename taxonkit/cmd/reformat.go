@@ -292,7 +292,8 @@ column by flag "-t/--show-lineage-taxids".
 
 					if pseudoStrain {
 						if symbol2weight[srank] > weightOfSpecies && // lower than species
-							!(hasRankSubspecies || hasRankStrain) { // does not have strain or subspecies
+							!(hasRankSubspecies || hasRankStrain) && // does not have strain or subspecies
+							lastI < len(names)-1 { // not itself
 							replacements[srank] = names[len(names)-1]
 							continue
 						}

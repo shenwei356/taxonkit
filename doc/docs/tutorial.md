@@ -139,10 +139,10 @@ as subspecies/strain name, if which rank is lower than "species".
     taxid     rank         species                                                 strain
     376619    strain       Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
     349741    strain       Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
-    239935    species      Akkermansia muciniphila                                 Akkermansia muciniphila
-    314101    species      uncultured murine large bowel bacterium BAC 54B         uncultured murine large bowel bacterium BAC 54B
-    11932     species      Mouse Intracisternal A-particle                         Mouse Intracisternal A-particle
-    1327037   species      Croceibacter phage P2559Y                               Croceibacter phage P2559Y
+    239935    species      Akkermansia muciniphila                                 unclassified Akkermansia muciniphila subspecies/strain
+    314101    species      uncultured murine large bowel bacterium BAC 54B         unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
+    11932     species      Mouse Intracisternal A-particle                         unclassified Mouse Intracisternal A-particle subspecies/strain
+    1327037   species      Croceibacter phage P2559Y                               unclassified Croceibacter phage P2559Y subspecies/strain
     83333     strain       Escherichia coli                                        Escherichia coli K-12
     1408252   subspecies   Escherichia coli                                        Escherichia coli R178
     2605619   no rank      Escherichia coli                                        Escherichia coli O16:H48
