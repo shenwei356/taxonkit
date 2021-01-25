@@ -78,9 +78,6 @@ Rank file:
 
 		discardNoRank := getFlagBool(cmd, "discard-noranks")
 		saveNorank := getFlagBool(cmd, "save-predictable-norank")
-		if saveNorank {
-			discardNoRank = true
-		}
 
 		blackListRanks := getFlagStringSlice(cmd, "black-list")
 
@@ -99,6 +96,14 @@ Rank file:
 
 		if higher != "" && lower != "" {
 			checkError(fmt.Errorf("-H/--higher-than and -L/--lower-than can't be simultaneous given"))
+		}
+
+		if saveNorank {
+			discardNoRank = true
+
+			if lower == "" {
+				checkError(fmt.Errorf("flag -n/--save-predictable-norank only works along with -L/--lower-than"))
+			}
 		}
 
 		rankOrder, noRanks, err := readRankOrder(config, rankFile)
