@@ -112,16 +112,18 @@ R libraries `dplyr`, `ggplot2`, `scales`, `ggthemes`, `ggrepel` are needed.
     # reformat dataset
     # tools: https://github.com/shenwei356/csvtk/
     for f in taxids.*.txt;  do wc -l $f; done \
-        | csvtk space2tab | csvtk cut -H -t -f 2,1 \
-        | csvtk replace -H -t -f 2 -p ^ -r n= \
+        | sort -k 1,1n \
+        | LC_ALL=en_US.UTF-8 awk '{ printf("%s\tn=%'"'"'d\n",$2,$1) }' \
         > dataset_rename.tsv
 
     cat bench.get_lineage.tsv \
+        | csvtk sort -t -L dataset:<(cut -f 1 dataset_rename.tsv) -k dataset:u \
         | csvtk replace -t -f dataset -k dataset_rename.tsv -p '(.+)' -r '{kv}' \
-        | csvtk sort -t -k dataset:N \
         > bench.get_lineage.reformat.tsv
 
     ./plot.R -i bench.get_lineage.reformat.tsv --width 8 --height 3.3
+    
+    # ./plot.R -i bench.get_lineage.reformat.tsv -o bench.get_lineage.reformat.tsv2.png --dpi 600 --width 8 --height 3.3
 
 Result
 

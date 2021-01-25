@@ -81,7 +81,11 @@ Rank file:
 
 		higher := strings.ToLower(getFlagString(cmd, "higher-than"))
 		lower := strings.ToLower(getFlagString(cmd, "lower-than"))
-		equal := strings.ToLower(getFlagString(cmd, "equal-to"))
+		equalsS := getFlagStringSlice(cmd, "equal-to")
+		equals := make([]string, 0, len(equalsS))
+		for _, val := range equalsS {
+			equals = append(equals, strings.ToLower(val))
+		}
 
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
 
@@ -184,7 +188,7 @@ Rank file:
 			}
 		}
 
-		filter, err := newRankFilter(taxondb.Ranks, rankOrder, noRanks, lower, higher, equal, blackListRanks, discardNoRank)
+		filter, err := newRankFilter(taxondb.Ranks, rankOrder, noRanks, lower, higher, equals, blackListRanks, discardNoRank)
 		checkError(err)
 
 		outfh, err := xopen.Wopen(config.OutFile)
@@ -265,14 +269,14 @@ func init() {
 	filterCmd.Flags().BoolP("list-ranks", "", false, `list ordered ranks in taxonomy database, sorted in user defined order`)
 
 	filterCmd.Flags().BoolP("discard-noranks", "N", false, `discard ranks without order, type "taxonkit filter --help" for details`)
-	filterCmd.Flags().StringSliceP("black-list", "B", []string{}, `black list of ranks to discard, e.g., '"no rank", "clade"'`)
+	filterCmd.Flags().StringSliceP("black-list", "B", []string{}, `black list of ranks to discard, e.g., '-B "no rank" -B "clade"`)
 
 	filterCmd.Flags().BoolP("discard-root", "R", false, `discard root taxid, defined by --root-taxid`)
 	filterCmd.Flags().Uint32P("root-taxid", "", 1, `root taxid`)
 
 	filterCmd.Flags().StringP("lower-than", "L", "", "output taxIDs with rank lower than a rank, exclusive with --higher-than")
 	filterCmd.Flags().StringP("higher-than", "H", "", "output taxIDs with rank higher than a rank, exclusive with --lower-than")
-	filterCmd.Flags().StringP("equal-to", "E", "", "output taxIDs with rank equal to a rank")
+	filterCmd.Flags().StringSliceP("equal-to", "E", []string{}, `output taxIDs with rank equal to some ranks, multiple values can be separated with comma "," (e.g., -E "genus,species"), or give multiple times (e.g., -E genus -E species)`)
 
 	filterCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. input data should be tab-separated")
 }

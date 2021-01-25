@@ -32,6 +32,8 @@ var rankList = []string{
 	"genus",
 	"species",
 	"subspecies",
+	"subspecies/strain",
+	"strain",
 }
 
 var srankList = []string{
@@ -43,18 +45,22 @@ var srankList = []string{
 	"f",
 	"g",
 	"s",
+	"t",
 	"S",
+	"T",
 }
 
 var rank2symbol = map[string]string{
-	"superkingdom": "k",
-	"phylum":       "p",
-	"class":        "c",
-	"order":        "o",
-	"family":       "f",
-	"genus":        "g",
-	"species":      "s",
-	"subspecies":   "S",
+	"superkingdom":      "k",
+	"phylum":            "p",
+	"class":             "c",
+	"order":             "o",
+	"family":            "f",
+	"genus":             "g",
+	"species":           "s",
+	"subspecies/strain": "t",
+	"subspecies":        "S",
+	"strain":            "T",
 }
 
 var symbol2rank = map[string]string{
@@ -65,7 +71,9 @@ var symbol2rank = map[string]string{
 	"f": "family",
 	"g": "genus",
 	"s": "species",
+	"t": "subspecies/strain",
 	"S": "subspecies",
+	"T": "strain",
 }
 var symbol2weight = map[string]float32{
 	"k": 1,
@@ -75,7 +83,9 @@ var symbol2weight = map[string]float32{
 	"f": 5,
 	"g": 6,
 	"s": 7,
-	"S": 8,
+	"t": 8,
+	"S": 9,
+	"T": 10,
 }
 
 var reRankPlaceHolder = regexp.MustCompile(`\{(\w)\}`)
@@ -88,7 +98,9 @@ var reRankPlaceHolders = map[string]*regexp.Regexp{
 	"f": regexp.MustCompile(`\{f\}`),
 	"g": regexp.MustCompile(`\{g\}`),
 	"s": regexp.MustCompile(`\{s\}`),
+	"t": regexp.MustCompile(`\{t\}`),
 	"S": regexp.MustCompile(`\{S\}`),
+	"T": regexp.MustCompile(`\{T\}`),
 }
 
 const norank = "no rank"

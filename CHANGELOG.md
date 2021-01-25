@@ -1,3 +1,9 @@
+- [TaxonKit v0.7.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.2)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.2)
+    - `taxonkit filter`:
+        - flag `-E/--equal-to` supports multiple values.
+    - `taxonkit reformat`:
+        - **new placeholder `{t}` for `subspecies/strain`, `{T}` for `strain`**. Thanks @wqssf102 for feedback.
 - [TaxonKit v0.7.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.1)
     - `taxonkit filter`: 

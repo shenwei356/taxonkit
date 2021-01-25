@@ -37,7 +37,7 @@ All-in-one command:
 ```text
 TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.7.0
+Version: 0.7.2
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -458,7 +458,10 @@ Output format can be formated by flag --format, available placeholders:
     {f}: family
     {g}: genus
     {s}: species
+    {t}: subspecies/strain
+    
     {S}: subspecies
+    {T}: strain
 
 Output format can contains some escape charactors like "\t".
 
@@ -480,6 +483,7 @@ Flags:
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
   -R, --miss-taxid-repl string         replacement string for missing taxid
       --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix (default "S__")
+      --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default "T__")
       --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default "c__")
       --prefix-f string                prefix for family, used along with flag -P/--add-prefix (default "f__")
       --prefix-g string                prefix for genus, used along with flag -P/--add-prefix (default "g__")
@@ -487,6 +491,7 @@ Flags:
       --prefix-o string                prefix for order, used along with flag -P/--add-prefix (default "o__")
       --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default "p__")
       --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default "s__")
+      --prefix-t string                prefix for subspecies/strain, used along with flag -P/--add-prefix (default "t__")
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
   -T, --trim                           do not fill missing rank lower than current rank
 
@@ -551,7 +556,28 @@ Examples:
             92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
             1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
 
+1. And `subspecies/stain` (`{t}`), `subspecies` (`{S}`), and `strain` (`{T}`) are also available.
 
+
+        $ echo -ne "83333\n1408252\n" \
+            | taxonkit lineage -n -r \
+            | taxonkit reformat -f '{t};{S};{T}' \
+            | csvtk -H -t cut -f 1,4,3,5 \
+            | csvtk -H -t sep -f 4 -s ';' -R \
+            | csvtk pretty -t
+        83333     strain       Escherichia coli K-12   Escherichia coli K-12                           Escherichia coli K-12
+        1408252   subspecies   Escherichia coli R178   Escherichia coli R178   Escherichia coli R178 
+
+        # see example below for -F
+        $ echo -ne "83333\n1408252\n" \
+            | taxonkit lineage -n -r \
+            | taxonkit reformat -f '{t};{S};{T}' -F \
+            | csvtk -H -t cut -f 1,4,3,5 \
+            | csvtk -H -t sep -f 4 -s ';' -R \
+            | csvtk pretty -t
+        83333     strain       Escherichia coli K-12   Escherichia coli K-12   unclassified Escherichia subspecies   Escherichia coli K-12
+        1408252   subspecies   Escherichia coli R178   Escherichia coli R178   Escherichia coli R178                 unclassified Escherichia coli strain
+        
 1. Add prefix (`-P/--add-prefix`).
 
         $ cat lineage.txt \
@@ -698,6 +724,14 @@ Examples:
             | head -n 5 \
             | csvtk pretty -t
         
+        # 8-level
+        $ taxonkit list --ids 1 \
+            | taxonkit lineage \
+            | taxonkit reformat -r Unassigned -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+            | csvtk cut -H -t -f -2 \
+            | head -n 5 \
+            | csvtk pretty -t
+        
         # Fill and trim
         $ memusg -t -s ' taxonkit list --ids 1 \
             | taxonkit lineage \
@@ -811,29 +845,31 @@ Attentions:
 
   1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
      used along with -E/--equal-to which values can be different.
-  2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can give
+  2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can use
      your list by -r/--rank-file, the format specification is below.
-  3. TaxIDss with no rank will be discarded.
+  3. All ranks in taxonomy database should be defined in rank file.
+  4. TaxIDs with no rank can be optionally discarded by -N/--discard-noranks.
+  5. Futher ranks can be removed with black list via -B/--black-list.
 
 Rank file:
 
   1. Blank lines or lines starting with "#" are ignored.
   2. Ranks are in decending order and case ignored.
   3. Ranks with same order should be in one line separated with comma (",", no space).
-  4. Ranks without order should be assigning a prefix symbol "!" for each rank.
+  4. Ranks without order should be assigned a prefix symbol "!" for each rank.
 
 Usage:
   taxonkit filter [flags]
 
 Flags:
-  -B, --black-list strings   black list of ranks to discard (default [no rank,clade])
+  -B, --black-list strings   black list of ranks to discard, e.g., '-B "no rank" -B "clade"
   -N, --discard-noranks      discard ranks without order, type "taxonkit filter --help" for details
   -R, --discard-root         discard root taxid, defined by --root-taxid
-  -E, --equal-to string      output taxIDs with rank equal to a rank
+  -E, --equal-to strings     output taxIDs with rank equal to some ranks, multiple values can be separated with comma "," (e.g., -E "genus,species"), or give multiple times (e.g., -E genus -E species)
   -h, --help                 help for filter
   -H, --higher-than string   output taxIDs with rank higher than a rank, exclusive with --lower-than
-      --list-order           list defined ranks in order
-      --list-ranks           list ordered ranks in taxonomy database
+      --list-order           list user defined ranks in order, from "$HOME/.taxonkit/ranks.txt"
+      --list-ranks           list ordered ranks in taxonomy database, sorted in user defined order
   -L, --lower-than string    output taxIDs with rank lower than a rank, exclusive with --higher-than
   -r, --rank-file string     user-defined ordered taxonomic ranks, type "taxonkit filter --help" for details
       --root-taxid uint32    root taxid (default 1)
@@ -872,15 +908,16 @@ Examples
         239935    species        cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
         349741    strain         cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
 
-1. Filter certain rank (`-E/--equal-to`)
+1. Equal to certain rank(s) (`-E/--equal-to`)
 
         $ cat taxids2.txt \
-            | taxonkit filter -E Phylum \
+            | taxonkit filter -E Phylum -E Class \
             | taxonkit lineage -r \
             | csvtk -Ht cut -f 1,3,2 \
             | csvtk pretty -t
-        74201   phylum   cellular organisms;Bacteria;PVC group;Verrucomicrobia
-        
+        74201    phylum   cellular organisms;Bacteria;PVC group;Verrucomicrobia
+        203494   class    cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae
+            
 1. Lower than a rank (`-L/--lower-than`)
 
         $ cat taxids2.txt \
@@ -891,7 +928,7 @@ Examples
         239935   species   Akkermansia muciniphila
         349741   strain    Akkermansia muciniphila ATCC BAA-835
 
-1. Higher than a rank (`-H/--higher-than`), note that "no rank" and "clade" have no rank and be filter out by default.
+1. Higher than a rank (`-H/--higher-than`)
 
         $ cat taxids2.txt \
             | taxonkit filter -H phylum \
@@ -900,6 +937,34 @@ Examples
             | csvtk pretty -t
         2   superkingdom   Bacteria
 
+1. "no rank" and "clade" have no rank and can be filter out via `-N/--discard-noranks`.
+  Futher ranks can be removed with black list via `-B/--black-list`
+
+        # 562 is taxID of Escherichia coli
+        $ taxonkit list --ids 562 \
+            | taxonkit filter -L species \
+            | taxonkit lineage -r -n -L \
+            | csvtk cut -Ht -f 1,3,2 \
+            | csvtk freq -Ht -f 2 -nr \
+            | csvtk pretty -t
+        strain       2950
+        no rank      149
+        serotype     141
+        serogroup    95
+        isolate      1
+        subspecies   1
+        
+        $ taxonkit list --ids 562 \
+            | taxonkit filter -L species -N -B strain \
+            | taxonkit lineage -r -n -L \
+            | csvtk cut -Ht -f 1,3,2 \
+            | csvtk freq -Ht -f 2 -nr \
+            | csvtk pretty -t
+        serotype     141
+        serogroup    95
+        isolate      1
+        subspecies   1
+        
 1. Combine of `-L/-H` with `-E`.
 
         $ cat taxids2.txt \

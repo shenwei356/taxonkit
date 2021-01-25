@@ -47,7 +47,10 @@ Output format can be formated by flag --format, available placeholders:
     {f}: family
     {g}: genus
     {s}: species
+    {t}: subspecies/strain
+    
     {S}: subspecies
+    {T}: strain
 
 Output format can contains some escape charactors like "\t".
 
@@ -77,6 +80,8 @@ column by flag "-t/--show-lineage-taxids".
 		prefixG := getFlagString(cmd, "prefix-g")
 		prefixs := getFlagString(cmd, "prefix-s")
 		prefixS := getFlagString(cmd, "prefix-S")
+		prefixt := getFlagString(cmd, "prefix-t")
+		prefixT := getFlagString(cmd, "prefix-T")
 
 		trim := getFlagBool(cmd, "trim")
 
@@ -89,6 +94,8 @@ column by flag "-t/--show-lineage-taxids".
 			"g": prefixG,
 			"s": prefixs,
 			"S": prefixS,
+			"t": prefixt,
+			"T": prefixT,
 		}
 		// check format
 		if !reRankPlaceHolder.MatchString(format) {
@@ -209,6 +216,22 @@ column by flag "-t/--show-lineage-taxids".
 				// ranks[i] = rank
 				ranks = append(ranks, rank)
 				if srank, ok = rank2symbol[rank]; ok {
+					// special symbol "{t}"
+					switch rank {
+					case "strain":
+						replacements["t"] = name2Name[name]
+						if printLineageInTaxid {
+							ireplacements["t"] = strconv.Itoa(int(taxid))
+						}
+						srank2idx["t"] = i
+					case "subspecies":
+						replacements["t"] = name2Name[name]
+						if printLineageInTaxid {
+							ireplacements["t"] = strconv.Itoa(int(taxid))
+						}
+						srank2idx["t"] = i
+					}
+
 					replacements[srank] = name2Name[name]
 					if printLineageInTaxid {
 						ireplacements[srank] = strconv.Itoa(int(taxid))
@@ -332,7 +355,9 @@ func init() {
 	flineageCmd.Flags().StringP("prefix-f", "", "f__", `prefix for family, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-g", "", "g__", `prefix for genus, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-s", "", "s__", `prefix for species, used along with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-t", "", "t__", `prefix for subspecies/strain, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-S", "", "S__", `prefix for subspecies, used along with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-T", "", "T__", `prefix for strain, used along with flag -P/--add-prefix`)
 
 	flineageCmd.Flags().BoolP("trim", "T", false, "do not fill missing rank lower than current rank")
 }

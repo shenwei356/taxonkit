@@ -39,11 +39,11 @@ type rankFilter struct {
 
 	lower  string
 	higher string
-	equal  string
+	equals []string
 
 	oLower  int
 	oHigher int
-	oEqual  int
+	oEquals map[int]interface{}
 
 	limitLower  bool
 	limitHigher bool
@@ -127,7 +127,7 @@ func loadTaxonomy(opt *Config, withRank bool) *unikmer.Taxonomy {
 }
 
 func newRankFilter(dbRanks map[string]interface{}, rankOrder map[string]int, noRanks map[string]interface{},
-	lower, higher, equal string, blackList []string, discardNorank bool) (*rankFilter, error) {
+	lower string, higher string, equals []string, blackList []string, discardNorank bool) (*rankFilter, error) {
 
 	if lower != "" && higher != "" {
 		return nil, fmt.Errorf("higher and lower can't be simultaneous given")
@@ -142,7 +142,7 @@ func newRankFilter(dbRanks map[string]interface{}, rankOrder map[string]int, noR
 		rankOrder:     rankOrder,
 		lower:         lower,
 		higher:        higher,
-		equal:         equal,
+		equals:        equals,
 		noRanks:       noRanks,
 		blackLists:    blackListMap,
 		discardNorank: discardNorank,
@@ -163,10 +163,15 @@ func newRankFilter(dbRanks map[string]interface{}, rankOrder map[string]int, noR
 		}
 		f.limitHigher = true
 	}
-	if equal != "" {
-		f.oEqual, err = getRankOrder(dbRanks, rankOrder, equal)
-		if err != nil {
-			return nil, err
+	if len(equals) > 0 {
+		f.oEquals = make(map[int]interface{}, len(equals))
+		var oe int
+		for _, equal := range equals {
+			oe, err = getRankOrder(dbRanks, rankOrder, equal)
+			if err != nil {
+				return nil, err
+			}
+			f.oEquals[oe] = struct{}{}
 		}
 		f.limitEqual = true
 	}
@@ -213,8 +218,8 @@ func (f *rankFilter) isPassed(rank string) (bool, error) {
 	// }
 
 	if f.limitEqual {
-		if f.oEqual == order {
-			pass = true
+		if _, pass = f.oEquals[order]; pass {
+			// pass = true
 		} else if f.limitLower {
 			pass = order < f.oLower
 		} else if f.limitHigher {
