@@ -210,6 +210,8 @@ column by flag "-t/--show-lineage-taxids".
 				rank = taxid2taxon[taxid].Rank
 
 				if rank == norank {
+					ranks = append(ranks, rank)
+					sranks = append(sranks, "")
 					continue
 				}
 
