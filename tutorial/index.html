@@ -286,13 +286,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#summaries-of-taxonomy-data" class="md-nav__link">
-    Summaries of taxonomy data
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#formating-lineage" class="md-nav__link">
     Formating lineage
   </a>
@@ -309,6 +302,13 @@
         <li class="md-nav__item">
   <a href="#making-nr-blastdb-for-specific-taxids" class="md-nav__link">
     Making nr blastdb for specific taxids
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summaries-of-taxonomy-data" class="md-nav__link">
+    Summaries of taxonomy data
   </a>
   
 </li>
@@ -391,13 +391,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#summaries-of-taxonomy-data" class="md-nav__link">
-    Summaries of taxonomy data
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#formating-lineage" class="md-nav__link">
     Formating lineage
   </a>
@@ -414,6 +407,13 @@
         <li class="md-nav__item">
   <a href="#making-nr-blastdb-for-specific-taxids" class="md-nav__link">
     Making nr blastdb for specific taxids
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summaries-of-taxonomy-data" class="md-nav__link">
+    Summaries of taxonomy data
   </a>
   
 </li>
@@ -441,297 +441,38 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 <ul>
-<li><a href="#summaries-of-taxonomy-data">Summaries of taxonomy data</a></li>
 <li><a href="#formating-lineage">Formating lineage</a></li>
 <li><a href="#parsing-krakenbraken-result">Parsing kraken/bracken result</a></li>
 <li><a href="#making-nr-blastdb-for-specific-taxids">Making nr blastdb for specific taxids</a></li>
+<li><a href="#summaries-of-taxonomy-data">Summaries of taxonomy data</a></li>
 </ul>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-<h2 id="summaries-of-taxonomy-data">Summaries of taxonomy data</h2>
-<p>You can change the taxID of interest.</p>
-<ol>
-<li>
-<p>Rank counts of common categories.</p>
-<pre><code>$ echo Archaea Bacteria Eukaryota Fungi Metazoa Viridiplantae \
-    | rush -D ' ' -T b \
-        'taxonkit list --ids $(echo {} | taxonkit name2taxid | cut -f 2) \
-            | sed 1d \
-            | taxonkit filter -i 2 -E genus -L genus \
-            | taxonkit lineage -L -r \
-            | csvtk freq -H -t -f 2 -nr \
-            &gt; stats.{}.tsv '
-
-$ csvtk -t join --outer-join stats.*.tsv \
-    | csvtk add-header -t -n "rank,$(ls stats.*.tsv | rush -k 'echo {@stats.(.+).tsv}' | paste -sd, )" \
-    | csvtk csv2md -t
-</code></pre>
-<p><a href="https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=statistics&amp;uncultured=hide&amp;unspecified=hide">Similar data on NCBI Taxonomy</a></p>
-<table>
-<thead>
-<tr>
-<th align="left">rank</th>
-<th align="left">Archaea</th>
-<th align="left">Bacteria</th>
-<th align="left">Eukaryota</th>
-<th align="left">Fungi</th>
-<th align="left">Metazoa</th>
-<th align="left">Viridiplantae</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">species</td>
-<td align="left">12482</td>
-<td align="left">460940</td>
-<td align="left">1349648</td>
-<td align="left">156908</td>
-<td align="left">957297</td>
-<td align="left">191026</td>
-</tr>
-<tr>
-<td align="left">strain</td>
-<td align="left">354</td>
-<td align="left">40643</td>
-<td align="left">3486</td>
-<td align="left">2352</td>
-<td align="left">33</td>
-<td align="left">50</td>
-</tr>
-<tr>
-<td align="left">genus</td>
-<td align="left">205</td>
-<td align="left">4112</td>
-<td align="left">90882</td>
-<td align="left">6844</td>
-<td align="left">64148</td>
-<td align="left">16202</td>
-</tr>
-<tr>
-<td align="left">isolate</td>
-<td align="left">7</td>
-<td align="left">503</td>
-<td align="left">809</td>
-<td align="left">76</td>
-<td align="left">17</td>
-<td align="left">3</td>
-</tr>
-<tr>
-<td align="left">species group</td>
-<td align="left">2</td>
-<td align="left">77</td>
-<td align="left">251</td>
-<td align="left">22</td>
-<td align="left">214</td>
-<td align="left">5</td>
-</tr>
-<tr>
-<td align="left">serotype</td>
-<td align="left"></td>
-<td align="left">218</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">serogroup</td>
-<td align="left"></td>
-<td align="left">136</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">subsection</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">21</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">21</td>
-</tr>
-<tr>
-<td align="left">subspecies</td>
-<td align="left"></td>
-<td align="left">632</td>
-<td align="left">24523</td>
-<td align="left">158</td>
-<td align="left">17043</td>
-<td align="left">7212</td>
-</tr>
-<tr>
-<td align="left">forma specialis</td>
-<td align="left"></td>
-<td align="left">521</td>
-<td align="left">220</td>
-<td align="left">179</td>
-<td align="left">33</td>
-<td align="left">1</td>
-</tr>
-<tr>
-<td align="left">species subgroup</td>
-<td align="left"></td>
-<td align="left">23</td>
-<td align="left">101</td>
-<td align="left"></td>
-<td align="left">101</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">biotype</td>
-<td align="left"></td>
-<td align="left">7</td>
-<td align="left">10</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">morph</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">12</td>
-<td align="left">3</td>
-<td align="left">4</td>
-<td align="left">5</td>
-</tr>
-<tr>
-<td align="left">section</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">437</td>
-<td align="left">37</td>
-<td align="left">2</td>
-<td align="left">398</td>
-</tr>
-<tr>
-<td align="left">genotype</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">12</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">12</td>
-</tr>
-<tr>
-<td align="left">series</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">9</td>
-<td align="left"></td>
-<td align="left">5</td>
-<td align="left">4</td>
-</tr>
-<tr>
-<td align="left">varietas</td>
-<td align="left"></td>
-<td align="left">25</td>
-<td align="left">8499</td>
-<td align="left">1100</td>
-<td align="left">2</td>
-<td align="left">7188</td>
-</tr>
-<tr>
-<td align="left">forma</td>
-<td align="left"></td>
-<td align="left">4</td>
-<td align="left">560</td>
-<td align="left">185</td>
-<td align="left">6</td>
-<td align="left">315</td>
-</tr>
-<tr>
-<td align="left">subgenus</td>
-<td align="left"></td>
-<td align="left">1</td>
-<td align="left">1558</td>
-<td align="left">10</td>
-<td align="left">1414</td>
-<td align="left">112</td>
-</tr>
-<tr>
-<td align="left">pathogroup</td>
-<td align="left"></td>
-<td align="left">5</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">subvariety</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">5</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">5</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>Count of all ranks</p>
-<pre><code>$ time taxonkit list --ids 1 \
-    | taxonkit lineage -L -r \
-    | csvtk freq -H -t -f 2 -nr \
+<h2 id="formating-lineage">Formating lineage</h2>
+<p>Show lineage detail of a taxID.
+The command below works on Windows with help of <a href="http://bioinf.shenwei.me/csvtk">csvtk</a>.</p>
+<pre><code>$ echo "2697049" \
+    | taxonkit lineage -t \
+    | csvtk cut -Ht -f 3 \
+    | csvtk unfold -Ht -f 1 -s ";" \
+    | taxonkit lineage -r -n -L \
+    | csvtk cut -Ht -f 1,3,2 \
     | csvtk pretty -t
 
-species            1879659
-no rank            222743
-genus              96625
-strain             44483
-subspecies         25174
-family             9492
-varietas           8524
-subfamily          3050
-tribe              2213
-order              1660
-subgenus           1618
-isolate            1319
-serotype           1216
-clade              886
-superfamily        865
-forma specialis    741
-forma              564
-subtribe           508
-section            437
-class              429
-suborder           372
-species group      330
-phylum             272
-subclass           156
-serogroup          138
-infraorder         130
-species subgroup   124
-superorder         55
-subphylum          33
-parvorder          26
-subsection         21
-genotype           20
-infraclass         18
-biotype            17
-morph              12
-kingdom            11
-series             9
-superclass         6
-cohort             5
-pathogroup         5
-subvariety         5
-superkingdom       4
-subcohort          3
-subkingdom         1
-superphylum        1
-
-real    0m3.663s
-user    0m15.897s
-sys     0m1.010s
+10239     superkingdom   Viruses
+2559587   clade          Riboviria
+2732396   kingdom        Orthornavirae
+2732408   phylum         Pisuviricota
+2732506   class          Pisoniviricetes
+76804     order          Nidovirales
+2499399   suborder       Cornidovirineae
+11118     family         Coronaviridae
+2501931   subfamily      Orthocoronavirinae
+694002    genus          Betacoronavirus
+2509511   subgenus       Sarbecovirus
+694009    species        Severe acute respiratory syndrome-related coronavirus
+2697049   no rank        Severe acute respiratory syndrome coronavirus 2
 </code></pre>
-</li>
-</ol>
-<h2 id="formating-lineage">Formating lineage</h2>
 <p>Example data.</p>
 <pre><code>$ cat taxids3.txt
 376619
@@ -740,6 +481,10 @@ sys     0m1.010s
 314101
 11932
 1327037
+83333
+1408252
+2605619
+2697049
 </code></pre>
 <p>Format to seven-level ranks ("superkingdom phylum class order family genus species").</p>
 <pre><code>$ cat taxids3.txt \
@@ -752,43 +497,114 @@ sys     0m1.010s
 314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
 11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
 1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
+83333   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+1408252 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+2605619 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Severe acute respiratory syndrome-related coronavirus
+</code></pre>
+<p>Format to eight-level ranks ("superkingdom phylum class order family genus species subspecies/rank").</p>
+<pre><code>$ cat taxids3.txt \
+    | taxonkit lineage \
+    | taxonkit reformat -f "{k};{p};{c};{o};{f};{g};{s};{t}" \
+    | cut -f 1,3
+376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica LVS
+349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;
+314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B;
+11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle;
+1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y;
+83333   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
+1408252 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli R178
+2605619 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;
+2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Severe acute respiratory syndrome-related coronavirus;
 </code></pre>
 <p>Replace missing ranks with <code>Unassigned</code> and output tab-delimited format.</p>
 <pre><code>$ cat taxids3.txt \
     | taxonkit lineage \
-    | taxonkit reformat -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" \
-    | cut -f 1,3-9 \
+    | taxonkit reformat -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+    | cut -f 1,3-10 \
     | csvtk pretty -t 
-376619    Bacteria   Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
-349741    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
-239935    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
-314101    Bacteria   Unassigned        Unassigned            Unassigned           Unassigned        Unassigned                   uncultured murine large bowel bacterium BAC 54B
-11932     Viruses    Artverviricota    Revtraviricetes       Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
-1327037   Viruses    Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae      Unassigned                   Croceibacter phage P2559Y
+376619    Bacteria   Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae      Francisella                  Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
+349741    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
+239935    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Unassigned
+314101    Bacteria   Unassigned        Unassigned            Unassigned           Unassigned           Unassigned                   uncultured murine large bowel bacterium BAC 54B         Unassigned
+11932     Viruses    Artverviricota    Revtraviricetes       Ortervirales         Retroviridae         Intracisternal A-particles   Mouse Intracisternal A-particle                         Unassigned
+1327037   Viruses    Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae         Unassigned                   Croceibacter phage P2559Y                               Unassigned
+83333     Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Escherichia coli K-12
+1408252   Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Escherichia coli R178
+2605619   Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Unassigned
+2697049   Viruses    Pisuviricota      Pisoniviricetes       Nidovirales          Coronaviridae        Betacoronavirus              Severe acute respiratory syndrome-related coronavirus   Unassigned
 </code></pre>
 <p>Fill missing ranks and add prefixes.</p>
 <pre><code>$ cat taxids3.txt \
     | taxonkit lineage \
-    | taxonkit reformat -F -P \
-    | cut -f 1,3
-376619  k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Thiotrichales;f__Francisellaceae;g__Francisella;s__Francisella tularensis
-349741  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
-239935  k__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
-314101  k__Bacteria;p__unclassified Bacteria phylum;c__unclassified Bacteria class;o__unclassified Bacteria order;f__unclassified Bacteria family;g__unclassified Bacteria genus;s__uncultured murine large bowel bacterium BAC 54B
-11932   k__Viruses;p__Artverviricota;c__Revtraviricetes;o__Ortervirales;f__Retroviridae;g__Intracisternal A-particles;s__Mouse Intracisternal A-particle
-1327037 k__Viruses;p__Uroviricota;c__Caudoviricetes;o__Caudovirales;f__Siphoviridae;g__unclassified Siphoviridae genus;s__Croceibacter phage P2559Y
+    | taxonkit reformat -F -P -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+    | cut -f 1,3-10 \
+    | csvtk pretty -t         
+376619    k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Thiotrichales                 f__Francisellaceae                g__Francisella                       s__Francisella tularensis                                  t__Francisella tularensis subsp. holarctica LVS
+349741    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__Akkermansia muciniphila ATCC BAA-835
+239935    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__unclassified Akkermansia muciniphila subspecies/strain
+314101    k__Bacteria   p__unclassified Bacteria phylum   c__unclassified Bacteria class   o__unclassified Bacteria order   f__unclassified Bacteria family   g__unclassified Bacteria genus       s__uncultured murine large bowel bacterium BAC 54B         t__unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
+11932     k__Viruses    p__Artverviricota                 c__Revtraviricetes               o__Ortervirales                  f__Retroviridae                   g__Intracisternal A-particles        s__Mouse Intracisternal A-particle                         t__unclassified Mouse Intracisternal A-particle subspecies/strain
+1327037   k__Viruses    p__Uroviricota                    c__Caudoviricetes                o__Caudovirales                  f__Siphoviridae                   g__unclassified Siphoviridae genus   s__Croceibacter phage P2559Y                               t__unclassified Croceibacter phage P2559Y subspecies/strain
+83333     k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__Escherichia coli K-12
+1408252   k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__Escherichia coli R178
+2605619   k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__unclassified Escherichia coli subspecies/strain
+2697049   k__Viruses    p__Pisuviricota                   c__Pisoniviricetes               o__Nidovirales                   f__Coronaviridae                  g__Betacoronavirus                   s__Severe acute respiratory syndrome-related coronavirus   t__unclassified Severe acute respiratory syndrome-related coronavirus subspecies/strain
 </code></pre>
-<p>Single prefix of a rank can be set with flag like <code>--prefix-k</code>.</p>
+<p><strong>When these's no nodes of rank "subspecies" nor "stain",
+we can switch <code>-S/--pseudo-strain</code> to use the node with lowest rank
+as subspecies/strain name, if which rank is lower than "species"</strong>.</p>
 <pre><code>$ cat taxids3.txt \
-    | taxonkit lineage \
-    | taxonkit reformat -F -P --prefix-k "d__" \
-    | cut -f 1,3
-376619  d__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Thiotrichales;f__Francisellaceae;g__Francisella;s__Francisella tularensis
-349741  d__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
-239935  d__Bacteria;p__Verrucomicrobia;c__Verrucomicrobiae;o__Verrucomicrobiales;f__Akkermansiaceae;g__Akkermansia;s__Akkermansia muciniphila
-314101  d__Bacteria;p__unclassified Bacteria phylum;c__unclassified Bacteria class;o__unclassified Bacteria order;f__unclassified Bacteria family;g__unclassified Bacteria genus;s__uncultured murine large bowel bacterium BAC 54B
-11932   d__Viruses;p__Artverviricota;c__Revtraviricetes;o__Ortervirales;f__Retroviridae;g__Intracisternal A-particles;s__Mouse Intracisternal A-particle
-1327037 d__Viruses;p__Uroviricota;c__Caudoviricetes;o__Caudovirales;f__Siphoviridae;g__unclassified Siphoviridae genus;s__Croceibacter phage P2559Y
+    | taxonkit lineage -r \
+    | taxonkit reformat -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+    | cut -f 1,3,10,11 \
+    | csvtk add-header -t -n "taxid,rank,species,strain" \
+    | csvtk pretty -t   
+taxid     rank         species                                                 strain
+376619    strain       Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
+349741    strain       Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
+239935    species      Akkermansia muciniphila                                 unclassified Akkermansia muciniphila subspecies/strain
+314101    species      uncultured murine large bowel bacterium BAC 54B         unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
+11932     species      Mouse Intracisternal A-particle                         unclassified Mouse Intracisternal A-particle subspecies/strain
+1327037   species      Croceibacter phage P2559Y                               unclassified Croceibacter phage P2559Y subspecies/strain
+83333     strain       Escherichia coli                                        Escherichia coli K-12
+1408252   subspecies   Escherichia coli                                        Escherichia coli R178
+2605619   no rank      Escherichia coli                                        Escherichia coli O16:H48
+2697049   no rank      Severe acute respiratory syndrome-related coronavirus   Severe acute respiratory syndrome coronavirus 2
+</code></pre>
+<p>List eight-level lineage for all taxIDs of rank lower than or equal to species, including some nodes with "no rank".
+But when filtering with <code>-L/--lower-than</code>, you can use
+<code>-n/--save-predictable-norank</code> to <strong>save some special ranks without order,
+where rank of the closest higher node is still lower than rank cutoff</strong>.</p>
+<pre><code>$ time taxonkit list --ids 1 \
+    | taxonkit filter -L species -E species -R -N -n \
+    | taxonkit lineage -n -r \
+    | taxonkit reformat -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+    | csvtk cut -Ht -l -f 1,4,3,2,5-12 \
+    | csvtk add-header -t -n "taxid,rank,name,lineage,kingdom,phylum,class,order,family,genus,species,strain" \
+    | pigz -c &gt; result.tsv.gz
+
+real    0m25.167s
+user    2m14.809s
+sys     0m7.197s
+
+$ pigz -cd result.tsv.gz \
+    | csvtk grep -t -f taxid -p 2697049 \
+    | csvtk transpose -t \
+    | csvtk pretty -t 
+taxid     2697049
+rank      no rank
+name      Severe acute respiratory syndrome coronavirus 2
+lineage   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
+kingdom   Viruses
+phylum    Pisuviricota
+class     Pisoniviricetes
+order     Nidovirales
+family    Coronaviridae
+genus     Betacoronavirus
+species   Severe acute respiratory syndrome-related coronavirus
+strain    Severe acute respiratory syndrome coronavirus 2
 </code></pre>
 <h2 id="parsing-krakenbracken-result">Parsing kraken/bracken result</h2>
 <p>Example Data.</p>
@@ -1106,6 +922,289 @@ blastp -num_threads 16 -db nr.$id -query t4.fa &gt; t4.fa.blast
 # ADB56726.1  HNTX-IV.2 precursor [Haplopelma hainanum]                 66.6    9e-15
 # D2Y233.1  RecName: Full=Mu-theraphotoxin-Hhn1b 2; Short=Mu-TRTX-H...  66.6    9e-15
 # ADB56830.1  HNTX-IV.3 precursor [Haplopelma hainanum]                 66.6    9e-15
+</code></pre>
+</li>
+</ol>
+<h2 id="summaries-of-taxonomy-data">Summaries of taxonomy data</h2>
+<p>You can change the taxID of interest.</p>
+<ol>
+<li>
+<p>Rank counts of common categories.</p>
+<pre><code>$ echo Archaea Bacteria Eukaryota Fungi Metazoa Viridiplantae \
+    | rush -D ' ' -T b \
+        'taxonkit list --ids $(echo {} | taxonkit name2taxid | cut -f 2) \
+            | sed 1d \
+            | taxonkit filter -i 2 -E genus -L genus \
+            | taxonkit lineage -L -r \
+            | csvtk freq -H -t -f 2 -nr \
+            &gt; stats.{}.tsv '
+
+$ csvtk -t join --outer-join stats.*.tsv \
+    | csvtk add-header -t -n "rank,$(ls stats.*.tsv | rush -k 'echo {@stats.(.+).tsv}' | paste -sd, )" \
+    | csvtk csv2md -t
+</code></pre>
+<p><a href="https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=statistics&amp;uncultured=hide&amp;unspecified=hide">Similar data on NCBI Taxonomy</a></p>
+<table>
+<thead>
+<tr>
+<th align="left">rank</th>
+<th align="left">Archaea</th>
+<th align="left">Bacteria</th>
+<th align="left">Eukaryota</th>
+<th align="left">Fungi</th>
+<th align="left">Metazoa</th>
+<th align="left">Viridiplantae</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">species</td>
+<td align="left">12482</td>
+<td align="left">460940</td>
+<td align="left">1349648</td>
+<td align="left">156908</td>
+<td align="left">957297</td>
+<td align="left">191026</td>
+</tr>
+<tr>
+<td align="left">strain</td>
+<td align="left">354</td>
+<td align="left">40643</td>
+<td align="left">3486</td>
+<td align="left">2352</td>
+<td align="left">33</td>
+<td align="left">50</td>
+</tr>
+<tr>
+<td align="left">genus</td>
+<td align="left">205</td>
+<td align="left">4112</td>
+<td align="left">90882</td>
+<td align="left">6844</td>
+<td align="left">64148</td>
+<td align="left">16202</td>
+</tr>
+<tr>
+<td align="left">isolate</td>
+<td align="left">7</td>
+<td align="left">503</td>
+<td align="left">809</td>
+<td align="left">76</td>
+<td align="left">17</td>
+<td align="left">3</td>
+</tr>
+<tr>
+<td align="left">species group</td>
+<td align="left">2</td>
+<td align="left">77</td>
+<td align="left">251</td>
+<td align="left">22</td>
+<td align="left">214</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">serotype</td>
+<td align="left"></td>
+<td align="left">218</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">serogroup</td>
+<td align="left"></td>
+<td align="left">136</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">subsection</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">21</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">21</td>
+</tr>
+<tr>
+<td align="left">subspecies</td>
+<td align="left"></td>
+<td align="left">632</td>
+<td align="left">24523</td>
+<td align="left">158</td>
+<td align="left">17043</td>
+<td align="left">7212</td>
+</tr>
+<tr>
+<td align="left">forma specialis</td>
+<td align="left"></td>
+<td align="left">521</td>
+<td align="left">220</td>
+<td align="left">179</td>
+<td align="left">33</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">species subgroup</td>
+<td align="left"></td>
+<td align="left">23</td>
+<td align="left">101</td>
+<td align="left"></td>
+<td align="left">101</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">biotype</td>
+<td align="left"></td>
+<td align="left">7</td>
+<td align="left">10</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">morph</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">12</td>
+<td align="left">3</td>
+<td align="left">4</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">section</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">437</td>
+<td align="left">37</td>
+<td align="left">2</td>
+<td align="left">398</td>
+</tr>
+<tr>
+<td align="left">genotype</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">12</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">12</td>
+</tr>
+<tr>
+<td align="left">series</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">9</td>
+<td align="left"></td>
+<td align="left">5</td>
+<td align="left">4</td>
+</tr>
+<tr>
+<td align="left">varietas</td>
+<td align="left"></td>
+<td align="left">25</td>
+<td align="left">8499</td>
+<td align="left">1100</td>
+<td align="left">2</td>
+<td align="left">7188</td>
+</tr>
+<tr>
+<td align="left">forma</td>
+<td align="left"></td>
+<td align="left">4</td>
+<td align="left">560</td>
+<td align="left">185</td>
+<td align="left">6</td>
+<td align="left">315</td>
+</tr>
+<tr>
+<td align="left">subgenus</td>
+<td align="left"></td>
+<td align="left">1</td>
+<td align="left">1558</td>
+<td align="left">10</td>
+<td align="left">1414</td>
+<td align="left">112</td>
+</tr>
+<tr>
+<td align="left">pathogroup</td>
+<td align="left"></td>
+<td align="left">5</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">subvariety</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">5</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">5</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Count of all ranks</p>
+<pre><code>$ time taxonkit list --ids 1 \
+    | taxonkit lineage -L -r \
+    | csvtk freq -H -t -f 2 -nr \
+    | csvtk pretty -t
+
+species            1879659
+no rank            222743
+genus              96625
+strain             44483
+subspecies         25174
+family             9492
+varietas           8524
+subfamily          3050
+tribe              2213
+order              1660
+subgenus           1618
+isolate            1319
+serotype           1216
+clade              886
+superfamily        865
+forma specialis    741
+forma              564
+subtribe           508
+section            437
+class              429
+suborder           372
+species group      330
+phylum             272
+subclass           156
+serogroup          138
+infraorder         130
+species subgroup   124
+superorder         55
+subphylum          33
+parvorder          26
+subsection         21
+genotype           20
+infraclass         18
+biotype            17
+morph              12
+kingdom            11
+series             9
+superclass         6
+cohort             5
+pathogroup         5
+subvariety         5
+superkingdom       4
+subcohort          3
+subkingdom         1
+superphylum        1
+
+real    0m3.663s
+user    0m15.897s
+sys     0m1.010s
 </code></pre>
 </li>
 </ol>

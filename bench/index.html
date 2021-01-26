@@ -398,7 +398,7 @@
 <ul>
 <li>ETE, version: <a href="https://pypi.org/project/ete3/3.1.2/">3.1.2</a></li>
 <li>taxadb, version: <a href="https://pypi.org/project/taxadb/0.12.0">0.12.0</a></li>
-<li>TaxonKit, version: <a href="https://github.com/shenwei356/taxonkit/releases/tag/0.6.2">0.6.2</a></li>
+<li>TaxonKit, version: <a href="https://github.com/shenwei356/taxonkit/releases/tag/0.7.2">0.7.2</a></li>
 <li>BioPython, version: <a href="https://pypi.org/project/biopython/1.78/">1.78</a></li>
 </ul>
 <p>Not used tools without direct function of getting full lineage</p>
@@ -452,12 +452,11 @@ is used to automatically running tests and generate data for plotting.</p>
 <p><strong>Note that <code>get_lineage.biopython.py</code> is not used,
 because quering via internet (entrez) is too slow for large number of queries.</strong></p>
 <p>Running benchmark:</p>
-<pre><code># 55min for me...
-time perl run.pl -n 3 run_benchmark.sh -o bench.get_lineage.tsv
+<pre><code>$ # emptying the buffers cache
+$ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
-# clear
-# rm *.lineage
-# rm *.out
+# 43min for me...
+time perl run.pl -n 3 run_benchmark.sh -o bench.get_lineage.tsv
 </code></pre>
 <p>Checking result:</p>
 <pre><code>md5sum *.lineage
@@ -470,6 +469,11 @@ time perl run.pl -n 3 run_benchmark.sh -o bench.get_lineage.tsv
 c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.ete.lineage
 c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxadb.lineage
 c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxonkit.lineage
+
+
+# clear
+# rm *.lineage
+# rm *.out
 </code></pre>
 <p>Note that taxonkit returns "root" for taxid 1, while the others return nothing.</p>
 <p>Plotting benchmark result. 
@@ -477,16 +481,18 @@ R libraries <code>dplyr</code>, <code>ggplot2</code>, <code>scales</code>, <code
 <pre><code># reformat dataset
 # tools: https://github.com/shenwei356/csvtk/
 for f in taxids.*.txt;  do wc -l $f; done \
-    | csvtk space2tab | csvtk cut -H -t -f 2,1 \
-    | csvtk replace -H -t -f 2 -p ^ -r n= \
+    | sort -k 1,1n \
+    | LC_ALL=en_US.UTF-8 awk '{ printf("%s\tn=%'"'"'d\n",$2,$1) }' \
     &gt; dataset_rename.tsv
 
 cat bench.get_lineage.tsv \
+    | csvtk sort -t -L dataset:&lt;(cut -f 1 dataset_rename.tsv) -k dataset:u \
     | csvtk replace -t -f dataset -k dataset_rename.tsv -p '(.+)' -r '{kv}' \
-    | csvtk sort -t -k dataset:N \
     &gt; bench.get_lineage.reformat.tsv
 
 ./plot.R -i bench.get_lineage.reformat.tsv --width 8 --height 3.3
+
+# ./plot.R -i bench.get_lineage.reformat.tsv -o bench.get_lineage.reformat.tsv2.png --dpi 600 --width 8 --height 3.3
 </code></pre>
 <p>Result</p>
 <p><img alt="" src="bench.get_lineage.reformat.tsv.png" /></p>

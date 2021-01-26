@@ -541,7 +541,7 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h2 id="taxonkit">taxonkit</h2>
 <pre><code class="language-text">TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.7.0
+Version: 0.7.2
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -806,6 +806,7 @@ Flags:
   -d, --delimiter string      field delimiter in lineage (default &quot;;&quot;)
   -h, --help                  help for lineage
   -L, --no-lineage            do not show lineage, when user just want names or/and ranks
+  -R, --show-lineage-ranks    appending ranks of all levels
   -t, --show-lineage-taxids   appending lineage consisting of taxids
   -n, --show-name             appending scientific name
   -r, --show-rank             appending rank of taxids
@@ -852,6 +853,23 @@ $ taxonkit lineage taxids.txt | tee lineage.txt
 </code></pre>
 </li>
 <li>
+<p>Speed.</p>
+<pre><code>$ time echo 9606 | taxonkit lineage 
+9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+
+real    0m1.190s
+user    0m2.365s
+sys     0m0.170s
+
+# all taxIDs
+$ time taxonkit list --ids 1 --indent "" | taxonkit lineage &gt; t
+
+real    0m4.249s
+user    0m16.418s
+sys     0m1.221s
+</code></pre>
+</li>
+<li>
 <p>Checking deleted or merged taxids</p>
 <pre><code>$ taxonkit lineage --show-status-code taxids.txt | tee lineage.withcode.txt
 
@@ -883,8 +901,8 @@ $ cat lineage.withcode.txt | awk '$2 &lt; 0' | cut -f 1
 </code></pre>
 </li>
 <li>
-<p><strong>Filter out invalid and deleted taxids, and *replace merged taxids with new ones"</strong>,
-  you may install [csvtk](https://github.com/shenwei356/csvtk.</p>
+<p><strong>Filter out invalid and deleted taxids, and replace merged taxids with new ones</strong>,
+  you may install <a href="https://github.com/shenwei356/csvtk">csvtk</a>.</p>
 <pre><code># input is one-column-taxid
 $ taxonkit lineage -c taxids.txt \
     | awk '$2&gt;0' \
@@ -936,6 +954,39 @@ $ cat input.txt \
 <pre><code>$ cat taxids.txt | taxonkit lineage
 </code></pre>
 </li>
+<li>
+<p>And ranks of all nodes:</p>
+<pre><code>$ echo 2697049 \
+    | taxonkit lineage -t -R \
+    | csvtk transpose -Ht
+2697049
+Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
+10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+superkingdom;clade;kingdom;phylum;class;order;suborder;family;subfamily;genus;subgenus;species;no rank
+</code></pre>
+<p>Another way to show lineage detail of a taxID</p>
+<pre><code>$ echo 2697049 \
+    | taxonkit lineage -t \
+    | csvtk cut -Ht -f 3 \
+    | csvtk unfold -Ht -f 1 -s ";" \
+    | taxonkit lineage -r -n -L \
+    | csvtk cut -Ht -f 1,3,2 \
+    | csvtk pretty -t 
+10239     superkingdom   Viruses
+2559587   clade          Riboviria
+2732396   kingdom        Orthornavirae
+2732408   phylum         Pisuviricota
+2732506   class          Pisoniviricetes
+76804     order          Nidovirales
+2499399   suborder       Cornidovirineae
+11118     family         Coronaviridae
+2501931   subfamily      Orthocoronavirinae
+694002    genus          Betacoronavirus
+2509511   subgenus       Sarbecovirus
+694009    species        Severe acute respiratory syndrome-related coronavirus
+2697049   no rank        Severe acute respiratory syndrome coronavirus 2
+</code></pre>
+</li>
 </ol>
 <h2 id="reformat">reformat</h2>
 <p>Usage</p>
@@ -950,7 +1001,15 @@ Output format can be formated by flag --format, available placeholders:
     {f}: family
     {g}: genus
     {s}: species
+    {t}: subspecies/strain
+
     {S}: subspecies
+    {T}: strain
+
+When these's no nodes of rank &quot;subspecies&quot; nor &quot;stain&quot;,
+you can switch -S/--pseudo-strain to use the node with lowest rank
+as subspecies/strain name, if which rank is lower than &quot;species&quot;. 
+This flag affects {t}, {S}, {T}.
 
 Output format can contains some escape charactors like &quot;\t&quot;.
 
@@ -964,7 +1023,7 @@ Usage:
 Flags:
   -P, --add-prefix                     add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X
   -d, --delimiter string               field delimiter in input lineage (default &quot;;&quot;)
-  -F, --fill-miss-rank                 fill missing rank with original lineage information (experimental)
+  -F, --fill-miss-rank                 fill missing rank with lineage information of the next higher rank
   -f, --format string                  output format, placeholders of rank are needed (default &quot;{k};{p};{c};{o};{f};{g};{s}&quot;)
   -h, --help                           help for reformat
   -i, --lineage-field int              field index of lineage. data should be tab-separated (default 2)
@@ -972,6 +1031,7 @@ Flags:
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default &quot;unclassified &quot;)
   -R, --miss-taxid-repl string         replacement string for missing taxid
       --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix (default &quot;S__&quot;)
+      --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default &quot;T__&quot;)
       --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default &quot;c__&quot;)
       --prefix-f string                prefix for family, used along with flag -P/--add-prefix (default &quot;f__&quot;)
       --prefix-g string                prefix for genus, used along with flag -P/--add-prefix (default &quot;g__&quot;)
@@ -979,6 +1039,8 @@ Flags:
       --prefix-o string                prefix for order, used along with flag -P/--add-prefix (default &quot;o__&quot;)
       --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default &quot;p__&quot;)
       --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default &quot;s__&quot;)
+      --prefix-t string                prefix for subspecies/strain, used along with flag -P/--add-prefix (default &quot;t__&quot;)
+  -S, --pseudo-strain                  use the node with lowest rank as strain name, only if which rank is lower than &quot;species&quot; and not &quot;subpecies&quot; nor &quot;strain&quot;. This flag affects {t}, {S}, {T}
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
   -T, --trim                           do not fill missing rank lower than current rank
 
@@ -1042,6 +1104,59 @@ $ cat lineage.txt \
     1327037   Viruses     Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae                                   Croceibacter phage P2559Y
     92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
     1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
+</code></pre>
+</li>
+<li>
+<p>And <code>subspecies/stain</code> (<code>{t}</code>), <code>subspecies</code> (<code>{S}</code>), and <code>strain</code> (<code>{T}</code>) are also available.</p>
+<pre><code># default operation
+$ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
+    | taxonkit lineage -n -r \
+    | taxonkit reformat -f '{t};{S};{T}' \
+    | csvtk -H -t cut -f 1,4,3,5 \
+    | csvtk -H -t sep -f 4 -s ';' -R \
+    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+    | csvtk pretty -t
+taxid     rank         name                                              subspecies/stain        subspecies              strain
+239935    species      Akkermansia muciniphila                                                                           
+83333     strain       Escherichia coli K-12                             Escherichia coli K-12                           Escherichia coli K-12
+1408252   subspecies   Escherichia coli R178                             Escherichia coli R178   Escherichia coli R178   
+2697049   no rank      Severe acute respiratory syndrome coronavirus 2                                                   
+2605619   no rank      Escherichia coli O16:H48
+
+# fill missing ranks
+# see example below for -F/--fill-miss-rank
+#
+$ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
+    | taxonkit lineage -n -r \
+    | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank \
+    | csvtk -H -t cut -f 1,4,3,5 \
+    | csvtk -H -t sep -f 4 -s ';' -R \
+    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+    | csvtk pretty -t
+taxid     rank         name                                              subspecies/stain                                                                       subspecies                                                                      strain
+239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain                                 unclassified Akkermansia muciniphila subspecies                                 unclassified Akkermansia muciniphila strain
+83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                                                  unclassified Escherichia coli subspecies                                        Escherichia coli K-12
+1408252   subspecies   Escherichia coli R178                             Escherichia coli R178                                                                  Escherichia coli R178                                                           unclassified Escherichia coli R178 strain
+2697049   no rank      Severe acute respiratory syndrome coronavirus 2   unclassified Severe acute respiratory syndrome-related coronavirus subspecies/strain   unclassified Severe acute respiratory syndrome-related coronavirus subspecies   unclassified Severe acute respiratory syndrome-related coronavirus strain
+2605619   no rank      Escherichia coli O16:H48                          unclassified Escherichia coli subspecies/strain                                        unclassified Escherichia coli subspecies                                        unclassified Escherichia coli strain
+
+# When these's no nodes of rank "subspecies" nor "stain",
+# you can switch -S/--pseudo-strain to use the node with lowest rank
+# as subspecies/strain name, if which rank is lower than "species"
+#
+$ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
+    | taxonkit lineage -n -r \
+    | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank  --pseudo-strain \
+    | csvtk -H -t cut -f 1,4,3,5 \
+    | csvtk -H -t sep -f 4 -s ';' -R \
+    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+    | csvtk pretty -t
+taxid     rank         name                                              subspecies/stain                                         subspecies                                        strain
+239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain   unclassified Akkermansia muciniphila subspecies   unclassified Akkermansia muciniphila strain
+83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                    unclassified Escherichia coli subspecies          Escherichia coli K-12
+1408252   subspecies   Escherichia coli R178                             Escherichia coli R178                                    Escherichia coli R178                             unclassified Escherichia coli R178 strain
+2697049   no rank      Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2          Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2
+2605619   no rank      Escherichia coli O16:H48                          Escherichia coli O16:H48                                 Escherichia coli O16:H48                          Escherichia coli O16:H48
 </code></pre>
 </li>
 <li>
@@ -1194,6 +1309,14 @@ $ taxonkit list --ids 1 \
     | head -n 5 \
     | csvtk pretty -t
 
+# 8-level
+$ taxonkit list --ids 1 \
+    | taxonkit lineage \
+    | taxonkit reformat -r Unassigned -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+    | csvtk cut -H -t -f -2 \
+    | head -n 5 \
+    | csvtk pretty -t
+
 # Fill and trim
 $ memusg -t -s ' taxonkit list --ids 1 \
     | taxonkit lineage \
@@ -1306,33 +1429,39 @@ Attentions:
 
   1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
      used along with -E/--equal-to which values can be different.
-  2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can give
+  2. A list of pre-ordered ranks is in ~/.taxonkit/ranks.txt, you can use
      your list by -r/--rank-file, the format specification is below.
-  3. TaxIDss with no rank will be discarded.
+  3. All ranks in taxonomy database should be defined in rank file.
+  4. Ranks can be removed with black list via -B/--black-list.
+  5. TaxIDs with no rank can be optionally discarded by -N/--discard-noranks.
+  6. But when filtering with -L/--lower-than, you can use
+    -n/--save-predictable-norank to save some special ranks without order,
+    where rank of the closest higher node is still lower than rank cutoff.
 
 Rank file:
 
   1. Blank lines or lines starting with &quot;#&quot; are ignored.
   2. Ranks are in decending order and case ignored.
   3. Ranks with same order should be in one line separated with comma (&quot;,&quot;, no space).
-  4. Ranks without order should be assigning a prefix symbol &quot;!&quot; for each rank.
+  4. Ranks without order should be assigned a prefix symbol &quot;!&quot; for each rank.
 
 Usage:
   taxonkit filter [flags]
 
 Flags:
-  -B, --black-list strings   black list of ranks to discard (default [no rank,clade])
-  -N, --discard-noranks      discard ranks without order, type &quot;taxonkit filter --help&quot; for details
-  -R, --discard-root         discard root taxid, defined by --root-taxid
-  -E, --equal-to string      output taxIDs with rank equal to a rank
-  -h, --help                 help for filter
-  -H, --higher-than string   output taxIDs with rank higher than a rank, exclusive with --lower-than
-      --list-order           list defined ranks in order
-      --list-ranks           list ordered ranks in taxonomy database
-  -L, --lower-than string    output taxIDs with rank lower than a rank, exclusive with --higher-than
-  -r, --rank-file string     user-defined ordered taxonomic ranks, type &quot;taxonkit filter --help&quot; for details
-      --root-taxid uint32    root taxid (default 1)
-  -i, --taxid-field int      field index of taxid. input data should be tab-separated (default 1)
+  -B, --black-list strings        black list of ranks to discard, e.g., '-B &quot;no rank&quot; -B &quot;clade&quot;
+  -N, --discard-noranks           discard all ranks without order, type &quot;taxonkit filter --help&quot; for details
+  -R, --discard-root              discard root taxid, defined by --root-taxid
+  -E, --equal-to strings          output taxIDs with rank equal to some ranks, multiple values can be separated with comma &quot;,&quot; (e.g., -E &quot;genus,species&quot;), or give multiple times (e.g., -E genus -E species)
+  -h, --help                      help for filter
+  -H, --higher-than string        output taxIDs with rank higher than a rank, exclusive with --lower-than
+      --list-order                list user defined ranks in order, from &quot;$HOME/.taxonkit/ranks.txt&quot;
+      --list-ranks                list ordered ranks in taxonomy database, sorted in user defined order
+  -L, --lower-than string         output taxIDs with rank lower than a rank, exclusive with --higher-than
+  -r, --rank-file string          user-defined ordered taxonomic ranks, type &quot;taxonkit filter --help&quot; for details
+      --root-taxid uint32         root taxid (default 1)
+  -n, --save-predictable-norank   do not discard some special ranks without order when using -L, where rank of the closest higher node is still lower than rank cutoff
+  -i, --taxid-field int           field index of taxid. input data should be tab-separated (default 1)
 
 </code></pre>
 <p>Examples</p>
@@ -1367,13 +1496,14 @@ $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty
 </code></pre>
 </li>
 <li>
-<p>Filter certain rank (<code>-E/--equal-to</code>)</p>
+<p>Equal to certain rank(s) (<code>-E/--equal-to</code>)</p>
 <pre><code>$ cat taxids2.txt \
-    | taxonkit filter -E Phylum \
+    | taxonkit filter -E Phylum -E Class \
     | taxonkit lineage -r \
     | csvtk -Ht cut -f 1,3,2 \
     | csvtk pretty -t
-74201   phylum   cellular organisms;Bacteria;PVC group;Verrucomicrobia
+74201    phylum   cellular organisms;Bacteria;PVC group;Verrucomicrobia
+203494   class    cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae
 </code></pre>
 </li>
 <li>
@@ -1388,13 +1518,42 @@ $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty
 </code></pre>
 </li>
 <li>
-<p>Higher than a rank (<code>-H/--higher-than</code>), note that "no rank" and "clade" have no rank and be filter out by default.</p>
+<p>Higher than a rank (<code>-H/--higher-than</code>)</p>
 <pre><code>$ cat taxids2.txt \
     | taxonkit filter -H phylum \
     | taxonkit lineage -r -n -L \
     | csvtk -Ht cut -f 1,3,2 \
     | csvtk pretty -t
 2   superkingdom   Bacteria
+</code></pre>
+</li>
+<li>
+<p>"no rank" and "clade" have no rank and can be filter out via <code>-N/--discard-noranks</code>.
+  Futher ranks can be removed with black list via <code>-B/--black-list</code></p>
+<pre><code># 562 is taxID of Escherichia coli
+$ taxonkit list --ids 562 \
+    | taxonkit filter -L species \
+    | taxonkit lineage -r -n -L \
+    | csvtk cut -Ht -f 1,3,2 \
+    | csvtk freq -Ht -f 2 -nr \
+    | csvtk pretty -t
+strain       2950
+no rank      149
+serotype     141
+serogroup    95
+isolate      1
+subspecies   1
+
+$ taxonkit list --ids 562 \
+    | taxonkit filter -L species -N -B strain \
+    | taxonkit lineage -r -n -L \
+    | csvtk cut -Ht -f 1,3,2 \
+    | csvtk freq -Ht -f 2 -nr \
+    | csvtk pretty -t
+serotype     141
+serogroup    95
+isolate      1
+subspecies   1
 </code></pre>
 </li>
 <li>
@@ -1408,6 +1567,75 @@ $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty
 239935   species   Akkermansia muciniphila
 349741   strain    Akkermansia muciniphila ATCC BAA-835
 </code></pre>
+</li>
+<li>
+<p><strong>Special cases of "no rank"</strong>. (<code>-n/--save-predictable-norank</code>).
+    When filtering with <code>-L/--lower-than</code>, you can use
+    <code>-n/--save-predictable-norank</code> to save some special ranks without order,
+    where rank of the closest higher node is still lower than rank cutoff.</p>
+<pre><code>$ echo -ne "2605619\n1327037\n" \
+    | taxonkit lineage -t \
+    | csvtk cut -Ht -f 3 \
+    | csvtk unfold -Ht -f 1 -s ";" \
+    | taxonkit lineage -r -n -L \
+    | csvtk cut -Ht -f 1,3,2 \
+    | csvtk pretty -t 
+131567    no rank        cellular organisms
+2         superkingdom   Bacteria
+1224      phylum         Proteobacteria
+1236      class          Gammaproteobacteria
+91347     order          Enterobacterales
+543       family         Enterobacteriaceae
+561       genus          Escherichia
+562       species        Escherichia coli
+2605619   no rank        Escherichia coli O16:H48
+
+10239     superkingdom   Viruses
+2731341   clade          Duplodnaviria
+2731360   clade          Heunggongvirae
+2731618   phylum         Uroviricota
+2731619   class          Caudoviricetes
+28883     order          Caudovirales
+10699     family         Siphoviridae
+196894    no rank        unclassified Siphoviridae
+1327037   species        Croceibacter phage P2559Y
+
+# save taxids
+$  echo -ne "2605619\n1327037\n" \
+    | taxonkit lineage -t \
+    | csvtk cut -Ht -f 3 \
+    | csvtk unfold -Ht -f 1 -s ";" \
+    | tee taxids4.txt
+131567
+2
+1224
+1236
+91347
+543
+561
+562
+2605619
+10239
+2731341
+2731360
+2731618
+2731619
+28883
+10699
+196894
+1327037
+</code></pre>
+<p>Now, filter nodes of rank &lt;= species.</p>
+<pre><code>$ cat taxids4.txt \
+    | taxonkit filter -L species -E species -N -n \
+    | taxonkit lineage -r -n -L \
+    | csvtk cut -Ht -f 1,3,2 \
+    | csvtk pretty -t
+562       species   Escherichia coli
+2605619   no rank   Escherichia coli O16:H48
+1327037   species   Croceibacter phage P2559Y
+</code></pre>
+<p>Note that 2605619 (no rank) is saved because its parent node 562 is &lt;= species.</p>
 </li>
 </ol>
 <h2 id="lca">lca</h2>
