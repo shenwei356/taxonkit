@@ -78,6 +78,7 @@ taxids with new ones:
 
 		delimiter := getFlagString(cmd, "delimiter")
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
+		printLineageInRank := getFlagBool(cmd, "show-lineage-ranks")
 		printRank := getFlagBool(cmd, "show-rank")
 		printName := getFlagBool(cmd, "show-name")
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
@@ -101,7 +102,7 @@ taxids with new ones:
 		var names map[uint32]string
 		var delnodes map[uint32]struct{}
 		var merged map[uint32]uint32
-		tree, ranks, names, delnodes, merged = loadData(config, true, printRank)
+		tree, ranks, names, delnodes, merged = loadData(config, true, printRank || printLineageInRank)
 
 		// -------------------- load data ----------------------
 
@@ -114,6 +115,7 @@ taxids with new ones:
 			taxid          uint32
 			lineage        string
 			lineageInTaxid string
+			lineageInRank  string
 			notFound       bool
 		}
 
@@ -129,15 +131,16 @@ taxids with new ones:
 			}
 
 			if data[field] == "" {
-				return taxid2lineage{line, 0, "", "", false}, true, nil
+				return taxid2lineage{line, 0, "", "", "", false}, true, nil
 			}
 			id, e := strconv.Atoi(data[field])
 			if e != nil {
-				return taxid2lineage{line, 0, "", "", false}, true, nil
+				return taxid2lineage{line, 0, "", "", "", false}, true, nil
 			}
 
 			lineage := make([]string, 0, 16)
-			lineageInTaxid := []string{}
+			lineageInTaxid := make([]string, 0, 16)
+			lineageInRank := make([]string, 0, 16)
 			var child, parent, newtaxid uint32
 			var ok bool
 			child = uint32(id)
@@ -175,22 +178,30 @@ taxids with new ones:
 				if printLineageInTaxid {
 					lineageInTaxid = append(lineageInTaxid, strconv.Itoa(int(child)))
 				}
+				if printLineageInRank {
+					lineageInRank = append(lineageInRank, ranks[child])
+				}
+
 				if parent == 1 {
 					break
 				}
 				child = parent
 			}
 			child = uint32(id)
+
+			var lineageInTaxidS, lineageInRankS string
 			if printLineageInTaxid {
-				return taxid2lineage{line, child,
-					strings.Join(stringutil.ReverseStringSlice(lineage), delimiter),
-					strings.Join(stringutil.ReverseStringSlice(lineageInTaxid), delimiter),
-					notFound,
-				}, true, nil
+				lineageInTaxidS = strings.Join(stringutil.ReverseStringSlice(lineageInTaxid), delimiter)
 			}
+
+			if printLineageInRank {
+				lineageInRankS = strings.Join(stringutil.ReverseStringSlice(lineageInRank), delimiter)
+			}
+
 			return taxid2lineage{line, child,
 				strings.Join(stringutil.ReverseStringSlice(lineage), delimiter),
-				"",
+				lineageInTaxidS,
+				lineageInRankS,
 				notFound,
 			}, true, nil
 		}
@@ -224,11 +235,16 @@ taxids with new ones:
 					if printLineageInTaxid && !noLineage {
 						buf.WriteString("\t" + t2l.lineageInTaxid)
 					}
+
 					if printName {
 						buf.WriteString("\t" + names[t2l.taxid])
 					}
 					if printRank {
 						buf.WriteString("\t" + ranks[t2l.taxid])
+					}
+
+					if printLineageInRank && !noLineage {
+						buf.WriteString("\t" + t2l.lineageInRank)
 					}
 
 					buf.WriteString("\n")
@@ -248,6 +264,7 @@ func init() {
 	RootCmd.AddCommand(lineageCmd)
 	lineageCmd.Flags().BoolP("show-status-code", "c", false, "show status code before lineage")
 	lineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `appending lineage consisting of taxids`)
+	lineageCmd.Flags().BoolP("show-lineage-ranks", "R", false, `appending ranks of all levels`)
 	lineageCmd.Flags().BoolP("show-rank", "r", false, `appending rank of taxids`)
 	lineageCmd.Flags().BoolP("show-name", "n", false, `appending scientific name`)
 	lineageCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. input data should be tab-separated")

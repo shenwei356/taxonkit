@@ -313,6 +313,7 @@ Flags:
   -d, --delimiter string      field delimiter in lineage (default ";")
   -h, --help                  help for lineage
   -L, --no-lineage            do not show lineage, when user just want names or/and ranks
+  -R, --show-lineage-ranks    appending ranks of all levels
   -t, --show-lineage-taxids   appending lineage consisting of taxids
   -n, --show-name             appending scientific name
   -r, --show-rank             appending rank of taxids
@@ -442,6 +443,39 @@ Examples
 
         $ cat taxids.txt | taxonkit lineage
 
+1. And ranks of all nodes:
+
+        $ echo 2697049 \
+            | taxonkit lineage -t -R \
+            | csvtk transpose -Ht
+        2697049
+        Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
+        10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+        superkingdom;clade;kingdom;phylum;class;order;suborder;family;subfamily;genus;subgenus;species;no rank
+
+    Another way to show lineage detail of a taxID
+    
+        $ echo 2697049 \
+            | taxonkit lineage -t \
+            | csvtk cut -Ht -f 3 \
+            | csvtk unfold -Ht -f 1 -s ";" \
+            | taxonkit lineage -r -n -L \
+            | csvtk cut -Ht -f 1,3,2 \
+            | csvtk pretty -t 
+        10239     superkingdom   Viruses
+        2559587   clade          Riboviria
+        2732396   kingdom        Orthornavirae
+        2732408   phylum         Pisuviricota
+        2732506   class          Pisoniviricetes
+        76804     order          Nidovirales
+        2499399   suborder       Cornidovirineae
+        11118     family         Coronaviridae
+        2501931   subfamily      Orthocoronavirinae
+        694002    genus          Betacoronavirus
+        2509511   subgenus       Sarbecovirus
+        694009    species        Severe acute respiratory syndrome-related coronavirus
+        2697049   no rank        Severe acute respiratory syndrome coronavirus 2
+        
 ## reformat
 
 Usage
