@@ -91,10 +91,10 @@ p <-
     )
   ) +
   
-  geom_hline(aes(yintercept = time_mean, color = app), size = 0.4, alpha = 0.4) +
-  geom_vline(aes(xintercept = mem_mean, color = app), size = 0.4, alpha = 0.4) +
+  geom_hline(aes(yintercept = time_mean, color = app), size = 0.5, alpha = 0.4) +
+  geom_vline(aes(xintercept = mem_mean, color = app), size = 0.5, alpha = 0.4) +
   
-  geom_point(size = 2) +
+  geom_point(size = 2.5) +
   
 #   geom_errorbar(width = 20,  size = 1, alpha = 1) +
 #   geom_errorbarh(height = 20/max(df$mem2)*max(df$time), 
@@ -111,7 +111,7 @@ p <-
 #                           ymin=NULL, ymax=NULL),
 #              size = 1.5, alpha = 0.6) +
   
-  geom_text_repel(size = 4.5) +
+  geom_text_repel(size = 5.5) +
   # scale_color_wsj() +
   scale_color_colorblind() +
   facet_wrap( ~ dataset, scales = "free_y") +
@@ -138,14 +138,14 @@ p <- p +
     axis.ticks.x = element_line(size = size, color = color),
     # axis.line.x = element_line(colour = color, size = size),
     # axis.line.y = element_line(colour = color, size = size),
-    axis.text.x = element_text(size = 11, color = "grey30"),
-    axis.text.y = element_text(size = 11, color = "grey30"),
-    axis.title = element_text(size = 12, color= "grey20"),
+    axis.text.x = element_text(size = 13, color = "grey30"),
+    axis.text.y = element_text(size = 13, color = "grey30"),
+    axis.title = element_text(size = 14, color= "grey20"),
     
     strip.background = element_rect(
       colour = "grey90", fill = "grey90", size = size 
     ),
-    strip.text = element_text(size = 12, color = "grey20"),
+    strip.text = element_text(size = 14, color = "grey20"),
     
     legend.position = "none",
     legend.key = element_blank(),

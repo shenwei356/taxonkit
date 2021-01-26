@@ -1,5 +1,8 @@
 - [TaxonKit v0.7.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.2)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.2)
+    - `taxonkit lineage`:
+        - new flag `-R/--show-lineage-ranks` for appending ranks of all levels.
+        - reduce memory occupation and slightly speedup.
     - `taxonkit filter`:
         - flag `-E/--equal-to` supports multiple values.
         - new flag `-n/--save-predictable-norank`: do not discard some special ranks without order when using -L, where rank of the closest higher node is still lower than rank cutoff.

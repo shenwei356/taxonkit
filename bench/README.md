@@ -26,7 +26,7 @@
 
 - ETE, version: [3.1.2](https://pypi.org/project/ete3/3.1.2/)
 - taxadb, version: [0.12.0](https://pypi.org/project/taxadb/0.12.0)
-- TaxonKit, version: [0.6.2](https://github.com/shenwei356/taxonkit/releases/tag/0.6.2)
+- TaxonKit, version: [0.7.2](https://github.com/shenwei356/taxonkit/releases/tag/0.7.2)
 - BioPython, version: [1.78](https://pypi.org/project/biopython/1.78/)
 
 Not used tools without direct function of getting full lineage
@@ -83,12 +83,11 @@ because quering via internet (entrez) is too slow for large number of queries.**
 
 Running benchmark:
 
-    # 55min for me...
+    $ # emptying the buffers cache
+    $ su -c "free && sync && echo 3 > /proc/sys/vm/drop_caches && free"
+    
+    # 43min for me...
     time perl run.pl -n 3 run_benchmark.sh -o bench.get_lineage.tsv
-
-    # clear
-    # rm *.lineage
-    # rm *.out
 
 Checking result:
 
@@ -103,6 +102,10 @@ Checking result:
     c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxadb.lineage
     c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxonkit.lineage
 
+    
+    # clear
+    # rm *.lineage
+    # rm *.out
 
 Note that taxonkit returns "root" for taxid 1, while the others return nothing.
 

@@ -360,6 +360,22 @@ Examples
         92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
         1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raicheisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 
+1. Speed
+
+        $ time echo 9606 | taxonkit lineage 
+        9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
+
+        real    0m1.190s
+        user    0m2.365s
+        sys     0m0.170s
+        
+        # all taxIDs
+        $ time taxonkit list --ids 1 --indent "" | taxonkit lineage > t
+
+        real    0m4.249s
+        user    0m16.418s
+        sys     0m1.221s
+
 1. Checking deleted or merged taxids
     
         $ taxonkit lineage --show-status-code taxids.txt | tee lineage.withcode.txt

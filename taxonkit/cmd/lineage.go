@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/shenwei356/breader"
 	"github.com/shenwei356/util/stringutil"
@@ -119,6 +120,10 @@ taxids with new ones:
 			notFound       bool
 		}
 
+		var poolStrings = &sync.Pool{New: func() interface{} {
+			return make([]string, 0, 16)
+		}}
+
 		fn := func(line string) (interface{}, bool, error) {
 			line = strings.Trim(line, "\r\n ")
 			if line == "" {
@@ -138,9 +143,17 @@ taxids with new ones:
 				return taxid2lineage{line, 0, "", "", "", false}, true, nil
 			}
 
-			lineage := make([]string, 0, 16)
-			lineageInTaxid := make([]string, 0, 16)
-			lineageInRank := make([]string, 0, 16)
+			// lineage := make([]string, 0, 16)
+			lineage := poolStrings.Get().([]string)
+			var lineageInTaxid, lineageInRank []string
+
+			if printLineageInTaxid {
+				lineageInTaxid = make([]string, 0, 16)
+			}
+			if printLineageInRank {
+				lineageInRank = make([]string, 0, 16)
+			}
+
 			var child, parent, newtaxid uint32
 			var ok bool
 			child = uint32(id)
@@ -189,17 +202,28 @@ taxids with new ones:
 			}
 			child = uint32(id)
 
-			var lineageInTaxidS, lineageInRankS string
+			var lineageS, lineageInTaxidS, lineageInRankS string
+			lineageS = strings.Join(stringutil.ReverseStringSlice(lineage), delimiter)
+
+			lineage = lineage[:0]
+			poolStrings.Put(lineage)
+
 			if printLineageInTaxid {
 				lineageInTaxidS = strings.Join(stringutil.ReverseStringSlice(lineageInTaxid), delimiter)
+
+				lineageInTaxid = lineageInTaxid[:0]
+				poolStrings.Put(lineageInTaxid)
 			}
 
 			if printLineageInRank {
 				lineageInRankS = strings.Join(stringutil.ReverseStringSlice(lineageInRank), delimiter)
+
+				lineageInRank = lineageInRank[:0]
+				poolStrings.Put(lineageInRank)
 			}
 
 			return taxid2lineage{line, child,
-				strings.Join(stringutil.ReverseStringSlice(lineage), delimiter),
+				lineageS,
 				lineageInTaxidS,
 				lineageInRankS,
 				notFound,

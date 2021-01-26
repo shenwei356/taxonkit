@@ -2,63 +2,63 @@ Test: Querying lineage
 == TaxonKit
 data: taxids.big.txt
 
-elapsed time: 3.034
-peak rss: 705668
+elapsed time: 2.755
+peak rss: 536500
 
 4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxonkit.lineage
 == ETE
 data: taxids.big.txt
 
-elapsed time: 21.890
-peak rss: 92304
+elapsed time: 21.871
+peak rss: 96860
 
 4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.ete.lineage
 == taxadb
 data: taxids.big.txt
 
-elapsed time: 825.449
-peak rss: 84528
+elapsed time: 822.012
+peak rss: 88584
 
 4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxadb.lineage
 == TaxonKit
 data: taxids.medium.txt
 
-elapsed time: 2.151
-peak rss: 437276
+elapsed time: 2.236
+peak rss: 437808
 
 4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxonkit.lineage
 == ETE
 data: taxids.medium.txt
 
-elapsed time: 0.567
-peak rss: 91920
+elapsed time: 0.672
+peak rss: 96836
 
 4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.ete.lineage
 == taxadb
 data: taxids.medium.txt
 
-elapsed time: 7.677
-peak rss: 32672
+elapsed time: 7.589
+peak rss: 35852
 
 4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxadb.lineage
 == TaxonKit
 data: taxids.small.txt
 
-elapsed time: 2.256
-peak rss: 479304
+elapsed time: 2.234
+peak rss: 483724
 
 c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxonkit.lineage
 == ETE
 data: taxids.small.txt
 
-elapsed time: 0.456
-peak rss: 78432
+elapsed time: 0.435
+peak rss: 96748
 
 c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.ete.lineage
 == taxadb
 data: taxids.small.txt
 
-elapsed time: 0.227
-peak rss: 18768
+elapsed time: 0.225
+peak rss: 21888
 
 c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxadb.lineage
