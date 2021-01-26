@@ -360,7 +360,7 @@ Examples
         92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
         1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raicheisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 
-1. Speed
+1. Speed.
 
         $ time echo 9606 | taxonkit lineage 
         9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
@@ -406,8 +406,8 @@ Examples
         $ cat lineage.withcode.txt | awk '$2 < 0' | cut -f 1
         123124124
 
-1. **Filter out invalid and deleted taxids, and *replace merged taxids with new ones"**,
-  you may install [csvtk](https://github.com/shenwei356/csvtk.
+1. **Filter out invalid and deleted taxids, and replace merged taxids with new ones**,
+  you may install [csvtk](https://github.com/shenwei356/csvtk).
     
         # input is one-column-taxid
         $ taxonkit lineage -c taxids.txt \

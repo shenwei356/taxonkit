@@ -126,9 +126,9 @@ Fill missing ranks and add prefixes.
     2605619   k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__unclassified Escherichia coli subspecies/strain
     2697049   k__Viruses    p__Pisuviricota                   c__Pisoniviricetes               o__Nidovirales                   f__Coronaviridae                  g__Betacoronavirus                   s__Severe acute respiratory syndrome-related coronavirus   t__unclassified Severe acute respiratory syndrome-related coronavirus subspecies/strain
 
-When these's no nodes of rank "subspecies" nor "stain",
+**When these's no nodes of rank "subspecies" nor "stain",
 we can switch `-S/--pseudo-strain` to use the node with lowest rank
-as subspecies/strain name, if which rank is lower than "species".
+as subspecies/strain name, if which rank is lower than "species"**.
 
     $ cat taxids3.txt \
         | taxonkit lineage -r \
@@ -150,8 +150,8 @@ as subspecies/strain name, if which rank is lower than "species".
 
 List eight-level lineage for all taxIDs of rank lower than or equal to species, including some nodes with "no rank".
 But when filtering with `-L/--lower-than`, you can use
-`-n/--save-predictable-norank` to save some special ranks without order,
-where rank of the closest higher node is still lower than rank cutoff.
+`-n/--save-predictable-norank` to **save some special ranks without order,
+where rank of the closest higher node is still lower than rank cutoff**.
 
     $ time taxonkit list --ids 1 \
         | taxonkit filter -L species -E species -R -N -n \
