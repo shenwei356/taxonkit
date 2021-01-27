@@ -34,6 +34,12 @@ Not used tools without direct function of getting full lineage
 - [opensci/taxadb](https://github.com/ropensci/taxadb)
 - [ncbi-taxonomist](https://ncbi-taxonomist.readthedocs.io/en/latest/)
 
+## Environment
+
+- OS: Linux 5.4.89-1-MANJARO
+- CPU: AMD Ryzen 7 2700X Eight-Core Processor, 3.7GHz
+- RAM: 64GB DDR4 3000MHz
+- SSD: Samsung 970EVO 500G NVMe SSD
 
 ## Installation and Configurations
 
