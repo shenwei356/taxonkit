@@ -103,15 +103,29 @@ column by flag "-t/--show-lineage-taxids".
 			"t": prefixt,
 			"T": prefixT,
 		}
+
 		// check format
 		if !reRankPlaceHolder.MatchString(format) {
 			checkError(fmt.Errorf("placeholder of simplified rank not found in output format: %s", format))
 		}
 		matches := reRankPlaceHolder.FindAllStringSubmatch(format, -1)
+		flag := false
 		for _, match := range matches {
 			if _, ok := symbol2rank[match[1]]; !ok {
 				checkError(fmt.Errorf("invalid placeholder: %s", match[0]))
 			}
+			switch match[1] {
+			case "t", "S", "T":
+				flag = true
+			}
+		}
+		if flag {
+			if pseudoStrain && !fill {
+				fill = true
+				log.Infof("-F/--fill-miss-rank is switched on when giving flag -S/--pseudo-strain")
+			}
+		} else if pseudoStrain {
+			log.Warningf(`flag -S/--pseudo-strain will not work because none of "{t}", "{S}", "{T}" is found in -f/--format`)
 		}
 
 		files := getFileList(args)
@@ -368,7 +382,7 @@ func init() {
 	flineageCmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
 
 	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "fill missing rank with lineage information of the next higher rank")
-	flineageCmd.Flags().BoolP("pseudo-strain", "S", false, `use the node with lowest rank as strain name, only if which rank is lower than "species" and not "subpecies" nor "strain". This flag affects {t}, {S}, {T}`)
+	flineageCmd.Flags().BoolP("pseudo-strain", "S", false, `use the node with lowest rank as strain name, only if which rank is lower than "species" and not "subpecies" nor "strain". It affects {t}, {S}, {T}. This flag needs flag -F`)
 
 	flineageCmd.Flags().IntP("lineage-field", "i", 2, "field index of lineage. data should be tab-separated")
 	flineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)
