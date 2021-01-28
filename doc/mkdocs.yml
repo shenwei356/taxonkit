@@ -4,7 +4,7 @@ pages:
 - Download: download.md
 - Usage: usage.md
 - Tutorial: tutorial.md
-- Benchmark: /bench/
+- Benchmark: bench/
 - Taxid-Changelog: https://github.com/shenwei356/taxid-changelog
 - More tools: https://github.com/shenwei356
 
