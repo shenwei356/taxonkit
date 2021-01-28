@@ -1,7 +1,0 @@
-test	dataset	app	time_mean	time_stdev	mem_mean	mem_stdev
-	taxids.medium.txt	ete	0.43	0.00	61265	20
-	taxids.medium.txt	taxadb	5.25	0.06	19176	63
-	taxids.medium.txt	taxonkit	4.14	0.09	917248	7921
-	taxids.small.txt	ete	0.22	0.00	48878	855
-	taxids.small.txt	taxadb	0.11	0.00	7400	727
-	taxids.small.txt	taxonkit	4.04	0.15	904540	21038
