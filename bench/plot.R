@@ -87,7 +87,7 @@ p <-
       xmax = mem_mean + mem_stdev,
       ymin = time_mean - time_stdev,
       ymax = time_mean + time_stdev,
-      color = app, label = app
+      color = app
     )
   ) +
   
@@ -111,7 +111,21 @@ p <-
 #                           ymin=NULL, ymax=NULL),
 #              size = 1.5, alpha = 0.6) +
   
-  geom_text_repel(size = 5.5) +
+  geom_text_repel(data = df2 %>% filter(dataset != "n=200,000"),
+                  aes(x = mem_mean, y = time_mean, color = app, 
+                      label = app),
+                size = 5,
+                max.iter = 200000,
+                seed = 11) + 
+  geom_text_repel(data = df2 %>% filter(dataset == "n=200,000"),
+                  aes(x = mem_mean, y = time_mean, color = app, 
+                      label = ifelse(app != "taxadb" ,
+                                     sprintf("%s (%.1fs)", app, time_mean),
+                                      sprintf("%s", app))),
+                  nudge_y = 50,
+                  size = 4.5,
+                  max.iter = 200000,
+                  seed = 11) +
   # scale_color_wsj() +
   scale_color_colorblind() +
   facet_wrap( ~ dataset, scales = "free_y") +

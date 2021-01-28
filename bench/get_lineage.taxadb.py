@@ -4,7 +4,6 @@ import sys
 from os.path import expanduser
 from taxadb.taxid import TaxID
 
-
 handler = TaxID(dbtype="sqlite", dbname=expanduser("~") + "/.taxadb/taxadb.sqlite")
 
 for taxid in sys.stdin:

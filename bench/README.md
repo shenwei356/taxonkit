@@ -24,10 +24,12 @@
 
 ## Softwares
 
-- ETE, version: [3.1.2](https://pypi.org/project/ete3/3.1.2/)
-- taxadb, version: [0.12.0](https://pypi.org/project/taxadb/0.12.0)
-- TaxonKit, version: [0.7.2](https://github.com/shenwei356/taxonkit/releases/tag/0.7.2)
-- BioPython, version: [1.78](https://pypi.org/project/biopython/1.78/)
+- Loading database from local database:
+    - ETE, version: [3.1.2](https://pypi.org/project/ete3/3.1.2/)
+    - taxadb, version: [0.12.0](https://pypi.org/project/taxadb/0.12.0)
+- Directly parsing dump files:
+    - taxopy, version: [0.5.0](https://github.com/apcamargo/taxopy/releases/tag/v0.5.0)
+    - TaxonKit, version: [0.7.2](https://github.com/shenwei356/taxonkit/releases/tag/0.7.2)
 
 Not used tools without direct function of getting full lineage
 
@@ -53,10 +55,6 @@ Not used tools without direct function of getting full lineage
         ncbi = NCBITaxa()
         ncbi.update_taxonomy_database()
 
-- Biopython
-
-        sudo pip3 install biopython
-
 - taxadb
 
         sudo pip3 install -U taxadb
@@ -66,17 +64,24 @@ Not used tools without direct function of getting full lineage
         taxadb download --type taxa -o ~/.taxadb -f
         taxadb create -i ~/.taxadb --division taxa  --dbname ~/.taxadb/taxadb.sqlite
 
+- taxopy
+
+        sudo pip3 install -U taxopy
+        
+        # taxoopy identical dump files copied from taxonkit
+        mkdir -p ~/.taxopy
+        cp ~/.taxonkit/{nodes.dmp,names.dmp} ~/.taxopy
 
 ## Scripts and Commands
 
 Scripts/Command as listed below.
-Python scripts were written followed to the official documents,
+Python scripts were written following to the official documents,
 and **parallelized querying were not used, including TaxonKit**.
 
-    ETE             get_lineage.ete.py
-    Biopython       get_lineage.biopython.py
-    taxadb          get_lineage.taxadb.py
-    taxonkit        taxonkit lineage -d "; "
+    ETE             get_lineage.ete.py                              < $infile > $outfile
+    taxadb          get_lineage.taxadb.py                           < $infile > $outfile
+    taxopy          get_lineage.taxopy.py                           < $infile > $outfile
+    taxonkit        taxonkit lineage --threads 1 --delimiter "; "   < $infile > $outfile
 
 A Python script [memusg](https://github.com/shenwei356/memusg) was used
 to computate running time and peak memory usage of a process.
@@ -84,8 +89,6 @@ A Perl scripts
 [`run.pl`](https://github.com/shenwei356/seqkit/blob/master/bench/run.pl)
 is used to automatically running tests and generate data for plotting.
 
-**Note that `get_lineage.biopython.py` is not used,
-because quering via internet (entrez) is too slow for large number of queries.**
 
 Running benchmark:
 
@@ -97,20 +100,23 @@ Running benchmark:
 
 Checking result:
 
-    md5sum *.lineage
+    $ md5sum *.lineage
     4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.ete.lineage
     4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxadb.lineage
     4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxonkit.lineage
+    4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxopy.lineage
     4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.ete.lineage
     4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxadb.lineage
     4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxonkit.lineage
+    4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxopy.lineage
     c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.ete.lineage
     c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxadb.lineage
     c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxonkit.lineage
+    c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxopy.lineage
 
     
     # clear
-    # rm *.lineage
+    $ rm *.lineage
     # rm *.out
 
 Note that taxonkit returns "root" for taxid 1, while the others return nothing.
