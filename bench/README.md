@@ -1,6 +1,8 @@
 # Benchmark
 
-## Data set
+## Benchmark 1: Getting lineage
+
+### Data set
 
 - [NCBI taxonomy](ftp://ftp.ncbi.nih.gov/taxonomy), version 2021-01-21
 
@@ -22,7 +24,7 @@
             cut -f 1 nodes.dmp | csvtk sample -H -p 0.1 \
                 | grep -w 1 -v | head -n 200000  > taxids.big.txt
 
-## Softwares
+### Softwares
 
 - Loading database from local database:
     - ETE, version: [3.1.2](https://pypi.org/project/ete3/3.1.2/)
@@ -36,14 +38,14 @@ Not used tools without direct function of getting full lineage
 - [opensci/taxadb](https://github.com/ropensci/taxadb)
 - [ncbi-taxonomist](https://ncbi-taxonomist.readthedocs.io/en/latest/)
 
-## Environment
+### Environment
 
 - OS: Linux 5.4.89-1-MANJARO
 - CPU: AMD Ryzen 7 2700X Eight-Core Processor, 3.7GHz
 - RAM: 64GB DDR4 3000MHz
 - SSD: Samsung 970EVO 500G NVMe SSD
 
-## Installation and Configurations
+### Installation and Configurations
 
 - ETE
 
@@ -72,7 +74,7 @@ Not used tools without direct function of getting full lineage
         mkdir -p ~/.taxopy
         cp ~/.taxonkit/{nodes.dmp,names.dmp} ~/.taxopy
 
-## Scripts and Commands
+### Scripts and Commands
 
 Scripts/Command as listed below.
 Python scripts were written following to the official documents,
@@ -142,7 +144,33 @@ R libraries `dplyr`, `ggplot2`, `scales`, `ggthemes`, `ggrepel` are needed.
 
 Result
 
-![](bench.get_lineage.reformat.tsv.png)
+<img src="bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" />
+
+## Benchmark 2: TaxonKit multi-threaded scalability
+
+Running benchmark:
+
+    $ # emptying the buffers cache
+    $ su -c "free && sync && echo 3 > /proc/sys/vm/drop_caches && free"
+    
+
+    $ time perl run.pl -n 3 run_benchmark_taxonkit.sh -o bench.taxonkit.tsv
+    $ rm *.lineage
+    
+Plotting benchmark result.
+
+    cat bench.taxonkit.tsv \
+        | csvtk sort -t -L dataset:<(cut -f 1 dataset_rename.tsv) -k dataset:u \
+        | csvtk replace -t -f dataset -k dataset_rename.tsv -p '(.+)' -r '{kv}' \
+        > bench.taxonkit.reformat.tsv
+
+    ./plot2.R -i bench.taxonkit.reformat.tsv --width 8 --height 3.3
+    
+Result
+
+<img src="bench.taxonkit.reformat.tsv.png" alt="" width="600" align="center" />
+
+
 
 <div id="disqus_thread"></div>
 <script>
