@@ -318,36 +318,56 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#benchmark-1-getting-lineage" class="md-nav__link">
+    Benchmark 1: Getting lineage
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark 1: Getting lineage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#data-set" class="md-nav__link">
     Data set
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#softwares" class="md-nav__link">
     Softwares
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#environment" class="md-nav__link">
     Environment
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#installation-and-configurations" class="md-nav__link">
     Installation and Configurations
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#scripts-and-commands" class="md-nav__link">
     Scripts and Commands
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-2-taxonkit-multi-threaded-scalability" class="md-nav__link">
+    Benchmark 2: TaxonKit multi-threaded scalability
   </a>
   
 </li>
@@ -370,7 +390,8 @@
                 
                 
                 <h1 id="benchmark">Benchmark</h1>
-<h2 id="data-set">Data set</h2>
+<h2 id="benchmark-1-getting-lineage">Benchmark 1: Getting lineage</h2>
+<h3 id="data-set">Data set</h3>
 <ul>
 <li>
 <p><a href="ftp://ftp.ncbi.nih.gov/taxonomy">NCBI taxonomy</a>, version 2021-01-21</p>
@@ -401,7 +422,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="softwares">Softwares</h2>
+<h3 id="softwares">Softwares</h3>
 <ul>
 <li>Loading database from local database:<ul>
 <li>ETE, version: <a href="https://pypi.org/project/ete3/3.1.2/">3.1.2</a></li>
@@ -419,14 +440,14 @@
 <li><a href="https://github.com/ropensci/taxadb">opensci/taxadb</a></li>
 <li><a href="https://ncbi-taxonomist.readthedocs.io/en/latest/">ncbi-taxonomist</a></li>
 </ul>
-<h2 id="environment">Environment</h2>
+<h3 id="environment">Environment</h3>
 <ul>
 <li>OS: Linux 5.4.89-1-MANJARO</li>
 <li>CPU: AMD Ryzen 7 2700X Eight-Core Processor, 3.7GHz</li>
 <li>RAM: 64GB DDR4 3000MHz</li>
 <li>SSD: Samsung 970EVO 500G NVMe SSD</li>
 </ul>
-<h2 id="installation-and-configurations">Installation and Configurations</h2>
+<h3 id="installation-and-configurations">Installation and Configurations</h3>
 <ul>
 <li>
 <p>ETE</p>
@@ -459,7 +480,7 @@ cp ~/.taxonkit/{nodes.dmp,names.dmp} ~/.taxopy
 </code></pre>
 </li>
 </ul>
-<h2 id="scripts-and-commands">Scripts and Commands</h2>
+<h3 id="scripts-and-commands">Scripts and Commands</h3>
 <p>Scripts/Command as listed below.
 Python scripts were written following to the official documents,
 and <strong>parallelized querying were not used, including TaxonKit</strong>.</p>
@@ -520,7 +541,26 @@ cat bench.get_lineage.tsv \
 # ./plot.R -i bench.get_lineage.reformat.tsv -o bench.get_lineage.reformat.tsv2.png --dpi 600 --width 8 --height 3.3
 </code></pre>
 <p>Result</p>
-<p><img alt="" src="bench.get_lineage.reformat.tsv.png" /></p>
+<p><img src="bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" /></p>
+<h2 id="benchmark-2-taxonkit-multi-threaded-scalability">Benchmark 2: TaxonKit multi-threaded scalability</h2>
+<p>Running benchmark:</p>
+<pre><code>$ # emptying the buffers cache
+$ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
+
+
+$ time perl run.pl -n 3 run_benchmark_taxonkit.sh -o bench.taxonkit.tsv
+$ rm *.lineage
+</code></pre>
+<p>Plotting benchmark result.</p>
+<pre><code>cat bench.taxonkit.tsv \
+    | csvtk sort -t -L dataset:&lt;(cut -f 1 dataset_rename.tsv) -k dataset:u \
+    | csvtk replace -t -f dataset -k dataset_rename.tsv -p '(.+)' -r '{kv}' \
+    &gt; bench.taxonkit.reformat.tsv
+
+./plot2.R -i bench.taxonkit.reformat.tsv --width 8 --height 3.3
+</code></pre>
+<p>Result</p>
+<p><img src="bench.taxonkit.reformat.tsv.png" alt="" width="600" align="center" /></p>
 <div id="disqus_thread"></div>
 <script>
 
