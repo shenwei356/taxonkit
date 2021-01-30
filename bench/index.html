@@ -333,8 +333,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#softwares" class="md-nav__link">
-    Softwares
+  <a href="#software" class="md-nav__link">
+    Software
   </a>
   
 </li>
@@ -422,7 +422,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="softwares">Softwares</h3>
+<h3 id="software">Software</h3>
 <ul>
 <li>Loading database from local database:<ul>
 <li>ETE, version: <a href="https://pypi.org/project/ete3/3.1.2/">3.1.2</a></li>
@@ -468,6 +468,20 @@ ncbi.update_taxonomy_database()
 # https://github.com/HadrienG/taxadb#creating-the-database
 taxadb download --type taxa -o ~/.taxadb -f
 taxadb create -i ~/.taxadb --division taxa  --dbname ~/.taxadb/taxadb.sqlite
+</code></pre>
+</li>
+<li>
+<p>TaxonKit</p>
+<pre><code>mkdir -p $HOME/.taxonkit
+mkdir -p $HOME/bin/
+
+# data
+wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+tar -zxvf taxdump.tar.gz -C $HOME/.taxonkit
+
+# binary
+wget https://github.com/shenwei356/taxonkit/releases/download/v0.7.2/taxonkit_linux_amd64.tar.gz
+tar -zxvf taxonkit_linux_amd64.tar.gz -C $HOME/bin/
 </code></pre>
 </li>
 <li>
