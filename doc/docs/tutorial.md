@@ -6,7 +6,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Formating lineage](#formating-lineage)
+- [Formatting lineage](#formatting-lineage)
 - [Parsing kraken/bracken result](#parsing-krakenbraken-result)
 - [Making nr blastdb for specific taxids](#making-nr-blastdb-for-specific-taxids)
 - [Summaries of taxonomy data](#summaries-of-taxonomy-data)
@@ -14,7 +14,7 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-## Formating lineage
+## Formatting lineage
 
 Show lineage detail of a taxID.
 The command below works on Windows with help of [csvtk](http://bioinf.shenwei.me/csvtk).

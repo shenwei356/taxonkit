@@ -24,7 +24,7 @@
             cut -f 1 nodes.dmp | csvtk sample -H -p 0.1 \
                 | grep -w 1 -v | head -n 200000  > taxids.big.txt
 
-### Softwares
+### Software
 
 - Loading database from local database:
     - ETE, version: [3.1.2](https://pypi.org/project/ete3/3.1.2/)
@@ -66,6 +66,19 @@ Not used tools without direct function of getting full lineage
         taxadb download --type taxa -o ~/.taxadb -f
         taxadb create -i ~/.taxadb --division taxa  --dbname ~/.taxadb/taxadb.sqlite
 
+- TaxonKit
+
+        mkdir -p $HOME/.taxonkit
+        mkdir -p $HOME/bin/
+        
+        # data
+        wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+        tar -zxvf taxdump.tar.gz -C $HOME/.taxonkit
+        
+        # binary
+        wget https://github.com/shenwei356/taxonkit/releases/download/v0.7.2/taxonkit_linux_amd64.tar.gz
+        tar -zxvf taxonkit_linux_amd64.tar.gz -C $HOME/bin/        
+
 - taxopy
 
         sudo pip3 install -U taxopy
@@ -73,6 +86,7 @@ Not used tools without direct function of getting full lineage
         # taxoopy identical dump files copied from taxonkit
         mkdir -p ~/.taxopy
         cp ~/.taxonkit/{nodes.dmp,names.dmp} ~/.taxopy
+
 
 ### Scripts and Commands
 

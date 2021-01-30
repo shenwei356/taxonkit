@@ -734,7 +734,7 @@ Examples:
             
 
 1. **Estimate and fill missing rank with original lineage information**
-  (`-F, --fill-miss-rank`, very useful for formating input data for
+  (`-F, --fill-miss-rank`, very useful for formatting input data for
   [LEfSe](https://bitbucket.org/biobakery/biobakery/wiki/lefse)).
   You can change the prefix "unclassified" using flag `-p/--miss-rank-repl-prefix`.
 
