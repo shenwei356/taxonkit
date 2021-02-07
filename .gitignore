@@ -38,3 +38,7 @@ taxonkit/*.gz
 test.*
 *Rplots.pdf
 *.lineage
+run_.*out
+nodes.dmp
+taxids.n*.txt*
+ids.txt

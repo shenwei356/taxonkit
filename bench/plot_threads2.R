@@ -53,8 +53,6 @@ df <- read.csv(args$infile, sep = "\t")
 # sort
 df$test <- factor(df$test, levels = unique(df$test), ordered = TRUE)
 df$app <- factor(df$app, levels = unique(df$app), ordered = TRUE)
-df$dataset <-
-  factor(df$dataset, levels = unique(df$dataset), ordered = TRUE)
 
 # humanize mem unit
 max_mem <- max(df$mem)
@@ -77,7 +75,8 @@ df2 <- df %>%
     mem_mean = mean(mem2),
     time_stdev = sd(time) / sqrt(length(time)),
     time_mean = mean(time)
-  )
+  ) %>%
+  mutate(dataset2 = log10(dataset))
 
 p <-
   ggplot(
@@ -87,14 +86,19 @@ p <-
       xmax = mem_mean + mem_stdev,
       ymin = time_mean - time_stdev,
       ymax = time_mean + time_stdev,
-      color = app
+      shape = app, color = dataset2
     )
   ) +
   
   # geom_hline(aes(yintercept = time_mean, color = app), size = 0.5, alpha = 0.4) +
   # geom_vline(aes(xintercept = mem_mean, color = app), size = 0.5, alpha = 0.4) +
-  
-  geom_point(size = 2.5) +
+ 
+   geom_smooth(method = "lm", 
+              colour = "grey50",
+              fill = "grey85",
+              alpha =0.7) +
+  geom_point(size = 3) +
+
   
 #   geom_errorbar(width = 20,  size = 1, alpha = 1) +
 #   geom_errorbarh(height = 20/max(df$mem2)*max(df$time), 
@@ -111,25 +115,16 @@ p <-
 #                           ymin=NULL, ymax=NULL),
 #              size = 1.5, alpha = 0.6) +
   
-  geom_text_repel(data = df2, #  %>% filter(dataset != "n=200,000"),
-                  aes(x = mem_mean, y = time_mean, color = app,
-                      label = app),
-                size = 5.5,
-                max.iter = 200000,
-                seed = 12) +
-  # geom_text_repel(data = df2 %>% filter(dataset == "n=200,000"),
-  #                 aes(x = mem_mean, y = time_mean, color = app, 
-  #                     label = ifelse(app != "taxadb" ,
-  #                                    sprintf("%s (%.1fs)", app, time_mean),
-  #                                     sprintf("%s", app))),
-  #                 nudge_y = 50,
-  #                 size = 4.5,
-  #                 max.iter = 200000,
-  #                 seed = 11) +
+  # geom_text_repel(aes(label = app), 
+  #                 size = 5,
+  #               max.iter = 200000,
+  #               seed = 11) + 
   # scale_color_wsj() +
-  scale_color_colorblind() +
-  # scale_y_continuous(expand=c(0,0)) +
-  facet_wrap( ~ dataset, scales = "free_y") +
+  # scale_color_colorblind() +
+  scale_colour_gradient2_tableau( palette="Orange-Blue Diverging",
+                                  trans = "reverse") + 
+  guides(color = guide_colourbar(reverse = TRUE)) +
+  # facet_grid(. ~ app, scales = "free") +
   expand_limits(y=0) + 
   # ylim(0, max(df$time)) +
   # xlim(0, max(df$mem2)) +
@@ -154,20 +149,20 @@ p <- p +
     axis.ticks.x = element_line(size = size, color = color),
     # axis.line.x = element_line(colour = color, size = size),
     # axis.line.y = element_line(colour = color, size = size),
-    axis.text.x = element_text(size = 13, color = "grey30"),
-    axis.text.y = element_text(size = 13, color = "grey30"),
-    axis.title = element_text(size = 14, color= "grey20"),
+    axis.text.x = element_text(size = 12, color = "grey30"),
+    axis.text.y = element_text(size = 12, color = "grey30"),
+    axis.title = element_text(size = 13, color= "grey20"),
     
     strip.background = element_rect(
       colour = "grey90", fill = "grey90", size = size 
     ),
-    strip.text = element_text(size = 14, color = "grey20"),
+    strip.text = element_text(size = 13, color = "grey20"),
     
-    legend.position = "none",
+    legend.position = "right",
     legend.key = element_blank(),
     legend.direction = "vertical",
-    legend.text = element_text(size = 11),
-    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 12),
+    legend.title = element_text(size = 12),
     legend.background = element_rect(fill = "transparent"),
     legend.margin = margin(0.1, 0.1, 0.1, 0.1, unit = "cm"),
     

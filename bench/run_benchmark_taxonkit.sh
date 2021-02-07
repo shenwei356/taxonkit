@@ -8,9 +8,9 @@ function check() {
 }
 
 
-for f in taxids.*.txt; do
+for f in taxids.n*.txt; do
     for t in 1 2 4 8; do
-        echo == threads=$t
+        echo == t=$t
         echo data: $f
         out=$f.taxonkit-threads-$t.lineage
         memusg -t -H -s " taxonkit lineage --delimiter \"; \" --threads $t  < $f > $out "

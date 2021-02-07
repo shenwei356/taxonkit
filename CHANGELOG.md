@@ -1,7 +1,9 @@
 - [TaxonKit v0.7.3](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.3)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.3/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.3)
-    - `taxonkit refmorat`:
+    - `taxonkit reformat`:
         - better flag checking. [#40](https://github.com/shenwei356/taxonkit/issues/40)
+    - `taxonkit lca`:
+        - slightly speedup.
 - [TaxonKit v0.7.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.2)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.2)
     - `taxonkit lineage`:

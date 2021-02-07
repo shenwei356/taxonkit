@@ -8,7 +8,7 @@ function check() {
 }
 
 
-for f in taxids.*.txt; do
+for f in taxids.n*.txt; do
     echo == TaxonKit
     echo data: $f
     out=$f.taxonkit.lineage
@@ -21,15 +21,9 @@ for f in taxids.*.txt; do
     memusg -t -H -s " /usr/bin/python3 get_lineage.ete.py < $f > $out "
     check $out
     
-    echo == taxopy
+    echo == Taxopy
     echo data: $f
     out=$f.taxopy.lineage
     memusg -t -H -s " /usr/bin/python3 get_lineage.taxopy.py < $f > $out "
-    check $out
-
-    echo == taxadb
-    echo data: $f
-    out=$f.taxadb.lineage
-    memusg -t -H -s " /usr/bin/python3 get_lineage.taxadb.py < $f > $out "
     check $out
 done

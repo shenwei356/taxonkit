@@ -1,3 +1,14 @@
-taxids.small.txt	n=20
-taxids.medium.txt	n=2,000
-taxids.big.txt	n=200,000
+taxids.n1.txt	1
+taxids.n10.txt	10
+taxids.n100.txt	100
+taxids.n1000.txt	1000
+taxids.n2000.txt	2000
+taxids.n4000.txt	4000
+taxids.n6000.txt	6000
+taxids.n8000.txt	8000
+taxids.n10000.txt	10000
+taxids.n20000.txt	20000
+taxids.n40000.txt	40000
+taxids.n60000.txt	60000
+taxids.n80000.txt	80000
+taxids.n100000.txt	100000

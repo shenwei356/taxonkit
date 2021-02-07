@@ -111,28 +111,15 @@ p <-
 #                           ymin=NULL, ymax=NULL),
 #              size = 1.5, alpha = 0.6) +
   
-  geom_text_repel(data = df2, #  %>% filter(dataset != "n=200,000"),
-                  aes(x = mem_mean, y = time_mean, color = app,
-                      label = app),
-                size = 5.5,
+  geom_text_repel(aes(label = app), 
+                  size = 5,
                 max.iter = 200000,
-                seed = 12) +
-  # geom_text_repel(data = df2 %>% filter(dataset == "n=200,000"),
-  #                 aes(x = mem_mean, y = time_mean, color = app, 
-  #                     label = ifelse(app != "taxadb" ,
-  #                                    sprintf("%s (%.1fs)", app, time_mean),
-  #                                     sprintf("%s", app))),
-  #                 nudge_y = 50,
-  #                 size = 4.5,
-  #                 max.iter = 200000,
-  #                 seed = 11) +
+                seed = 11) + 
   # scale_color_wsj() +
   scale_color_colorblind() +
-  # scale_y_continuous(expand=c(0,0)) +
-  facet_wrap( ~ dataset, scales = "free_y") +
-  expand_limits(y=0) + 
+  facet_wrap( ~ dataset, scales = "free") +
   # ylim(0, max(df$time)) +
-  # xlim(0, max(df$mem2)) +
+  xlim(0, max(df$mem2)) +
   
   # ggtitle(paste("FASTA/Q Manipulation Performance\n", test1, sep = "")) +
   ylab("Time (s)") +

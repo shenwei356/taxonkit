@@ -142,8 +142,6 @@ github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
-github.com/pkg/profile v1.5.0 h1:042Buzk+NhDI+DeSAA62RwJL8VAuZUMQZUjCsRz1Mug=
-github.com/pkg/profile v1.5.0/go.mod h1:qBsxPvzyUincmltOk6iyRVxHYg4adc0OFOv72ZdLa18=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/posener/complete v1.1.1/go.mod h1:em0nMJCgc9GFtwrmVmEMR/ZL6WyhyjMBndrE9hABlRI=
 github.com/prometheus/client_golang v0.9.1/go.mod h1:7SWBe2y4D6OKWSNQJUaRYU/AaXPKyh/dDVn+NZz0KFw=
@@ -172,8 +170,8 @@ github.com/shenwei356/go-logging v0.0.0-20171012171522-c6b9702d88ba h1:UvnrxFDPm
 github.com/shenwei356/go-logging v0.0.0-20171012171522-c6b9702d88ba/go.mod h1:LiqYp/K5yCEWOi7Ux/iOF/kjDxtsdYjOGcKHDbEOXFU=
 github.com/shenwei356/natsort v0.0.0-20190418160752-600d539c017d h1:eeXLHcXyGEr72V1SOSEI7vSzUOTJvHutwF7Ykm+hscQ=
 github.com/shenwei356/natsort v0.0.0-20190418160752-600d539c017d/go.mod h1:SiiGiRFyRtV7S9RamOrmQR5gpGIRhWJM1w0EtmuQ1io=
-github.com/shenwei356/unikmer v0.17.1 h1:xASoNjWNKlTmYFy/EEFX1lw7g9+EuyQHyC3+fMq9pkY=
-github.com/shenwei356/unikmer v0.17.1/go.mod h1:S/uaqbuvrlPSbjsEwndV/Q5ANEZC3kBRUY2+87gxdiE=
+github.com/shenwei356/unikmer v0.17.2 h1:HoxZSxfEIsDRGk+xtTjC9aJxU5pBoSMZfgCH97kVQ0w=
+github.com/shenwei356/unikmer v0.17.2/go.mod h1:S/uaqbuvrlPSbjsEwndV/Q5ANEZC3kBRUY2+87gxdiE=
 github.com/shenwei356/util v0.0.0-20201214054755-2942125340cd/go.mod h1:n3qhc3bQzlqJ2/5v79hgl0Gd3WzJOkI8XcUix25Brdg=
 github.com/shenwei356/util v2020.12.31+incompatible h1:CQYnsFHZ6A6OdDTnx/+xYbY4AhRFXaTG1muSvOJZGEo=
 github.com/shenwei356/util v2020.12.31+incompatible/go.mod h1:n3qhc3bQzlqJ2/5v79hgl0Gd3WzJOkI8XcUix25Brdg=
