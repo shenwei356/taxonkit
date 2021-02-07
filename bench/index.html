@@ -398,35 +398,22 @@
 </li>
 <li>
 <p>TaxIDs. Root node <code>1</code> is removed. 
-  And These data should be updated along with NCBI taxonomy dataset, 
-  because <code>taxadb</code> does not handle merged taxiIDs.</p>
-<ul>
-<li>
-<p>small.txt (n=20)</p>
-<pre><code>cut -f 1 nodes.dmp | csvtk sample -H -p 0.00002 \
-    | grep -w 1 -v | head -n 20 &gt; taxids.small.txt
+  And These data should be updated along with NCBI taxonomy dataset.
+  Seven sizes of taxIDs are sampled from <code>nodes.dmp</code>.</p>
+<pre><code># shuffle all taxids
+cut -f 1 nodes.dmp | grep -w -v 1 | shuf &gt; ids.txt
+
+# extract n taxids for testing
+for n in 1 10 100 1000 2000 4000 6000 8000 10000 20000 40000 60000 80000 100000; do 
+    head -n $n ids.txt &gt; taxids.n$n.txt
+done
 </code></pre>
-</li>
-<li>
-<p>medium.txt (n=2,000)</p>
-<pre><code>cut -f 1 nodes.dmp | csvtk sample -H -p 0.002 \
-    | grep -w 1 -v | head -n 2000 &gt; taxids.medium.txt
-</code></pre>
-</li>
-<li>
-<p>big.txt (n=200,000)</p>
-<pre><code>cut -f 1 nodes.dmp | csvtk sample -H -p 0.1 \
-    | grep -w 1 -v | head -n 200000  &gt; taxids.big.txt
-</code></pre>
-</li>
-</ul>
 </li>
 </ul>
 <h3 id="software">Software</h3>
 <ul>
 <li>Loading database from local database:<ul>
 <li>ETE, version: <a href="https://pypi.org/project/ete3/3.1.2/">3.1.2</a></li>
-<li>taxadb, version: <a href="https://pypi.org/project/taxadb/0.12.0">0.12.0</a></li>
 </ul>
 </li>
 <li>Directly parsing dump files:<ul>
@@ -434,11 +421,6 @@
 <li>TaxonKit, version: <a href="https://github.com/shenwei356/taxonkit/releases/tag/0.7.2">0.7.2</a></li>
 </ul>
 </li>
-</ul>
-<p>Not used tools without direct function of getting full lineage</p>
-<ul>
-<li><a href="https://github.com/ropensci/taxadb">opensci/taxadb</a></li>
-<li><a href="https://ncbi-taxonomist.readthedocs.io/en/latest/">ncbi-taxonomist</a></li>
 </ul>
 <h3 id="environment">Environment</h3>
 <ul>
@@ -458,16 +440,6 @@
 from ete3 import NCBITaxa
 ncbi = NCBITaxa()
 ncbi.update_taxonomy_database()
-</code></pre>
-</li>
-<li>
-<p>taxadb</p>
-<pre><code>sudo pip3 install -U taxadb
-
-# create database
-# https://github.com/HadrienG/taxadb#creating-the-database
-taxadb download --type taxa -o ~/.taxadb -f
-taxadb create -i ~/.taxadb --division taxa  --dbname ~/.taxadb/taxadb.sqlite
 </code></pre>
 </li>
 <li>
@@ -499,7 +471,6 @@ cp ~/.taxonkit/{nodes.dmp,names.dmp} ~/.taxopy
 Python scripts were written following to the official documents,
 and <strong>parallelized querying were not used, including TaxonKit</strong>.</p>
 <pre><code>ETE             get_lineage.ete.py                              &lt; $infile &gt; $outfile
-taxadb          get_lineage.taxadb.py                           &lt; $infile &gt; $outfile
 taxopy          get_lineage.taxopy.py                           &lt; $infile &gt; $outfile
 taxonkit        taxonkit lineage --threads 1 --delimiter "; "   &lt; $infile &gt; $outfile
 </code></pre>
@@ -512,47 +483,31 @@ is used to automatically running tests and generate data for plotting.</p>
 <pre><code>$ # emptying the buffers cache
 $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
 
-# 43min for me...
 time perl run.pl -n 3 run_benchmark.sh -o bench.get_lineage.tsv
 </code></pre>
 <p>Checking result:</p>
-<pre><code>$ md5sum *.lineage
-4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.ete.lineage
-4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxadb.lineage
-4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxonkit.lineage
-4d89c6cafa9e5fc75b3166d9cc1fd9c7  taxids.big.txt.taxopy.lineage
-4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.ete.lineage
-4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxadb.lineage
-4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxonkit.lineage
-4ef1d6afd94f8d5034ad46670610bfda  taxids.medium.txt.taxopy.lineage
-c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.ete.lineage
-c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxadb.lineage
-c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxonkit.lineage
-c2596fc28068b7dad4af59309c7b8d12  taxids.small.txt.taxopy.lineage
-
+<pre><code>$ md5sum taxids.n*.lineage
 
 # clear
-$ rm *.lineage
-# rm *.out
+$ rm *.lineage *.out
 </code></pre>
-<p>Note that taxonkit returns "root" for taxid 1, while the others return nothing.</p>
 <p>Plotting benchmark result. 
 R libraries <code>dplyr</code>, <code>ggplot2</code>, <code>scales</code>, <code>ggthemes</code>, <code>ggrepel</code> are needed.</p>
 <pre><code># reformat dataset
 # tools: https://github.com/shenwei356/csvtk/
-for f in taxids.*.txt;  do wc -l $f; done \
+
+for f in taxids.n*.txt;  do wc -l $f; done \
     | sort -k 1,1n \
-    | LC_ALL=en_US.UTF-8 awk '{ printf("%s\tn=%'"'"'d\n",$2,$1) }' \
+    | awk '{ print($2"\t"$1) }' \
     &gt; dataset_rename.tsv
 
 cat bench.get_lineage.tsv \
-    | csvtk sort -t -L dataset:&lt;(cut -f 1 dataset_rename.tsv) -k dataset:u \
+    | csvtk sort -t -L dataset:&lt;(cut -f 1 dataset_rename.tsv) -k dataset:u -k app \
     | csvtk replace -t -f dataset -k dataset_rename.tsv -p '(.+)' -r '{kv}' \
     &gt; bench.get_lineage.reformat.tsv
 
-./plot.R -i bench.get_lineage.reformat.tsv --width 8 --height 3.3
-
-# ./plot.R -i bench.get_lineage.reformat.tsv -o bench.get_lineage.reformat.tsv2.png --dpi 600 --width 8 --height 3.3
+./plot2.R -i bench.get_lineage.reformat.tsv --width 6 --height 4 --dpi 600 \
+    --labcolor "log10(queries)" --labshape "Tools"
 </code></pre>
 <p>Result</p>
 <p><img src="bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" /></p>
@@ -563,15 +518,16 @@ $ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &a
 
 
 $ time perl run.pl -n 3 run_benchmark_taxonkit.sh -o bench.taxonkit.tsv
-$ rm *.lineage
+$ rm *.lineage *.out
 </code></pre>
 <p>Plotting benchmark result.</p>
 <pre><code>cat bench.taxonkit.tsv \
-    | csvtk sort -t -L dataset:&lt;(cut -f 1 dataset_rename.tsv) -k dataset:u \
+    | csvtk sort -t -L dataset:&lt;(cut -f 1 dataset_rename.tsv) -k dataset:u -k app \
     | csvtk replace -t -f dataset -k dataset_rename.tsv -p '(.+)' -r '{kv}' \
     &gt; bench.taxonkit.reformat.tsv
 
-./plot2.R -i bench.taxonkit.reformat.tsv --width 8 --height 3.3
+./plot_threads2.R -i bench.taxonkit.reformat.tsv --width 6 --height 4 --dpi 600 \
+    --labcolor "log10(queries)" --labshape "Threads"
 </code></pre>
 <p>Result</p>
 <p><img src="bench.taxonkit.reformat.tsv.png" alt="" width="600" align="center" /></p>
