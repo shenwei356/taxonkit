@@ -75,22 +75,30 @@ And then:
 
 ## Bash-completion
 
-Note: The current version supports Bash only.
-This should work for *nix systems with Bash installed.
+Supported shell: bash|zsh|fish|powershell
 
-Howto:
+Bash:
 
-1. run: `taxonkit genautocomplete`
+    # generate completion shell
+    taxonkit genautocomplete --shell bash
 
-2. create and edit `~/.bash_completion` file if you don't have it.
+    # configure if never did.
+    # install bash-completion if the "complete" command is not found.
+    echo "for bcfile in ~/.bash_completion.d/* ; do source \$bcfile; done" >> ~/.bash_completion
+    echo "source ~/.bash_completion" >> ~/.bashrc
 
-        nano ~/.bash_completion
+Zsh:
 
-    add the following:
+    # generate completion shell
+    taxonkit genautocomplete --shell zsh --file ~/.zfunc/_taxonkit
 
-        for bcfile in ~/.bash_completion.d/* ; do
-          . $bcfile
-        done
+    # configure if never did
+    echo 'fpath=( ~/.zfunc "${fpath[@]}" )' >> ~/.zshrc
+    echo "autoload -U compinit; compinit" >> ~/.zshrc
+
+fish:
+
+    taxonkit genautocomplete --shell fish --file ~/.config/fish/completions/taxonkit.fish
 
 ## Dataset
 
