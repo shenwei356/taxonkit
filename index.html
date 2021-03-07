@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#taxonkit-a-cross-platform-and-efficient-ncbi-taxonomy-toolkit" class="md-skip">
+        <a href="#taxonkit-a-practical-and-efficient-ncbi-taxonomy-toolkit" class="md-skip">
           Skip to content
         </a>
       
@@ -416,6 +416,32 @@
 
 
   <li class="md-nav__item">
+    <a href="chinese/" class="md-nav__link">
+      中文介绍
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="chinese-dev/" class="md-nav__link">
+      开发笔记
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
     <a href="https://github.com/shenwei356/taxid-changelog" class="md-nav__link">
       Taxid-Changelog
     </a>
@@ -587,7 +613,7 @@
                   </a>
                 
                 
-                <h1 id="taxonkit-a-cross-platform-and-efficient-ncbi-taxonomy-toolkit">TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit</h1>
+                <h1 id="taxonkit-a-practical-and-efficient-ncbi-taxonomy-toolkit">TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit</h1>
 <p><img src="taxonkit.jpg" alt="taxonkit" width="600" align="center" /></p>
 <ul>
 <li><strong>Documents:</strong> <a href="https://bioinf.shenwei.me/taxonkit">https://bioinf.shenwei.me/taxonkit</a>
@@ -615,7 +641,7 @@
 <li><a href="#benchmark">Benchmark</a></li>
 <li><a href="#dataset">Dataset</a></li>
 <li><a href="#installation">Installation</a></li>
-<li><a href="#bash-completion">Bash-completion</a></li>
+<li><a href="#command-line-completion">Command-line completion</a></li>
 <li><a href="#citation">Citation</a></li>
 <li><a href="#contact">Contact</a></li>
 <li><a href="#license">License</a></li>
@@ -752,24 +778,27 @@ And then:</p>
 <pre><code>go get -u github.com/shenwei356/taxonkit/taxonkit
 </code></pre>
 <h2 id="bash-completion">Bash-completion</h2>
-<p>Note: The current version supports Bash only.
-This should work for *nix systems with Bash installed.</p>
-<p>Howto:</p>
-<ol>
-<li>
-<p>run: <code>taxonkit genautocomplete</code></p>
-</li>
-<li>
-<p>create and edit <code>~/.bash_completion</code> file if you don't have it.</p>
-<pre><code>nano ~/.bash_completion
+<p>Supported shell: bash|zsh|fish|powershell</p>
+<p>Bash:</p>
+<pre><code># generate completion shell
+taxonkit genautocomplete --shell bash
+
+# configure if never did.
+# install bash-completion if the "complete" command is not found.
+echo "for bcfile in ~/.bash_completion.d/* ; do source \$bcfile; done" &gt;&gt; ~/.bash_completion
+echo "source ~/.bash_completion" &gt;&gt; ~/.bashrc
 </code></pre>
-<p>add the following:</p>
-<pre><code>for bcfile in ~/.bash_completion.d/* ; do
-  . $bcfile
-done
+<p>Zsh:</p>
+<pre><code># generate completion shell
+taxonkit genautocomplete --shell zsh --file ~/.zfunc/_taxonkit
+
+# configure if never did
+echo 'fpath=( ~/.zfunc "${fpath[@]}" )' &gt;&gt; ~/.zshrc
+echo "autoload -U compinit; compinit" &gt;&gt; ~/.zshrc
 </code></pre>
-</li>
-</ol>
+<p>fish:</p>
+<pre><code>taxonkit genautocomplete --shell fish --file ~/.config/fish/completions/taxonkit.fish
+</code></pre>
 <h2 id="citation">Citation</h2>
 <p>If you use TaxonKit in your work, please cite <a href="https://www.biorxiv.org/content/early/2019/01/08/513523">the preprint</a>.</p>
 <h2 id="contact">Contact</h2>
