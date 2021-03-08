@@ -1,10 +1,10 @@
 # TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-<img src="taxonkit.jpg" alt="taxonkit" width="600" align="center" />
+<img src="taxonkit.jpg" alt="taxonkit" width="700" align="center" />
 
 - **Documents:** [https://bioinf.shenwei.me/taxonkit](https://bioinf.shenwei.me/taxonkit)
-([**Usage**](https://bioinf.shenwei.me/taxonkit/usage/),
-[**Tutorial**](https://bioinf.shenwei.me/taxonkit/tutorial/))
+([**Usage&Examples**](https://bioinf.shenwei.me/taxonkit/usage/),
+[**Tutorial**](https://bioinf.shenwei.me/taxonkit/tutorial/), [**中文介绍**](https://bioinf.shenwei.me/taxonkit/chinese/))
 - **Source code:** [https://github.com/shenwei356/taxonkit](https://github.com/shenwei356/taxonkit)
 [![GitHub stars](https://img.shields.io/github/stars/shenwei356/taxonkit.svg?style=social&label=Star&?maxAge=2592000)](https://github.com/shenwei356/taxonkit)
 [![license](https://img.shields.io/github/license/shenwei356/taxonkit.svg?maxAge=2592000)](https://github.com/shenwei356/taxonkit/blob/master/LICENSE)
@@ -16,6 +16,8 @@
 - [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of taxIDss, including deletion, new adding, merge, reuse, and rank/name changes.
 - **[Please cite](#citation):** [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
 - [pytaxonkit](https://github.com/bioforensics/pytaxonkit), Python bindings for TaxonKit.
+
+
 
 ## Table of Contents
 
