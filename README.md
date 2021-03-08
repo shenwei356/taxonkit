@@ -1,6 +1,6 @@
 # TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-<img src="taxonkit.jpg" alt="taxonkit" width="700" align="center" />
+<img src="taxonkit.jpg" alt="taxonkit" width="800" align="center" />
 
 - **Documents:** [https://bioinf.shenwei.me/taxonkit](https://bioinf.shenwei.me/taxonkit)
 ([**Usage&Examples**](https://bioinf.shenwei.me/taxonkit/usage/),
