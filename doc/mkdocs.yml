@@ -5,6 +5,8 @@ pages:
 - Usage: usage.md
 - Tutorial: tutorial.md
 - Benchmark: bench/
+- 中文介绍: chinese.md
+- 开发笔记: chinese-dev.md
 - Taxid-Changelog: https://github.com/shenwei356/taxid-changelog
 - More tools: https://github.com/shenwei356
 

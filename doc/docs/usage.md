@@ -31,6 +31,8 @@ All-in-one command:
     
     mkdir -p $HOME/.taxonkit
     cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
+    
+**Update dataset**: Simply re-download the taxdump files, decompress and override old ones.
 
 ## taxonkit
 
