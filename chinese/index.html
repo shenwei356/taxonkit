@@ -745,7 +745,7 @@ $ echo -ne "349741\n1327037"\
     | csvtk cut -t -f -2 \
     | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
     | csvtk transpose -t \
-    | csvtk pretty -t
+    | csvtk pretty -H -t
 
 taxid     349741                       1327037
 kindom    k__Bacteria                  k__Viruses
@@ -763,7 +763,7 @@ $ echo -ne "2697049"\
     | csvtk cut -t -f -2 \
     | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species,strain \
     | csvtk transpose -t \
-    | csvtk pretty -t
+    | csvtk pretty -H -t
 
 taxid     2697049
 kindom    k__Viruses
@@ -791,7 +791,7 @@ Drosophila      2081351 genus
     | taxonkit filter -L genus -E genus  \
     | taxonkit lineage -r -n -L \
     | csvtk -Ht cut -f 1,3,2 \
-    | csvtk pretty -t
+    | csvtk pretty -H -t
 239934   genus     Akkermansia
 239935   species   Akkermansia muciniphila
 349741   strain    Akkermansia muciniphila ATCC BAA-835
