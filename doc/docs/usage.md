@@ -426,7 +426,7 @@ Examples
 1. Only show name and rank.
 
         $ taxonkit lineage -r -n -L taxids.txt \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         9606        Homo sapiens                                      species
         9913        Bos taurus                                        species
         376619      Francisella tularensis subsp. holarctica LVS      strain
@@ -479,7 +479,7 @@ Examples
             | csvtk unfold -Ht -f 1 -s ";" \
             | taxonkit lineage -r -n -L \
             | csvtk cut -Ht -f 1,3,2 \
-            | csvtk pretty -t 
+            | csvtk pretty -H -t 
         10239     superkingdom   Viruses
         2559587   clade          Riboviria
         2732396   kingdom        Orthornavirae
@@ -813,7 +813,7 @@ Examples:
             | taxonkit reformat -r Unassigned -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" \
             | csvtk cut -H -t -f -2 \
             | head -n 5 \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         
         # 8-level
         $ taxonkit list --ids 1 \
@@ -821,7 +821,7 @@ Examples:
             | taxonkit reformat -r Unassigned -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
             | csvtk cut -H -t -f -2 \
             | head -n 5 \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         
         # Fill and trim
         $ memusg -t -s ' taxonkit list --ids 1 \
@@ -882,7 +882,7 @@ Example data
 1. Default.
 
         # taxonkit name2taxid names.txt
-        $ cat names.txt | taxonkit name2taxid | csvtk pretty -t
+        $ cat names.txt | taxonkit name2taxid | csvtk pretty -H -t
         Homo sapiens                                      9606
         Akkermansia muciniphila ATCC BAA-835              349741
         Akkermansia muciniphila                           239935
@@ -893,7 +893,7 @@ Example data
 
 1. Show rank.
 
-        $ cat names.txt | taxonkit name2taxid --show-rank | csvtk pretty -t
+        $ cat names.txt | taxonkit name2taxid --show-rank | csvtk pretty -H -t
         Homo sapiens                                      9606      species
         Akkermansia muciniphila ATCC BAA-835              349741    strain
         Akkermansia muciniphila                           239935    species
@@ -920,7 +920,7 @@ Example data
             | taxonkit lineage -i 2 -r \
             | taxonkit reformat -i 3 \
             | csvtk cut -H -t -f 1,2,4,5 \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         Drosophila   7215      genus      Eukaryota;Arthropoda;Insecta;Diptera;Drosophilidae;Drosophila;
         Drosophila   32281     subgenus   Eukaryota;Arthropoda;Insecta;Diptera;Drosophilidae;Drosophila;
         Drosophila   2081351   genus      Eukaryota;Basidiomycota;Agaricomycetes;Agaricales;Psathyrellaceae;Drosophila;
@@ -991,7 +991,7 @@ Examples
         349741
         
         
-        $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty -t
+        $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty -H -t
         131567    no rank        cellular organisms
         2         superkingdom   cellular organisms;Bacteria
         1783257   clade          cellular organisms;Bacteria;PVC group
@@ -1009,7 +1009,7 @@ Examples
             | taxonkit filter -E Phylum -E Class \
             | taxonkit lineage -r \
             | csvtk -Ht cut -f 1,3,2 \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         74201    phylum   cellular organisms;Bacteria;PVC group;Verrucomicrobia
         203494   class    cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae
             
@@ -1019,7 +1019,7 @@ Examples
             | taxonkit filter -L genus \
             | taxonkit lineage -r -n -L \
             | csvtk -Ht cut -f 1,3,2 \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         239935   species   Akkermansia muciniphila
         349741   strain    Akkermansia muciniphila ATCC BAA-835
 
@@ -1029,7 +1029,7 @@ Examples
             | taxonkit filter -H phylum \
             | taxonkit lineage -r -n -L \
             | csvtk -Ht cut -f 1,3,2 \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         2   superkingdom   Bacteria
 
 1. "no rank" and "clade" have no rank and can be filter out via `-N/--discard-noranks`.
@@ -1041,7 +1041,7 @@ Examples
             | taxonkit lineage -r -n -L \
             | csvtk cut -Ht -f 1,3,2 \
             | csvtk freq -Ht -f 2 -nr \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         strain       2950
         no rank      149
         serotype     141
@@ -1054,7 +1054,7 @@ Examples
             | taxonkit lineage -r -n -L \
             | csvtk cut -Ht -f 1,3,2 \
             | csvtk freq -Ht -f 2 -nr \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         serotype     141
         serogroup    95
         isolate      1
@@ -1065,8 +1065,8 @@ Examples
         $ cat taxids2.txt \
             | taxonkit filter -L genus -E genus  \
             | taxonkit lineage -r -n -L \
-            | csvtk -Ht cut -f 1,3,2 \
-            | csvtk pretty -t
+            | csvtk cut -Ht -f 1,3,2 \
+            | csvtk pretty -H -t
         239934   genus     Akkermansia
         239935   species   Akkermansia muciniphila
         349741   strain    Akkermansia muciniphila ATCC BAA-835
@@ -1082,7 +1082,7 @@ Examples
             | csvtk unfold -Ht -f 1 -s ";" \
             | taxonkit lineage -r -n -L \
             | csvtk cut -Ht -f 1,3,2 \
-            | csvtk pretty -t 
+            | csvtk pretty -H -t 
         131567    no rank        cellular organisms
         2         superkingdom   Bacteria
         1224      phylum         Proteobacteria
@@ -1134,7 +1134,7 @@ Examples
             | taxonkit filter -L species -E species -N -n \
             | taxonkit lineage -r -n -L \
             | csvtk cut -Ht -f 1,3,2 \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         562       species   Escherichia coli
         2605619   no rank   Escherichia coli O16:H48
         1327037   species   Croceibacter phage P2559Y

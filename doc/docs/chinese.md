@@ -203,7 +203,7 @@ TaxonKit可以用自定义内容替代缺失的分类单元，如用“__”替�
         | csvtk cut -t -f -2 \
         | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
         | csvtk transpose -t \
-        | csvtk pretty -t
+        | csvtk pretty -H -t
     
     taxid     349741                       1327037
     kindom    k__Bacteria                  k__Viruses
@@ -221,7 +221,7 @@ TaxonKit可以用自定义内容替代缺失的分类单元，如用“__”替�
         | csvtk cut -t -f -2 \
         | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species,strain \
         | csvtk transpose -t \
-        | csvtk pretty -t
+        | csvtk pretty -H -t
     
     taxid     2697049
     kindom    k__Viruses
@@ -254,7 +254,7 @@ filter可以按**分类学水平范围**过滤TaxIDs，注意，不仅仅是特�
         | taxonkit filter -L genus -E genus  \
         | taxonkit lineage -r -n -L \
         | csvtk -Ht cut -f 1,3,2 \
-        | csvtk pretty -t
+        | csvtk pretty -H -t
     239934   genus     Akkermansia
     239935   species   Akkermansia muciniphila
     349741   strain    Akkermansia muciniphila ATCC BAA-835

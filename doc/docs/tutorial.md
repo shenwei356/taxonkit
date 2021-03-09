@@ -25,7 +25,7 @@ The command below works on Windows with help of [csvtk](http://bioinf.shenwei.me
         | csvtk unfold -Ht -f 1 -s ";" \
         | taxonkit lineage -r -n -L \
         | csvtk cut -Ht -f 1,3,2 \
-        | csvtk pretty -t 
+        | csvtk pretty -Ht 
     
     10239     superkingdom   Viruses
     2559587   clade          Riboviria
@@ -96,7 +96,7 @@ Replace missing ranks with `Unassigned` and output tab-delimited format.
         | taxonkit lineage \
         | taxonkit reformat -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | cut -f 1,3-10 \
-        | csvtk pretty -t 
+        | csvtk pretty -H -t 
     376619    Bacteria   Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae      Francisella                  Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
     349741    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
     239935    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Unassigned
@@ -114,7 +114,7 @@ Fill missing ranks and add prefixes.
         | taxonkit lineage \
         | taxonkit reformat -F -P -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | cut -f 1,3-10 \
-        | csvtk pretty -t         
+        | csvtk pretty -H -t         
     376619    k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Thiotrichales                 f__Francisellaceae                g__Francisella                       s__Francisella tularensis                                  t__Francisella tularensis subsp. holarctica LVS
     349741    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__Akkermansia muciniphila ATCC BAA-835
     239935    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__unclassified Akkermansia muciniphila subspecies/strain
@@ -168,7 +168,7 @@ where rank of the closest higher node is still lower than rank cutoff**.
     $ pigz -cd result.tsv.gz \
         | csvtk grep -t -f taxid -p 2697049 \
         | csvtk transpose -t \
-        | csvtk pretty -t 
+        | csvtk pretty -H -t 
     taxid     2697049
     rank      no rank
     name      Severe acute respiratory syndrome coronavirus 2
@@ -547,7 +547,7 @@ You can change the taxID of interest.
         $ time taxonkit list --ids 1 \
             | taxonkit lineage -L -r \
             | csvtk freq -H -t -f 2 -nr \
-            | csvtk pretty -t
+            | csvtk pretty -H -t
         
         species            1879659
         no rank            222743
