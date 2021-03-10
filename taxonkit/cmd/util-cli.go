@@ -52,7 +52,7 @@ type Config struct {
 }
 
 func errDataNotFound(dataDir string) {
-	checkError(fmt.Errorf(`taxonomy data not found, please download and decompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp", "nodes.dmp", "delnodes.dmp", and "merged.dmp" to %s`, dataDir))
+	checkError(fmt.Errorf(`taxonomy data not found, please download and uncompress ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz, and copy "names.dmp", "nodes.dmp", "delnodes.dmp", and "merged.dmp" to %s`, dataDir))
 }
 
 func getConfigs(cmd *cobra.Command) Config {

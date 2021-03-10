@@ -18,7 +18,7 @@ Table of Contents
 
 ## Before use
 
-1. Download and decompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+1. Download and uncompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
 2. Copy `names.dmp`, `nodes.dmp`, `delnodes.dmp` and `merged.dmp` to data directory: `$HOME/.taxonkit`,
 e.g., `/home/shenwei/.taxonkit` ,
 3. Optionally copy to some other directories, and later you can refer to using flag `--data-dir`,
@@ -32,7 +32,7 @@ All-in-one command:
     mkdir -p $HOME/.taxonkit
     cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
     
-**Update dataset**: Simply re-download the taxdump files, decompress and override old ones.
+**Update dataset**: Simply re-download the taxdump files, uncompress and override old ones.
 
 ## taxonkit
 
@@ -49,7 +49,7 @@ Citation   : https://www.biorxiv.org/content/early/2019/01/08/513523
 
 Dataset:
 
-    Please download and decompress "taxdump.tar.gz":
+    Please download and uncompress "taxdump.tar.gz":
     ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
     and copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data directory:
@@ -1303,7 +1303,7 @@ Usage:
   taxonkit taxid-changelog [flags]
 
 Flags:
-  -i, --archive string   directory containing decompressed dumped archives
+  -i, --archive string   directory containing uncompressed dumped archives
   -h, --help             help for taxid-changelog
   
 ```

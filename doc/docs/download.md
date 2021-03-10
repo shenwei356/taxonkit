@@ -47,7 +47,7 @@ Windows|**64-bit**|[**taxonkit_windows_amd64.exe.tar.gz**](https://github.com/sh
 
 Just [download](https://github.com/shenwei356/taxonkit/releases) compressed
 executable file of your operating system,
-and decompress it with `tar -zxvf *.tar.gz` command or other tools.
+and uncompress it with `tar -zxvf *.tar.gz` command or other tools.
 And then:
 
 1. **For Linux-like systems**
@@ -102,7 +102,7 @@ fish:
 
 ## Dataset
 
-1. Download and decompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+1. Download and uncompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
 2. Copy `names.dmp`, `nodes.dmp`, `delnodes.dmp` and `merged.dmp` to data directory: `$HOME/.taxonkit`,
 e.g., `/home/shenwei/.taxonkit` ,
 3. Optionally copy to some other directories, and later you can refer to using flag `--data-dir`,
@@ -116,7 +116,7 @@ All-in-one command:
     mkdir -p $HOME/.taxonkit
     cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
     
-**Update dataset**: Simply re-download the taxdump files, decompress and override old ones.
+**Update dataset**: Simply re-download the taxdump files, uncompress and override old ones.
 
 ## Previous Versions
 

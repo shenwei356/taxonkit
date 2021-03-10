@@ -66,7 +66,7 @@ Citation   : https://www.biorxiv.org/content/early/2019/01/08/513523
 
 Dataset:
 
-    Please download and decompress "taxdump.tar.gz":
+    Please download and uncompress "taxdump.tar.gz":
     ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
     and copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data directory:

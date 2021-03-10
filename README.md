@@ -41,8 +41,8 @@
 
 - **Easy to install** ([download](http://bioinf.shenwei.me/taxonkit/download/))
     - Statically linked executable binaries for multiple platforms (Linux/Windows/macOS, amd64/arm64) 
-    - Light weight and out-of-the-box, no dependencies, no compilation, no configuration*
-    - No database building, just download [NCBI taxonomy data](ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz) and uncompress to `$HOME/.taxonkit`
+    - Light weight and out-of-the-box, no dependencies, no compilation, no configuration
+    - No database building, just download [NCBI taxonomy data](https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz) and uncompress to `$HOME/.taxonkit`
 - **Easy to use** ([usages and examples](http://bioinf.shenwei.me/taxonkit/usage/))
     - Supporting [bash-completion](#bash-completion)
     - Fast (see [benchmark](#benchmark)), multiple-CPUs supported, most operations cost 2-10s.
@@ -52,7 +52,7 @@
     - [Usage and examples](http://bioinf.shenwei.me/taxonkit/usage/)
     - Featured command: [tracking monthly changelog of all taxIDs](https://github.com/shenwei356/taxid-changelog)
     - Featured command: [reformating lineage into format of seven-level ("superkingdom, phylum, class, order, family, genus, species"](https://bioinf.shenwei.me/taxonkit/usage/#reformat)
-    - Featured command: [filtering taxiDs by rank range](http://bioinf.shenwei.me/taxonkit/usage/#filter), e.g., genus or lower ranks.
+    - Featured command: [filtering taxiDs by a rank range](http://bioinf.shenwei.me/taxonkit/usage/#filter), e.g., at or below genus rank.
 
 ## Subcommands
 
@@ -76,7 +76,7 @@ Subcommand                                                                    |F
 
 ## Dataset
 
-1. Download and decompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+1. Download and uncompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
 2. Copy `names.dmp`, `nodes.dmp`, `delnodes.dmp` and `merged.dmp` to data directory: `$HOME/.taxonkit`,
 e.g., `/home/shenwei/.taxonkit` ,
 3. Optionally copy to some other directories, and later you can refer to using flag `--data-dir`,
@@ -90,7 +90,7 @@ All-in-one command:
     mkdir -p $HOME/.taxonkit
     cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
     
-**Update dataset**: Simply re-download the taxdump files, decompress and override old ones.
+**Update dataset**: Simply re-download the taxdump files, uncompress and override old ones.
 
 ## Installation
 
@@ -104,7 +104,7 @@ Go to [Download Page](https://bioinf.shenwei.me/taxonkit/download) for more down
 
 Just [download](https://github.com/shenwei356/taxonkit/releases) compressed
 executable file of your operating system,
-and decompress it with `tar -zxvf *.tar.gz` command or other tools.
+and uncompress it with `tar -zxvf *.tar.gz` command or other tools.
 And then:
 
 1. **For Linux-like systems**

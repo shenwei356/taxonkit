@@ -117,7 +117,7 @@ Output format (CSV):
 func init() {
 	RootCmd.AddCommand(taxidlogCmd)
 
-	taxidlogCmd.Flags().StringP("archive", "i", "", "directory containing decompressed dumped archives")
+	taxidlogCmd.Flags().StringP("archive", "i", "", "directory containing uncompressed dumped archives")
 }
 
 // TaxidChangeCode represents code of taxid change type
