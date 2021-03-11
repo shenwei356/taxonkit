@@ -56,12 +56,13 @@ Example data.
     2697049
 
     
-Format to seven-level ranks ("superkingdom phylum class order family genus species").
+Format to 7-level ranks ("superkingdom phylum class order family genus species").
 
     $ cat taxids3.txt \
         | taxonkit lineage \
         | taxonkit reformat \
         | cut -f 1,3
+    
     376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
     349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
     239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
@@ -73,12 +74,13 @@ Format to seven-level ranks ("superkingdom phylum class order family genus speci
     2605619 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
     2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Severe acute respiratory syndrome-related coronavirus
 
-Format to eight-level ranks ("superkingdom phylum class order family genus species subspecies/rank").
+Format to 8-level ranks ("superkingdom phylum class order family genus species subspecies/rank").
 
     $ cat taxids3.txt \
         | taxonkit lineage \
         | taxonkit reformat -f "{k};{p};{c};{o};{f};{g};{s};{t}" \
         | cut -f 1,3
+    
     376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica LVS
     349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
     239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;
@@ -97,6 +99,7 @@ Replace missing ranks with `Unassigned` and output tab-delimited format.
         | taxonkit reformat -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | cut -f 1,3-10 \
         | csvtk pretty -H -t 
+        
     376619    Bacteria   Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae      Francisella                  Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
     349741    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
     239935    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Unassigned
@@ -114,7 +117,8 @@ Fill missing ranks and add prefixes.
         | taxonkit lineage \
         | taxonkit reformat -F -P -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | cut -f 1,3-10 \
-        | csvtk pretty -H -t         
+        | csvtk pretty -H -t 
+        
     376619    k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Thiotrichales                 f__Francisellaceae                g__Francisella                       s__Francisella tularensis                                  t__Francisella tularensis subsp. holarctica LVS
     349741    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__Akkermansia muciniphila ATCC BAA-835
     239935    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__unclassified Akkermansia muciniphila subspecies/strain
@@ -135,8 +139,10 @@ as subspecies/strain name, if which rank is lower than "species"**.
         | taxonkit reformat -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | cut -f 1,3,10,11 \
         | csvtk add-header -t -n "taxid,rank,species,strain" \
-        | csvtk pretty -t   
+        | csvtk pretty -t
+        
     taxid     rank         species                                                 strain
+    -------   ----------   -----------------------------------------------------   ------------------------------------------------------------------------------
     376619    strain       Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
     349741    strain       Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
     239935    species      Akkermansia muciniphila                                 unclassified Akkermansia muciniphila subspecies/strain
@@ -169,6 +175,7 @@ where rank of the closest higher node is still lower than rank cutoff**.
         | csvtk grep -t -f taxid -p 2697049 \
         | csvtk transpose -t \
         | csvtk pretty -H -t 
+        
     taxid     2697049
     rank      no rank
     name      Severe acute respiratory syndrome coronavirus 2
@@ -184,48 +191,100 @@ where rank of the closest higher node is still lower than rank cutoff**.
     
 ## Parsing kraken/bracken result
 
-Example Data.
+Example Data
 
-    $ head -n 10  test_bracken_species.kreport 
-    100.00  11430773        0       R       1       root
-    92.12   10530410        0       R1      131567    cellular organisms
-    92.06   10522651        0       D       2           Bacteria
-    92.04   10520821        0       P       1224          Proteobacteria
-    92.02   10518133        0       C       1236            Gammaproteobacteria
-    92.00   10516208        0       O       91347             Enterobacterales
-    91.81   10494626        0       F       543                 Enterobacteriaceae
-    86.73   9914368 0       G       561                   Escherichia
-    84.84   9698064 9698064 S       562                     Escherichia coli
-    0.93    106494  106494  S       208962                  Escherichia albertii
+- [SRS014459-Stool.fasta.gz](https://github.com/biobakery/biobakery/raw/master/demos/biobakery_demos/data/metaphlan2/input/SRS014459-Stool.fasta.gz)
+
+
+Run Kraken2 and Bracken
+
+    KRAKEN_DB=/home/shenwei/ws/db/kraken/k2_pluspf
+    THREADS=16
+
+    CLASSIFICATION_LVL=S
+    THRESHOLD=10
+
+    READ_LEN=100
+    SAMPLE=SRS014459-Stool.fasta.gz
+
+    BRACKEN_OUTPUT_FILE=$SAMPLE
+
+    kraken2 --db ${KRAKEN_DB} --threads ${THREADS} -report ${SAMPLE}.kreport $SAMPLE > ${SAMPLE}.kraken
+
+    est_abundance.py -i ${SAMPLE}.kreport -k ${KRAKEN_DB}/database${READ_LEN}mers.kmer_distrib \
+        -l ${CLASSIFICATION_LVL} -t ${THRESHOLD} -o ${BRACKEN_OUTPUT_FILE}.bracken
+
+Orignial format
+
+    $ head -n 15 SRS014459-Stool.fasta.gz_bracken_species.kreport
+    100.00  9491    0       R       1       root
+    99.85   9477    0       R1      131567    cellular organisms
+    99.85   9477    0       D       2           Bacteria
+    66.08   6271    0       D1      1783270       FCB group
+    66.08   6271    0       D2      68336           Bacteroidetes/Chlorobi group
+    66.08   6271    0       P       976               Bacteroidetes
+    66.08   6271    0       C       200643              Bacteroidia
+    66.08   6271    0       O       171549                Bacteroidales
+    34.45   3270    0       F       815                     Bacteroidaceae
+    34.45   3270    0       G       816                       Bacteroides
+    10.43   990     990     S       246787                      Bacteroides cellulosilyticus
+    7.98    757     757     S       28116                       Bacteroides ovatus
+    3.10    293     0       G1      2646097                     unclassified Bacteroides
+    1.06    100     100     S       2755405                       Bacteroides sp. CACC 737
+    0.49    46      46      S       2650157                       Bacteroides sp. HF-5287
+    
+Converting to MetaPhlAn2 format
+
+    $ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
+        | csvtk cut -Ht -f 5,1 \
+        | taxonkit lineage \
+        | taxonkit reformat -i 3 -P -f "{k}|{p}|{c}|{o}|{f}|{g}|{s}" \
+        | csvtk cut -Ht -f 4,2 \
+        | csvtk replace -Ht -p "(\|[kpcofgs]__)+$" \
+        | csvtk uniq -Ht \
+        | csvtk grep -Ht -p k__ -v \
+        > SRS014459-Stool.fasta.gz_bracken_species.kreport.format
+        
+    $ head -n 10 SRS014459-Stool.fasta.gz_bracken_species.kreport.format
+    
+    k__Bacteria     99.85
+    k__Bacteria|p__Bacteroidetes    66.08
+    k__Bacteria|p__Bacteroidetes|c__Bacteroidia     66.08
+    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales    66.08
+    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae  34.45
+    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides   34.45
+    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides cellulosilyticus   10.43
+    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides ovatus     7.98
+    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. CACC 737       1.06
+    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. HF-5287        0.49
+
 
 Save taxon proportion and taxid, and get lineage, name and rank.
 
-    $ time cat test_bracken_species.kreport \
+    $ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
         | csvtk cut -Ht -f 1,5 \
         | taxonkit lineage -i 2 -n -r \
         | csvtk cut -Ht -f 1,2,5,4,3 \
-        | head -n 10 
+        | head -n 10 \
+        | csvtk pretty -Ht
         
-    100.00  1       no rank root    root
-    92.12   131567  no rank cellular organisms      cellular organisms
-    92.06   2       superkingdom    Bacteria        cellular organisms;Bacteria
-    92.04   1224    phylum  Proteobacteria  cellular organisms;Bacteria;Proteobacteria
-    92.02   1236    class   Gammaproteobacteria     cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria
-    92.00   91347   order   Enterobacterales        cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales
-    91.81   543     family  Enterobacteriaceae      cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae
-    86.73   561     genus   Escherichia     cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia
-    84.84   562     species Escherichia coli        cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
-    0.93    208962  species Escherichia albertii    cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia albertii
+    100.00   1         no rank        root                           root
+    99.85    131567    no rank        cellular organisms             cellular organisms
+    99.85    2         superkingdom   Bacteria                       cellular organisms;Bacteria
+    66.08    1783270   clade          FCB group                      cellular organisms;Bacteria;FCB group
+    66.08    68336     clade          Bacteroidetes/Chlorobi group   cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group
+    66.08    976       phylum         Bacteroidetes                  cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes
+    66.08    200643    class          Bacteroidia                    cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia
+    66.08    171549    order          Bacteroidales                  cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales
+    34.45    815       family         Bacteroidaceae                 cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae
+    34.45    816       genus          Bacteroides                    cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides
 
-    real    0m1.426s
-    user    0m2.993s
-    sys     0m0.260s
 
 Only save species or lower level and get lineage in format of "superkingdom phylum class order family genus species".
 
-    $ time cat test_bracken_species.kreport \
+    $ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
         | csvtk cut -Ht -f 1,5 \
-        | taxonkit filter -E species -L species -i 2 \
+        | taxonkit filter -N -E species -L species -i 2 \
         | taxonkit lineage -i 2 -n -r \
         | taxonkit reformat -i 3 -f "{k};{p};{c};{o};{f};{g};{s}" \
         | csvtk cut -Ht -f 1,2,5,4,6 \
@@ -233,21 +292,17 @@ Only save species or lower level and get lineage in format of "superkingdom phyl
         | head -n 10 \
         | csvtk pretty -t
         
-    abundance   taxid     name      rank                     lineage
-    84.84       562       species   Escherichia coli         Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
-    0.93        208962    species   Escherichia albertii     Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia albertii
-    0.90        564       species   Escherichia fergusonii   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia fergusonii
-    0.05        2725997   species   Escherichia sp. SCLE84   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. SCLE84
-    0.00        2044467   species   Escherichia sp. E4742    Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. E4742
-    0.01        1499973   species   Escherichia marmotae     Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia marmotae
-    2.68        621       species   Shigella boydii          Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella boydii
-    0.04        622       species   Shigella dysenteriae     Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella dysenteriae
-    0.98        28901     species   Salmonella enterica      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Salmonella;Salmonella enterica
-
-    real    0m4.142s
-    user    0m12.874s
-    sys     0m0.808s
-
+    abundance   taxid     rank      name                           lineage
+    ---------   -------   -------   ----------------------------   --------------------------------------------------------------------------------------------------------
+    10.43       246787    species   Bacteroides cellulosilyticus   Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides cellulosilyticus
+    7.98        28116     species   Bacteroides ovatus             Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides ovatus
+    1.06        2755405   species   Bacteroides sp. CACC 737       Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. CACC 737
+    0.49        2650157   species   Bacteroides sp. HF-5287        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. HF-5287
+    0.99        2528203   species   Bacteroides sp. A1C1           Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. A1C1
+    0.28        2763022   species   Bacteroides sp. M10            Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. M10
+    0.16        2650158   species   Bacteroides sp. HF-5141        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. HF-5141
+    0.12        2715212   species   Bacteroides sp. CBA7301        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. CBA7301
+    5.10        817       species   Bacteroides fragilis           Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides fragilis
 
 ## Making nr blastdb for specific taxids
 
@@ -599,7 +654,35 @@ You can change the taxID of interest.
         user    0m15.897s
         sys     0m1.010s
 
+1. Ranks of taxa at or below species.
 
+        $ taxonkit list --ids 1 \
+            | taxonkit filter --lower-than species --equal-to species \
+            | taxonkit lineage -L -r  \
+            | csvtk freq -Ht -nr -f 2 \
+            | csvtk add-header -t -n rank,count \
+            | csvtk pretty -t
+
+        rank              count
+        ---------------   -------
+        species           1880044
+        no rank           222756
+        strain            44483
+        subspecies        25171
+        varietas          8524
+        isolate           1319
+        serotype          1216
+        clade             885
+        forma specialis   741
+        forma             564
+        serogroup         138
+        genotype          20
+        biotype           17
+        morph             12
+        pathogroup        5
+        subvariety        5
+
+        
 <div id="disqus_thread"></div>
 <script>
 
