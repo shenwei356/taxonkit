@@ -233,7 +233,7 @@ Orignial format
     1.06    100     100     S       2755405                       Bacteroides sp. CACC 737
     0.49    46      46      S       2650157                       Bacteroides sp. HF-5287
     
-Converting to MetaPhlAn2 format
+Converting to MetaPhlAn2 format. (Similar to [kreport2mpa.py](https://github.com/jenniferlu717/KrakenTools/blob/master/kreport2mpa.py))
 
     $ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
         | csvtk cut -Ht -f 5,1 \
@@ -241,6 +241,7 @@ Converting to MetaPhlAn2 format
         | taxonkit reformat -i 3 -P -f "{k}|{p}|{c}|{o}|{f}|{g}|{s}" \
         | csvtk cut -Ht -f 4,2 \
         | csvtk replace -Ht -p "(\|[kpcofgs]__)+$" \
+        | csvtk replace -Ht -p "\|[kpcofgs]__\|" -r "|" \
         | csvtk uniq -Ht \
         | csvtk grep -Ht -p k__ -v \
         > SRS014459-Stool.fasta.gz_bracken_species.kreport.format
@@ -258,6 +259,29 @@ Converting to MetaPhlAn2 format
     k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. CACC 737       1.06
     k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. HF-5287        0.49
 
+Converting to Qiime format
+
+    $ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
+        | csvtk cut -Ht -f 5,1 \
+        | taxonkit lineage \
+        | taxonkit reformat -i 3 -P -f "{k}; {p}; {c}; {o}; {f}; {g}; {s}" \
+        | csvtk cut -Ht -f 4,2 \
+        | csvtk replace -Ht -p "(; [kpcofgs]__)+$" \
+        | csvtk replace -Ht -p "; [kpcofgs]__; " -r "; " \
+        | csvtk uniq -Ht \
+        | csvtk grep -Ht -p k__ -v \
+        | head -n 10 
+        
+    k__Bacteria     99.85
+    k__Bacteria; p__Bacteroidetes   66.08
+    k__Bacteria; p__Bacteroidetes; c__Bacteroidia   66.08
+    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales 66.08
+    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae      34.45
+    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides      34.45
+    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides cellulosilyticus     10.43
+    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides ovatus       7.98
+    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides sp. CACC 737 1.06
+    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides sp. HF-5287  0.49
 
 Save taxon proportion and taxid, and get lineage, name and rank.
 

@@ -25,10 +25,10 @@ k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Tannerellaceae	1
 k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Tannerellaceae|g__Parabacteroides	15.16
 k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Tannerellaceae|g__Parabacteroides|s__Parabacteroides distasonis	12.92
 k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Tannerellaceae|g__Parabacteroides|s__Parabacteroides sp. CT06	2.23
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__|g__Phocaeicola	12.33
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__|g__Phocaeicola|s__Phocaeicola vulgatus	10.38
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__|g__Phocaeicola|s__Phocaeicola dorei	1.77
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__|g__Phocaeicola|s__Phocaeicola salanitronis	0.18
+k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|g__Phocaeicola	12.33
+k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|g__Phocaeicola|s__Phocaeicola vulgatus	10.38
+k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|g__Phocaeicola|s__Phocaeicola dorei	1.77
+k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|g__Phocaeicola|s__Phocaeicola salanitronis	0.18
 k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Rikenellaceae	2.91
 k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Rikenellaceae|g__Alistipes	2.91
 k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Rikenellaceae|g__Alistipes|s__Alistipes onderdonkii	1.24
@@ -44,8 +44,8 @@ k__Bacteria|p__Firmicutes	33.53
 k__Bacteria|p__Firmicutes|c__Clostridia	32.95
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales	32.95
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Lachnospiraceae	17.87
-k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Lachnospiraceae|g__|s__Lachnospiraceae bacterium GAM79	11.84
-k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Lachnospiraceae|g__|s__Lachnospiraceae bacterium Choco86	0.83
+k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Lachnospiraceae|s__Lachnospiraceae bacterium GAM79	11.84
+k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Lachnospiraceae|s__Lachnospiraceae bacterium Choco86	0.83
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Lachnospiraceae|g__Roseburia	2.45
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Lachnospiraceae|g__Roseburia|s__Roseburia intestinalis	1.51
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Lachnospiraceae|g__Roseburia|s__Roseburia hominis	0.94
@@ -74,7 +74,7 @@ k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Oscillospiraceae|g__
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Oscillospiraceae|g__Oscillibacter	0.33
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Oscillospiraceae|g__Oscillibacter|s__Oscillibacter sp. NSJ-62	0.11
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Oscillospiraceae|g__Oscillibacter|s__Oscillibacter sp. PEA192	0.22
-k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__|g__|s__Clostridiales bacterium CCNA10	0.48
+k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|g__|s__Clostridiales bacterium CCNA10	0.48
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Christensenellaceae	0.33
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Christensenellaceae|g__Christensenella	0.33
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Christensenellaceae|g__Christensenella|s__Christensenella minuta	0.33
@@ -84,14 +84,14 @@ k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Peptostreptococcacea
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Eubacteriaceae	0.22
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Eubacteriaceae|g__Eubacterium	0.22
 k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__Eubacteriaceae|g__Eubacterium|s__Eubacterium sp. NSJ-61	0.22
-k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__|g__Massilistercora	0.18
-k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|f__|g__Massilistercora|s__Massilistercora timonensis	0.18
+k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|g__Massilistercora	0.18
+k__Bacteria|p__Firmicutes|c__Clostridia|o__Clostridiales|g__Massilistercora|s__Massilistercora timonensis	0.18
 k__Bacteria|p__Firmicutes|c__Erysipelotrichia	0.59
 k__Bacteria|p__Firmicutes|c__Erysipelotrichia|o__Erysipelotrichales	0.59
 k__Bacteria|p__Firmicutes|c__Erysipelotrichia|o__Erysipelotrichales|f__Erysipelotrichaceae	0.59
 k__Bacteria|p__Firmicutes|c__Erysipelotrichia|o__Erysipelotrichales|f__Erysipelotrichaceae|g__Faecalitalea	0.26
 k__Bacteria|p__Firmicutes|c__Erysipelotrichia|o__Erysipelotrichales|f__Erysipelotrichaceae|g__Faecalitalea|s__Faecalitalea cylindroides	0.26
-k__Bacteria|p__Firmicutes|c__Erysipelotrichia|o__Erysipelotrichales|f__Erysipelotrichaceae|g__|s__Erysipelotrichaceae bacterium GAM147	0.17
+k__Bacteria|p__Firmicutes|c__Erysipelotrichia|o__Erysipelotrichales|f__Erysipelotrichaceae|s__Erysipelotrichaceae bacterium GAM147	0.17
 k__Bacteria|p__Firmicutes|c__Erysipelotrichia|o__Erysipelotrichales|f__Erysipelotrichaceae|g__Longibaculum	0.16
 k__Bacteria|p__Firmicutes|c__Erysipelotrichia|o__Erysipelotrichales|f__Erysipelotrichaceae|g__Longibaculum|s__Longibaculum sp. KGMB06250	0.16
 k__Bacteria|p__Actinobacteria	0.11
