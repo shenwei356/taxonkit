@@ -611,7 +611,7 @@
 <h4 id="method-1-download-binaries-latest-stabledev-version">Method 1: Download binaries (latest stable/dev version)</h4>
 <p>Just <a href="https://github.com/shenwei356/taxonkit/releases">download</a> compressed
 executable file of your operating system,
-and decompress it with <code>tar -zxvf *.tar.gz</code> command or other tools.
+and uncompress it with <code>tar -zxvf *.tar.gz</code> command or other tools.
 And then:</p>
 <ol>
 <li>
@@ -666,7 +666,7 @@ echo "autoload -U compinit; compinit" &gt;&gt; ~/.zshrc
 </code></pre>
 <h2 id="dataset">Dataset</h2>
 <ol>
-<li>Download and decompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
+<li>Download and uncompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
 <li>Copy <code>names.dmp</code>, <code>nodes.dmp</code>, <code>delnodes.dmp</code> and <code>merged.dmp</code> to data directory: <code>$HOME/.taxonkit</code>,
 e.g., <code>/home/shenwei/.taxonkit</code> ,</li>
 <li>Optionally copy to some other directories, and later you can refer to using flag <code>--data-dir</code>,
@@ -679,7 +679,7 @@ tar -zxvf taxdump.tar.gz
 mkdir -p $HOME/.taxonkit
 cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 </code></pre>
-<p><strong>Update dataset</strong>: Simply re-download the taxdump files, decompress and override old ones.</p>
+<p><strong>Update dataset</strong>: Simply re-download the taxdump files, uncompress and override old ones.</p>
 <h2 id="previous-versions">Previous Versions</h2>
 <ul>
 <li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.7.1">TaxonKit v0.7.1</a>

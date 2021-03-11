@@ -652,8 +652,8 @@
 <ul>
 <li><strong>Easy to install</strong> (<a href="http://bioinf.shenwei.me/taxonkit/download/">download</a>)<ul>
 <li>Statically linked executable binaries for multiple platforms (Linux/Windows/macOS, amd64/arm64) </li>
-<li>Light weight and out-of-the-box, no dependencies, no compilation, no configuration*</li>
-<li>No database building, just download <a href="ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz">NCBI taxonomy data</a> and uncompress to <code>$HOME/.taxonkit</code></li>
+<li>Light weight and out-of-the-box, no dependencies, no compilation, no configuration</li>
+<li>No database building, just download <a href="https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz">NCBI taxonomy data</a> and uncompress to <code>$HOME/.taxonkit</code></li>
 </ul>
 </li>
 <li><strong>Easy to use</strong> (<a href="http://bioinf.shenwei.me/taxonkit/usage/">usages and examples</a>)<ul>
@@ -667,7 +667,7 @@
 <li><a href="http://bioinf.shenwei.me/taxonkit/usage/">Usage and examples</a></li>
 <li>Featured command: <a href="https://github.com/shenwei356/taxid-changelog">tracking monthly changelog of all taxIDs</a></li>
 <li>Featured command: <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat">reformating lineage into format of seven-level ("superkingdom, phylum, class, order, family, genus, species"</a></li>
-<li>Featured command: <a href="http://bioinf.shenwei.me/taxonkit/usage/#filter">filtering taxiDs by rank range</a>, e.g., genus or lower ranks.</li>
+<li>Featured command: <a href="http://bioinf.shenwei.me/taxonkit/usage/#filter">filtering taxiDs by a rank range</a>, e.g., at or below genus rank.</li>
 </ul>
 </li>
 </ul>
@@ -725,7 +725,7 @@
 <p><img src="bench/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" /></p>
 <h2 id="dataset">Dataset</h2>
 <ol>
-<li>Download and decompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
+<li>Download and uncompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
 <li>Copy <code>names.dmp</code>, <code>nodes.dmp</code>, <code>delnodes.dmp</code> and <code>merged.dmp</code> to data directory: <code>$HOME/.taxonkit</code>,
 e.g., <code>/home/shenwei/.taxonkit</code> ,</li>
 <li>Optionally copy to some other directories, and later you can refer to using flag <code>--data-dir</code>,
@@ -738,7 +738,7 @@ tar -zxvf taxdump.tar.gz
 mkdir -p $HOME/.taxonkit
 cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 </code></pre>
-<p><strong>Update dataset</strong>: Simply re-download the taxdump files, decompress and override old ones.</p>
+<p><strong>Update dataset</strong>: Simply re-download the taxdump files, uncompress and override old ones.</p>
 <h2 id="installation">Installation</h2>
 <p>Go to <a href="https://bioinf.shenwei.me/taxonkit/download">Download Page</a> for more download options and changelogs.</p>
 <p><code>TaxonKit</code> is implemented in <a href="https://golang.org/">Go</a> programming language,
@@ -747,7 +747,7 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h4 id="method-1-download-binaries-latest-stabledev-version">Method 1: Download binaries (latest stable/dev version)</h4>
 <p>Just <a href="https://github.com/shenwei356/taxonkit/releases">download</a> compressed
 executable file of your operating system,
-and decompress it with <code>tar -zxvf *.tar.gz</code> command or other tools.
+and uncompress it with <code>tar -zxvf *.tar.gz</code> command or other tools.
 And then:</p>
 <ol>
 <li>

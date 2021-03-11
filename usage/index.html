@@ -551,7 +551,7 @@
 
 <h2 id="before-use">Before use</h2>
 <ol>
-<li>Download and decompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
+<li>Download and uncompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
 <li>Copy <code>names.dmp</code>, <code>nodes.dmp</code>, <code>delnodes.dmp</code> and <code>merged.dmp</code> to data directory: <code>$HOME/.taxonkit</code>,
 e.g., <code>/home/shenwei/.taxonkit</code> ,</li>
 <li>Optionally copy to some other directories, and later you can refer to using flag <code>--data-dir</code>,
@@ -564,7 +564,7 @@ tar -zxvf taxdump.tar.gz
 mkdir -p $HOME/.taxonkit
 cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 </code></pre>
-<p><strong>Update dataset</strong>: Simply re-download the taxdump files, decompress and override old ones.</p>
+<p><strong>Update dataset</strong>: Simply re-download the taxdump files, uncompress and override old ones.</p>
 <h2 id="taxonkit">taxonkit</h2>
 <pre><code class="language-text">TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
 
@@ -578,7 +578,7 @@ Citation   : https://www.biorxiv.org/content/early/2019/01/08/513523
 
 Dataset:
 
-    Please download and decompress &quot;taxdump.tar.gz&quot;:
+    Please download and uncompress &quot;taxdump.tar.gz&quot;:
     ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
     and copy &quot;names.dmp&quot;, &quot;nodes.dmp&quot;, &quot;delnodes.dmp&quot; and &quot;merged.dmp&quot; to data directory:
@@ -1827,7 +1827,7 @@ Usage:
   taxonkit taxid-changelog [flags]
 
 Flags:
-  -i, --archive string   directory containing decompressed dumped archives
+  -i, --archive string   directory containing uncompressed dumped archives
   -h, --help             help for taxid-changelog
 
 </code></pre>
