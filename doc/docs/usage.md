@@ -37,9 +37,9 @@ All-in-one command:
 ## taxonkit
 
 ```text
-TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
+TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.7.2
+Version: 0.8.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -63,7 +63,7 @@ Usage:
 
 Available Commands:
   filter          Filter TaxIds by taxonomic rank range
-  genautocomplete generate shell autocompletion script
+  genautocomplete generate shell autocompletion script (bash|zsh|fish|powershell)
   help            Help about any command
   lca             Compute lowest common ancestor (LCA) for TaxIds
   lineage         Query taxonomic lineage of given TaxIds
@@ -290,8 +290,9 @@ Output:
      - New TaxIds for merged TaxIds, provided by "merged.dmp".
      - Taxids for these found in "nodes.dmp".
   3. Lineage, delimiter can be changed with flag -d/--delimiter.
-  4. (Optional) Lineage in TaxIds (-t/--show-lineage-taxids)
-  5. (Optional) Rank (-r/--show-rank)
+  4. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
+  5. (Optional) Name (-n/--show-name)
+  6. (Optional) Rank (-r/--show-rank)
 
 Filter out invalid and deleted taxids, and replace merged 
 taxids with new ones:
@@ -501,6 +502,28 @@ Usage
 ```text
 Reformat lineage in canonical ranks
 
+Input:
+
+  - List of TaxIds or lineages, one record per line.
+    The lineage can be a complete lineage or only one taxonomy name.
+  - Or tab-delimited format.
+    Plese specify the lineage field with flag -i/--lineage-field (default 2).
+    Or specify the TaxId field with flag -I/--taxid-field (default 0),
+    which overrides -i/--lineage-field.
+  - Supporting (gzipped) file or STDIN.
+
+Output:
+
+  1. Input line data.
+  2. Reformated lineage.
+  3. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
+  
+Ambiguous names:
+
+  - Some TaxIds have the same complete lineage, empty result is returned 
+    by default. You can use the flag -a/--output-ambiguous-result to
+    return one possible result
+
 Output format can be formated by flag --format, available placeholders:
 
     {k}: superkingdom
@@ -516,15 +539,11 @@ Output format can be formated by flag --format, available placeholders:
     {T}: strain
 
 When these's no nodes of rank "subspecies" nor "stain",
-you can switch -S/--pseudo-strain to use the node with lowest rank
+you can switch on -S/--pseudo-strain to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than "species". 
 This flag affects {t}, {S}, {T}.
-
+    
 Output format can contains some escape charactors like "\t".
-
-This command appends reformated lineage to the input line.
-The corresponding TaxIds of reformated lineage can be provided as another
-column by flag "-t/--show-lineage-taxids".
 
 Usage:
   taxonkit reformat [flags]
@@ -539,6 +558,7 @@ Flags:
   -r, --miss-rank-repl string          replacement string for missing rank
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
   -R, --miss-taxid-repl string         replacement string for missing taxid
+  -a, --output-ambiguous-result        output one of the ambigous result
       --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix (default "S__")
       --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default "T__")
       --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default "c__")
@@ -549,13 +569,22 @@ Flags:
       --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default "p__")
       --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default "s__")
       --prefix-t string                prefix for subspecies/strain, used along with flag -P/--add-prefix (default "t__")
-  -S, --pseudo-strain                  use the node with lowest rank as strain name, only if which rank is lower than "species" and not "subpecies" nor "strain". This flag affects {t}, {S}, {T}
+  -S, --pseudo-strain                  use the node with lowest rank as strain name, only if which rank is lower than "species" and not "subpecies" nor "strain". It affects {t}, {S}, {T}. This flag needs flag -F
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
+  -I, --taxid-field int                field index of taxid. input data should be tab-separated. it overrides -i/--lineage-field
   -T, --trim                           do not fill missing rank lower than current rank
 
 ```
 
 Examples:
+
+1. **For version > 0.8.0, `reformat` accept input of TaxIds via flag `-I/--taxid-field`**.
+
+        $ echo 239935 | taxonkit reformat -I 1
+        239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+        
+        $ echo 349741 | taxonkit reformat -I 1 -f "{k}|{p}|{c}|{o}|{f}|{g}|{s}|{t}" -F -t
+        349741  Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia|Akkermansia muciniphila|Akkermansia muciniphila ATCC BAA-835    2|74201|203494|48461|1647988|239934|239935|349741
 
 1. Example lineage (produced by: `taxonkit lineage taxids.txt | awk '$2!=""' > lineage.txt`).
 
@@ -602,17 +631,18 @@ Examples:
             | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
             | csvtk pretty -t
             
-            taxid     kindom      phylum            class                 order                family            genus                        species
-            9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
-            9913      Eukaryota   Chordata          Mammalia              Artiodactyla         Bovidae           Bos                          Bos taurus
-            376619    Bacteria    Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
-            349741    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
-            239935    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
-            314101    Bacteria                                                                                                                uncultured murine large bowel bacterium BAC 54B
-            11932     Viruses     Artverviricota    Revtraviricetes       Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
-            1327037   Viruses     Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae                                   Croceibacter phage P2559Y
-            92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
-            1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
+        taxid     kindom      phylum            class                 order                family            genus                        species
+        -------   ---------   ---------------   -------------------   ------------------   ---------------   --------------------------   -----------------------------------------------
+        9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
+        9913      Eukaryota   Chordata          Mammalia              Artiodactyla         Bovidae           Bos                          Bos taurus
+        376619    Bacteria    Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
+        349741    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+        239935    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+        314101    Bacteria                                                                                                                uncultured murine large bowel bacterium BAC 54B
+        11932     Viruses     Artverviricota    Revtraviricetes       Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
+        1327037   Viruses     Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae                                   Croceibacter phage P2559Y
+        92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
+        1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
 
 1. And `subspecies/stain` (`{t}`), `subspecies` (`{S}`), and `strain` (`{T}`) are also available.
 
@@ -625,12 +655,14 @@ Examples:
             | csvtk -H -t sep -f 4 -s ';' -R \
             | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
             | csvtk pretty -t
+            
         taxid     rank         name                                              subspecies/stain        subspecies              strain
+        -------   ----------   -----------------------------------------------   ---------------------   ---------------------   ---------------------
         239935    species      Akkermansia muciniphila                                                                           
         83333     strain       Escherichia coli K-12                             Escherichia coli K-12                           Escherichia coli K-12
         1408252   subspecies   Escherichia coli R178                             Escherichia coli R178   Escherichia coli R178   
         2697049   no rank      Severe acute respiratory syndrome coronavirus 2                                                   
-        2605619   no rank      Escherichia coli O16:H48
+        2605619   no rank      Escherichia coli O16:H48                                                                          
 
         
         # fill missing ranks
@@ -643,17 +675,19 @@ Examples:
             | csvtk -H -t sep -f 4 -s ';' -R \
             | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
             | csvtk pretty -t
+            
         taxid     rank         name                                              subspecies/stain                                                                       subspecies                                                                      strain
+        -------   ----------   -----------------------------------------------   ------------------------------------------------------------------------------------   -----------------------------------------------------------------------------   -------------------------------------------------------------------------
         239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain                                 unclassified Akkermansia muciniphila subspecies                                 unclassified Akkermansia muciniphila strain
         83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                                                  unclassified Escherichia coli subspecies                                        Escherichia coli K-12
         1408252   subspecies   Escherichia coli R178                             Escherichia coli R178                                                                  Escherichia coli R178                                                           unclassified Escherichia coli R178 strain
         2697049   no rank      Severe acute respiratory syndrome coronavirus 2   unclassified Severe acute respiratory syndrome-related coronavirus subspecies/strain   unclassified Severe acute respiratory syndrome-related coronavirus subspecies   unclassified Severe acute respiratory syndrome-related coronavirus strain
         2605619   no rank      Escherichia coli O16:H48                          unclassified Escherichia coli subspecies/strain                                        unclassified Escherichia coli subspecies                                        unclassified Escherichia coli strain
 
-        # When these's no nodes of rank "subspecies" nor "stain",
-        # you can switch -S/--pseudo-strain to use the node with lowest rank
-        # as subspecies/strain name, if which rank is lower than "species"
-        #
+1. **When these's no nodes of rank "subspecies" nor "stain",
+   you can switch `-S/--pseudo-strain` to use the node with lowest rank
+   as subspecies/strain name, if which rank is lower than "species"**.
+
         $ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
             | taxonkit lineage -n -r \
             | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank  --pseudo-strain \
@@ -661,19 +695,21 @@ Examples:
             | csvtk -H -t sep -f 4 -s ';' -R \
             | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
             | csvtk pretty -t
+            
         taxid     rank         name                                              subspecies/stain                                         subspecies                                        strain
+        -------   ----------   -----------------------------------------------   ------------------------------------------------------   -----------------------------------------------   -----------------------------------------------
         239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain   unclassified Akkermansia muciniphila subspecies   unclassified Akkermansia muciniphila strain
         83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                    unclassified Escherichia coli subspecies          Escherichia coli K-12
         1408252   subspecies   Escherichia coli R178                             Escherichia coli R178                                    Escherichia coli R178                             unclassified Escherichia coli R178 strain
         2697049   no rank      Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2          Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2
         2605619   no rank      Escherichia coli O16:H48                          Escherichia coli O16:H48                                 Escherichia coli O16:H48                          Escherichia coli O16:H48
 
-
 1. Add prefix (`-P/--add-prefix`).
 
         $ cat lineage.txt \
             | taxonkit reformat -P \
             | csvtk -H -t cut -f 1,3 
+            
         9606    k__Eukaryota;p__Chordata;c__Mammalia;o__Primates;f__Hominidae;g__Homo;s__Homo sapiens
         9913    k__Eukaryota;p__Chordata;c__Mammalia;o__Artiodactyla;f__Bovidae;g__Bos;s__Bos taurus
         376619  k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Thiotrichales;f__Francisellaceae;g__Francisella;s__Francisella tularensis
@@ -696,6 +732,7 @@ Examples:
             | csvtk pretty -t   
             
         taxid     kindom   phylum    class     order     family    genus     species
+        -------   ------   -------   -------   -------   -------   -------   -------
         9606      2759     7711      40674     9443      9604      9605      9606
         9913      2759     7711      40674     91561     9895      9903      9913
         376619    2        1224      1236      72273     34064     262       263
@@ -748,6 +785,7 @@ Examples:
             | csvtk pretty -t
             
         taxid     kindom      phylum                         class                         order                         family                         genus                             species
+        -------   ---------   ----------------------------   ---------------------------   ---------------------------   ----------------------------   -------------------------------   -----------------------------------------------
         9606      Eukaryota   Chordata                       Mammalia                      Primates                      Hominidae                      Homo                              Homo sapiens
         9913      Eukaryota   Chordata                       Mammalia                      Artiodactyla                  Bovidae                        Bos                               Bos taurus
         376619    Bacteria    Proteobacteria                 Gammaproteobacteria           Thiotrichales                 Francisellaceae                Francisella                       Francisella tularensis
@@ -769,6 +807,7 @@ Examples:
             | csvtk pretty -t
             
         taxid     species                                           phylum
+        -------   -----------------------------------------------   ----------------------------
         9606      Homo sapiens                                      Chordata
         9913      Bos taurus                                        Chordata
         376619    Francisella tularensis                            Proteobacteria
@@ -787,6 +826,7 @@ Examples:
             | taxonkit reformat -T \
             | sed -r "s/;+$//" \
             | csvtk -H -t cut -f 1,3 
+            
         2       Bacteria
         239934  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia
         239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
@@ -797,6 +837,7 @@ Examples:
             | taxonkit lineage \
             | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}" \
             | csvtk cut -t -f -2
+        
         9606    Eukaryota       Chordata        Mammalia        Primates        Hominidae       Homo    Homo sapiens
 
 1. List seven-level lineage for all TaxIds.
@@ -837,6 +878,23 @@ Examples:
 1. From taxid to 7-ranks lineage:
 
         $ cat taxids.txt | taxonkit lineage | taxonkit reformat
+        
+        # for taxonkit v0.8.0 or later versions
+        $ cat taxids.txt | taxonkit reformat -I 1
+        
+1. Some TaxIds have the same complete lineage, empty result is returned 
+    by default. You can use the flag `-a/--output-ambiguous-result` to
+    return one possible result. [see #42](https://github.com/shenwei356/taxonkit/issues/42)
+    
+        $ echo -ne "2507530\n2516889\n" | taxonkit lineage --data-dir . | taxonkit reformat --data-dir . -t 
+        19:18:29.770 [WARN] we can't distinguish the TaxIds (2507530, 2516889) for lineage: cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019. But you can use -a/--output-ambiguous-result to return one possible result
+        19:18:29.770 [WARN] we can't distinguish the TaxIds (2507530, 2516889) for lineage: cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019. But you can use -a/--output-ambiguous-result to return one possible result
+        2507530 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019
+        2516889 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019
+
+        $ echo -ne "2507530\n2516889\n" | taxonkit lineage --data-dir . | taxonkit reformat --data-dir . -t -a
+        2507530 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019     Eukaryota;Basidiomycota;Agaricomycetes;Russulales;Russulaceae;Russula;Russula sp. 8 KA-2019      2759;5204;155619;452342;5401;5402;2507530
+        2516889 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019     Eukaryota;Basidiomycota;Agaricomycetes;Russulales;Russulaceae;Russula;Russula sp. 8 KA-2019      2759;5204;155619;452342;5401;5402;2507530
 
 ## name2taxid
 

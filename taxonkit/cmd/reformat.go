@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/shenwei356/breader"
 	"github.com/shenwei356/util/stringutil"
@@ -37,6 +36,28 @@ var flineageCmd = &cobra.Command{
 	Use:   "reformat",
 	Short: "Reformat lineage in canonical ranks",
 	Long: `Reformat lineage in canonical ranks
+
+Input:
+
+  - List of TaxIds or lineages, one record per line.
+    The lineage can be a complete lineage or only one taxonomy name.
+  - Or tab-delimited format.
+    Plese specify the lineage field with flag -i/--lineage-field (default 2).
+    Or specify the TaxId field with flag -I/--taxid-field (default 0),
+    which overrides -i/--lineage-field.
+  - Supporting (gzipped) file or STDIN.
+
+Output:
+
+  1. Input line data.
+  2. Reformated lineage.
+  3. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
+  
+Ambiguous names:
+
+  - Some TaxIds have the same complete lineage, empty result is returned 
+    by default. You can use the flag -a/--output-ambiguous-result to
+    return one possible result
 
 Output format can be formated by flag --format, available placeholders:
 
@@ -53,15 +74,11 @@ Output format can be formated by flag --format, available placeholders:
     {T}: strain
 
 When these's no nodes of rank "subspecies" nor "stain",
-you can switch -S/--pseudo-strain to use the node with lowest rank
+you can switch on -S/--pseudo-strain to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than "species". 
 This flag affects {t}, {S}, {T}.
     
 Output format can contains some escape charactors like "\t".
-
-This command appends reformated lineage to the input line.
-The corresponding TaxIds of reformated lineage can be provided as another
-column by flag "-t/--show-lineage-taxids".
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -77,14 +94,19 @@ column by flag "-t/--show-lineage-taxids".
 
 		taxIdField := getFlagNonNegativeInt(cmd, "taxid-field")
 		field := getFlagPositiveInt(cmd, "lineage-field")
+		outputAmbigous := getFlagBool(cmd, "output-ambiguous-result")
 
 		var parsingTaxId bool
 		if taxIdField > 0 {
-			log.Infof("parsing TaxIds from field %d", taxIdField)
+			if config.Verbose {
+				log.Infof("parsing TaxIds from field %d", taxIdField)
+			}
 			parsingTaxId = true
 			taxIdField--
 		} else if field > 0 {
-			log.Infof("parsing complete lineages from field %d", field)
+			if config.Verbose {
+				log.Infof("parsing complete lineages from field %d", field)
+			}
 			field--
 		}
 
@@ -154,23 +176,21 @@ column by flag "-t/--show-lineage-taxids".
 		// --------------------------------------------------------
 		// load data
 
-		// for parsing lineage
-		var taxid2taxon map[uint32]*Taxon
-		var name2parent2taxid map[string]map[string]uint32
-		var name2taxid map[string]uint32
-		var ambigous map[string][]uint32
-
-		// for parsing taxid
 		var tree0 map[uint32]uint32
 		var ranks0 map[uint32]string
 		var names0 map[uint32]string
 		var delnodes0 map[uint32]struct{}
 		var merged0 map[uint32]uint32
 
-		if parsingTaxId {
-			tree0, ranks0, names0, delnodes0, merged0 = loadData(config, true, true)
-		} else {
-			taxid2taxon, name2parent2taxid, name2taxid, ambigous = getName2Parent2Taxid(config)
+		tree0, ranks0, names0, delnodes0, merged0 = loadData(config, true, true)
+
+		// for querying taxid from lineage
+		var name2parent2taxid map[string]map[string]uint32
+		var name2taxids map[string]*[]uint32
+		var ambigous map[string][]uint32
+
+		if !parsingTaxId {
+			name2parent2taxid, name2taxids, ambigous = generateName2Parent2Taxid(config, tree0, names0)
 		}
 
 		// --------------------------------------------------------
@@ -182,10 +202,6 @@ column by flag "-t/--show-lineage-taxids".
 		}
 
 		unescape := stringutil.UnEscaper()
-
-		var poolStrings = &sync.Pool{New: func() interface{} {
-			return make([]string, 0, 32)
-		}}
 
 		weightOfSpecies := symbol2weight["s"]
 
@@ -209,9 +225,117 @@ column by flag "-t/--show-lineage-taxids".
 
 			// -----------------------------------------------
 
-			var rank, srank string   // lower case of name : name
-			var lname, plname string // lower case of name, rank and it's one-letter symbol
 			var ok bool
+
+			var taxid uint32
+			var taxidInt int
+
+			var names []string
+			var ranks []string
+			var taxids []uint32
+
+			// -----------------------------------------------
+			// get the taxid
+
+			if parsingTaxId { // directly from field
+
+				taxidInt, err = strconv.Atoi(data[taxIdField])
+				if err != nil || taxidInt < 0 {
+					checkError(fmt.Errorf("invalid TaxId: %s", data[taxIdField]))
+				}
+				taxid = uint32(taxidInt)
+
+			} else { // query taxid by taxon names
+
+				if strings.Trim(data[field], " ") == "" { // empty, returns empty result
+					return line2flineage{line, "", ""}, true, nil
+				}
+
+				// names
+				names = strings.Split(data[field], delimiter)
+				n := len(names)
+
+				// name and name of its parent
+				var name, pname string
+
+				if n == 1 { // single name
+
+					// direct query via name2taxids
+					_taxids := name2taxids[strings.ToLower(names[0])]
+					if _taxids == nil {
+						log.Warningf(`failed to query the TaxId of: %s. Possible reasons: `, data[field])
+						log.Warningf(`  1) the lineage were produced with different taxonomy data files, please re-run taxonkit lineage;`)
+						log.Warningf(`  2) some taxon names contain delimiter (%s), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d "/"`, delimiter)
+						return line2flineage{line, "", ""}, true, nil
+					}
+
+					if len(*_taxids) == 1 { // found
+						taxid = (*_taxids)[0]
+					} else { // ambiguous name
+						tmp := make([]string, len(*_taxids))
+						for _i, _taxid := range *_taxids {
+							tmp[_i] = strconv.Itoa(int(_taxid))
+						}
+						log.Warningf(`we can't distinguish the TaxIds (%s) for lineage: %s. But you can use -a/--output-ambiguous-result to return one possible result`,
+							strings.Join(tmp, ", "), data[field])
+
+						if !outputAmbigous {
+							return line2flineage{line, "", ""}, true, nil
+						}
+					}
+
+				} else { // multiple names
+
+					name = strings.ToLower(names[n-1])  // name
+					pname = strings.ToLower(names[n-2]) // parent name
+					var tmp map[string]uint32
+
+					if tmp, ok = name2parent2taxid[name]; !ok {
+						log.Warningf(`failed to query the TaxIds for: %s. Possible reasons: `, data[field])
+						log.Warningf(`  1) the lineage were produced with different taxonomy data files, please re-run taxonkit lineage;`)
+						log.Warningf(`  2) some taxon names contain delimiter (%s), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d "/"`, delimiter)
+						return line2flineage{line, "", ""}, true, nil
+					}
+
+					if taxid, ok = tmp[pname]; !ok {
+						log.Warningf(`failed to query the TaxIds for: %s. Possible reasons: `, data[field])
+						log.Warningf(`  1) the lineage were produced with different taxonomy data files, please re-run taxonkit lineage;`)
+						log.Warningf(`  2) some taxon names contain delimiter (%s), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d "/"`, delimiter)
+						return line2flineage{line, "", ""}, true, nil
+					}
+
+					// for cases where child-parent pairs are shared by multiple taxids.
+					pair := name + "__" + pname
+					var _ambids []uint32
+					if _ambids, ok = ambigous[pair]; ok {
+						tmp := make([]string, len(_ambids))
+						for _i, _taxid := range _ambids {
+							tmp[_i] = strconv.Itoa(int(_taxid))
+						}
+						log.Warningf("we can't distinguish the TaxIds (%s) for lineage: %s. But you can use -a/--output-ambiguous-result to return one possible result",
+							strings.Join(tmp, ", "), data[field])
+
+						if !outputAmbigous {
+							return line2flineage{line, "", ""}, true, nil
+						}
+					}
+				}
+			}
+
+			// -----------------------------------------------
+			// query complete lineage with the taxid
+
+			names, ranks, taxids, ok = queryNamesRanksTaxids(tree0, ranks0, names0, delnodes0, merged0, taxid)
+			if !ok { // taxid not found
+				return line2flineage{line, "", ""}, true, nil
+			}
+
+			sranks := poolStringsN16.Get().([]string)
+
+			srank2idx := make(map[string]int) // srank: index
+
+			var maxRankWeight float32
+			var rank, srank string // lower case of name : name
 
 			// preprare replacements.
 			// find the orphan names and missing ranks
@@ -229,143 +353,28 @@ column by flag "-t/--show-lineage-taxids".
 				}
 			}
 
-			// -----------------------------------------------
-
-			var taxid uint32
-			var taxidInt int
-
-			var names []string
-			var ranks []string
-			var taxids []uint32
-
-			if parsingTaxId {
-				taxidInt, err = strconv.Atoi(data[taxIdField])
-				if err != nil || taxidInt < 0 {
-					checkError(fmt.Errorf("invalid TaxId: %s", data[taxIdField]))
-				}
-				taxid = uint32(taxidInt)
-				names, ranks, taxids, ok = namesRanksTaxids(tree0, ranks0, names0, delnodes0, merged0, taxid)
-				if !ok {
-					return line2flineage{line, "", ""}, false, nil
-				}
-			} else {
-				// names
-				names = strings.Split(data[field], delimiter) // all names of full lineage
-
-				// ranks := make([]string, len(names))
-				ranks = poolStrings.Get().([]string)
-			}
-
-			// sranks := make([]string, len(names))
-			sranks := poolStrings.Get().([]string)
-
-			name2Name := make(map[string]string, len(names)) // lower case of name of parent
-
-			srank2idx := make(map[string]int) // srank: index
-
-			var maxRankWeight float32
-
-			var pair string
-			var _ambids []uint32
 			for i, name := range names {
-				if name == "" {
-					continue
-				}
-
-				lname = strings.ToLower(name)
-				name2Name[lname] = name
-				name = lname
-
-				// -----------------------------------------------
-
-				if parsingTaxId {
-					rank = ranks[i]
-					taxid = taxids[i]
-				} else {
-					if _, ok = name2taxid[name]; !ok { // unofficial name
-						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, name)
-						return line2flineage{line, "", ""}, true, nil
-					}
-
-					if i == 0 { // root node
-						taxid = name2taxid[name]
-					} else {
-						plname = strings.ToLower(names[i-1])
-						if _, ok = name2parent2taxid[name]; !ok {
-							log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, name)
-							return line2flineage{line, "", ""}, true, nil
-						}
-						if taxid, ok = name2parent2taxid[name][plname]; !ok {
-							log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, plname)
-							return line2flineage{line, "", ""}, true, nil
-						}
-
-						// for cases where child-parent pairs are shared by multiple taxids.
-						pair = name + "__" + plname
-
-						if _ambids, ok = ambigous[pair]; ok {
-
-							var _lineage string
-							lineage0 := strings.Join(names[:i], delimiter)
-							var _taxids2 []uint32
-							var _taxid uint32
-
-							_taxids2 = make([]uint32, 0, 2) // possible taxids
-
-							for _, _taxid = range _ambids {
-								_lineage = lineageFromTaxid2Taxon(taxid2taxon, _taxid, delimiter)
-								if _lineage == lineage0 {
-									_taxids2 = append(_taxids2, _taxid)
-								}
-							}
-							switch len(_taxids2) { // cool
-							case 0:
-								log.Warningf("it's a bug, please report: '%s'. %s", pair, line)
-							case 1: // we correct it
-								taxid = _taxid
-							default:
-								tmp := make([]string, len(_taxids2))
-								for _i, _taxid := range _taxids2 {
-									tmp[_i] = strconv.Itoa(int(_taxid))
-								}
-								log.Warningf("we can't distinguish the TaxId (%s) for lineage: %s",
-									strings.Join(tmp, ", "), lineage0)
-							}
-						}
-					}
-					// note that code below is computing rank of current name, not its parent.
-					rank = taxid2taxon[taxid].Rank
-
-					if rank == norank {
-						ranks = append(ranks, rank)
-						sranks = append(sranks, "")
-						continue
-					}
-
-					// ranks[i] = rank
-					ranks = append(ranks, rank)
-				}
-
-				// -----------------------------------------------
+				rank = ranks[i]
+				taxid = taxids[i]
 
 				if srank, ok = rank2symbol[rank]; ok {
 					// special symbol "{t}"
 					switch rank {
 					case "strain":
-						replacements["t"] = name2Name[name]
+						replacements["t"] = name
 						if printLineageInTaxid {
 							ireplacements["t"] = strconv.Itoa(int(taxid))
 						}
 						srank2idx["t"] = i
 					case "subspecies":
-						replacements["t"] = name2Name[name]
+						replacements["t"] = name
 						if printLineageInTaxid {
 							ireplacements["t"] = strconv.Itoa(int(taxid))
 						}
 						srank2idx["t"] = i
 					}
 
-					replacements[srank] = name2Name[name]
+					replacements[srank] = name
 					if printLineageInTaxid {
 						ireplacements[srank] = strconv.Itoa(int(taxid))
 					}
@@ -448,16 +457,14 @@ column by flag "-t/--show-lineage-taxids".
 
 			// recycle
 			ranks = ranks[:0]
-			poolStrings.Put(ranks)
+			poolStringsN16.Put(ranks)
 			sranks = sranks[:0]
-			poolStrings.Put(sranks)
+			poolStringsN16.Put(sranks)
 
-			if parsingTaxId {
-				names = names[:0]
-				poolStrings.Put(names)
-				taxids = taxids[:0]
-				poolUint32.Put(taxids)
-			}
+			names = names[:0]
+			poolStringsN16.Put(names)
+			taxids = taxids[:0]
+			poolUint32N16.Put(taxids)
 
 			return line2flineage{line, unescape(flineage), unescape(iflineage)}, true, nil
 		}
@@ -501,8 +508,9 @@ func init() {
 	flineageCmd.Flags().BoolP("pseudo-strain", "S", false, `use the node with lowest rank as strain name, only if which rank is lower than "species" and not "subpecies" nor "strain". It affects {t}, {S}, {T}. This flag needs flag -F`)
 
 	flineageCmd.Flags().IntP("lineage-field", "i", 2, "field index of lineage. data should be tab-separated")
-	flineageCmd.Flags().IntP("taxid-field", "I", 0, "field index of taxid. input data should be tab-separated")
+	flineageCmd.Flags().IntP("taxid-field", "I", 0, "field index of taxid. input data should be tab-separated. it overrides -i/--lineage-field")
 	flineageCmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)
+	flineageCmd.Flags().BoolP("output-ambiguous-result", "a", false, `output one of the ambigous result`)
 
 	flineageCmd.Flags().BoolP("add-prefix", "P", false, `add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X`)
 	flineageCmd.Flags().StringP("prefix-k", "", "k__", `prefix for superkingdom, used along with flag -P/--add-prefix`)

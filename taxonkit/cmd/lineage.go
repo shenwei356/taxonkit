@@ -55,8 +55,9 @@ Output:
      - New TaxIds for merged TaxIds, provided by "merged.dmp".
      - Taxids for these found in "nodes.dmp".
   3. Lineage, delimiter can be changed with flag -d/--delimiter.
-  4. (Optional) Lineage in TaxIds (-t/--show-lineage-taxids)
-  5. (Optional) Rank (-r/--show-rank)
+  4. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
+  5. (Optional) Name (-n/--show-name)
+  6. (Optional) Rank (-r/--show-rank)
 
 Filter out invalid and deleted taxids, and replace merged 
 taxids with new ones:

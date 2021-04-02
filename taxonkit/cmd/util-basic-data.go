@@ -139,6 +139,7 @@ func getTaxonNames(file string) map[uint32]string {
 	return taxid2name
 }
 
+// child -> parent. taxid -> rank
 func getNodes(file string, recordRank bool) (map[uint32]uint32, map[uint32]string) {
 	tree := make(map[uint32]uint32, mapInitialSize)
 	var ranks map[uint32]string

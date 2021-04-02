@@ -1,6 +1,9 @@
-- [TaxonKit v0.7.3](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.3)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.7.3/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.7.3)
+- [TaxonKit v0.8.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.8.0)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.8.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.8.0)
     - `taxonkit reformat`:
+        - **accept input of TaxIds via flag `-I/--taxid-field`**.
+        - **accept single taxonomy names**.
+        - show warning message for TaxIds with the same lineage. [#42](https://github.com/shenwei356/taxonkit/issues/42)
         - better flag checking. [#40](https://github.com/shenwei356/taxonkit/issues/40)
     - `taxonkit lca`:
         - slightly speedup.

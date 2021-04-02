@@ -54,7 +54,7 @@ func init() {
 	defaulDataDir, err = homedir.Expand("~/.taxonkit/")
 	checkError(errors.Wrap(err, "get data directory"))
 
-	RootCmd.Long = fmt.Sprintf(`TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
+	RootCmd.Long = fmt.Sprintf(`TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
 Version: %s
 
