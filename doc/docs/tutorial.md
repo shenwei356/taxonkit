@@ -16,7 +16,7 @@
 
 ## Formatting lineage
 
-Show lineage detail of a taxID.
+Show lineage detail of a TaxId.
 The command below works on Windows with help of [csvtk](http://bioinf.shenwei.me/csvtk).
 
     $ echo "2697049" \
@@ -154,7 +154,7 @@ as subspecies/strain name, if which rank is lower than "species"**.
     2605619   no rank      Escherichia coli                                        Escherichia coli O16:H48
     2697049   no rank      Severe acute respiratory syndrome-related coronavirus   Severe acute respiratory syndrome coronavirus 2
 
-List eight-level lineage for all taxIDs of rank lower than or equal to species, including some nodes with "no rank".
+List eight-level lineage for all TaxIds of rank lower than or equal to species, including some nodes with "no rank".
 But when filtering with `-L/--lower-than`, you can use
 `-n/--save-predictable-norank` to **save some special ranks without order,
 where rank of the closest higher node is still lower than rank cutoff**.
@@ -578,7 +578,7 @@ Steps:
 
 ## Summaries of taxonomy data
 
-You can change the taxID of interest.
+You can change the TaxId of interest.
 
 1. Rank counts of common categories.
 

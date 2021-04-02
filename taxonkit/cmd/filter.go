@@ -36,8 +36,8 @@ import (
 // filterCmd represents
 var filterCmd = &cobra.Command{
 	Use:   "filter",
-	Short: "Filter taxIDs by taxonomic rank range",
-	Long: `Filter taxIDs by taxonomic rank range
+	Short: "Filter TaxIds by taxonomic rank range",
+	Long: `Filter TaxIds by taxonomic rank range
 
 Attentions:
 
@@ -282,9 +282,9 @@ func init() {
 	filterCmd.Flags().BoolP("discard-root", "R", false, `discard root taxid, defined by --root-taxid`)
 	filterCmd.Flags().Uint32P("root-taxid", "", 1, `root taxid`)
 
-	filterCmd.Flags().StringP("lower-than", "L", "", "output taxIDs with rank lower than a rank, exclusive with --higher-than")
-	filterCmd.Flags().StringP("higher-than", "H", "", "output taxIDs with rank higher than a rank, exclusive with --lower-than")
-	filterCmd.Flags().StringSliceP("equal-to", "E", []string{}, `output taxIDs with rank equal to some ranks, multiple values can be separated with comma "," (e.g., -E "genus,species"), or give multiple times (e.g., -E genus -E species)`)
+	filterCmd.Flags().StringP("lower-than", "L", "", "output TaxIds with rank lower than a rank, exclusive with --higher-than")
+	filterCmd.Flags().StringP("higher-than", "H", "", "output TaxIds with rank higher than a rank, exclusive with --lower-than")
+	filterCmd.Flags().StringSliceP("equal-to", "E", []string{}, `output TaxIds with rank equal to some ranks, multiple values can be separated with comma "," (e.g., -E "genus,species"), or give multiple times (e.g., -E genus -E species)`)
 
 	filterCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. input data should be tab-separated")
 }

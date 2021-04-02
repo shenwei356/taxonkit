@@ -39,8 +39,8 @@ import (
 // taxidlogCmd represents the taxid-changelog command
 var taxidlogCmd = &cobra.Command{
 	Use:   "taxid-changelog",
-	Short: "Create taxID changelog from dump archives",
-	Long: `Create taxID changelog from dump archives
+	Short: "Create TaxId changelog from dump archives",
+	Long: `Create TaxId changelog from dump archives
 
 Steps:
 

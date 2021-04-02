@@ -62,15 +62,15 @@ Usage:
   taxonkit [command]
 
 Available Commands:
-  filter          Filter taxIDs by taxonomic rank range
+  filter          Filter TaxIds by taxonomic rank range
   genautocomplete generate shell autocompletion script
   help            Help about any command
-  lca             Compute lowest common ancestor (LCA) for taxIDs
-  lineage         Query taxonomic lineage of given taxIDs
-  list            List taxonomic subtrees of given taxIDs
-  name2taxid      Convert scientific names to taxIDs
+  lca             Compute lowest common ancestor (LCA) for TaxIds
+  lineage         Query taxonomic lineage of given TaxIds
+  list            List taxonomic subtrees of given TaxIds
+  name2taxid      Convert scientific names to TaxIds
   reformat        Reformat lineage in canonical ranks
-  taxid-changelog Create taxID changelog from dump archives
+  taxid-changelog Create TaxId changelog from dump archives
   version         print version information and check for update
 
 Flags:
@@ -88,7 +88,7 @@ Flags:
 Usage
 
 ```text
-List taxonomic subtrees of given taxIDs
+List taxonomic subtrees of given TaxIds
 
 Examples:
 
@@ -107,7 +107,7 @@ Usage:
 
 Flags:
   -h, --help            help for list
-  -i, --ids string      taxID(s), multiple values should be separated by comma
+  -i, --ids string      TaxId(s), multiple values should be separated by comma
   -I, --indent string   indent (default "  ")
   -J, --json            output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor
   -n, --show-name       output scientific name
@@ -272,12 +272,12 @@ Examples
 Usage
 
 ```text
-Query taxonomic lineage of given taxIDs
+Query taxonomic lineage of given TaxIds
 
 Input:
 
-  - List of taxIDs, one taxID per line.
-  - Or tab-delimited format, please specify taxID field 
+  - List of TaxIds, one TaxId per line.
+  - Or tab-delimited format, please specify TaxId field 
     with flag -i/--taxid-field (default 1).
   - Supporting (gzipped) file or STDIN.
 
@@ -286,11 +286,11 @@ Output:
   1. Input line data.
   2. (Optional) Status code (-c/--show-status-code), values:
      - "-1" for queries not found in whole database.
-     - "0" for deleted taxIDs, provided by "delnodes.dmp".
-     - New taxIDs for merged taxIDs, provided by "merged.dmp".
+     - "0" for deleted TaxIds, provided by "delnodes.dmp".
+     - New TaxIds for merged TaxIds, provided by "merged.dmp".
      - Taxids for these found in "nodes.dmp".
   3. Lineage, delimiter can be changed with flag -d/--delimiter.
-  4. (Optional) Lineage in taxIDs (-t/--show-lineage-taxids)
+  4. (Optional) Lineage in TaxIds (-t/--show-lineage-taxids)
   5. (Optional) Rank (-r/--show-rank)
 
 Filter out invalid and deleted taxids, and replace merged 
@@ -371,7 +371,7 @@ Examples
         user    0m2.365s
         sys     0m0.170s
         
-        # all taxIDs
+        # all TaxIds
         $ time taxonkit list --ids 1 --indent "" | taxonkit lineage > t
 
         real    0m4.249s
@@ -471,7 +471,7 @@ Examples
         10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
         superkingdom;clade;kingdom;phylum;class;order;suborder;family;subfamily;genus;subgenus;species;no rank
 
-    Another way to show lineage detail of a taxID
+    Another way to show lineage detail of a TaxId
     
         $ echo 2697049 \
             | taxonkit lineage -t \
@@ -523,7 +523,7 @@ This flag affects {t}, {S}, {T}.
 Output format can contains some escape charactors like "\t".
 
 This command appends reformated lineage to the input line.
-The corresponding taxIDs of reformated lineage can be provided as another
+The corresponding TaxIds of reformated lineage can be provided as another
 column by flag "-t/--show-lineage-taxids".
 
 Usage:
@@ -799,7 +799,7 @@ Examples:
             | csvtk cut -t -f -2
         9606    Eukaryota       Chordata        Mammalia        Primates        Hominidae       Homo    Homo sapiens
 
-1. List seven-level lineage for all taxIDs.
+1. List seven-level lineage for all TaxIds.
 
         # replace empty taxon with "Unassigned"
         $ taxonkit list --ids 1 \
@@ -843,12 +843,12 @@ Examples:
 Usage
 
 ```text
-Convert scientific names to taxIDs
+Convert scientific names to TaxIds
 
 Attention:
 
-  1. Some taxIDs share the same scientific names, e.g, Drosophila.
-     These input lines are duplicated with multiple taxIDs.
+  1. Some TaxIds share the same scientific names, e.g, Drosophila.
+     These input lines are duplicated with multiple TaxIds.
 
     $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L
     Drosophila      7215    genus
@@ -913,7 +913,7 @@ Example data
         uncultured murine large bowel bacterium BAC 54B 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
         Croceibacter phage P2559Y       1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
 
-1. **Some taxIDs share the same scientific names**, e.g, Drosophila.
+1. **Some TaxIds share the same scientific names**, e.g, Drosophila.
 
         $ echo Drosophila \
             | taxonkit name2taxid \
@@ -930,7 +930,7 @@ Example data
 Usage
 
 ```text
-Filter taxIDs by taxonomic rank range
+Filter TaxIds by taxonomic rank range
 
 Attentions:
 
@@ -959,12 +959,12 @@ Flags:
   -B, --black-list strings        black list of ranks to discard, e.g., '-B "no rank" -B "clade"
   -N, --discard-noranks           discard all ranks without order, type "taxonkit filter --help" for details
   -R, --discard-root              discard root taxid, defined by --root-taxid
-  -E, --equal-to strings          output taxIDs with rank equal to some ranks, multiple values can be separated with comma "," (e.g., -E "genus,species"), or give multiple times (e.g., -E genus -E species)
+  -E, --equal-to strings          output TaxIds with rank equal to some ranks, multiple values can be separated with comma "," (e.g., -E "genus,species"), or give multiple times (e.g., -E genus -E species)
   -h, --help                      help for filter
-  -H, --higher-than string        output taxIDs with rank higher than a rank, exclusive with --lower-than
+  -H, --higher-than string        output TaxIds with rank higher than a rank, exclusive with --lower-than
       --list-order                list user defined ranks in order, from "$HOME/.taxonkit/ranks.txt"
       --list-ranks                list ordered ranks in taxonomy database, sorted in user defined order
-  -L, --lower-than string         output taxIDs with rank lower than a rank, exclusive with --higher-than
+  -L, --lower-than string         output TaxIds with rank lower than a rank, exclusive with --higher-than
   -r, --rank-file string          user-defined ordered taxonomic ranks, type "taxonkit filter --help" for details
       --root-taxid uint32         root taxid (default 1)
   -n, --save-predictable-norank   do not discard some special ranks without order when using -L, where rank of the closest higher node is still lower than rank cutoff
@@ -1035,7 +1035,7 @@ Examples
 1. "no rank" and "clade" have no rank and can be filter out via `-N/--discard-noranks`.
   Futher ranks can be removed with black list via `-B/--black-list`
 
-        # 562 is taxID of Escherichia coli
+        # 562 is TaxId of Escherichia coli
         $ taxonkit list --ids 562 \
             | taxonkit filter -L species \
             | taxonkit lineage -r -n -L \
@@ -1146,16 +1146,16 @@ Examples
 Usage
 
 ```text
-Compute lowest common ancestor (LCA) for taxIDs
+Compute lowest common ancestor (LCA) for TaxIds
 
 Attention:
 
-  1. This command computes LCA taxID for a list of taxIDs 
+  1. This command computes LCA TaxId for a list of TaxIds 
      in a field ("-i/--taxids-field) of tab-delimited file or STDIN.
   2. TaxIDs should have the same separater ("-s/--separater"),
      single charactor separater is prefered.
-  3. Empty lines or lines without valid taxIDs in the field are omitted.
-  4. If some taxIDs are not found in database, it returns 0.
+  3. Empty lines or lines without valid TaxIds in the field are omitted.
+  4. If some TaxIds are not found in database, it returns 0.
   
 Examples:
 
@@ -1170,9 +1170,9 @@ Usage:
 
 Flags:
   -h, --help               help for lca
-  -s, --separater string   separater for taxIDs (default " ")
-  -D, --skip-deleted       skip deleted taxIDs and compute with left ones
-  -U, --skip-unfound       skip unfound taxIDs and compute with left ones
+  -s, --separater string   separater for TaxIds (default " ")
+  -D, --skip-deleted       skip deleted TaxIds and compute with left ones
+  -U, --skip-unfound       skip unfound TaxIds and compute with left ones
   -i, --taxids-field int   field index of taxid. input data should be tab-separated (default 1)
 
 ```
@@ -1206,14 +1206,14 @@ Examples:
         a       63221,2665953   9605
         b       63221, 741158   9606
         
-1. Merged taxIDs.
+1. Merged TaxIds.
 
         # merged
         $ echo 92487 92488 92489 | taxonkit lca
         10:08:26.578 [WARN] taxid 92489 was merged into 796334
         92487 92488 92489       1236
         
-1. Deleted taxIDs, you can ommit theses and continue compute with left onces with (`-D/--skip-deleted`).
+1. Deleted TaxIds, you can ommit theses and continue compute with left onces with (`-D/--skip-deleted`).
 
         $ echo 1 2 3 | taxonkit lca 
         10:30:17.678 [WARN] taxid 3 not found
@@ -1238,7 +1238,7 @@ Examples:
 Usage
 
 ```text
-Create taxID changelog from dump archives
+Create TaxId changelog from dump archives
 
 Steps:
 

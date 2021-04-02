@@ -60,7 +60,7 @@ This flag affects {t}, {S}, {T}.
 Output format can contains some escape charactors like "\t".
 
 This command appends reformated lineage to the input line.
-The corresponding taxIDs of reformated lineage can be provided as another
+The corresponding TaxIds of reformated lineage can be provided as another
 column by flag "-t/--show-lineage-taxids".
 
 `,

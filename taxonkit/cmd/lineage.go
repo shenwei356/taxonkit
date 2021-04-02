@@ -36,13 +36,13 @@ import (
 // lineageCmd represents the lineage command
 var lineageCmd = &cobra.Command{
 	Use:   "lineage",
-	Short: "Query taxonomic lineage of given taxIDs",
-	Long: `Query taxonomic lineage of given taxIDs
+	Short: "Query taxonomic lineage of given TaxIds",
+	Long: `Query taxonomic lineage of given TaxIds
 
 Input:
 
-  - List of taxIDs, one taxID per line.
-  - Or tab-delimited format, please specify taxID field 
+  - List of TaxIds, one TaxId per line.
+  - Or tab-delimited format, please specify TaxId field 
     with flag -i/--taxid-field (default 1).
   - Supporting (gzipped) file or STDIN.
 
@@ -51,11 +51,11 @@ Output:
   1. Input line data.
   2. (Optional) Status code (-c/--show-status-code), values:
      - "-1" for queries not found in whole database.
-     - "0" for deleted taxIDs, provided by "delnodes.dmp".
-     - New taxIDs for merged taxIDs, provided by "merged.dmp".
+     - "0" for deleted TaxIds, provided by "delnodes.dmp".
+     - New TaxIds for merged TaxIds, provided by "merged.dmp".
      - Taxids for these found in "nodes.dmp".
   3. Lineage, delimiter can be changed with flag -d/--delimiter.
-  4. (Optional) Lineage in taxIDs (-t/--show-lineage-taxids)
+  4. (Optional) Lineage in TaxIds (-t/--show-lineage-taxids)
   5. (Optional) Rank (-r/--show-rank)
 
 Filter out invalid and deleted taxids, and replace merged 

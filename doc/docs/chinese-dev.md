@@ -59,7 +59,7 @@ NCBI Taxonomy公开数据格式有两种，旧的名称为 `taxdump.tar.gz` ，�
 其中最主要的是前4个文件：
 
 1. `nodes.dmp` 主要包含当前版本的所有分类学单元节点（taxon）
-的唯一标识符（taxonomic identifier, 简称taxID, taxid, tax_id)，
+的唯一标识符（taxonomic identifier, 简称TaxId, taxid, tax_id)，
 分类学水平(rank），及其父节点的TaxID。
 2. `names.dmp` 主要包含包含当前版本的所有TaxID及其统一科学名称（scientific name）和别名。
 3. `merged.dmp` 包含了到当前版本为止，所有被合并的TaxID与合并到的新TaxID。

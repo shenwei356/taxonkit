@@ -35,8 +35,8 @@ import (
 // listCmd represents the fx2tab command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List taxonomic subtrees of given taxIDs",
-	Long: `List taxonomic subtrees of given taxIDs
+	Short: "List taxonomic subtrees of given TaxIds",
+	Long: `List taxonomic subtrees of given TaxIds
 
 Examples:
 
@@ -222,7 +222,7 @@ Examples:
 func init() {
 	RootCmd.AddCommand(listCmd)
 
-	listCmd.Flags().StringP("ids", "i", "", "taxID(s), multiple values should be separated by comma")
+	listCmd.Flags().StringP("ids", "i", "", "TaxId(s), multiple values should be separated by comma")
 	listCmd.Flags().StringP("indent", "I", "  ", "indent")
 	listCmd.Flags().BoolP("show-rank", "r", false, `output rank`)
 	listCmd.Flags().BoolP("show-name", "n", false, `output scientific name`)

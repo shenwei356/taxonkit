@@ -8,7 +8,7 @@
 
 - TaxIDs. Root node `1` is removed. 
   And These data should be updated along with NCBI taxonomy dataset.
-  Seven sizes of taxIDs are sampled from `nodes.dmp`.
+  Seven sizes of TaxIds are sampled from `nodes.dmp`.
 
         # shuffle all taxids
         cut -f 1 nodes.dmp | grep -w -v 1 | shuf > ids.txt

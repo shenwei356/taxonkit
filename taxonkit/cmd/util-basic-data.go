@@ -119,7 +119,7 @@ func getTaxonNames(file string) map[uint32]string {
 	var id int
 	for scanner.Scan() {
 		stringSplitN(scanner.Text(), "\t", 8, &items)
-		if len(items) < 7 {
+		if len(items) < 8 {
 			continue
 		}
 		if items[6] != "scientific name" {

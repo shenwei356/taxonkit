@@ -34,17 +34,17 @@ import (
 // lcaCmd represents
 var lcaCmd = &cobra.Command{
 	Use:   "lca",
-	Short: "Compute lowest common ancestor (LCA) for taxIDs",
-	Long: `Compute lowest common ancestor (LCA) for taxIDs
+	Short: "Compute lowest common ancestor (LCA) for TaxIds",
+	Long: `Compute lowest common ancestor (LCA) for TaxIds
 
 Attention:
 
-  1. This command computes LCA taxID for a list of taxIDs 
+  1. This command computes LCA TaxId for a list of TaxIds 
      in a field ("-i/--taxids-field) of tab-delimited file or STDIN.
   2. TaxIDs should have the same separater ("-s/--separater"),
      single charactor separater is prefered.
-  3. Empty lines or lines without valid taxIDs in the field are omitted.
-  4. If some taxIDs are not found in database, it returns 0.
+  3. Empty lines or lines without valid TaxIds in the field are omitted.
+  4. If some TaxIds are not found in database, it returns 0.
   
 Examples:
 
@@ -185,9 +185,9 @@ func init() {
 
 	lcaCmd.Flags().IntP("taxids-field", "i", 1, "field index of taxid. input data should be tab-separated")
 
-	lcaCmd.Flags().StringP("separater", "s", " ", "separater for taxIDs")
-	lcaCmd.Flags().BoolP("skip-deleted", "D", false, "skip deleted taxIDs and compute with left ones")
-	lcaCmd.Flags().BoolP("skip-unfound", "U", false, "skip unfound taxIDs and compute with left ones")
+	lcaCmd.Flags().StringP("separater", "s", " ", "separater for TaxIds")
+	lcaCmd.Flags().BoolP("skip-deleted", "D", false, "skip deleted TaxIds and compute with left ones")
+	lcaCmd.Flags().BoolP("skip-unfound", "U", false, "skip unfound TaxIds and compute with left ones")
 
 }
 

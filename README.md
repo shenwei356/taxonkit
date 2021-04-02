@@ -13,7 +13,7 @@
 [![Github Releases](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/total.svg?maxAge=3600)](https://bioinf.shenwei.me/taxonkit/download/)
 [![Cross-platform](https://img.shields.io/badge/platform-any-ec2eb4.svg?style=flat)](https://bioinf.shenwei.me/taxonkit/download/)
 [![Anaconda Cloud](	https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit)
-- [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of taxIDss, including deletion, new adding, merge, reuse, and rank/name changes.
+- [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of TaxIds, including deletion, new adding, merge, reuse, and rank/name changes.
 - **[Please cite](#citation):** [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
 - [pytaxonkit](https://github.com/bioforensics/pytaxonkit), Python bindings for TaxonKit.
 
@@ -50,7 +50,7 @@
     - Supporting STDIN and (gzipped) input/output file, easily integrated in pipe
 - **Versatile commands** 
     - [Usage and examples](http://bioinf.shenwei.me/taxonkit/usage/)
-    - Featured command: [tracking monthly changelog of all taxIDs](https://github.com/shenwei356/taxid-changelog)
+    - Featured command: [tracking monthly changelog of all TaxIds](https://github.com/shenwei356/taxid-changelog)
     - Featured command: [reformating lineage into format of seven-level ("superkingdom, phylum, class, order, family, genus, species"](https://bioinf.shenwei.me/taxonkit/usage/#reformat)
     - Featured command: [filtering taxiDs by a rank range](http://bioinf.shenwei.me/taxonkit/usage/#filter), e.g., at or below genus rank.
 
@@ -58,19 +58,19 @@
 
 Subcommand                                                                    |Function
 :-----------------------------------------------------------------------------|:----------------------------------------------
-[`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)                      |List taxonomic subtrees (taxIDs) bellow given taxIDs
-[`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage)                |Query taxonomic lineage of given taxIDs
+[`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)                      |List taxonomic subtrees (TaxIds) bellow given TaxIds
+[`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage)                |Query taxonomic lineage of given TaxIds
 [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat)              |Reformat lineage in canonical ranks
-[`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid)          |Convert scientific names to taxIDs
-[`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter)                  |Filter taxIDs by taxonomic rank range
-[`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca)                        |Compute lowest common ancestor (LCA) for taxIDs
-[`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog)|Create taxID changelog from dump archives 
+[`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid)          |Convert scientific names to TaxIds
+[`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter)                  |Filter TaxIds by taxonomic rank range
+[`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca)                        |Compute lowest common ancestor (LCA) for TaxIds
+[`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog)|Create TaxId changelog from dump archives 
 `version`                                                                     |Print version information and check for update
 `genautocomplete`                                                             |Generate shell autocompletion script
 
 ## Benchmark
 
-1. Getting full lineage for given taxIDs
+1. Getting full lineage for given TaxIds
 
    <img src="bench/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" />
 
