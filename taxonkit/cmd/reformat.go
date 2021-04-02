@@ -138,8 +138,7 @@ column by flag "-t/--show-lineage-taxids".
 		checkError(err)
 		defer outfh.Close()
 
-		taxid2taxon, name2parent2taxid, name2taxid := getName2Parent2Taxid(config)
-
+		taxid2taxon, name2parent2taxid, name2taxid, ambigous := getName2Parent2Taxid(config)
 		type line2flineage struct {
 			line      string
 			flineage  string
@@ -202,6 +201,9 @@ column by flag "-t/--show-lineage-taxids".
 
 			var taxid uint32
 			var maxRankWeight float32
+
+			var pair string
+			var _ambids []uint32
 			for i, name := range names {
 				if name == "" {
 					continue
@@ -223,9 +225,43 @@ column by flag "-t/--show-lineage-taxids".
 					if _, ok = name2parent2taxid[name]; !ok {
 						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, name)
 						return line2flineage{line, "", ""}, true, nil
-					} else if taxid, ok = name2parent2taxid[name][plname]; !ok {
+					}
+					if taxid, ok = name2parent2taxid[name][plname]; !ok {
 						log.Warningf(`unofficial taxon name detected: %s. Possible reasons: 1) lineages were produced with different taxonomy data files, please re-run taxonkit lineage; 2) some taxon names contain semicolon (";"), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d /`, plname)
 						return line2flineage{line, "", ""}, true, nil
+					}
+
+					// for cases where child-parent pairs are shared by multiple taxids.
+					pair = name + plname
+
+					if _ambids, ok = ambigous[pair]; ok {
+
+						var _lineage string
+						lineage0 := data[field]
+						var _taxids2 []uint32
+						var _taxid uint32
+
+						_taxids2 = make([]uint32, 0, 2) // possible taxids
+
+						for _, _taxid = range _ambids {
+							_lineage = lineageFromTaxid2Taxon(taxid2taxon, _taxid, delimiter)
+							if _lineage == lineage0 {
+								_taxids2 = append(_taxids2, _taxid)
+							}
+						}
+						switch len(_taxids2) { // cool
+						case 0:
+							log.Warningf("it's a bug, please report: %s", pair)
+						case 1: // we correct it
+							taxid = _taxid
+						default:
+							tmp := make([]string, len(_taxids2))
+							for _i, _taxid := range _taxids2 {
+								tmp[_i] = strconv.Itoa(int(_taxid))
+							}
+							log.Warningf("we can't distinguish the TaxId (%s) for lineage: %s",
+								strings.Join(tmp, ", "), lineage0)
+						}
 					}
 				}
 				// note that code below is computing rank of current name, not its parent.

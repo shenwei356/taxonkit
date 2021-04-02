@@ -26,6 +26,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/shenwei356/util/stringutil"
 	"github.com/shenwei356/xopen"
 )
 
@@ -144,6 +145,7 @@ func getName2Parent2Taxid(config Config) (
 	map[uint32]*Taxon,
 	map[string]map[string]uint32,
 	map[string]uint32,
+	map[string][]uint32, // save ambigous child-parent pairs
 ) {
 
 	taxid2taxon := make(map[uint32]*Taxon, mapInitialSize)
@@ -233,11 +235,14 @@ func getName2Parent2Taxid(config Config) (
 
 	name2taxid := make(map[string]uint32, len(taxid2taxon)) // not accurate
 
+	ambigous := make(map[string][]uint32, 128)
+
 	// name -> parent-name -> taxid
 
 	var _name, name, pname string
 	var _n2i map[string]uint32
 	var ok bool
+	var pair string
 	for taxid, taxon := range taxid2taxon {
 		_name = taxid2name[taxid]
 		taxon.Name = _name
@@ -248,7 +253,17 @@ func getName2Parent2Taxid(config Config) (
 		if _n2i, ok = name2parent2taxid[name]; !ok {
 			name2parent2taxid[name] = map[string]uint32{pname: taxid}
 		} else {
-			_n2i[pname] = taxid
+			if _, ok = _n2i[pname]; ok {
+				// log.Warningf("ambigous name pair: (%s, %s). TaxIds: %d, %d", _name, taxid2name[taxid2taxon[taxid].Parent], _n2i[pname], taxid)
+				pair = name + pname
+				if _, ok = ambigous[pair]; !ok {
+					ambigous[pair] = []uint32{_n2i[pname], taxid}
+				} else {
+					ambigous[pair] = append(ambigous[pair], taxid)
+				}
+			} else {
+				_n2i[pname] = taxid
+			}
 		}
 
 		name2taxid[name] = taxid
@@ -257,5 +272,29 @@ func getName2Parent2Taxid(config Config) (
 	if config.Verbose {
 		log.Infof("created links: child name -> parent name -> taxid")
 	}
-	return taxid2taxon, name2parent2taxid, name2taxid
+	return taxid2taxon, name2parent2taxid, name2taxid, ambigous
+}
+
+// this function is only used in reformat command, with
+func lineageFromTaxid2Taxon(taxid2taxon map[uint32]*Taxon, id uint32, delimiter string) string {
+	lineage := make([]string, 0, 16)
+
+	var taxon *Taxon
+	var child, parent uint32
+	child = uint32(id)
+
+	for {
+		taxon = taxid2taxon[child]
+		parent = taxon.Parent
+
+		lineage = append(lineage, taxon.Name)
+
+		if parent == 1 {
+			break
+		}
+		child = parent
+	}
+	child = uint32(id)
+
+	return strings.Join(stringutil.ReverseStringSlice(lineage), delimiter)
 }

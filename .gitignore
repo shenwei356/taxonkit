@@ -29,8 +29,10 @@ taxonkit/taxonkit*
 TODO.md
 benchmark/.Rhistory
 taxonkit/binaries*
-*names.dmp
-*nodes.dmp
+names.dmp
+nodes.dmp
+merged.dmp
+delnodes.dmp
 *.json
 doc/site
 taxonkit/archive
@@ -39,6 +41,5 @@ test.*
 *Rplots.pdf
 *.lineage
 run_.*out
-nodes.dmp
 taxids.n*.txt*
 ids.txt

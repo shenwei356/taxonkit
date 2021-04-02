@@ -158,7 +158,7 @@ taxids with new ones:
 			var ok bool
 			child = uint32(id)
 			var notFound bool
-			for true {
+			for {
 				parent, ok = tree[child]
 				if !ok { // taxid not found
 					// check if it was deleted
