@@ -255,7 +255,7 @@ func getName2Parent2Taxid(config Config) (
 		} else {
 			if _, ok = _n2i[pname]; ok {
 				// log.Warningf("ambigous name pair: (%s, %s). TaxIds: %d, %d", _name, taxid2name[taxid2taxon[taxid].Parent], _n2i[pname], taxid)
-				pair = name + pname
+				pair = name + "__" + pname
 				if _, ok = ambigous[pair]; !ok {
 					ambigous[pair] = []uint32{_n2i[pname], taxid}
 				} else {
@@ -297,4 +297,74 @@ func lineageFromTaxid2Taxon(taxid2taxon map[uint32]*Taxon, id uint32, delimiter 
 	child = uint32(id)
 
 	return strings.Join(stringutil.ReverseStringSlice(lineage), delimiter)
+}
+
+var poolStrings = &sync.Pool{New: func() interface{} {
+	return make([]string, 0, 16)
+}}
+
+var poolUint32 = &sync.Pool{New: func() interface{} {
+	return make([]uint32, 0, 16)
+}}
+
+// only for reformat.
+// remember to recyle return values
+func namesRanksTaxids(
+	tree map[uint32]uint32,
+	ranks map[uint32]string,
+	names map[uint32]string,
+	delnodes map[uint32]struct{},
+	merged map[uint32]uint32,
+	id uint32,
+) ([]string, []string, []uint32, bool) {
+
+	lineage := poolStrings.Get().([]string)
+	lineageInRank := poolStrings.Get().([]string)
+	lineageInTaxid := poolUint32.Get().([]uint32)
+
+	var child, parent, newtaxid uint32
+	var ok bool
+	child = id
+	var notFound bool
+	for {
+		parent, ok = tree[child]
+		if !ok { // taxid not found
+			// check if it was deleted
+			if _, ok = delnodes[child]; ok {
+				// log
+				log.Warningf("taxid %d was deleted", child)
+				id = 0
+				break
+			}
+			// check if it was merged
+			if newtaxid, ok = merged[child]; ok {
+				// log
+				log.Warningf("taxid %d was merged into %d", child, newtaxid)
+				child = newtaxid
+				parent = tree[child]
+				id = child
+			} else {
+				id = 0
+				log.Warningf("taxid %d not found", child)
+				notFound = true
+				break
+			}
+		}
+
+		lineage = append(lineage, names[child])
+		lineageInRank = append(lineageInRank, ranks[child])
+		lineageInTaxid = append(lineageInTaxid, child)
+
+		if parent == 1 {
+			break
+		}
+
+		child = parent
+	}
+
+	stringutil.ReverseStringSliceInplace(lineage)
+	stringutil.ReverseStringSliceInplace(lineageInRank)
+	reverseUint32s(lineageInTaxid)
+
+	return lineage, lineageInRank, lineageInTaxid, !notFound
 }
