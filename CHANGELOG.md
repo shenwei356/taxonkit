@@ -3,7 +3,7 @@
     - `taxonkit reformat`:
         - **accept input of TaxIds via flag `-I/--taxid-field`**.
         - **accept single taxonomy names**.
-        - show warning message for TaxIds with the same lineage. [#42](https://github.com/shenwei356/taxonkit/issues/42)
+        - *show warning message for TaxIds with the same lineage*. [#42](https://github.com/shenwei356/taxonkit/issues/42)
         - better flag checking. [#40](https://github.com/shenwei356/taxonkit/issues/40)
     - `taxonkit lca`:
         - slightly speedup.
