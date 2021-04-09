@@ -566,9 +566,9 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 </code></pre>
 <p><strong>Update dataset</strong>: Simply re-download the taxdump files, uncompress and override old ones.</p>
 <h2 id="taxonkit">taxonkit</h2>
-<pre><code class="language-text">TaxonKit - A Cross-platform and Efficient NCBI Taxonomy Toolkit
+<pre><code class="language-text">TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.7.2
+Version: 0.8.0
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -591,15 +591,15 @@ Usage:
   taxonkit [command]
 
 Available Commands:
-  filter          Filter taxIDs by taxonomic rank range
-  genautocomplete generate shell autocompletion script
+  filter          Filter TaxIds by taxonomic rank range
+  genautocomplete generate shell autocompletion script (bash|zsh|fish|powershell)
   help            Help about any command
-  lca             Compute lowest common ancestor (LCA) for taxIDs
-  lineage         Query taxonomic lineage of given taxIDs
-  list            List taxonomic subtrees of given taxIDs
-  name2taxid      Convert scientific names to taxIDs
+  lca             Compute lowest common ancestor (LCA) for TaxIds
+  lineage         Query taxonomic lineage of given TaxIds
+  list            List taxonomic subtrees of given TaxIds
+  name2taxid      Convert scientific names to TaxIds
   reformat        Reformat lineage in canonical ranks
-  taxid-changelog Create taxID changelog from dump archives
+  taxid-changelog Create TaxId changelog from dump archives
   version         print version information and check for update
 
 Flags:
@@ -613,7 +613,7 @@ Flags:
 </code></pre>
 <h2 id="list">list</h2>
 <p>Usage</p>
-<pre><code class="language-text">List taxonomic subtrees of given taxIDs
+<pre><code class="language-text">List taxonomic subtrees of given TaxIds
 
 Examples:
 
@@ -632,7 +632,7 @@ Usage:
 
 Flags:
   -h, --help            help for list
-  -i, --ids string      taxID(s), multiple values should be separated by comma
+  -i, --ids string      TaxId(s), multiple values should be separated by comma
   -I, --indent string   indent (default &quot;  &quot;)
   -J, --json            output in JSON format. you can save the result in file with suffix &quot;.json&quot; and open with modern text editor
   -n, --show-name       output scientific name
@@ -790,12 +790,12 @@ peak rss: 1.04 GB
 </ol>
 <h2 id="lineage">lineage</h2>
 <p>Usage</p>
-<pre><code class="language-text">Query taxonomic lineage of given taxIDs
+<pre><code class="language-text">Query taxonomic lineage of given TaxIds
 
 Input:
 
-  - List of taxIDs, one taxID per line.
-  - Or tab-delimited format, please specify taxID field 
+  - List of TaxIds, one TaxId per line.
+  - Or tab-delimited format, please specify TaxId field 
     with flag -i/--taxid-field (default 1).
   - Supporting (gzipped) file or STDIN.
 
@@ -804,12 +804,13 @@ Output:
   1. Input line data.
   2. (Optional) Status code (-c/--show-status-code), values:
      - &quot;-1&quot; for queries not found in whole database.
-     - &quot;0&quot; for deleted taxIDs, provided by &quot;delnodes.dmp&quot;.
-     - New taxIDs for merged taxIDs, provided by &quot;merged.dmp&quot;.
+     - &quot;0&quot; for deleted TaxIds, provided by &quot;delnodes.dmp&quot;.
+     - New TaxIds for merged TaxIds, provided by &quot;merged.dmp&quot;.
      - Taxids for these found in &quot;nodes.dmp&quot;.
   3. Lineage, delimiter can be changed with flag -d/--delimiter.
-  4. (Optional) Lineage in taxIDs (-t/--show-lineage-taxids)
-  5. (Optional) Rank (-r/--show-rank)
+  4. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
+  5. (Optional) Name (-n/--show-name)
+  6. (Optional) Rank (-r/--show-rank)
 
 Filter out invalid and deleted taxids, and replace merged 
 taxids with new ones:
@@ -888,7 +889,7 @@ real    0m1.190s
 user    0m2.365s
 sys     0m0.170s
 
-# all taxIDs
+# all TaxIds
 $ time taxonkit list --ids 1 --indent "" | taxonkit lineage &gt; t
 
 real    0m4.249s
@@ -991,7 +992,7 @@ Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornido
 10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
 superkingdom;clade;kingdom;phylum;class;order;suborder;family;subfamily;genus;subgenus;species;no rank
 </code></pre>
-<p>Another way to show lineage detail of a taxID</p>
+<p>Another way to show lineage detail of a TaxId</p>
 <pre><code>$ echo 2697049 \
     | taxonkit lineage -t \
     | csvtk cut -Ht -f 3 \
@@ -1019,6 +1020,28 @@ superkingdom;clade;kingdom;phylum;class;order;suborder;family;subfamily;genus;su
 <p>Usage</p>
 <pre><code class="language-text">Reformat lineage in canonical ranks
 
+Input:
+
+  - List of TaxIds or lineages, one record per line.
+    The lineage can be a complete lineage or only one taxonomy name.
+  - Or tab-delimited format.
+    Plese specify the lineage field with flag -i/--lineage-field (default 2).
+    Or specify the TaxId field with flag -I/--taxid-field (default 0),
+    which overrides -i/--lineage-field.
+  - Supporting (gzipped) file or STDIN.
+
+Output:
+
+  1. Input line data.
+  2. Reformated lineage.
+  3. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
+
+Ambiguous names:
+
+  - Some TaxIds have the same complete lineage, empty result is returned 
+    by default. You can use the flag -a/--output-ambiguous-result to
+    return one possible result
+
 Output format can be formated by flag --format, available placeholders:
 
     {k}: superkingdom
@@ -1034,15 +1057,11 @@ Output format can be formated by flag --format, available placeholders:
     {T}: strain
 
 When these's no nodes of rank &quot;subspecies&quot; nor &quot;stain&quot;,
-you can switch -S/--pseudo-strain to use the node with lowest rank
+you can switch on -S/--pseudo-strain to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than &quot;species&quot;. 
 This flag affects {t}, {S}, {T}.
 
 Output format can contains some escape charactors like &quot;\t&quot;.
-
-This command appends reformated lineage to the input line.
-The corresponding taxIDs of reformated lineage can be provided as another
-column by flag &quot;-t/--show-lineage-taxids&quot;.
 
 Usage:
   taxonkit reformat [flags]
@@ -1057,6 +1076,7 @@ Flags:
   -r, --miss-rank-repl string          replacement string for missing rank
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default &quot;unclassified &quot;)
   -R, --miss-taxid-repl string         replacement string for missing taxid
+  -a, --output-ambiguous-result        output one of the ambigous result
       --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix (default &quot;S__&quot;)
       --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default &quot;T__&quot;)
       --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default &quot;c__&quot;)
@@ -1067,13 +1087,23 @@ Flags:
       --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default &quot;p__&quot;)
       --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default &quot;s__&quot;)
       --prefix-t string                prefix for subspecies/strain, used along with flag -P/--add-prefix (default &quot;t__&quot;)
-  -S, --pseudo-strain                  use the node with lowest rank as strain name, only if which rank is lower than &quot;species&quot; and not &quot;subpecies&quot; nor &quot;strain&quot;. This flag affects {t}, {S}, {T}
+  -S, --pseudo-strain                  use the node with lowest rank as strain name, only if which rank is lower than &quot;species&quot; and not &quot;subpecies&quot; nor &quot;strain&quot;. It affects {t}, {S}, {T}. This flag needs flag -F
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
+  -I, --taxid-field int                field index of taxid. input data should be tab-separated. it overrides -i/--lineage-field
   -T, --trim                           do not fill missing rank lower than current rank
 
 </code></pre>
 <p>Examples:</p>
 <ol>
+<li>
+<p><strong>For version &gt; 0.8.0, <code>reformat</code> accept input of TaxIds via flag <code>-I/--taxid-field</code></strong>.</p>
+<pre><code>$ echo 239935 | taxonkit reformat -I 1
+239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+
+$ echo 349741 | taxonkit reformat -I 1 -f "{k}|{p}|{c}|{o}|{f}|{g}|{s}|{t}" -F -t
+349741  Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia|Akkermansia muciniphila|Akkermansia muciniphila ATCC BAA-835    2|74201|203494|48461|1647988|239934|239935|349741
+</code></pre>
+</li>
 <li>
 <p>Example lineage (produced by: <code>taxonkit lineage taxids.txt | awk '$2!=""' &gt; lineage.txt</code>).</p>
 <pre><code>$ cat lineage.txt
@@ -1120,17 +1150,18 @@ $ cat lineage.txt \
     | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
     | csvtk pretty -t
 
-    taxid     kindom      phylum            class                 order                family            genus                        species
-    9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
-    9913      Eukaryota   Chordata          Mammalia              Artiodactyla         Bovidae           Bos                          Bos taurus
-    376619    Bacteria    Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
-    349741    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
-    239935    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
-    314101    Bacteria                                                                                                                uncultured murine large bowel bacterium BAC 54B
-    11932     Viruses     Artverviricota    Revtraviricetes       Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
-    1327037   Viruses     Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae                                   Croceibacter phage P2559Y
-    92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
-    1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
+taxid     kindom      phylum            class                 order                family            genus                        species
+-------   ---------   ---------------   -------------------   ------------------   ---------------   --------------------------   -----------------------------------------------
+9606      Eukaryota   Chordata          Mammalia              Primates             Hominidae         Homo                         Homo sapiens
+9913      Eukaryota   Chordata          Mammalia              Artiodactyla         Bovidae           Bos                          Bos taurus
+376619    Bacteria    Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae   Francisella                  Francisella tularensis
+349741    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+239935    Bacteria    Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae   Akkermansia                  Akkermansia muciniphila
+314101    Bacteria                                                                                                                uncultured murine large bowel bacterium BAC 54B
+11932     Viruses     Artverviricota    Revtraviricetes       Ortervirales         Retroviridae      Intracisternal A-particles   Mouse Intracisternal A-particle
+1327037   Viruses     Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae                                   Croceibacter phage P2559Y
+92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
+1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
 </code></pre>
 </li>
 <li>
@@ -1143,7 +1174,9 @@ $ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
     | csvtk -H -t sep -f 4 -s ';' -R \
     | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
     | csvtk pretty -t
+
 taxid     rank         name                                              subspecies/stain        subspecies              strain
+-------   ----------   -----------------------------------------------   ---------------------   ---------------------   ---------------------
 239935    species      Akkermansia muciniphila                                                                           
 83333     strain       Escherichia coli K-12                             Escherichia coli K-12                           Escherichia coli K-12
 1408252   subspecies   Escherichia coli R178                             Escherichia coli R178   Escherichia coli R178   
@@ -1160,25 +1193,30 @@ $ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
     | csvtk -H -t sep -f 4 -s ';' -R \
     | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
     | csvtk pretty -t
+
 taxid     rank         name                                              subspecies/stain                                                                       subspecies                                                                      strain
+-------   ----------   -----------------------------------------------   ------------------------------------------------------------------------------------   -----------------------------------------------------------------------------   -------------------------------------------------------------------------
 239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain                                 unclassified Akkermansia muciniphila subspecies                                 unclassified Akkermansia muciniphila strain
 83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                                                  unclassified Escherichia coli subspecies                                        Escherichia coli K-12
 1408252   subspecies   Escherichia coli R178                             Escherichia coli R178                                                                  Escherichia coli R178                                                           unclassified Escherichia coli R178 strain
 2697049   no rank      Severe acute respiratory syndrome coronavirus 2   unclassified Severe acute respiratory syndrome-related coronavirus subspecies/strain   unclassified Severe acute respiratory syndrome-related coronavirus subspecies   unclassified Severe acute respiratory syndrome-related coronavirus strain
 2605619   no rank      Escherichia coli O16:H48                          unclassified Escherichia coli subspecies/strain                                        unclassified Escherichia coli subspecies                                        unclassified Escherichia coli strain
-
-# When these's no nodes of rank "subspecies" nor "stain",
-# you can switch -S/--pseudo-strain to use the node with lowest rank
-# as subspecies/strain name, if which rank is lower than "species"
-#
-$ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
+</code></pre>
+</li>
+<li>
+<p><strong>When these's no nodes of rank "subspecies" nor "stain",
+   you can switch <code>-S/--pseudo-strain</code> to use the node with lowest rank
+   as subspecies/strain name, if which rank is lower than "species"</strong>.</p>
+<pre><code>$ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
     | taxonkit lineage -n -r \
     | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank  --pseudo-strain \
     | csvtk -H -t cut -f 1,4,3,5 \
     | csvtk -H -t sep -f 4 -s ';' -R \
     | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
     | csvtk pretty -t
+
 taxid     rank         name                                              subspecies/stain                                         subspecies                                        strain
+-------   ----------   -----------------------------------------------   ------------------------------------------------------   -----------------------------------------------   -----------------------------------------------
 239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain   unclassified Akkermansia muciniphila subspecies   unclassified Akkermansia muciniphila strain
 83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                    unclassified Escherichia coli subspecies          Escherichia coli K-12
 1408252   subspecies   Escherichia coli R178                             Escherichia coli R178                                    Escherichia coli R178                             unclassified Escherichia coli R178 strain
@@ -1190,7 +1228,8 @@ taxid     rank         name                                              subspec
 <p>Add prefix (<code>-P/--add-prefix</code>).</p>
 <pre><code>$ cat lineage.txt \
     | taxonkit reformat -P \
-    | csvtk -H -t cut -f 1,3 
+    | csvtk -H -t cut -f 1,3
+
 9606    k__Eukaryota;p__Chordata;c__Mammalia;o__Primates;f__Hominidae;g__Homo;s__Homo sapiens
 9913    k__Eukaryota;p__Chordata;c__Mammalia;o__Artiodactyla;f__Bovidae;g__Bos;s__Bos taurus
 376619  k__Bacteria;p__Proteobacteria;c__Gammaproteobacteria;o__Thiotrichales;f__Francisellaceae;g__Francisella;s__Francisella tularensis
@@ -1213,6 +1252,7 @@ taxid     rank         name                                              subspec
     | csvtk pretty -t
 
 taxid     kindom   phylum    class     order     family    genus     species
+-------   ------   -------   -------   -------   -------   -------   -------
 9606      2759     7711      40674     9443      9604      9605      9606
 9913      2759     7711      40674     91561     9895      9903      9913
 376619    2        1224      1236      72273     34064     262       263
@@ -1265,6 +1305,7 @@ Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpen
     | csvtk pretty -t
 
 taxid     kindom      phylum                         class                         order                         family                         genus                             species
+-------   ---------   ----------------------------   ---------------------------   ---------------------------   ----------------------------   -------------------------------   -----------------------------------------------
 9606      Eukaryota   Chordata                       Mammalia                      Primates                      Hominidae                      Homo                              Homo sapiens
 9913      Eukaryota   Chordata                       Mammalia                      Artiodactyla                  Bovidae                        Bos                               Bos taurus
 376619    Bacteria    Proteobacteria                 Gammaproteobacteria           Thiotrichales                 Francisellaceae                Francisella                       Francisella tularensis
@@ -1287,6 +1328,7 @@ taxid     kindom      phylum                         class                      
     | csvtk pretty -t
 
 taxid     species                                           phylum
+-------   -----------------------------------------------   ----------------------------
 9606      Homo sapiens                                      Chordata
 9913      Bos taurus                                        Chordata
 376619    Francisella tularensis                            Proteobacteria
@@ -1305,7 +1347,8 @@ taxid     species                                           phylum
     | taxonkit lineage \
     | taxonkit reformat -T \
     | sed -r "s/;+$//" \
-    | csvtk -H -t cut -f 1,3 
+    | csvtk -H -t cut -f 1,3
+
 2       Bacteria
 239934  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia
 239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
@@ -1317,11 +1360,12 @@ taxid     species                                           phylum
     | taxonkit lineage \
     | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{S}" \
     | csvtk cut -t -f -2
+
 9606    Eukaryota       Chordata        Mammalia        Primates        Hominidae       Homo    Homo sapiens
 </code></pre>
 </li>
 <li>
-<p>List seven-level lineage for all taxIDs.</p>
+<p>List seven-level lineage for all TaxIds.</p>
 <pre><code># replace empty taxon with "Unassigned"
 $ taxonkit list --ids 1 \
     | taxonkit lineage \
@@ -1358,17 +1402,35 @@ peak rss: 6.25 GB
 <li>
 <p>From taxid to 7-ranks lineage:</p>
 <pre><code>$ cat taxids.txt | taxonkit lineage | taxonkit reformat
+
+# for taxonkit v0.8.0 or later versions
+$ cat taxids.txt | taxonkit reformat -I 1
+</code></pre>
+</li>
+<li>
+<p>Some TaxIds have the same complete lineage, empty result is returned 
+    by default. You can use the flag <code>-a/--output-ambiguous-result</code> to
+    return one possible result. <a href="https://github.com/shenwei356/taxonkit/issues/42">see #42</a></p>
+<pre><code>$ echo -ne "2507530\n2516889\n" | taxonkit lineage --data-dir . | taxonkit reformat --data-dir . -t 
+19:18:29.770 [WARN] we can't distinguish the TaxIds (2507530, 2516889) for lineage: cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019. But you can use -a/--output-ambiguous-result to return one possible result
+19:18:29.770 [WARN] we can't distinguish the TaxIds (2507530, 2516889) for lineage: cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019. But you can use -a/--output-ambiguous-result to return one possible result
+2507530 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019
+2516889 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019
+
+$ echo -ne "2507530\n2516889\n" | taxonkit lineage --data-dir . | taxonkit reformat --data-dir . -t -a
+2507530 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019     Eukaryota;Basidiomycota;Agaricomycetes;Russulales;Russulaceae;Russula;Russula sp. 8 KA-2019      2759;5204;155619;452342;5401;5402;2507530
+2516889 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019     Eukaryota;Basidiomycota;Agaricomycetes;Russulales;Russulaceae;Russula;Russula sp. 8 KA-2019      2759;5204;155619;452342;5401;5402;2507530
 </code></pre>
 </li>
 </ol>
 <h2 id="name2taxid">name2taxid</h2>
 <p>Usage</p>
-<pre><code class="language-text">Convert scientific names to taxIDs
+<pre><code class="language-text">Convert scientific names to TaxIds
 
 Attention:
 
-  1. Some taxIDs share the same scientific names, e.g, Drosophila.
-     These input lines are duplicated with multiple taxIDs.
+  1. Some TaxIds share the same scientific names, e.g, Drosophila.
+     These input lines are duplicated with multiple TaxIds.
 
     $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L
     Drosophila      7215    genus
@@ -1435,7 +1497,7 @@ Croceibacter phage P2559Y       1327037 Viruses;Caudovirales;Siphoviridae;unclas
 </code></pre>
 </li>
 <li>
-<p><strong>Some taxIDs share the same scientific names</strong>, e.g, Drosophila.</p>
+<p><strong>Some TaxIds share the same scientific names</strong>, e.g, Drosophila.</p>
 <pre><code>$ echo Drosophila \
     | taxonkit name2taxid \
     | taxonkit lineage -i 2 -r \
@@ -1450,7 +1512,7 @@ Drosophila   2081351   genus      Eukaryota;Basidiomycota;Agaricomycetes;Agarica
 </ol>
 <h2 id="filter">filter</h2>
 <p>Usage</p>
-<pre><code class="language-text">Filter taxIDs by taxonomic rank range
+<pre><code class="language-text">Filter TaxIds by taxonomic rank range
 
 Attentions:
 
@@ -1479,12 +1541,12 @@ Flags:
   -B, --black-list strings        black list of ranks to discard, e.g., '-B &quot;no rank&quot; -B &quot;clade&quot;
   -N, --discard-noranks           discard all ranks without order, type &quot;taxonkit filter --help&quot; for details
   -R, --discard-root              discard root taxid, defined by --root-taxid
-  -E, --equal-to strings          output taxIDs with rank equal to some ranks, multiple values can be separated with comma &quot;,&quot; (e.g., -E &quot;genus,species&quot;), or give multiple times (e.g., -E genus -E species)
+  -E, --equal-to strings          output TaxIds with rank equal to some ranks, multiple values can be separated with comma &quot;,&quot; (e.g., -E &quot;genus,species&quot;), or give multiple times (e.g., -E genus -E species)
   -h, --help                      help for filter
-  -H, --higher-than string        output taxIDs with rank higher than a rank, exclusive with --lower-than
+  -H, --higher-than string        output TaxIds with rank higher than a rank, exclusive with --lower-than
       --list-order                list user defined ranks in order, from &quot;$HOME/.taxonkit/ranks.txt&quot;
       --list-ranks                list ordered ranks in taxonomy database, sorted in user defined order
-  -L, --lower-than string         output taxIDs with rank lower than a rank, exclusive with --higher-than
+  -L, --lower-than string         output TaxIds with rank lower than a rank, exclusive with --higher-than
   -r, --rank-file string          user-defined ordered taxonomic ranks, type &quot;taxonkit filter --help&quot; for details
       --root-taxid uint32         root taxid (default 1)
   -n, --save-predictable-norank   do not discard some special ranks without order when using -L, where rank of the closest higher node is still lower than rank cutoff
@@ -1557,7 +1619,7 @@ $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty
 <li>
 <p>"no rank" and "clade" have no rank and can be filter out via <code>-N/--discard-noranks</code>.
   Futher ranks can be removed with black list via <code>-B/--black-list</code></p>
-<pre><code># 562 is taxID of Escherichia coli
+<pre><code># 562 is TaxId of Escherichia coli
 $ taxonkit list --ids 562 \
     | taxonkit filter -L species \
     | taxonkit lineage -r -n -L \
@@ -1667,16 +1729,16 @@ $  echo -ne "2605619\n1327037\n" \
 </ol>
 <h2 id="lca">lca</h2>
 <p>Usage</p>
-<pre><code class="language-text">Compute lowest common ancestor (LCA) for taxIDs
+<pre><code class="language-text">Compute lowest common ancestor (LCA) for TaxIds
 
 Attention:
 
-  1. This command computes LCA taxID for a list of taxIDs 
+  1. This command computes LCA TaxId for a list of TaxIds 
      in a field (&quot;-i/--taxids-field) of tab-delimited file or STDIN.
   2. TaxIDs should have the same separater (&quot;-s/--separater&quot;),
      single charactor separater is prefered.
-  3. Empty lines or lines without valid taxIDs in the field are omitted.
-  4. If some taxIDs are not found in database, it returns 0.
+  3. Empty lines or lines without valid TaxIds in the field are omitted.
+  4. If some TaxIds are not found in database, it returns 0.
 
 Examples:
 
@@ -1691,9 +1753,9 @@ Usage:
 
 Flags:
   -h, --help               help for lca
-  -s, --separater string   separater for taxIDs (default &quot; &quot;)
-  -D, --skip-deleted       skip deleted taxIDs and compute with left ones
-  -U, --skip-unfound       skip unfound taxIDs and compute with left ones
+  -s, --separater string   separater for TaxIds (default &quot; &quot;)
+  -D, --skip-deleted       skip deleted TaxIds and compute with left ones
+  -U, --skip-unfound       skip unfound TaxIds and compute with left ones
   -i, --taxids-field int   field index of taxid. input data should be tab-separated (default 1)
 
 </code></pre>
@@ -1730,7 +1792,7 @@ b       63221, 741158   9606
 </code></pre>
 </li>
 <li>
-<p>Merged taxIDs.</p>
+<p>Merged TaxIds.</p>
 <pre><code># merged
 $ echo 92487 92488 92489 | taxonkit lca
 10:08:26.578 [WARN] taxid 92489 was merged into 796334
@@ -1738,7 +1800,7 @@ $ echo 92487 92488 92489 | taxonkit lca
 </code></pre>
 </li>
 <li>
-<p>Deleted taxIDs, you can ommit theses and continue compute with left onces with (<code>-D/--skip-deleted</code>).</p>
+<p>Deleted TaxIds, you can ommit theses and continue compute with left onces with (<code>-D/--skip-deleted</code>).</p>
 <pre><code>$ echo 1 2 3 | taxonkit lca 
 10:30:17.678 [WARN] taxid 3 not found
 1 2 3   0
@@ -1762,7 +1824,7 @@ $ echo 61021 61022 11111111 | taxonkit lca -U
 </ol>
 <h2 id="taxid-changelog">taxid-changelog</h2>
 <p>Usage</p>
-<pre><code class="language-text">Create taxID changelog from dump archives
+<pre><code class="language-text">Create TaxId changelog from dump archives
 
 Steps:
 

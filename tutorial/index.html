@@ -475,7 +475,7 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 <h2 id="formatting-lineage">Formatting lineage</h2>
-<p>Show lineage detail of a taxID.
+<p>Show lineage detail of a TaxId.
 The command below works on Windows with help of <a href="http://bioinf.shenwei.me/csvtk">csvtk</a>.</p>
 <pre><code>$ echo "2697049" \
     | taxonkit lineage -t \
@@ -605,7 +605,7 @@ taxid     rank         species                                                 s
 2605619   no rank      Escherichia coli                                        Escherichia coli O16:H48
 2697049   no rank      Severe acute respiratory syndrome-related coronavirus   Severe acute respiratory syndrome coronavirus 2
 </code></pre>
-<p>List eight-level lineage for all taxIDs of rank lower than or equal to species, including some nodes with "no rank".
+<p>List eight-level lineage for all TaxIds of rank lower than or equal to species, including some nodes with "no rank".
 But when filtering with <code>-L/--lower-than</code>, you can use
 <code>-n/--save-predictable-norank</code> to <strong>save some special ranks without order,
 where rank of the closest higher node is still lower than rank cutoff</strong>.</p>
@@ -1027,7 +1027,7 @@ blastp -num_threads 16 -db nr.$id -query t4.fa &gt; t4.fa.blast
 </li>
 </ol>
 <h2 id="summaries-of-taxonomy-data">Summaries of taxonomy data</h2>
-<p>You can change the taxID of interest.</p>
+<p>You can change the TaxId of interest.</p>
 <ol>
 <li>
 <p>Rank counts of common categories.</p>
