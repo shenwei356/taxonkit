@@ -706,7 +706,7 @@ Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornido
 superkingdom;clade;kingdom;phylum;class;order;suborder;family;subfamily;genus;subgenus;species;no rank
 </code></pre>
 <h3 id="reformat">reformat 生成标准层级物种注释</h3>
-<p>有时候，我们并不需要完整的分类学谱系（full lineage），因为很多级别即不常用，而且不完整。通常只想保留界门纲目科属种。</p>
+<p>有时候，我们并不需要完整的分类学谱系（complete lineage），因为很多级别即不常用，而且不完整。通常只想保留界门纲目科属种。</p>
 <p>值得注意的是，<strong>不是所有物种都有完整的界门纲目科属种水平，特别是病毒以及一些环境样品</strong>。
 TaxonKit可以用自定义内容替代缺失的分类单元，如用“__”替代。
 更<s>厉害</s>有用的是，<strong>TaxonKit还可以用更高层级的分类单元信息来补齐缺失的层级</strong> (<code>-F/--fill-miss-rank</code>)，比如</p>
@@ -849,7 +849,7 @@ change-value    # variable values for changes:
                 #   3) empty for others
 name            # scientific name
 rank            # rank
-lineage         # full lineage of the taxid
+lineage         # complete lineage of the taxid
 lineage-taxids  # taxids of the lineage
 </code></pre>
 <p>数据文件可以在前面网站上下载，<code>taxid-changelog.csv.gz</code>，130M左右，解压后2.2G，因为是gzip格式，完全不需要解压即可分析。
