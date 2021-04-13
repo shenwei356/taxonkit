@@ -70,7 +70,7 @@ Subcommand                                                                    |F
 
 ## Benchmark
 
-1. Getting full lineage for given TaxIds
+1. Getting complete lineage for given TaxIds
 
    <img src="bench/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" />
 

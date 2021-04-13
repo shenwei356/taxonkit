@@ -160,7 +160,7 @@ TaxonKit会自动识别，并进行提示，对于被合并的TaxID，TaxonKit�
 
 ### reformat 生成标准层级物种注释 
 
-有时候，我们并不需要完整的分类学谱系（full lineage），因为很多级别即不常用，而且不完整。通常只想保留界门纲目科属种。
+有时候，我们并不需要完整的分类学谱系（complete lineage），因为很多级别即不常用，而且不完整。通常只想保留界门纲目科属种。
 
 值得注意的是，**不是所有物种都有完整的界门纲目科属种水平，特别是病毒以及一些环境样品**。
 TaxonKit可以用自定义内容替代缺失的分类单元，如用“__”替代。
@@ -320,7 +320,7 @@ TaxonKit可以追踪所有TaxID每个月的变化，输出到csv文件中，可�
                     #   3) empty for others
     name            # scientific name
     rank            # rank
-    lineage         # full lineage of the taxid
+    lineage         # complete lineage of the taxid
     lineage-taxids  # taxids of the lineage
 
 数据文件可以在前面网站上下载，`taxid-changelog.csv.gz`，130M左右，解压后2.2G，因为是gzip格式，完全不需要解压即可分析。
