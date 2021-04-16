@@ -18,7 +18,12 @@
     - `taxonkit genautocomplete`:
         - support bash|zsh|fish/powershell
 
-Links:
+### Please cite
+
+> Shen, W., Ren, H., TaxonKit: a practical and efficient NCBI Taxonomy toolkit,
+> Journal of Genetics and Genomics, [https://doi.org/10.1016/j.jgg.2021.03.006](https://www.sciencedirect.com/science/article/pii/S1673852721000837)
+
+### Links:
 
 ***Tips***
 

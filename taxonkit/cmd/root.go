@@ -62,7 +62,7 @@ Author: Wei Shen <shenwei356@gmail.com>
 
 Source code: https://github.com/shenwei356/taxonkit
 Documents  : https://bioinf.shenwei.me/taxonkit
-Citation   : https://www.biorxiv.org/content/early/2019/01/08/513523
+Citation   : https://www.sciencedirect.com/science/article/pii/S1673852721000837
 
 Dataset:
 
