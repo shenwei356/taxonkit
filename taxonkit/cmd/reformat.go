@@ -73,7 +73,7 @@ Output format can be formated by flag --format, available placeholders:
     {S}: subspecies
     {T}: strain
 
-When these's no nodes of rank "subspecies" nor "stain",
+When these's no nodes of rank "subspecies" nor "strain",
 you can switch on -S/--pseudo-strain to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than "species". 
 This flag affects {t}, {S}, {T}.
