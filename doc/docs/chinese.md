@@ -181,7 +181,7 @@ TaxonKit可以用自定义内容替代缺失的分类单元，如用“__”替�
 - `-P/--add-prefix`：给每个分类学水平添加前缀，比如`s__species`。
 - `-t/--show-lineage-taxids`：输出分类学单元对应的TaxID。
 - `-r/--miss-rank-repl`: 替代没有对应rank的taxon名称
-- `-S/--pseudo-strain`: 对于低于species且rank既不是subspecies也不是stain的taxid，使用水平最低taxon名称做为菌株名称。
+- `-S/--pseudo-strain`: 对于低于species且rank既不是subspecies也不是strain的taxid，使用水平最低taxon名称做为菌株名称。
 
 例，
 

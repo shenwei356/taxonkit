@@ -538,7 +538,7 @@ Output format can be formated by flag --format, available placeholders:
     {S}: subspecies
     {T}: strain
 
-When these's no nodes of rank "subspecies" nor "stain",
+When these's no nodes of rank "subspecies" nor "strain",
 you can switch on -S/--pseudo-strain to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than "species". 
 This flag affects {t}, {S}, {T}.
@@ -644,7 +644,7 @@ Examples:
         92489     Bacteria    Proteobacteria    Gammaproteobacteria   Enterobacterales     Erwiniaceae       Erwinia                      Erwinia oleae
         1458427   Bacteria    Proteobacteria    Betaproteobacteria    Burkholderiales      Comamonadaceae    Serpentinomonas              Serpentinomonas raichei
 
-1. And `subspecies/stain` (`{t}`), `subspecies` (`{S}`), and `strain` (`{T}`) are also available.
+1. And `subspecies/strain` (`{t}`), `subspecies` (`{S}`), and `strain` (`{T}`) are also available.
 
 
         # default operation
@@ -653,10 +653,10 @@ Examples:
             | taxonkit reformat -f '{t};{S};{T}' \
             | csvtk -H -t cut -f 1,4,3,5 \
             | csvtk -H -t sep -f 4 -s ';' -R \
-            | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+            | csvtk -H -t add-header -n "taxid,rank,name,subspecies/strain,subspecies,strain" \
             | csvtk pretty -t
             
-        taxid     rank         name                                              subspecies/stain        subspecies              strain
+        taxid     rank         name                                              subspecies/strain       subspecies              strain
         -------   ----------   -----------------------------------------------   ---------------------   ---------------------   ---------------------
         239935    species      Akkermansia muciniphila                                                                           
         83333     strain       Escherichia coli K-12                             Escherichia coli K-12                           Escherichia coli K-12
@@ -673,10 +673,10 @@ Examples:
             | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank \
             | csvtk -H -t cut -f 1,4,3,5 \
             | csvtk -H -t sep -f 4 -s ';' -R \
-            | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+            | csvtk -H -t add-header -n "taxid,rank,name,subspecies/strain,subspecies,strain" \
             | csvtk pretty -t
             
-        taxid     rank         name                                              subspecies/stain                                                                       subspecies                                                                      strain
+        taxid     rank         name                                              subspecies/strain                                                                      subspecies                                                                      strain
         -------   ----------   -----------------------------------------------   ------------------------------------------------------------------------------------   -----------------------------------------------------------------------------   -------------------------------------------------------------------------
         239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain                                 unclassified Akkermansia muciniphila subspecies                                 unclassified Akkermansia muciniphila strain
         83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                                                  unclassified Escherichia coli subspecies                                        Escherichia coli K-12
@@ -684,7 +684,7 @@ Examples:
         2697049   no rank      Severe acute respiratory syndrome coronavirus 2   unclassified Severe acute respiratory syndrome-related coronavirus subspecies/strain   unclassified Severe acute respiratory syndrome-related coronavirus subspecies   unclassified Severe acute respiratory syndrome-related coronavirus strain
         2605619   no rank      Escherichia coli O16:H48                          unclassified Escherichia coli subspecies/strain                                        unclassified Escherichia coli subspecies                                        unclassified Escherichia coli strain
 
-1. **When these's no nodes of rank "subspecies" nor "stain",
+1. **When these's no nodes of rank "subspecies" nor "strain",
    you can switch `-S/--pseudo-strain` to use the node with lowest rank
    as subspecies/strain name, if which rank is lower than "species"**.
 
@@ -693,10 +693,10 @@ Examples:
             | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank  --pseudo-strain \
             | csvtk -H -t cut -f 1,4,3,5 \
             | csvtk -H -t sep -f 4 -s ';' -R \
-            | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+            | csvtk -H -t add-header -n "taxid,rank,name,subspecies/strain,subspecies,strain" \
             | csvtk pretty -t
             
-        taxid     rank         name                                              subspecies/stain                                         subspecies                                        strain
+        taxid     rank         name                                              subspecies/strain                                        subspecies                                        strain
         -------   ----------   -----------------------------------------------   ------------------------------------------------------   -----------------------------------------------   -----------------------------------------------
         239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain   unclassified Akkermansia muciniphila subspecies   unclassified Akkermansia muciniphila strain
         83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                    unclassified Escherichia coli subspecies          Escherichia coli K-12
