@@ -43,3 +43,4 @@ test.*
 run_.*out
 taxids.n*.txt*
 ids.txt
+.brename_detail.txt
