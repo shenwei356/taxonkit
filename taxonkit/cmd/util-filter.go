@@ -29,12 +29,12 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/shenwei356/unikmer"
+	"github.com/shenwei356/bio/taxdump"
 	"github.com/shenwei356/util/pathutil"
 )
 
 type rankFilter struct {
-	taxondb *unikmer.Taxonomy
+	taxondb *taxdump.Taxonomy
 
 	dbRanks   map[string]interface{}
 	rankOrder map[string]int
@@ -60,17 +60,17 @@ type rankFilter struct {
 	cache map[uint32]bool
 }
 
-func loadTaxonomy(opt *Config, withRank bool) *unikmer.Taxonomy {
+func loadTaxonomy(opt *Config, withRank bool) *taxdump.Taxonomy {
 
 	if opt.Verbose {
 		log.Infof("loading Taxonomy from: %s", opt.DataDir)
 	}
-	var t *unikmer.Taxonomy
+	var t *taxdump.Taxonomy
 	var err error
 	if withRank {
-		t, err = unikmer.NewTaxonomyWithRankFromNCBI(filepath.Join(opt.DataDir, "nodes.dmp"))
+		t, err = taxdump.NewTaxonomyWithRankFromNCBI(filepath.Join(opt.DataDir, "nodes.dmp"))
 	} else {
-		t, err = unikmer.NewTaxonomyFromNCBI(filepath.Join(opt.DataDir, "nodes.dmp"))
+		t, err = taxdump.NewTaxonomyFromNCBI(filepath.Join(opt.DataDir, "nodes.dmp"))
 	}
 	if err != nil {
 		checkError(fmt.Errorf("err on loading Taxonomy nodes: %s", err))
@@ -129,7 +129,7 @@ func loadTaxonomy(opt *Config, withRank bool) *unikmer.Taxonomy {
 	return t
 }
 
-func newRankFilter(taxondb *unikmer.Taxonomy, rankOrder map[string]int, noRanks map[string]interface{},
+func newRankFilter(taxondb *taxdump.Taxonomy, rankOrder map[string]int, noRanks map[string]interface{},
 	lower string, higher string, equals []string, blackList []string, discardNorank bool, saveKnownNoRank bool) (*rankFilter, error) {
 
 	if lower != "" && higher != "" {
@@ -376,7 +376,7 @@ func writeDefaltRankOrderFile(file string) error {
 
 const defaultRanksFile = "ranks.txt"
 const defaultRanksText = `
-# This file defines taxonomic rank order for unikmer/taxonkit.
+# This file defines taxonomic rank order for taxdump/taxonkit.
 # 
 # Here'are the rules:
 #     1. Blank lines or lines starting with "#" are ignored.
