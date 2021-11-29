@@ -46,6 +46,28 @@ func stringSplitN(s string, sep string, n int, a *[]string) {
 	(*a) = (*a)[:i+1]
 }
 
+func stringSplitNByByte(s string, sep byte, n int, a *[]string) {
+	if a == nil {
+		tmp := make([]string, n)
+		a = &tmp
+	}
+
+	n--
+	i := 0
+	for i < n {
+		m := strings.IndexByte(s, sep)
+		if m < 0 {
+			break
+		}
+		(*a)[i] = s[:m]
+		s = s[m+1:]
+		i++
+	}
+	(*a)[i] = s
+
+	(*a) = (*a)[:i+1]
+}
+
 func reverseUint32s(s []uint32) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]

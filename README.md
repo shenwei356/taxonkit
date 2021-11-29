@@ -64,7 +64,8 @@ Subcommand                                                                    |F
 [`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid)          |Convert scientific names to TaxIds
 [`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter)                  |Filter TaxIds by taxonomic rank range
 [`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca)                        |Compute lowest common ancestor (LCA) for TaxIds
-[`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog)|Create TaxId changelog from dump archives 
+[`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog)|Create TaxId changelog from dump archives
+[`profile2cami`](https://bioinf.shenwei.me/taxonkit/usage/#profile2cami)      |Convert metagenomic profile table to CAMI format 
 `version`                                                                     |Print version information and check for update
 `genautocomplete`                                                             |Generate shell autocompletion script
 

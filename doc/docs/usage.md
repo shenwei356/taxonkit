@@ -1477,6 +1477,33 @@ Flags:
 
 ```
 
+## profile2cami
+
+Usage
+
+```text
+Convert metagenomic profile table to CAMI format
+
+Input format: 
+  1. The input file should be tab-delimited
+  2. At least two columns needed:
+     a) TaxId.
+     b) Abundance (could be percentage, automatically detected).
+
+Usage:
+  taxonkit profile2cami [flags]
+
+Flags:
+  -a, --abundance-field int   field index of abundance. input data should be tab-separated (default 2)
+  -h, --help                  help for profile2cami
+  -0, --keep-zero             keep taxon with abundance of zero
+  -s, --sample-id string      sample ID in result file
+  -r, --show-rank strings     only show TaxIds and names of these ranks (default [superkingdom,phylum,class,order,family,genus,species,strain])
+  -i, --taxid-field int       field index of taxid. input data should be tab-separated (default 1)
+
+```
+
+
 <div id="disqus_thread"></div>
 <script>
 

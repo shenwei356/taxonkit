@@ -29,7 +29,7 @@ import (
 )
 
 // VERSION of taxonkit
-const VERSION = "0.8.0"
+const VERSION = "0.9.0"
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
