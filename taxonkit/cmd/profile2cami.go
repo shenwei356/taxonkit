@@ -45,7 +45,7 @@ Input format:
   1. The input file should be tab-delimited
   2. At least two columns needed:
      a) TaxId of taxon at species or lower rank.
-     b) Abundance (could be percentage, automatically detected).
+     b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -56,8 +56,7 @@ Input format:
 		fieldTaxid := getFlagPositiveInt(cmd, "taxid-field") - 1
 		fieldAbd := getFlagPositiveInt(cmd, "abundance-field") - 1
 		keepZero := getFlagBool(cmd, "keep-zero")
-		var usePercentage bool
-		// usePercentage := getFlagBool(cmd, "percentage")
+		usePercentage := getFlagBool(cmd, "percentage")
 
 		showRanks := getFlagStringSlice(cmd, "show-rank")
 
@@ -208,13 +207,13 @@ Input format:
 		}
 		checkError(fh.Close())
 
-		if config.Verbose {
-			if sum > 1 {
+		if usePercentage || sum > 10 {
+			if config.Verbose {
 				log.Infof("%d taxons given, sum of abundance in percentage: %.6f", len(targets), sum)
-				usePercentage = true
-			} else {
-				log.Infof("%d taxons given, sum of abundance : %.6f", len(targets), sum)
 			}
+			usePercentage = true
+		} else if config.Verbose {
+			log.Infof("%d taxons given, sum of abundance : %.6f", len(targets), sum)
 		}
 
 		sorts.Quicksort(Targets(targets))
@@ -308,5 +307,5 @@ func init() {
 	profile2camiCmd.Flags().IntP("abundance-field", "a", 2, "field index of abundance. input data should be tab-separated")
 	profile2camiCmd.Flags().StringSliceP("show-rank", "r", []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "strain"}, "only show TaxIds and names of these ranks")
 	profile2camiCmd.Flags().BoolP("keep-zero", "0", false, "keep taxon with abundance of zero")
-	// profile2camiCmd.Flags().BoolP("percentage", "p", false, "abundance is in percentage")
+	profile2camiCmd.Flags().BoolP("percentage", "p", false, "abundance is in percentage")
 }

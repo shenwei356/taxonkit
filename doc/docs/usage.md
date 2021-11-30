@@ -1487,8 +1487,8 @@ Convert metagenomic profile table to CAMI format
 Input format: 
   1. The input file should be tab-delimited
   2. At least two columns needed:
-     a) TaxId.
-     b) Abundance (could be percentage, automatically detected).
+     a) TaxId of taxon at species or lower rank.
+     b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
 Usage:
   taxonkit profile2cami [flags]
