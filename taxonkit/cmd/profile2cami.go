@@ -44,7 +44,7 @@ var profile2camiCmd = &cobra.Command{
 Input format: 
   1. The input file should be tab-delimited
   2. At least two columns needed:
-     a) TaxId.
+     a) TaxId of taxon at species or lower rank.
      b) Abundance (could be percentage, automatically detected).
 
 `,
@@ -52,6 +52,7 @@ Input format:
 		config := getConfigs(cmd)
 
 		sampleID := getFlagString(cmd, "sample-id")
+		taxonomyID := getFlagString(cmd, "taxonomy-id")
 		fieldTaxid := getFlagPositiveInt(cmd, "taxid-field") - 1
 		fieldAbd := getFlagPositiveInt(cmd, "abundance-field") - 1
 		keepZero := getFlagBool(cmd, "keep-zero")
@@ -252,7 +253,7 @@ Input format:
 		outfh.WriteString(fmt.Sprintf("@SampleID:%s\n", sampleID))
 		outfh.WriteString("@Version:0.10.0\n")
 		outfh.WriteString("@Ranks:superkingdom|phylum|class|order|family|genus|species|strain\n")
-		outfh.WriteString("@TaxonomyID:ncbi-taxonomy\n")
+		outfh.WriteString(fmt.Sprintf("@TaxonomyID:%s\n", taxonomyID))
 		outfh.WriteString("@@TAXID\tRANK\tTAXPATH\tTAXPATHSN\tPERCENTAGE\n")
 
 		var lineageTaxids, lineageNames string
@@ -302,6 +303,7 @@ func init() {
 	RootCmd.AddCommand(profile2camiCmd)
 
 	profile2camiCmd.Flags().StringP("sample-id", "s", "", `sample ID in result file`)
+	profile2camiCmd.Flags().StringP("taxonomy-id", "t", "", `taxonomy ID in result file`)
 	profile2camiCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. input data should be tab-separated")
 	profile2camiCmd.Flags().IntP("abundance-field", "a", 2, "field index of abundance. input data should be tab-separated")
 	profile2camiCmd.Flags().StringSliceP("show-rank", "r", []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "strain"}, "only show TaxIds and names of these ranks")
