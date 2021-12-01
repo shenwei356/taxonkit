@@ -724,7 +724,7 @@ $ echo 1327037 | taxonkit lineage | taxonkit reformat -F | cut -f 1,3
 <li><code>-P/--add-prefix</code>：给每个分类学水平添加前缀，比如<code>s__species</code>。</li>
 <li><code>-t/--show-lineage-taxids</code>：输出分类学单元对应的TaxID。</li>
 <li><code>-r/--miss-rank-repl</code>: 替代没有对应rank的taxon名称</li>
-<li><code>-S/--pseudo-strain</code>: 对于低于species且rank既不是subspecies也不是stain的taxid，使用水平最低taxon名称做为菌株名称。</li>
+<li><code>-S/--pseudo-strain</code>: 对于低于species且rank既不是subspecies也不是strain的taxid，使用水平最低taxon名称做为菌株名称。</li>
 </ul>
 <p>例，</p>
 <pre><code>$ echo -ne "349741\n1327037"\

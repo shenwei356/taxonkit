@@ -335,6 +335,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#profile2cami" class="md-nav__link">
+    profile2cami
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -514,6 +521,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#profile2cami" class="md-nav__link">
+    profile2cami
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -568,13 +582,13 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h2 id="taxonkit">taxonkit</h2>
 <pre><code class="language-text">TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.8.0
+Version: 0.9.0
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
 Source code: https://github.com/shenwei356/taxonkit
 Documents  : https://bioinf.shenwei.me/taxonkit
-Citation   : https://www.biorxiv.org/content/early/2019/01/08/513523
+Citation   : https://www.sciencedirect.com/science/article/pii/S1673852721000837
 
 Dataset:
 
@@ -598,6 +612,7 @@ Available Commands:
   lineage         Query taxonomic lineage of given TaxIds
   list            List taxonomic subtrees of given TaxIds
   name2taxid      Convert scientific names to TaxIds
+  profile2cami    Convert metagenomic profile table to CAMI format
   reformat        Reformat lineage in canonical ranks
   taxid-changelog Create TaxId changelog from dump archives
   version         print version information and check for update
@@ -1056,7 +1071,7 @@ Output format can be formated by flag --format, available placeholders:
     {S}: subspecies
     {T}: strain
 
-When these's no nodes of rank &quot;subspecies&quot; nor &quot;stain&quot;,
+When these's no nodes of rank &quot;subspecies&quot; nor &quot;strain&quot;,
 you can switch on -S/--pseudo-strain to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than &quot;species&quot;. 
 This flag affects {t}, {S}, {T}.
@@ -1165,17 +1180,17 @@ taxid     kindom      phylum            class                 order             
 </code></pre>
 </li>
 <li>
-<p>And <code>subspecies/stain</code> (<code>{t}</code>), <code>subspecies</code> (<code>{S}</code>), and <code>strain</code> (<code>{T}</code>) are also available.</p>
+<p>And <code>subspecies/strain</code> (<code>{t}</code>), <code>subspecies</code> (<code>{S}</code>), and <code>strain</code> (<code>{T}</code>) are also available.</p>
 <pre><code># default operation
 $ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
     | taxonkit lineage -n -r \
     | taxonkit reformat -f '{t};{S};{T}' \
     | csvtk -H -t cut -f 1,4,3,5 \
     | csvtk -H -t sep -f 4 -s ';' -R \
-    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/strain,subspecies,strain" \
     | csvtk pretty -t
 
-taxid     rank         name                                              subspecies/stain        subspecies              strain
+taxid     rank         name                                              subspecies/strain       subspecies              strain
 -------   ----------   -----------------------------------------------   ---------------------   ---------------------   ---------------------
 239935    species      Akkermansia muciniphila                                                                           
 83333     strain       Escherichia coli K-12                             Escherichia coli K-12                           Escherichia coli K-12
@@ -1191,10 +1206,10 @@ $ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
     | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank \
     | csvtk -H -t cut -f 1,4,3,5 \
     | csvtk -H -t sep -f 4 -s ';' -R \
-    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/strain,subspecies,strain" \
     | csvtk pretty -t
 
-taxid     rank         name                                              subspecies/stain                                                                       subspecies                                                                      strain
+taxid     rank         name                                              subspecies/strain                                                                      subspecies                                                                      strain
 -------   ----------   -----------------------------------------------   ------------------------------------------------------------------------------------   -----------------------------------------------------------------------------   -------------------------------------------------------------------------
 239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain                                 unclassified Akkermansia muciniphila subspecies                                 unclassified Akkermansia muciniphila strain
 83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                                                  unclassified Escherichia coli subspecies                                        Escherichia coli K-12
@@ -1204,7 +1219,7 @@ taxid     rank         name                                              subspec
 </code></pre>
 </li>
 <li>
-<p><strong>When these's no nodes of rank "subspecies" nor "stain",
+<p><strong>When these's no nodes of rank "subspecies" nor "strain",
    you can switch <code>-S/--pseudo-strain</code> to use the node with lowest rank
    as subspecies/strain name, if which rank is lower than "species"</strong>.</p>
 <pre><code>$ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
@@ -1212,10 +1227,10 @@ taxid     rank         name                                              subspec
     | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank  --pseudo-strain \
     | csvtk -H -t cut -f 1,4,3,5 \
     | csvtk -H -t sep -f 4 -s ';' -R \
-    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/stain,subspecies,strain" \
+    | csvtk -H -t add-header -n "taxid,rank,name,subspecies/strain,subspecies,strain" \
     | csvtk pretty -t
 
-taxid     rank         name                                              subspecies/stain                                         subspecies                                        strain
+taxid     rank         name                                              subspecies/strain                                        subspecies                                        strain
 -------   ----------   -----------------------------------------------   ------------------------------------------------------   -----------------------------------------------   -----------------------------------------------
 239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain   unclassified Akkermansia muciniphila subspecies   unclassified Akkermansia muciniphila strain
 83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                    unclassified Escherichia coli subspecies          Escherichia coli K-12
@@ -2003,6 +2018,106 @@ Flags:
       --type string   autocompletion type (currently only bash supported) (default &quot;bash&quot;)
 
 </code></pre>
+<h2 id="profile2cami">profile2cami</h2>
+<p>Usage</p>
+<pre><code class="language-text">Convert metagenomic profile table to CAMI format
+
+Input format: 
+  1. The input file should be tab-delimited
+  2. At least two columns needed:
+     a) TaxId of taxon at species or lower rank.
+     b) Abundance (could be percentage, automatically detected or use -p/--percentage).
+
+Attentions:
+  1. Some TaxIds may be merged to another ones in current taxonomy version,
+     the abundances will be summed up.
+  2. Some TaxIds may be deleted in current taxonomy version,
+     the abundances can be optionally recomputed with the flag -R/--recompute-abd.
+
+Usage:
+  taxonkit profile2cami [flags]
+
+Flags:
+  -a, --abundance-field int   field index of abundance. input data should be tab-separated (default 2)
+  -h, --help                  help for profile2cami
+  -0, --keep-zero             keep taxons with abundance of zero
+  -p, --percentage            abundance is in percentage
+  -R, --recompute-abd         recompute abundance if some TaxIds are deleted in current taxonomy version
+  -s, --sample-id string      sample ID in result file
+  -r, --show-rank strings     only show TaxIds and names of these ranks (default [superkingdom,phylum,class,order,family,genus,species,strain])
+  -i, --taxid-field int       field index of taxid. input data should be tab-separated (default 1)
+  -t, --taxonomy-id string    taxonomy ID in result file
+
+</code></pre>
+<p>Examples</p>
+<ul>
+<li>
+<p>Test data, not that <code>2824115</code> is merged to <code>483329</code> and <code>1657696</code> is deleted in current taxonomy version.</p>
+<pre><code>$ cat example/abundance.tsv 
+2824115 0.2     merged to 483329
+483329  0.2     absord 2824115
+239935  0.5     no change
+1657696 0.1     deleted
+</code></pre>
+</li>
+<li>
+<p>Example:</p>
+<pre><code>$ taxonkit profile2cami -s sample1 -t 2021-10-01 \
+    example/abundance.tsv
+
+13:17:40.552 [WARN] taxid is deleted in current taxonomy version: 1657696
+13:17:40.552 [WARN] you may recomputed abundance with the flag -R/--recompute-abd
+@SampleID:sample1
+@Version:0.10.0
+@Ranks:superkingdom|phylum|class|order|family|genus|species|strain
+@TaxonomyID:2021-10-01
+@@TAXID RANK    TAXPATH TAXPATHSN       PERCENTAGE
+2       superkingdom    2       Bacteria        50.000000000000000
+2759    superkingdom    2759    Eukaryota       40.000000000000000
+74201   phylum  2|74201 Bacteria|Verrucomicrobia        50.000000000000000
+6656    phylum  2759|6656       Eukaryota|Arthropoda    40.000000000000000
+203494  class   2|74201|203494  Bacteria|Verrucomicrobia|Verrucomicrobiae       50.000000000000000
+50557   class   2759|6656|50557 Eukaryota|Arthropoda|Insecta    40.000000000000000
+48461   order   2|74201|203494|48461    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales    50.000000000000000
+7041    order   2759|6656|50557|7041    Eukaryota|Arthropoda|Insecta|Coleoptera 40.000000000000000
+1647988 family  2|74201|203494|48461|1647988    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae    50.000000000000000
+57514   family  2759|6656|50557|7041|57514      Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae       40.000000000000000
+239934  genus   2|74201|203494|48461|1647988|239934     Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia 50.000000000000000
+57515   genus   2759|6656|50557|7041|57514|57515        Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus   40.000000000000000
+239935  species 2|74201|203494|48461|1647988|239934|239935      Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia|Akkermansia muciniphila 50.000000000000000
+483329  species 2759|6656|50557|7041|57514|57515|483329 Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus|Nicrophorus carolina       40.000000000000000
+</code></pre>
+</li>
+<li>
+<p>Recompute (normalize) the abundance</p>
+<pre><code>$ taxonkit profile2cami -s sample1 -t 2021-10-01 \
+    example/abundance.tsv --recompute-abd
+13:19:23.647 [WARN] taxid is deleted in current taxonomy version: 1657696
+@SampleID:sample1
+@Version:0.10.0
+@Ranks:superkingdom|phylum|class|order|family|genus|species|strain
+@TaxonomyID:2021-10-01
+@@TAXID RANK    TAXPATH TAXPATHSN       PERCENTAGE
+2       superkingdom    2       Bacteria        55.555555555555557
+2759    superkingdom    2759    Eukaryota       44.444444444444450
+74201   phylum  2|74201 Bacteria|Verrucomicrobia        55.555555555555557
+6656    phylum  2759|6656       Eukaryota|Arthropoda    44.444444444444450
+203494  class   2|74201|203494  Bacteria|Verrucomicrobia|Verrucomicrobiae       55.555555555555557
+50557   class   2759|6656|50557 Eukaryota|Arthropoda|Insecta    44.444444444444450
+48461   order   2|74201|203494|48461    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales    55.555555555555557
+7041    order   2759|6656|50557|7041    Eukaryota|Arthropoda|Insecta|Coleoptera 44.444444444444450
+1647988 family  2|74201|203494|48461|1647988    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae    55.555555555555557
+57514   family  2759|6656|50557|7041|57514      Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae       44.444444444444450
+239934  genus   2|74201|203494|48461|1647988|239934     Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia 55.555555555555557
+57515   genus   2759|6656|50557|7041|57514|57515        Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus   44.444444444444450
+239935  species 2|74201|203494|48461|1647988|239934|239935      Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia|Akkermansia muciniphila 55.555555555555557
+483329  species 2759|6656|50557|7041|57514|57515|483329 Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus|Nicrophorus carolina       44.444444444444450
+</code></pre>
+</li>
+<li>
+<p>See https://github.com/shenwei356/sun2021-cami-profiles</p>
+</li>
+</ul>
 <div id="disqus_thread"></div>
 <script>
 
