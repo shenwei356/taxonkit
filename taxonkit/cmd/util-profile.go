@@ -39,8 +39,12 @@ type Target struct {
 	CompleteLineageTaxids []uint32
 }
 
-func (t *Target) AddTaxonomy(taxdb *taxdump.Taxonomy, showRanksMap map[string]interface{}, taxid uint32) {
-	t.Taxid, _ = taxdb.TaxId(taxid)
+func (t *Target) AddTaxonomy(taxdb *taxdump.Taxonomy, showRanksMap map[string]interface{}, taxid uint32) bool {
+	var ok bool
+	t.Taxid, ok = taxdb.TaxId(taxid)
+	if !ok {
+		return ok
+	}
 	t.Rank = taxdb.Rank(taxid)
 	t.TaxonName = taxdb.Name(taxid)
 
@@ -50,7 +54,6 @@ func (t *Target) AddTaxonomy(taxdb *taxdump.Taxonomy, showRanksMap map[string]in
 	t.CompleteLineageNames = taxdb.LineageNames(taxid)
 
 	var _taxids2 []uint32
-	var ok bool
 	if len(showRanksMap) > 0 {
 		_taxids2 = make([]uint32, 0, len(_taxids))
 		for _, _taxid := range _taxids {
@@ -70,6 +73,8 @@ func (t *Target) AddTaxonomy(taxdb *taxdump.Taxonomy, showRanksMap map[string]in
 	for i, _taxid := range _taxids {
 		t.LineageNames[i] = taxdb.Names[_taxid]
 	}
+
+	return true
 }
 
 type Targets []*Target

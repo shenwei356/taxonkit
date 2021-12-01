@@ -87,6 +87,7 @@ Dataset:
 	RootCmd.PersistentFlags().StringP("data-dir", "", defaulDataDir, "directory containing nodes.dmp and names.dmp")
 	RootCmd.PersistentFlags().BoolP("verbose", "", false, "print verbose information")
 	RootCmd.PersistentFlags().BoolP("line-buffered", "", false, "use line buffering on output, i.e., immediately writing to stdin/file for every line of output")
-    
-    RootCmd.CompletionOptions.DisableDefaultCmd = true
+
+	RootCmd.CompletionOptions.DisableDefaultCmd = true
+	RootCmd.SetHelpCommand(&cobra.Command{Hidden: true})
 }

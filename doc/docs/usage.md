@@ -39,13 +39,13 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.8.0
+Version: 0.9.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
 Source code: https://github.com/shenwei356/taxonkit
 Documents  : https://bioinf.shenwei.me/taxonkit
-Citation   : https://www.biorxiv.org/content/early/2019/01/08/513523
+Citation   : https://www.sciencedirect.com/science/article/pii/S1673852721000837
 
 Dataset:
 
@@ -69,6 +69,7 @@ Available Commands:
   lineage         Query taxonomic lineage of given TaxIds
   list            List taxonomic subtrees of given TaxIds
   name2taxid      Convert scientific names to TaxIds
+  profile2cami    Convert metagenomic profile table to CAMI format
   reformat        Reformat lineage in canonical ranks
   taxid-changelog Create TaxId changelog from dump archives
   version         print version information and check for update
@@ -1490,19 +1491,91 @@ Input format:
      a) TaxId of taxon at species or lower rank.
      b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
+Attentions:
+  1. Some TaxIds may be merged to another ones in current taxonomy version,
+     the abundances will be summed up.
+  2. Some TaxIds may be deleted in current taxonomy version,
+     the abundances can be optionally recomputed with the flag -R/--recompute-abd.
+
 Usage:
   taxonkit profile2cami [flags]
 
 Flags:
   -a, --abundance-field int   field index of abundance. input data should be tab-separated (default 2)
   -h, --help                  help for profile2cami
-  -0, --keep-zero             keep taxon with abundance of zero
+  -0, --keep-zero             keep taxons with abundance of zero
+  -p, --percentage            abundance is in percentage
+  -R, --recompute-abd         recompute abundance if some TaxIds are deleted in current taxonomy version
   -s, --sample-id string      sample ID in result file
   -r, --show-rank strings     only show TaxIds and names of these ranks (default [superkingdom,phylum,class,order,family,genus,species,strain])
   -i, --taxid-field int       field index of taxid. input data should be tab-separated (default 1)
+  -t, --taxonomy-id string    taxonomy ID in result file
 
 ```
 
+Examples
+
+- Test data, not that `2824115` is merged to `483329` and `1657696` is deleted in current taxonomy version.
+
+        $ cat example/abundance.tsv 
+        2824115 0.2     merged to 483329
+        483329  0.2     absord 2824115
+        239935  0.5     no change
+        1657696 0.1     deleted
+
+- Example:
+
+        $ taxonkit profile2cami -s sample1 -t 2021-10-01 \
+            example/abundance.tsv
+            
+        13:17:40.552 [WARN] taxid is deleted in current taxonomy version: 1657696
+        13:17:40.552 [WARN] you may recomputed abundance with the flag -R/--recompute-abd
+        @SampleID:sample1
+        @Version:0.10.0
+        @Ranks:superkingdom|phylum|class|order|family|genus|species|strain
+        @TaxonomyID:2021-10-01
+        @@TAXID RANK    TAXPATH TAXPATHSN       PERCENTAGE
+        2       superkingdom    2       Bacteria        50.000000000000000
+        2759    superkingdom    2759    Eukaryota       40.000000000000000
+        74201   phylum  2|74201 Bacteria|Verrucomicrobia        50.000000000000000
+        6656    phylum  2759|6656       Eukaryota|Arthropoda    40.000000000000000
+        203494  class   2|74201|203494  Bacteria|Verrucomicrobia|Verrucomicrobiae       50.000000000000000
+        50557   class   2759|6656|50557 Eukaryota|Arthropoda|Insecta    40.000000000000000
+        48461   order   2|74201|203494|48461    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales    50.000000000000000
+        7041    order   2759|6656|50557|7041    Eukaryota|Arthropoda|Insecta|Coleoptera 40.000000000000000
+        1647988 family  2|74201|203494|48461|1647988    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae    50.000000000000000
+        57514   family  2759|6656|50557|7041|57514      Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae       40.000000000000000
+        239934  genus   2|74201|203494|48461|1647988|239934     Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia 50.000000000000000
+        57515   genus   2759|6656|50557|7041|57514|57515        Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus   40.000000000000000
+        239935  species 2|74201|203494|48461|1647988|239934|239935      Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia|Akkermansia muciniphila 50.000000000000000
+        483329  species 2759|6656|50557|7041|57514|57515|483329 Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus|Nicrophorus carolina       40.000000000000000
+
+- Recompute (normalize) the abundance
+
+        $ taxonkit profile2cami -s sample1 -t 2021-10-01 \
+            example/abundance.tsv --recompute-abd
+        13:19:23.647 [WARN] taxid is deleted in current taxonomy version: 1657696
+        @SampleID:sample1
+        @Version:0.10.0
+        @Ranks:superkingdom|phylum|class|order|family|genus|species|strain
+        @TaxonomyID:2021-10-01
+        @@TAXID RANK    TAXPATH TAXPATHSN       PERCENTAGE
+        2       superkingdom    2       Bacteria        55.555555555555557
+        2759    superkingdom    2759    Eukaryota       44.444444444444450
+        74201   phylum  2|74201 Bacteria|Verrucomicrobia        55.555555555555557
+        6656    phylum  2759|6656       Eukaryota|Arthropoda    44.444444444444450
+        203494  class   2|74201|203494  Bacteria|Verrucomicrobia|Verrucomicrobiae       55.555555555555557
+        50557   class   2759|6656|50557 Eukaryota|Arthropoda|Insecta    44.444444444444450
+        48461   order   2|74201|203494|48461    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales    55.555555555555557
+        7041    order   2759|6656|50557|7041    Eukaryota|Arthropoda|Insecta|Coleoptera 44.444444444444450
+        1647988 family  2|74201|203494|48461|1647988    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae    55.555555555555557
+        57514   family  2759|6656|50557|7041|57514      Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae       44.444444444444450
+        239934  genus   2|74201|203494|48461|1647988|239934     Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia 55.555555555555557
+        57515   genus   2759|6656|50557|7041|57514|57515        Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus   44.444444444444450
+        239935  species 2|74201|203494|48461|1647988|239934|239935      Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia|Akkermansia muciniphila 55.555555555555557
+        483329  species 2759|6656|50557|7041|57514|57515|483329 Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus|Nicrophorus carolina       44.444444444444450
+        
+- See https://github.com/shenwei356/sun2021-cami-profiles
 
 <div id="disqus_thread"></div>
 <script>

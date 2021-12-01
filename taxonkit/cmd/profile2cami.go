@@ -47,6 +47,12 @@ Input format:
      a) TaxId of taxon at species or lower rank.
      b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
+Attentions:
+  1. Some TaxIds may be merged to another ones in current taxonomy version,
+     the abundances will be summed up.
+  2. Some TaxIds may be deleted in current taxonomy version,
+     the abundances can be optionally recomputed with the flag -R/--recompute-abd.
+
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
@@ -57,6 +63,7 @@ Input format:
 		fieldAbd := getFlagPositiveInt(cmd, "abundance-field") - 1
 		keepZero := getFlagBool(cmd, "keep-zero")
 		usePercentage := getFlagBool(cmd, "percentage")
+		recomputeAbd := getFlagBool(cmd, "recompute-abd")
 
 		showRanks := getFlagStringSlice(cmd, "show-rank")
 
@@ -163,7 +170,8 @@ Input format:
 
 		targets := make([]*Target, 0, 512)
 
-		items := make([]string, maxField)
+		n := maxField + 1
+		items := make([]string, n)
 		// var line string
 		var _taxid int
 		var taxid uint32
@@ -178,20 +186,20 @@ Input format:
 		scanner := bufio.NewScanner(fh)
 
 		for scanner.Scan() {
-			stringSplitN(scanner.Text(), "\t", maxField, &items)
+			stringSplitN(scanner.Text(), "\t", n, &items)
 			if len(items) < maxField {
 				continue
 			}
 
 			_taxid, err = strconv.Atoi(items[fieldTaxid])
 			if err != nil {
-				checkError(fmt.Errorf("failt to parse taxid: %s", items[fieldTaxid]))
+				checkError(fmt.Errorf("failed to parse taxid: %s", items[fieldTaxid]))
 			}
 			taxid = uint32(_taxid)
 
 			abd, err = strconv.ParseFloat(items[fieldAbd], 64)
 			if err != nil {
-				checkError(fmt.Errorf("failt to parse abundance: %s", items[fieldAbd]))
+				checkError(fmt.Errorf("failed to parse abundance: %s", items[fieldAbd]))
 			}
 
 			if !keepZero && abd == 0 {
@@ -219,9 +227,39 @@ Input format:
 		sorts.Quicksort(Targets(targets))
 
 		// add taxonomy info
+		var hasDeleted, ok bool
 		for _, target := range targets {
-			target.AddTaxonomy(taxdb, showRanksMap, target.Taxid)
+			ok = target.AddTaxonomy(taxdb, showRanksMap, target.Taxid)
+			if !ok {
+				log.Warningf("taxid is deleted in current taxonomy version: %d", target.Taxid)
+				hasDeleted = true
+			}
 		}
+		if hasDeleted {
+			if recomputeAbd {
+				if config.Verbose {
+					log.Info("abundance will be recomputed")
+				}
+			} else {
+				log.Warningf("you may recomputed abundance with the flag -R/--recompute-abd")
+			}
+		}
+
+		if recomputeAbd {
+			sum = 0
+			for _, target := range targets {
+				if len(target.CompleteLineageTaxids) == 0 {
+					continue
+				}
+				sum += target.Abundance
+			}
+
+			for _, target := range targets {
+				target.Abundance = target.Abundance / sum
+			}
+		}
+
+		// ----------------------
 
 		profile := generateProfile(taxdb, targets)
 
@@ -259,7 +297,6 @@ Input format:
 		filterByRank := len(showRanksMap) > 0
 		names := make([]string, 0, 8)
 		taxids := make([]string, 0, 8)
-		var ok bool
 		var percentage float64
 		for _, node := range nodes {
 			if filterByRank {
@@ -306,6 +343,7 @@ func init() {
 	profile2camiCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. input data should be tab-separated")
 	profile2camiCmd.Flags().IntP("abundance-field", "a", 2, "field index of abundance. input data should be tab-separated")
 	profile2camiCmd.Flags().StringSliceP("show-rank", "r", []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "strain"}, "only show TaxIds and names of these ranks")
-	profile2camiCmd.Flags().BoolP("keep-zero", "0", false, "keep taxon with abundance of zero")
+	profile2camiCmd.Flags().BoolP("keep-zero", "0", false, "keep taxons with abundance of zero")
 	profile2camiCmd.Flags().BoolP("percentage", "p", false, "abundance is in percentage")
+	profile2camiCmd.Flags().BoolP("recompute-abd", "R", false, "recompute abundance if some TaxIds are deleted in current taxonomy version")
 }
