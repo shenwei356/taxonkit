@@ -4,18 +4,17 @@
  executable binary files **for most popular operating systems** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 
-### Current Version
+## Current Version
 
-- [TaxonKit v0.9.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.9.0)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.9.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.9.0)
-    - new command `taxonkit profile2cami`: converting metagenomic profile table to CAMI format
+- [TaxonKit v0.9.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.9.0) [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.9.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.9.0)
+
 
 ### Please cite
 
 > Shen, W., Ren, H., TaxonKit: a practical and efficient NCBI Taxonomy toolkit,
 > Journal of Genetics and Genomics, [https://doi.org/10.1016/j.jgg.2021.03.006](https://www.sciencedirect.com/science/article/pii/S1673852721000837)
 
-### Links:
+### Links
 
 ***Tips***
 
@@ -30,7 +29,6 @@ Linux  |**arm64**|[**taxonkit_linux_arm64.tar.gz**](https://github.com/shenwei35
 macOS  |**64-bit**|[**taxonkit_darwin_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.9.0/taxonkit_darwin_amd64.tar.gz),<br/> [备用镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.9.0/taxonkit_darwin_amd64.tar.gz)
 macOS  |**arm64** |[**taxonkit_darwin_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.9.0/taxonkit_darwin_arm64.tar.gz),<br/> [备用镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.9.0/taxonkit_darwin_arm64.tar.gz)
 Windows|**64-bit**|[**taxonkit_windows_amd64.exe.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.9.0/taxonkit_windows_amd64.exe.tar.gz),<br/> [备用镜像](http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz)|[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.9.0/taxonkit_windows_amd64.exe.tar.gz)
-
 
 ## Installation
 
@@ -117,7 +115,9 @@ All-in-one command:
 
 ## Release history
 
-- []
+- [TaxonKit v0.9.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.9.0)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.9.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.9.0)
+    - new command `taxonkit profile2cami`: converting metagenomic profile table to CAMI format
 - [TaxonKit v0.8.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.8.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.8.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.8.0)
     - `taxonkit reformat`:

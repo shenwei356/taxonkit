@@ -13,6 +13,7 @@ Table of Contents
   - [filter](#filter)
   - [lca](#lca)
   - [taxid-changelog](#taxid-changelog)
+  - [profile2cami](#profile2cami)
   - [genautocomplete](#genautocomplete)
 <!-- /TOC -->
 
