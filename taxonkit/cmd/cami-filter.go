@@ -115,7 +115,7 @@ var camiFilterCmd = &cobra.Command{
 		scanner := bufio.NewScanner(fh)
 
 		items := make([]string, n)
-		var line string
+		var _line, line string
 		var _taxid int
 		var taxid uint32
 		var taxids []string
@@ -161,8 +161,8 @@ var camiFilterCmd = &cobra.Command{
 						return false
 					})
 
-					for _, line = range meta {
-						outfh.WriteString(line + "\n")
+					for _, _line = range meta {
+						outfh.WriteString(_line + "\n")
 					}
 					for _, node := range nodes {
 						taxids = taxids[:0]
@@ -181,6 +181,7 @@ var camiFilterCmd = &cobra.Command{
 
 					rankMap = make(map[uint32]string, 1024)
 					meta = meta[:0]
+					meta = append(meta, line)
 					targets = targets[:0]
 					hasData = false
 					continue
@@ -277,8 +278,8 @@ var camiFilterCmd = &cobra.Command{
 				return false
 			})
 
-			for _, line = range meta {
-				outfh.WriteString(line + "\n")
+			for _, _line = range meta {
+				outfh.WriteString(_line + "\n")
 			}
 			for _, node := range nodes {
 				taxids = taxids[:0]
