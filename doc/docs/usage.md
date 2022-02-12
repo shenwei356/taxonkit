@@ -1578,6 +1578,72 @@ Examples
         
 - See https://github.com/shenwei356/sun2021-cami-profiles
 
+## cami-filter
+
+Usage
+
+```text
+Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
+
+Input format: 
+  The CAMI (Taxonomic) Profiling Output Format    
+  - https://github.com/CAMI-challenge/contest_information/blob/master/file_formats/CAMI_TP_specification.mkd
+  - One file with mutiple samples is also supported.
+
+How to:
+  - No extra taxonomy data needed, so the original taxonomic information are
+    used and not changed.
+  - A mini taxonomic tree is built from records with abundance greater than
+    zero, and only leaves are retained for later use. The rank of leaves may
+    be "strain", "species", or "no rank".
+  - Relative abundances (in percentage) are recomputed for all leaves
+    (reference genome).
+  - A new taxonomic tree is built from these leaves, and abundances are 
+    cumulatively added up from leaves to the root.
+
+Examples:
+  1. Remove Archaea, Bacteria, and EukaryoteS, only keeo Viruses
+      taxonkit cami-filter -t 2,2157,2759 test.profile -o test.filter.profile
+
+Usage:
+  taxonkit cami-filter [flags]
+
+Flags:
+      --field-percentage int   field index of PERCENTAGE (default 5)
+      --field-rank int         field index of taxid (default 2)
+      --field-taxid int        field index of taxid (default 1)
+      --field-taxpath int      field index of TAXPATH (default 3)
+      --field-taxpathsn int    field index of TAXPATHSN (default 4)
+  -h, --help                   help for cami-filter
+      --leaf-ranks strings     only consider leaves at these ranks (default [species,strain,no rank])
+      --show-rank strings      only show TaxIds and names of these ranks (default [superkingdom,phylum,class,order,family,genus,species,strain])
+      --taxid-sep string       separator of taxid in TAXPATH and TAXPATHSN (default "|")
+  -t, --taxids strings         the parent taxid(s) to filter out
+  -f, --taxids-file strings    file(s) for the parent taxid(s) to filter out, one taxid per line
+
+```
+
+Examples:
+
+1. Remove Eukaryota
+
+        taxonkit profile2cami -s sample1 -t 2021-10-01 \
+            example/abundance.tsv --recompute-abd \
+            | taxonkit cami-filter -t 2759
+        @SampleID:sample1
+        @Version:0.10.0
+        @Ranks:superkingdom|phylum|class|order|family|genus|species|strain
+        @TaxonomyID:2021-10-01
+        @@TAXID RANK    TAXPATH TAXPATHSN       PERCENTAGE
+        2       superkingdom    2       Bacteria        100.000000000000000
+        74201   phylum  2|74201 Bacteria|Verrucomicrobia        100.000000000000000
+        203494  class   2|74201|203494  Bacteria|Verrucomicrobia|Verrucomicrobiae       100.000000000000000
+        48461   order   2|74201|203494|48461    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales    100.000000000000000
+        1647988 family  2|74201|203494|48461|1647988    Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae    100.000000000000000
+        239934  genus   2|74201|203494|48461|1647988|239934     Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia       100.000000000000000
+        239935  species 2|74201|203494|48461|1647988|239934|239935      Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia|Akkermansia muciniphila       100.000000000000000
+
+
 <div id="disqus_thread"></div>
 <script>
 

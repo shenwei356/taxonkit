@@ -34,22 +34,35 @@ import (
 // camiFilterCmd represents the fx2tab command
 var camiFilterCmd = &cobra.Command{
 	Use:   "cami-filter",
-	Short: "Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile table",
-	Long: `Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile table
+	Short: "Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile",
+	Long: `Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
+
+Input format: 
+  The CAMI (Taxonomic) Profiling Output Format    
+  - https://github.com/CAMI-challenge/contest_information/blob/master/file_formats/CAMI_TP_specification.mkd
+  - One file with mutiple samples is also supported.
+
+How to:
+  - No extra taxonomy data needed, so the original taxonomic information are
+    used and not changed.
+  - A mini taxonomic tree is built from records with abundance greater than
+    zero, and only leaves are retained for later use. The rank of leaves may
+    be "strain", "species", or "no rank".
+  - Relative abundances (in percentage) are recomputed for all leaves
+    (reference genome).
+  - A new taxonomic tree is built from these leaves, and abundances are 
+    cumulatively added up from leaves to the root.
+
+Examples:
+  1. Remove Archaea, Bacteria, and EukaryoteS, only keeo Viruses
+      taxonkit cami-filter -t 2,2157,2759 test.profile -o test.filter.profile
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
 
+		taxidsFiles := getFlagStringSlice(cmd, "taxids-file")
 		taxidsStr := getFlagStringSlice(cmd, "taxids")
-		// if len(taxidsStr) == 0 {
-		// 	checkError(fmt.Errorf("flag --taxids needed"))
-		// }
-
-		filter := make(map[string]interface{}, len(taxidsStr))
-		for _, t := range taxidsStr {
-			filter[t] = struct{}{}
-		}
 
 		fieldTaxid := getFlagPositiveInt(cmd, "field-taxid") - 1
 		fieldRank := getFlagPositiveInt(cmd, "field-rank") - 1
@@ -83,10 +96,52 @@ var camiFilterCmd = &cobra.Command{
 			rankOrder[_r] = _i
 		}
 
-		leavesRanks := getFlagStringSlice(cmd, "leave-ranks")
+		leavesRanks := getFlagStringSlice(cmd, "leaf-ranks")
 		leavesRanksMap := make(map[string]interface{}, len(leavesRanks))
 		for _, r := range leavesRanks {
 			leavesRanksMap[r] = struct{}{}
+		}
+
+		// ----------------------------------------------------------------
+
+		var nfiles int
+		if len(taxidsFiles) != 0 {
+			nfiles = len(taxidsFiles)
+			for i, file := range taxidsFiles {
+				if config.Verbose {
+					log.Infof("loading taxids from file [%d/%d]: %s", i+1, nfiles, file)
+				}
+
+				fh, err := xopen.Ropen(file)
+				checkError(err)
+
+				scanner := bufio.NewScanner(fh)
+
+				var line string
+				for scanner.Scan() {
+					line = scanner.Text()
+					if line == "" {
+						continue
+					}
+
+					taxidsStr = append(taxidsStr, line)
+				}
+
+				if err := scanner.Err(); err != nil {
+					checkError(err)
+				}
+				checkError(fh.Close())
+			}
+		}
+		if len(taxidsStr) == 0 {
+			log.Warningf("no taxids given")
+		} else if config.Verbose {
+			log.Infof("%d taxids loaded", len(taxidsStr))
+		}
+
+		filter := make(map[string]interface{}, len(taxidsStr))
+		for _, t := range taxidsStr {
+			filter[t] = struct{}{}
 		}
 
 		// ----------------------------------------------------------------
@@ -313,16 +368,16 @@ func generateProfile2(targets0, targets []*Target) map[uint32]*ProfileNode {
 	for _, target := range targets {
 		for _, taxid := range target.CompleteLineageTaxids {
 			if node, ok := profile[taxid]; !ok {
-				target0 = targetsMap[taxid]
+				if target0, ok = targetsMap[taxid]; ok {
+					profile[taxid] = &ProfileNode{
+						Taxid:         taxid,
+						Rank:          target0.Rank,
+						TaxonName:     target0.TaxonName,
+						LineageNames:  target0.LineageNames,
+						LineageTaxids: target0.CompleteLineageTaxids,
 
-				profile[taxid] = &ProfileNode{
-					Taxid:         taxid,
-					Rank:          target0.Rank,
-					TaxonName:     target0.TaxonName,
-					LineageNames:  target0.LineageNames,
-					LineageTaxids: target0.CompleteLineageTaxids,
-
-					Abundance: target.Abundance,
+						Abundance: target.Abundance,
+					}
 				}
 			} else {
 				node.Abundance += target.Abundance
@@ -395,7 +450,8 @@ func init() {
 	camiFilterCmd.Flags().StringP("taxid-sep", "", "|", "separator of taxid in TAXPATH and TAXPATHSN")
 
 	camiFilterCmd.Flags().StringSliceP("taxids", "t", []string{}, "the parent taxid(s) to filter out")
+	camiFilterCmd.Flags().StringSliceP("taxids-file", "f", []string{}, "file(s) for the parent taxid(s) to filter out, one taxid per line")
 
 	camiFilterCmd.Flags().StringSliceP("show-rank", "", []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "strain"}, "only show TaxIds and names of these ranks")
-	camiFilterCmd.Flags().StringSliceP("leave-ranks", "", []string{"species", "strain"}, "only consider leaves at these ranks")
+	camiFilterCmd.Flags().StringSliceP("leaf-ranks", "", []string{"species", "strain", "no rank"}, "only consider leaves at these ranks")
 }

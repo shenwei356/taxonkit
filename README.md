@@ -66,9 +66,7 @@ Subcommand                                                                    |F
 [`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca)                        |Compute lowest common ancestor (LCA) for TaxIds
 [`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog)|Create TaxId changelog from dump archives
 [`profile2cami`](https://bioinf.shenwei.me/taxonkit/usage/#profile2cami)      |Convert metagenomic profile table to CAMI format 
-`version`                                                                     |Print version information and check for update
-`genautocomplete`                                                             |Generate shell autocompletion script
-
+[`cami-filter`](https://bioinf.shenwei.me/taxonkit/usage/#cami-filter)        |Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
 ## Benchmark
 
 1. Getting complete lineage for given TaxIds
