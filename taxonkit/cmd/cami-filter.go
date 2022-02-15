@@ -264,7 +264,7 @@ Examples:
 
 			_taxid, err = strconv.Atoi(items[fieldTaxid])
 			if err != nil {
-				checkError(fmt.Errorf("failed to parse taxid: %s", items[fieldTaxid]))
+				checkError(fmt.Errorf("failed to parse taxid: %s. line: %s", items[fieldTaxid], line))
 			}
 			taxid = uint32(_taxid)
 
@@ -289,7 +289,7 @@ Examples:
 			for _, taxidS = range taxids {
 				_taxid, err = strconv.Atoi(taxidS)
 				if err != nil {
-					checkError(fmt.Errorf("failed to parse taxid: %s", taxidS))
+					checkError(fmt.Errorf("failed to parse taxid: %s. taxpath: %s", taxidS, taxpath))
 				}
 				taxidsUint = append(taxidsUint, uint32(_taxid))
 			}
