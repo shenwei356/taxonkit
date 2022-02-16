@@ -217,7 +217,6 @@ func queryNamesRanksTaxids(
 	var child, parent, newtaxid uint32
 	var ok bool
 	child = id
-	var notFound bool
 	for {
 		parent, ok = tree[child]
 		if !ok { // taxid not found
@@ -226,7 +225,7 @@ func queryNamesRanksTaxids(
 				// log
 				log.Warningf("taxid %d was deleted", child)
 				id = 0
-				break
+				return nil, nil, nil, false
 			}
 			// check if it was merged
 			if newtaxid, ok = merged[child]; ok {
@@ -238,8 +237,7 @@ func queryNamesRanksTaxids(
 			} else {
 				id = 0
 				log.Warningf("taxid %d not found", child)
-				notFound = true
-				break
+				return nil, nil, nil, false
 			}
 		}
 
@@ -258,5 +256,5 @@ func queryNamesRanksTaxids(
 	stringutil.ReverseStringSliceInplace(lineageInRank)
 	reverseUint32s(lineageInTaxid)
 
-	return lineage, lineageInRank, lineageInTaxid, !notFound
+	return lineage, lineageInRank, lineageInTaxid, true
 }

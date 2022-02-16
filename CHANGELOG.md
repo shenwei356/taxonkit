@@ -1,6 +1,7 @@
 - [TaxonKit v0.10.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.10.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.10.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.10.0)
     - new command `taxonkit cami2-filter`: Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
+    - `taxonkit reformat`: fix panic for deleted taxid using `-F/--fill-miss-rank `. [#55](https://github.com/shenwei356/taxonkit/issues/55)
 - [TaxonKit v0.9.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.9.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.9.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.9.0)
     - new command `taxonkit profile2cami`: converting metagenomic profile table to CAMI format
