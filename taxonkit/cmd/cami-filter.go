@@ -287,9 +287,13 @@ Examples:
 
 			taxidsUint = make([]uint32, 0, len(taxids))
 			for _, taxidS = range taxids {
-				_taxid, err = strconv.Atoi(taxidS)
-				if err != nil {
-					checkError(fmt.Errorf("failed to parse taxid: %s. taxpath: %s", taxidS, taxpath))
+				if taxidS == "" {
+					_taxid = 0
+				} else {
+					_taxid, err = strconv.Atoi(taxidS)
+					if err != nil {
+						checkError(fmt.Errorf("failed to parse taxid: %s. taxpath: %s", taxidS, taxpath))
+					}
 				}
 				taxidsUint = append(taxidsUint, uint32(_taxid))
 			}
@@ -339,7 +343,11 @@ Examples:
 			for _, node := range nodes {
 				taxids = taxids[:0]
 				for _, taxid = range node.LineageTaxids {
-					taxids = append(taxids, strconv.Itoa(int(taxid)))
+					if taxid == 0 {
+						taxids = append(taxids, "")
+					} else {
+						taxids = append(taxids, strconv.Itoa(int(taxid)))
+					}
 				}
 
 				fmt.Fprintf(outfh, "%d\t%s\t%s\t%s\t%.15f\n",
@@ -391,6 +399,7 @@ func generateProfile2(targets0, targets []*Target) map[uint32]*ProfileNode {
 func filterLeaves(rankMap map[uint32]string, leavesRanksMap map[string]interface{}, targets []*Target) []*Target {
 
 	targetsMap := make(map[uint32]*Target, len(targets))
+	// parent -> son -> leave
 	tree := make(map[uint32]map[uint32]uint32, 1024)
 
 	var i int
@@ -400,10 +409,21 @@ func filterLeaves(rankMap map[uint32]string, leavesRanksMap map[string]interface
 		targetsMap[target.Taxid] = target
 
 		for i, taxid = range target.CompleteLineageTaxids {
+			if taxid == 0 { // it can't be leaves (species / strain)
+				continue
+			}
+
 			if i == 0 {
 				taxidP = 1
 			} else {
 				taxidP = target.CompleteLineageTaxids[i-1]
+
+				if taxidP == 0 {
+					if i < 2 {
+						checkError(fmt.Errorf("taxid (%d) has a bad taxpath: %s", target.Taxid, target.LineageNames))
+					}
+					taxidP = target.CompleteLineageTaxids[i-2]
+				}
 			}
 
 			if _, ok = tree[taxidP]; !ok {
