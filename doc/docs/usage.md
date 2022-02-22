@@ -1516,7 +1516,7 @@ Flags:
 
 Examples
 
-- Test data, not that `2824115` is merged to `483329` and `1657696` is deleted in current taxonomy version.
+- Test data, note that `2824115` is merged to `483329` and `1657696` is deleted in current taxonomy version.
 
         $ cat example/abundance.tsv 
         2824115 0.2     merged to 483329
@@ -1602,8 +1602,10 @@ How to:
     cumulatively added up from leaves to the root.
 
 Examples:
-  1. Remove Archaea, Bacteria, and EukaryoteS, only keeo Viruses
+  1. Remove Archaea, Bacteria, and EukaryoteS, only keep Viruses:
       taxonkit cami-filter -t 2,2157,2759 test.profile -o test.filter.profile
+  2. Remove Viruses:
+      taxonkit cami-filter -t 10239 test.profile -o test.filter.profile
 
 Usage:
   taxonkit cami-filter [flags]

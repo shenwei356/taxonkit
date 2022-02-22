@@ -54,8 +54,10 @@ How to:
     cumulatively added up from leaves to the root.
 
 Examples:
-  1. Remove Archaea, Bacteria, and EukaryoteS, only keeo Viruses
+  1. Remove Archaea, Bacteria, and EukaryoteS, only keep Viruses:
       taxonkit cami-filter -t 2,2157,2759 test.profile -o test.filter.profile
+  2. Remove Viruses:
+      taxonkit cami-filter -t 10239 test.profile -o test.filter.profile
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {

@@ -67,6 +67,7 @@ Subcommand                                                                    |F
 [`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog)|Create TaxId changelog from dump archives
 [`profile2cami`](https://bioinf.shenwei.me/taxonkit/usage/#profile2cami)      |Convert metagenomic profile table to CAMI format 
 [`cami-filter`](https://bioinf.shenwei.me/taxonkit/usage/#cami-filter)        |Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
+
 ## Benchmark
 
 1. Getting complete lineage for given TaxIds
