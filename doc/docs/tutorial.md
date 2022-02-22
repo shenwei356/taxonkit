@@ -59,9 +59,7 @@ Example data.
 Format to 7-level ranks ("superkingdom phylum class order family genus species").
 
     $ cat taxids3.txt \
-        | taxonkit lineage \
-        | taxonkit reformat \
-        | cut -f 1,3
+        | taxonkit reformat -I 1
     
     376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
     349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
@@ -77,9 +75,7 @@ Format to 7-level ranks ("superkingdom phylum class order family genus species")
 Format to 8-level ranks ("superkingdom phylum class order family genus species subspecies/rank").
 
     $ cat taxids3.txt \
-        | taxonkit lineage \
-        | taxonkit reformat -f "{k};{p};{c};{o};{f};{g};{s};{t}" \
-        | cut -f 1,3
+        | taxonkit reformat -I 1 -f "{k};{p};{c};{o};{f};{g};{s};{t}" 
     
     376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica LVS
     349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
@@ -95,9 +91,7 @@ Format to 8-level ranks ("superkingdom phylum class order family genus species s
 Replace missing ranks with `Unassigned` and output tab-delimited format.
 
     $ cat taxids3.txt \
-        | taxonkit lineage \
-        | taxonkit reformat -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
-        | cut -f 1,3-10 \
+        | taxonkit reformat -I 1 -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | csvtk pretty -H -t 
         
     376619    Bacteria   Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae      Francisella                  Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
@@ -114,9 +108,7 @@ Replace missing ranks with `Unassigned` and output tab-delimited format.
 Fill missing ranks and add prefixes.
 
     $ cat taxids3.txt \
-        | taxonkit lineage \
-        | taxonkit reformat -F -P -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
-        | cut -f 1,3-10 \
+        | taxonkit reformat -I 1 -F -P -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | csvtk pretty -H -t 
         
     376619    k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Thiotrichales                 f__Francisellaceae                g__Francisella                       s__Francisella tularensis                                  t__Francisella tularensis subsp. holarctica LVS
@@ -135,9 +127,9 @@ we can switch `-S/--pseudo-strain` to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than "species"**.
 
     $ cat taxids3.txt \
-        | taxonkit lineage -r \
-        | taxonkit reformat -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
-        | cut -f 1,3,10,11 \
+        | taxonkit lineage -r -L \
+        | taxonkit reformat -I 1 -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        | cut -f 1,2,9,10 \
         | csvtk add-header -t -n "taxid,rank,species,strain" \
         | csvtk pretty -t
         
@@ -161,9 +153,9 @@ where rank of the closest higher node is still lower than rank cutoff**.
 
     $ time taxonkit list --ids 1 \
         | taxonkit filter -L species -E species -R -N -n \
-        | taxonkit lineage -n -r \
-        | taxonkit reformat -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
-        | csvtk cut -Ht -l -f 1,4,3,2,5-12 \
+        | taxonkit lineage -n -r -L \
+        | taxonkit reformat -I 1 -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        | csvtk cut -Ht -l -f 1,3,2,1,4-11 \
         | csvtk add-header -t -n "taxid,rank,name,lineage,kingdom,phylum,class,order,family,genus,species,strain" \
         | pigz -c > result.tsv.gz
 
