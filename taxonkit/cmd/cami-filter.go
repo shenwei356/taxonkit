@@ -222,6 +222,10 @@ Examples:
 						outfh.WriteString(_line + "\n")
 					}
 					for _, node := range nodes {
+						if _, ok = showRanksMap[node.Rank]; !ok {
+							continue
+						}
+
 						taxids = taxids[:0]
 						for _, taxid = range node.LineageTaxids {
 							taxids = append(taxids, strconv.Itoa(int(taxid)))
@@ -343,6 +347,10 @@ Examples:
 				outfh.WriteString(_line + "\n")
 			}
 			for _, node := range nodes {
+				if _, ok = showRanksMap[node.Rank]; !ok {
+					continue
+				}
+
 				taxids = taxids[:0]
 				for _, taxid = range node.LineageTaxids {
 					if taxid == 0 {

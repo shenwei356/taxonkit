@@ -1,3 +1,6 @@
+- [TaxonKit v0.10.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.10.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.10.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.10.1)
+    - `taxonkit cami2-filter`: fix option `--show-rank` which did not work in v0.10.0.
 - [TaxonKit v0.10.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.10.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.10.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.10.0)
     - new command `taxonkit cami2-filter`: Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
