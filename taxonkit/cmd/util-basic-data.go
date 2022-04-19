@@ -240,7 +240,11 @@ func getDelnodes(file string) []uint32 {
 	}
 
 	fh, err := xopen.Ropen(file)
-	checkError(err)
+	if err == xopen.ErrNoContent {
+		return taxids
+	} else {
+		checkError(err)
+	}
 	defer func() {
 		checkError(fh.Close())
 	}()
@@ -281,7 +285,11 @@ func getDelnodesMap(file string) map[uint32]struct{} {
 	}
 
 	fh, err := xopen.Ropen(file)
-	checkError(err)
+	if err == xopen.ErrNoContent {
+		return taxids
+	} else {
+		checkError(err)
+	}
 	defer func() {
 		checkError(fh.Close())
 	}()
@@ -322,7 +330,11 @@ func getMergedNodes(file string) [][2]uint32 {
 	}
 
 	fh, err := xopen.Ropen(file)
-	checkError(err)
+	if err == xopen.ErrNoContent {
+		return merges
+	} else {
+		checkError(err)
+	}
 	defer func() {
 		checkError(fh.Close())
 	}()
@@ -367,7 +379,11 @@ func getMergedNodesMap(file string) map[uint32]uint32 {
 	}
 
 	fh, err := xopen.Ropen(file)
-	checkError(err)
+	if err == xopen.ErrNoContent {
+		return merges
+	} else {
+		checkError(err)
+	}
 	defer func() {
 		checkError(fh.Close())
 	}()

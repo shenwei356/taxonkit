@@ -22,6 +22,7 @@ package cmd
 
 import (
 	"strings"
+	"unsafe"
 )
 
 func stringSplitN(s string, sep string, n int, a *[]string) {
@@ -72,4 +73,20 @@ func reverseUint32s(s []uint32) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
 	}
+}
+
+func MaxInts(a int, vals ...int) int {
+	max := a
+	for _, v := range vals {
+		if v > max {
+			max = v
+		}
+	}
+	return max
+}
+
+func CopyString(s string) string {
+	b := make([]byte, len(s))
+	copy(b, s)
+	return *(*string)(unsafe.Pointer(&b))
 }

@@ -29,6 +29,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/shenwei356/util/pathutil"
 	"github.com/spf13/cobra"
 	"github.com/twotwotwo/sorts"
@@ -125,4 +126,26 @@ func getFlagTaxonIDs(cmd *cobra.Command, flag string) []int {
 		ids[i] = id
 	}
 	return ids
+}
+
+func makeOutDir(outDir string, force bool) {
+	pwd, _ := os.Getwd()
+	if outDir != "./" && outDir != "." && pwd != filepath.Clean(outDir) {
+		existed, err := pathutil.DirExists(outDir)
+		checkError(errors.Wrap(err, outDir))
+		if existed {
+			empty, err := pathutil.IsEmpty(outDir)
+			checkError(errors.Wrap(err, outDir))
+			if !empty {
+				if force {
+					checkError(os.RemoveAll(outDir))
+				} else {
+					checkError(fmt.Errorf("out-dir not empty: %s, use --force to overwrite", outDir))
+				}
+			} else {
+				checkError(os.RemoveAll(outDir))
+			}
+		}
+		checkError(os.MkdirAll(outDir, 0777))
+	}
 }

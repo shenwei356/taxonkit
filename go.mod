@@ -3,6 +3,7 @@ module github.com/shenwei356/taxonkit
 go 1.17
 
 require (
+	github.com/cespare/xxhash/v2 v2.1.2
 	github.com/mattn/go-colorable v0.1.10
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.9.1

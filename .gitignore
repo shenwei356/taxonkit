@@ -44,3 +44,5 @@ run_.*out
 taxids.n*.txt*
 ids.txt
 .brename_detail.txt
+*.tsv.gz
+taxonkit/gtdb.*.tsv
