@@ -46,3 +46,7 @@ ids.txt
 .brename_detail.txt
 *.tsv.gz
 taxonkit/gtdb.*.tsv
+*taxid-changelog.csv*
+taxonkit/mgv.*.tsv
+taxid.map
+mgv.tsv

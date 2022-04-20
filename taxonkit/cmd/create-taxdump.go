@@ -25,6 +25,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"sort"
 	"strings"
 	"sync"
 
@@ -53,6 +54,10 @@ Input format:
      7) Species (needed),                -S/--field-species
      8) Subspecies,                      -T/--field-subspecies
         For GTDB, we use the assembly accession (without version number).
+  3. The column containing the genome/assembly accession is recommended to
+     generate TaxId mapping file (taxid.map, id -> taxid).
+     -A/--field-accession,    field contaning genome/assembly accession        
+     --field-accession-re,    regular expression to extract the accession 
 
 Attentions:
   1. Names should be distinct in taxa of different rank.
@@ -78,6 +83,7 @@ Attentions:
 		}
 		runtime.GOMAXPROCS(config.Threads)
 
+		fAccession := getFlagNonNegativeInt(cmd, "field-accession")
 		fKingdom := getFlagNonNegativeInt(cmd, "field-kingdom")
 		fPhylum := getFlagNonNegativeInt(cmd, "field-phylum")
 		fClass := getFlagNonNegativeInt(cmd, "field-class")
@@ -92,33 +98,56 @@ Attentions:
 			checkError(fmt.Errorf(`the number of --rank-names should be 8`))
 		}
 
+		var err error
+
+		reGenomeIDStr := getFlagString(cmd, "field-accession-re")
+
+		var reGenomeID *regexp.Regexp
+		if reGenomeIDStr != "" {
+			if !regexp.MustCompile(`\(.+\)`).MatchString(reGenomeIDStr) {
+				checkError(fmt.Errorf(`value of --field-accession-re must contains "(" and ")"`))
+			}
+
+			reGenomeID, err = regexp.Compile(reGenomeIDStr)
+			if err != nil {
+				checkError(fmt.Errorf("fail to compile regular expression: %s", reGenomeIDStr))
+			}
+		}
+
 		isGTDB := getFlagBool(cmd, "gtdb")
 		reGTDBStr := getFlagString(cmd, "gtdb-re-subs")
 
-		if !regexp.MustCompile(`\(.+\)`).MatchString(reGTDBStr) {
-			checkError(fmt.Errorf(`value of --gtdb-re-subs must contains "(" and ")"`))
-		}
+		var reGTDBsubspe *regexp.Regexp
 
-		reGTDBsubspe, err := regexp.Compile(reGTDBStr)
-		if err != nil {
-			checkError(fmt.Errorf("fail to compile regular expression: %s", reGTDBStr))
+		if reGTDBStr != "" {
+			if !regexp.MustCompile(`\(.+\)`).MatchString(reGTDBStr) {
+				checkError(fmt.Errorf(`value of --gtdb-re-subs must contains "(" and ")"`))
+			}
+
+			reGTDBsubspe, err = regexp.Compile(reGTDBStr)
+			if err != nil {
+				checkError(fmt.Errorf("fail to compile regular expression: %s", reGTDBStr))
+			}
 		}
 
 		nulls := getFlagStringSlice(cmd, "null")
 
+		var hasAccession bool
 		var numFields int
 		if isGTDB {
 			numFields = 2
-		} else if fSubspe == 0 || fSpecies == 0 {
-			checkError(fmt.Errorf("flags -A/--field-accession and -S/--field-species needed"))
+			hasAccession = true
+		} else if fSpecies == 0 {
+			checkError(fmt.Errorf("flag -S/--field-species needed"))
 		} else {
-			numFields = MaxInts(fSubspe, fKingdom, fPhylum, fClass, fOrder, fFamily, fGenus, fSpecies)
+			numFields = MaxInts(fAccession, fSubspe, fKingdom, fPhylum, fClass, fOrder, fFamily, fGenus, fSpecies)
+			hasAccession = fAccession > 0
 		}
 
 		outDir := getFlagString(cmd, "out-dir")
 		force := getFlagBool(cmd, "force")
 		if outDir == "" {
-			checkError(fmt.Errorf("flag -O/--out-dir is needed"))
+			checkError(fmt.Errorf("flag --out-dir is needed"))
 		}
 
 		makeOutDir(outDir, force)
@@ -147,6 +176,8 @@ Attentions:
 			return &tmp
 		}}
 
+		var reGenomeIDNotCaptured bool
+
 		fn := func(line string) (interface{}, bool, error) {
 			line = strings.Trim(line, "\r\n")
 			if line == "" {
@@ -165,11 +196,21 @@ Attentions:
 			var val string
 
 			if isGTDB {
-				found := reGTDBsubspe.FindAllStringSubmatch((*items)[0], 1)
-				if len(found) == 0 {
-					checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+				if reGTDBsubspe != nil {
+					found := reGTDBsubspe.FindAllStringSubmatch((*items)[0], 1)
+					if len(found) == 0 {
+						checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+					}
+					t.Subspe = found[0][1]
 				}
-				t.Subspe = found[0][1]
+
+				if reGenomeID != nil {
+					found := reGenomeID.FindAllStringSubmatch((*items)[0], 1)
+					if len(found) == 0 {
+						checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+					}
+					t.Accession = found[0][1]
+				}
 
 				items7 := pool7.Get().(*[]string)
 				defer pool7.Put(items7)
@@ -261,6 +302,21 @@ Attentions:
 
 			var ok bool
 
+			if hasAccession {
+				val = (*items)[fAccession-1]
+
+				if reGenomeID != nil {
+					found := reGenomeID.FindAllStringSubmatch(val, 1)
+					if len(found) == 0 {
+						t.Accession = val
+						reGenomeIDNotCaptured = true
+					} else {
+						t.Accession = found[0][1]
+					}
+				}
+
+			}
+
 			if hasKingdom {
 				val = (*items)[fKingdom-1]
 				if _, ok = nullMap[val]; !ok {
@@ -349,6 +405,11 @@ Attentions:
 		// child -> name
 		names := make(map[uint32]string, 1<<16)
 
+		// accession -> taxid
+		acc2taxid := make(map[string]uint32, 1<<16)
+		accIdx := make(map[string]int, 1<<16)
+		var idx int
+
 		for _, file := range files {
 			reader, err := breader.NewBufferedReader(file, config.Threads, 10, fn)
 			checkError(err)
@@ -375,7 +436,7 @@ Attentions:
 					first = true
 					for i = 7; i >= 0; i-- {
 						taxid = t.TaxIds[i]
-						if taxid == 0 {
+						if taxid == 0 || t.Names[i] == "" {
 							continue
 						}
 
@@ -416,6 +477,12 @@ Attentions:
 						}
 
 						if first {
+							if hasAccession {
+								idx++
+								accIdx[t.Accession] = idx
+								acc2taxid[t.Accession] = taxid // the lowest taxid
+							}
+
 							prev = i
 							first = false
 							continue
@@ -430,6 +497,34 @@ Attentions:
 				}
 			}
 
+		}
+
+		// ------------------------------- taxid.map -------------------------
+
+		if hasAccession {
+			fileAcc2Taxid := filepath.Join(outDir, "taxid.map")
+
+			if reGenomeIDNotCaptured {
+				log.Warningf("--field-accession-re failed to extract genome accession, the cell value is used instead. please check: %s", fileAcc2Taxid)
+			}
+
+			outfhAcc2Taxid, err := xopen.Wopen(fileAcc2Taxid)
+			checkError(err)
+			defer outfhAcc2Taxid.Close()
+
+			accs := make([]string, 0, len(accIdx))
+			for acc := range accIdx {
+				accs = append(accs, acc)
+			}
+			sort.Slice(accs, func(i, j int) bool {
+				return accIdx[accs[i]] < accIdx[accs[j]]
+			})
+
+			for _, acc := range accs {
+				fmt.Fprintf(outfhAcc2Taxid, "%s\t%d\n", acc, acc2taxid[acc])
+			}
+
+			log.Infof("%d records saved to %s", len(acc2taxid), fileAcc2Taxid)
 		}
 
 		// ------------------------------- nodes.dmp -------------------------
@@ -496,12 +591,13 @@ func init() {
 	createTaxDumpCmd.Flags().IntP("field-species", "S", 0, "field index of species (needed)")
 	createTaxDumpCmd.Flags().IntP("field-subspecies", "T", 0, "field index of subspecies")
 
+	createTaxDumpCmd.Flags().IntP("field-accession", "A", 0, "field index of assembly accession (genome ID), for outputting taxid.map")
+	createTaxDumpCmd.Flags().StringP("field-accession-re", "", `^\w\w_(.+)$`, `regular expression to extract assembly accession`)
+
 	// -------------------------------------------------------------------
 
 	createTaxDumpCmd.Flags().BoolP("gtdb", "", false, "input files are GTDB taxonomy file")
-	createTaxDumpCmd.Flags().StringP("gtdb-re-subs", "", `^\w\w_(.+)\.\d+$`, `regular expression to extract accession as the subspecies from the assembly ID`)
-
-	createTaxDumpCmd.Flags().IntP("line-chunk-size", "", 5000, `number of lines to process for each thread, and 4 threads is fast enough.`)
+	createTaxDumpCmd.Flags().StringP("gtdb-re-subs", "", `^\w\w_(.+)\.\d+$`, `regular expression to extract assembly accession as the subspecies`)
 
 	// --------------
 
@@ -512,9 +608,16 @@ func init() {
 
 	createTaxDumpCmd.Flags().StringP("out-dir", "", "", `output directory`)
 	createTaxDumpCmd.Flags().BoolP("force", "", false, `overwrite existed output directory`)
+
+	// --------------
+
+	createTaxDumpCmd.Flags().IntP("line-chunk-size", "", 5000, `number of lines to process for each thread, and 4 threads is fast enough.`)
+
 }
 
 type _Taxon struct {
+	Accession string
+
 	Subspe  string
 	Kingdom string
 	Phylum  string
