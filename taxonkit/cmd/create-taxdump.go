@@ -30,7 +30,9 @@ import (
 	"sync"
 
 	"github.com/cespare/xxhash/v2"
+	"github.com/shenwei356/bio/taxdump"
 	"github.com/shenwei356/breader"
+	"github.com/shenwei356/util/pathutil"
 	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
 )
@@ -149,8 +151,74 @@ Attentions:
 		if outDir == "" {
 			checkError(fmt.Errorf("flag --out-dir is needed"))
 		}
-
 		makeOutDir(outDir, force)
+
+		// ------------------------------------------------------------
+
+		oldTaxdumpDir := getFlagString(cmd, "old-taxdump-dir")
+
+		var taxdb *taxdump.Taxonomy
+
+		if oldTaxdumpDir != "" {
+			log.Infof("loading Taxonomy from: %s", oldTaxdumpDir)
+
+			taxdb, err = taxdump.NewTaxonomyWithRankFromNCBI(filepath.Join(oldTaxdumpDir, "nodes.dmp"))
+			if err != nil {
+				checkError(fmt.Errorf("err on loading Taxonomy nodes: %s", err))
+			}
+			log.Infof("  %d nodes in %d ranks loaded", len(taxdb.Nodes), len(taxdb.Ranks))
+
+			var existed bool
+
+			var wg sync.WaitGroup
+			wg.Add(3)
+
+			go func() {
+				defer wg.Done()
+				err = taxdb.LoadNamesFromNCBI(filepath.Join(oldTaxdumpDir, "names.dmp"))
+				if err != nil {
+					checkError(fmt.Errorf("err on loading Taxonomy names: %s", err))
+				}
+				log.Infof("  %d names loaded", len(taxdb.Names))
+			}()
+
+			go func() {
+				defer wg.Done()
+				file := filepath.Join(oldTaxdumpDir, "delnodes.dmp")
+				existed, err = pathutil.Exists(file)
+				if err != nil {
+					checkError(fmt.Errorf("err on checking file delnodes.dmp: %s", err))
+				}
+				if existed {
+					err = taxdb.LoadDeletedNodesFromNCBI(file)
+					if err != nil {
+						checkError(fmt.Errorf("err on loading Taxonomy nodes: %s", err))
+					}
+				}
+				log.Infof("  %d deleted nodes loaded", len(taxdb.DelNodes))
+			}()
+
+			go func() {
+				defer wg.Done()
+				file := filepath.Join(oldTaxdumpDir, "merged.dmp")
+				existed, err = pathutil.Exists(file)
+				if err != nil {
+					checkError(fmt.Errorf("err on checking file merged.dmp: %s", err))
+				}
+				if existed {
+					err = taxdb.LoadMergedNodesFromNCBI(file)
+					if err != nil {
+						checkError(fmt.Errorf("err on loading Taxonomy merged nodes: %s", err))
+					}
+				}
+				log.Infof("  %d merged nodes loaded", len(taxdb.MergeNodes))
+			}()
+
+			wg.Wait()
+			log.Info()
+		}
+
+		// ------------------------------------------------------------
 
 		hasKingdom := fKingdom > 0
 		hasPhylum := fPhylum > 0
@@ -552,9 +620,17 @@ Attentions:
 		checkError(err)
 		defer outfhNodes.Close()
 
+		taxids := make([]uint32, 0, len(tree))
+		for child := range names {
+			taxids = append(taxids, child)
+		}
+		sort.Slice(taxids, func(i, j int) bool {
+			return taxids[i] < taxids[j]
+		})
+
 		fmt.Fprintf(outfhNodes, "%d\t|\t%d\t|\t%s\t|\t%s\t|\t8\t|\t0\t|\t1\t|\t0\t|\t0\t|\t0\t|\t0\t|\t0\t|\t\t|\n", 1, 1, "no rank", "")
-		for child, parent := range tree {
-			fmt.Fprintf(outfhNodes, "%d\t|\t%d\t|\t%s\t|\t%s\t|\t0\t|\t1\t|\t11\t|\t1\t|\t0\t|\t1\t|\t1\t|\t0\t|\t\t|\n", child, parent, rankNames[ranks[child]], "XX")
+		for _, child := range taxids {
+			fmt.Fprintf(outfhNodes, "%d\t|\t%d\t|\t%s\t|\t%s\t|\t0\t|\t1\t|\t11\t|\t1\t|\t0\t|\t1\t|\t1\t|\t0\t|\t\t|\n", child, tree[child], rankNames[ranks[child]], "XX")
 		}
 		log.Infof("%d records saved to %s", len(tree)+1, fileNodes)
 
@@ -566,34 +642,96 @@ Attentions:
 		defer outfhNames.Close()
 
 		fmt.Fprintf(outfhNames, "%d\t|\t%s\t|\t\t|\tscientific name\t|\n", 1, "root")
-		for child, name := range names {
-			fmt.Fprintf(outfhNames, "%d\t|\t%s\t|\t\t|\tscientific name\t|\n", child, name)
+		for _, child := range taxids {
+			fmt.Fprintf(outfhNames, "%d\t|\t%s\t|\t\t|\tscientific name\t|\n", child, names[child])
 		}
 		log.Infof("%d records saved to %s", len(names)+1, fileNames)
 
 		// ------------------------------- merged.dmp -------------------------
-		// TODO: compare to a old version
 
 		fileMerged := filepath.Join(outDir, "merged.dmp")
 		outfhMerged, err := xopen.Wopen(fileMerged)
 		checkError(err)
 		defer outfhMerged.Close()
 
-		// fmt.Fprintf(outfhMerged, "\n")
+		var merged map[uint32]uint32
+		var ok bool
 
-		log.Infof("%d records saved to %s", 0, fileMerged)
+		if taxdb != nil {
+			merged = make(map[uint32]uint32, len(taxdb.MergeNodes))
+			var _parent uint32
+			for child, parent := range tree {
+				if _parent, ok = taxdb.Nodes[child]; ok {
+					if parent != _parent && // parent changed
+						tree[parent] == taxdb.Nodes[_parent] { // while parents of the parents not changed
+						// e.g., `Escherichia flexneri` is merged into `Escherichia coli`
+						// GCF_002458255,no rank,Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia flexneri;002458255
+						// GCF_002458255,no rank,Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;002458255
+						merged[_parent] = parent
+					}
+				}
+			}
+
+			// append old delnodes.dmp
+			for from, to := range taxdb.MergeNodes {
+				if _, ok = merged[from]; !ok {
+					merged[from] = to
+				}
+			}
+
+			taxids := make([]uint32, 0, len(merged))
+			for child := range merged {
+				taxids = append(taxids, child)
+			}
+			sort.Slice(taxids, func(i, j int) bool {
+				return taxids[i] < taxids[j]
+			})
+
+			for _, child := range taxids {
+				fmt.Fprintf(outfhMerged, "%d\t|\t%d\t|\n", child, merged[child])
+			}
+		}
+
+		log.Infof("%d records saved to %s", len(merged), fileMerged)
 
 		// ------------------------------- delnodes.dmp -------------------------
-		// TODO: compare to a old version
 
 		fileDelNodes := filepath.Join(outDir, "delnodes.dmp")
 		outfhDelNodes, err := xopen.Wopen(fileDelNodes)
 		checkError(err)
 		defer outfhDelNodes.Close()
 
-		// fmt.Fprintf(outfhDelNodes, "\n")
+		var delnodes []uint32
 
-		log.Infof("%d records saved to %s", 0, fileDelNodes)
+		if taxdb != nil {
+			delnodes = make([]uint32, 0, len(taxdb.DelNodes))
+
+			for child := range taxdb.Nodes {
+				if child == 1 {
+					continue
+				}
+				if _, ok = tree[child]; !ok { // deleted
+					delnodes = append(delnodes, child)
+				}
+			}
+
+			// append old delnodes.dmp
+			for child := range taxdb.DelNodes {
+				if _, ok = tree[child]; ok { // some deleted taxids being reused
+					delnodes = append(delnodes, child)
+				}
+			}
+
+			sort.Slice(delnodes, func(i, j int) bool {
+				return delnodes[i] > delnodes[j]
+			})
+
+			for _, child := range delnodes {
+				fmt.Fprintf(outfhDelNodes, "%d\t|\n", child)
+			}
+		}
+
+		log.Infof("%d records saved to %s", len(delnodes), fileDelNodes)
 	},
 }
 
@@ -615,7 +753,7 @@ func init() {
 	// -------------------------------------------------------------------
 
 	createTaxDumpCmd.Flags().BoolP("gtdb", "", false, "input files are GTDB taxonomy file")
-	createTaxDumpCmd.Flags().StringP("gtdb-re-subs", "", `^\w\w_(.+)\.\d+$`, `regular expression to extract assembly accession as the subspecies`)
+	createTaxDumpCmd.Flags().StringP("gtdb-re-subs", "", `^\w\w_GC[AF]_(.+)\.\d+$`, `regular expression to extract assembly accession as the subspecies`)
 
 	// --------------
 
@@ -630,6 +768,9 @@ func init() {
 	// --------------
 
 	createTaxDumpCmd.Flags().IntP("line-chunk-size", "", 5000, `number of lines to process for each thread, and 4 threads is fast enough.`)
+
+	// --------------
+	createTaxDumpCmd.Flags().StringP("old-taxdump-dir", "x", "", `taxdump directory of older version`)
 
 }
 

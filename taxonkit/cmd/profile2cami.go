@@ -122,7 +122,7 @@ Attentions:
 			defer wg.Done()
 			existed, err = pathutil.Exists(config.DelNodesFile)
 			if err != nil {
-				checkError(fmt.Errorf("err on checking file merged.dmp: %s", err))
+				checkError(fmt.Errorf("err on checking file delnodes.dmp: %s", err))
 			}
 			if existed {
 				err = taxdb.LoadDeletedNodesFromNCBI(config.DelNodesFile)
@@ -148,7 +148,7 @@ Attentions:
 				}
 			}
 			if config.Verbose {
-				log.Infof("  %d merged nodes loaded", len(config.MergedFile))
+				log.Infof("  %d merged nodes loaded", len(taxdb.MergeNodes))
 			}
 		}()
 

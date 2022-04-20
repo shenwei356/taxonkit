@@ -50,3 +50,5 @@ taxonkit/gtdb.*.tsv
 taxonkit/mgv.*.tsv
 taxid.map
 mgv.tsv
+
+gtdb-taxdump
