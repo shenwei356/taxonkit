@@ -67,7 +67,7 @@ Attentions:
 
      It can also detect duplicate names with different ranks, e.g.,
      The Class and Genus have the same name B47-G6, and the Order and Family between them have different names.
-     In this case, we reassign TaxId by increasing the TaxId until it being distinct.
+     In this case, we reassign a new TaxId by increasing the TaxId until it being distinct.
 
        GB_GCA_003663585.1      d__Archaea;p__Thermoplasmatota;c__B47-G6;o__B47-G6B;f__47-G6;g__B47-G6;s__B47-G6 sp003663585
 
@@ -176,7 +176,11 @@ Attentions:
 			return &tmp
 		}}
 
+		var reGTDBsubspeNotCaptured bool
+		var reGTDBsubspeNotCapturedExample string
+
 		var reGenomeIDNotCaptured bool
+		var reGenomeIDNotCapturedExample string
 
 		fn := func(line string) (interface{}, bool, error) {
 			line = strings.Trim(line, "\r\n")
@@ -199,17 +203,26 @@ Attentions:
 				if reGTDBsubspe != nil {
 					found := reGTDBsubspe.FindAllStringSubmatch((*items)[0], 1)
 					if len(found) == 0 {
-						checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+						t.Subspe = (*items)[0]
+						// checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+						reGTDBsubspeNotCaptured = true
+						reGTDBsubspeNotCapturedExample = (*items)[0]
+					} else {
+						t.Subspe = found[0][1]
 					}
-					t.Subspe = found[0][1]
 				}
 
 				if reGenomeID != nil {
 					found := reGenomeID.FindAllStringSubmatch((*items)[0], 1)
 					if len(found) == 0 {
-						checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+						t.Accession = (*items)[0]
+						// checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+						reGTDBsubspeNotCaptured = true
+						reGTDBsubspeNotCapturedExample = (*items)[0]
+					} else {
+						t.Accession = found[0][1]
 					}
-					t.Accession = found[0][1]
+
 				}
 
 				items7 := pool7.Get().(*[]string)
@@ -221,43 +234,43 @@ Attentions:
 				}
 
 				val = (*items7)[0]
-				if len(val) < 4 || val[0:3] != "d__" {
+				if len(val) < 3 || val[0:3] != "d__" {
 					checkError(fmt.Errorf("invalid GTDB taxonomy format (kingdom): %s", val))
 				}
 				t.Kingdom = val[3:]
 
 				val = (*items7)[1]
-				if len(val) < 4 || val[0:3] != "p__" {
+				if len(val) < 3 || val[0:3] != "p__" {
 					checkError(fmt.Errorf("invalid GTDB taxonomy format (phylum): %s", val))
 				}
 				t.Phylum = val[3:]
 
 				val = (*items7)[2]
-				if len(val) < 4 || val[0:3] != "c__" {
+				if len(val) < 3 || val[0:3] != "c__" {
 					checkError(fmt.Errorf("invalid GTDB taxonomy format (class): %s", val))
 				}
 				t.Class = val[3:]
 
 				val = (*items7)[3]
-				if len(val) < 4 || val[0:3] != "o__" {
+				if len(val) < 3 || val[0:3] != "o__" {
 					checkError(fmt.Errorf("invalid GTDB taxonomy format (order): %s", val))
 				}
 				t.Order = val[3:]
 
 				val = (*items7)[4]
-				if len(val) < 4 || val[0:3] != "f__" {
+				if len(val) < 3 || val[0:3] != "f__" {
 					checkError(fmt.Errorf("invalid GTDB taxonomy format (family): %s", val))
 				}
 				t.Family = val[3:]
 
 				val = (*items7)[5]
-				if len(val) < 4 || val[0:3] != "g__" {
+				if len(val) < 3 || val[0:3] != "g__" {
 					checkError(fmt.Errorf("invalid GTDB taxonomy format (genus): %s", val))
 				}
 				t.Genus = val[3:]
 
 				val = (*items7)[6]
-				if len(val) < 4 || val[0:3] != "s__" {
+				if len(val) < 3 || val[0:3] != "s__" {
 					checkError(fmt.Errorf("invalid GTDB taxonomy format (species): %s", val))
 				}
 				t.Species = val[3:]
@@ -310,6 +323,7 @@ Attentions:
 					if len(found) == 0 {
 						t.Accession = val
 						reGenomeIDNotCaptured = true
+						reGenomeIDNotCapturedExample = val
 					} else {
 						t.Accession = found[0][1]
 					}
@@ -499,13 +513,17 @@ Attentions:
 
 		}
 
+		if isGTDB && reGTDBsubspeNotCaptured {
+			log.Warningf("--gtdb-re-subs failed to extract ID for subspecies, the origninal value is used instead. e.g., %s", reGTDBsubspeNotCapturedExample)
+		}
+
 		// ------------------------------- taxid.map -------------------------
 
 		if hasAccession {
 			fileAcc2Taxid := filepath.Join(outDir, "taxid.map")
 
 			if reGenomeIDNotCaptured {
-				log.Warningf("--field-accession-re failed to extract genome accession, the cell value is used instead. please check: %s", fileAcc2Taxid)
+				log.Warningf("--field-accession-re failed to extract genome accession, the origninal value is used instead. e.g., %s", reGenomeIDNotCapturedExample)
 			}
 
 			outfhAcc2Taxid, err := xopen.Wopen(fileAcc2Taxid)
