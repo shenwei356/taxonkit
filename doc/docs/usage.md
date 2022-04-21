@@ -14,6 +14,7 @@ Table of Contents
   - [lca](#lca)
   - [taxid-changelog](#taxid-changelog)
   - [profile2cami](#profile2cami)
+  - [create-taxdump](#create-taxdmp)
   - [genautocomplete](#genautocomplete)
 <!-- /TOC -->
 
@@ -40,7 +41,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.9.0
+Version: 0.11.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -60,12 +61,13 @@ Dataset:
     or environment variable TAXONKIT_DB
 
 Usage:
-  taxonkit [command]
+  taxonkit [command] 
 
 Available Commands:
+  cami-filter     Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
+  create-taxdump  Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB
   filter          Filter TaxIds by taxonomic rank range
   genautocomplete generate shell autocompletion script (bash|zsh|fish|powershell)
-  help            Help about any command
   lca             Compute lowest common ancestor (LCA) for TaxIds
   lineage         Query taxonomic lineage of given TaxIds
   list            List taxonomic subtrees of given TaxIds
@@ -1436,7 +1438,118 @@ Flags:
         349741   2020-07-01   CHANGE_RANK                     Akkermansia muciniphila ATCC BAA-835   strain    cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
 
 [More](https://github.com/shenwei356/taxid-changelog)
-    
+
+## create-taxdump
+
+Usage
+
+```text
+Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB
+
+Input format: 
+  0. For GTDB taxonomy file, just use --gtdb
+  1. The input file should be tab-delimited
+  2. At least one column is needed, please specify the filed index:
+     1) Kingdom/Superkingdom/Domain,     -K/--field-kingdom
+     2) Phylum,                          -P/--field-phylum
+     3) Class,                           -C/--field-class
+     4) Order,                           -O/--field-order
+     5) Family,                          -F/--field-family
+     6) Genus,                           -G/--field-genus
+     7) Species (needed),                -S/--field-species
+     8) Subspecies,                      -T/--field-subspecies
+        For GTDB, we use the numeric assembly accession
+        (without the prefix GCA_ and GCF_, and version number).
+  3. The column containing the genome/assembly accession is recommended to
+     generate TaxId mapping file (taxid.map, id -> taxid).
+     -A/--field-accession,    field contaning genome/assembly accession        
+     --field-accession-re,    regular expression to extract the accession 
+
+Attentions:
+  1. Names should be distinct in taxa of different rank.
+     But for these missing some taxon nodes, using names of parent nodes is allowed:
+
+       GB_GCA_018897955.1      d__Archaea;p__EX4484-52;c__EX4484-52;o__EX4484-52;f__LFW-46;g__LFW-46;s__LFW-46 sp018897155
+
+     It can also detect duplicate names with different ranks, e.g.,
+     the Class and Genus have the same name B47-G6, and the Order and Family between them have different names.
+     In this case, we reassign a new TaxId by increasing the TaxId until it being distinct.
+
+       GB_GCA_003663585.1      d__Archaea;p__Thermoplasmatota;c__B47-G6;o__B47-G6B;f__47-G6;g__B47-G6;s__B47-G6 sp003663585
+
+Usage:
+  taxonkit create-taxdump [flags] 
+
+Flags:
+  -A, --field-accession int         field index of assembly accession (genome ID), for outputting taxid.map
+      --field-accession-re string   regular expression to extract assembly accession (default
+                                    "^\\w\\w_(.+)$")
+  -C, --field-class int             field index of class
+  -F, --field-family int            field index of family
+  -G, --field-genus int             field index of genus
+  -K, --field-kingdom int           field index of kingdom
+  -O, --field-order int             field index of order
+  -P, --field-phylum int            field index of phylum
+  -S, --field-species int           field index of species (needed)
+  -T, --field-subspecies int        field index of subspecies
+      --force                       overwrite existed output directory
+      --gtdb                        input files are GTDB taxonomy file
+      --gtdb-re-subs string         regular expression to extract assembly accession as the subspecies
+                                    (default "^\\w\\w_GC[AF]_(.+)\\.\\d+$")
+  -h, --help                        help for create-taxdump
+      --line-chunk-size int         number of lines to process for each thread, and 4 threads is fast
+                                    enough. (default 5000)
+      --null strings                null value of taxa (default [,NULL,NA])
+  -x, --old-taxdump-dir string      taxdump directory of the previous version, for generating merged.dmp
+                                    and delnodes.dmp
+      --out-dir string              output directory
+      --rank-names strings          names of the 8 ranks, the order maters (default
+                                    [superkingdom,phylum,class,order,family,genus,species,no rank])
+```
+
+Examples:
+
+1. GTDB. See more: https://github.com/shenwei356/gtdb-taxdump
+
+        $ taxonkit create-taxdump --gtdb ar53_taxonomy_r207.tsv.gz bac120_taxonomy_r207.tsv.gz --out-dir taxdump
+        16:42:35.213 [INFO] 317542 records saved to taxdump/taxid.map
+        16:42:35.460 [INFO] 401815 records saved to taxdump/nodes.dmp
+        16:42:35.611 [INFO] 401815 records saved to taxdump/names.dmp
+        16:42:35.611 [INFO] 0 records saved to taxdump/merged.dmp
+        16:42:35.611 [INFO] 0 records saved to taxdump/delnodes.dmp
+
+1. [MGV](https://www.nature.com/articles/s41564-021-00928-6). Only Order, Family, Genus information are available.
+
+        $ cat mgv_contig_info.tsv \
+            | csvtk cut -t -f contig_id,votu_id,ictv_order,ictv_family,ictv_genus \
+            | sed 1d \
+            > mgv.tsv
+
+        $ taxonkit create-taxdump mgv.tsv --out-dir mgv --force -A 1 -S 2 -O 3 -F 4 -G 5
+        16:45:40.555 [WARN] --field-accession-re failed to extract genome accession, the origninal value is used instead. e.g., MGV-GENOME-0231225
+        16:45:40.817 [INFO] 189680 records saved to mgv/taxid.map
+        16:45:40.846 [INFO] 54224 records saved to mgv/nodes.dmp
+        16:45:40.864 [INFO] 54224 records saved to mgv/names.dmp
+        16:45:40.864 [INFO] 0 records saved to mgv/merged.dmp
+        16:45:40.864 [INFO] 0 records saved to mgv/delnodes.dmp
+        
+        $ head -n 5 mgv/taxid.map 
+        MGV-GENOME-0364295      677052301
+        MGV-GENOME-0364296      677052301
+        MGV-GENOME-0364303      1414406025
+        MGV-GENOME-0364311      1849074420
+        MGV-GENOME-0364312      2074846424
+        
+        $ echo 677052301 | taxonkit lineage --data-dir mgv/ 
+        677052301       Caudovirales;crAss-phage;OTU-61123
+        
+        $ echo 677052301 | taxonkit reformat --data-dir mgv/ -I 1 -P
+        677052301       k__;p__;c__;o__Caudovirales;f__crAss-phage;g__;s__OTU-61123
+        
+        $ csvtk grep -Ht -f 1 -p MGV-GENOME-0364295 mgv.tsv 
+        MGV-GENOME-0364295      OTU-61123       Caudovirales    crAss-phage     NULL
+
+
 ## genautocomplete
 
 Usage

@@ -55,7 +55,8 @@ Input format:
      6) Genus,                           -G/--field-genus
      7) Species (needed),                -S/--field-species
      8) Subspecies,                      -T/--field-subspecies
-        For GTDB, we use the assembly accession (without version number).
+        For GTDB, we use the numeric assembly accession
+        (without the prefix GCA_ and GCF_, and version number).
   3. The column containing the genome/assembly accession is recommended to
      generate TaxId mapping file (taxid.map, id -> taxid).
      -A/--field-accession,    field contaning genome/assembly accession        
@@ -68,7 +69,7 @@ Attentions:
        GB_GCA_018897955.1      d__Archaea;p__EX4484-52;c__EX4484-52;o__EX4484-52;f__LFW-46;g__LFW-46;s__LFW-46 sp018897155
 
      It can also detect duplicate names with different ranks, e.g.,
-     The Class and Genus have the same name B47-G6, and the Order and Family between them have different names.
+     the Class and Genus have the same name B47-G6, and the Order and Family between them have different names.
      In this case, we reassign a new TaxId by increasing the TaxId until it being distinct.
 
        GB_GCA_003663585.1      d__Archaea;p__Thermoplasmatota;c__B47-G6;o__B47-G6B;f__47-G6;g__B47-G6;s__B47-G6 sp003663585
@@ -770,7 +771,7 @@ func init() {
 	// --------------
 
 	createTaxDumpCmd.Flags().StringSliceP("null", "", []string{"", "NULL", "NA"}, "null value of taxa")
-	createTaxDumpCmd.Flags().StringSliceP("rank-names", "", []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "no rank"}, "names of the 8 ranks, order maters")
+	createTaxDumpCmd.Flags().StringSliceP("rank-names", "", []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "no rank"}, "names of the 8 ranks, the order maters")
 
 	// --------------
 
@@ -782,7 +783,7 @@ func init() {
 	createTaxDumpCmd.Flags().IntP("line-chunk-size", "", 5000, `number of lines to process for each thread, and 4 threads is fast enough.`)
 
 	// --------------
-	createTaxDumpCmd.Flags().StringP("old-taxdump-dir", "x", "", `taxdump directory of older version`)
+	createTaxDumpCmd.Flags().StringP("old-taxdump-dir", "x", "", `taxdump directory of the previous version, for generating merged.dmp and delnodes.dmp`)
 
 }
 
