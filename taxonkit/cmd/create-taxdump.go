@@ -661,13 +661,18 @@ Attentions:
 			merged = make(map[uint32]uint32, len(taxdb.MergeNodes))
 			var _parent uint32
 			for child, parent := range tree {
-				if _parent, ok = taxdb.Nodes[child]; ok {
-					if parent != _parent && // parent changed
+				if _parent, ok = taxdb.Nodes[child]; ok { // not new taxid
+					if parent != _parent && // its parent changed
 						tree[parent] == taxdb.Nodes[_parent] { // while parents of the parents not changed
-						// e.g., `Escherichia flexneri` is merged into `Escherichia coli`
-						// GCF_002458255,no rank,Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia flexneri;002458255
-						// GCF_002458255,no rank,Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;002458255
-						merged[_parent] = parent
+						if _, ok = tree[_parent]; !ok { // and the old parent disappeared
+
+							// R80
+							// GB_GCA_002299865.1	d__Bacteria;p__Desulfobacteraeota_A;c__Desulfovibrionia;o__Desulfovibrionales;f__Desulfonatronaceae;g__UBA663;s__
+							// R83
+							// GB_GCA_002299865.1	d__Bacteria;p__Desulfobacterota;c__Desulfovibrionia;o__Desulfovibrionales;f__Desulfonatronaceae;g__Desulfonatronum;s__
+
+							merged[_parent] = parent
+						}
 					}
 				}
 			}
@@ -710,14 +715,21 @@ Attentions:
 				if child == 1 {
 					continue
 				}
-				if _, ok = tree[child]; !ok { // deleted
-					delnodes = append(delnodes, child)
+
+				if _, ok = tree[child]; ok { // still there
+					continue
 				}
+
+				if _, ok = merged[child]; ok { // merged
+					continue
+				}
+
+				delnodes = append(delnodes, child)
 			}
 
 			// append old delnodes.dmp
 			for child := range taxdb.DelNodes {
-				if _, ok = tree[child]; ok { // some deleted taxids being reused
+				if _, ok = tree[child]; !ok { // some deleted taxids may be reused
 					delnodes = append(delnodes, child)
 				}
 			}
