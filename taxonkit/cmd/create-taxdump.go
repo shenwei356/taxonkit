@@ -519,6 +519,10 @@ Attentions:
 					first = true
 					for i = 7; i >= 0; i-- {
 						taxid = t.TaxIds[i]
+						if taxid == 1 { // just in case
+							taxid = 2
+						}
+
 						if taxid == 0 || t.Names[i] == "" {
 							continue
 						}
