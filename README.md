@@ -13,10 +13,13 @@
 [![Github Releases](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/total.svg?maxAge=3600)](https://bioinf.shenwei.me/taxonkit/download/)
 [![Cross-platform](https://img.shields.io/badge/platform-any-ec2eb4.svg?style=flat)](https://bioinf.shenwei.me/taxonkit/download/)
 [![Anaconda Cloud](	https://anaconda.org/bioconda/taxonkit/badges/version.svg)](https://anaconda.org/bioconda/taxonkit)
-- [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): tracking all changes of TaxIds, including deletion, new adding, merge, reuse, and rank/name changes.
 - **[Please cite](#citation):** [https://doi.org/10.1016/j.jgg.2021.03.006](https://www.sciencedirect.com/science/article/pii/S1673852721000837)
 - [pytaxonkit](https://github.com/bioforensics/pytaxonkit), Python bindings for TaxonKit.
 
+Related projects:
+
+- [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): Tracking all changes of TaxIds, including deletion, new adding, merge, reuse, and rank/name changes.
+- [GTDB taxdump](https://github.com/shenwei356/gtdb-taxdump): GTDB taxonomy taxdump files with trackable TaxIds.
 
 
 ## Table of Contents

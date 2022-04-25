@@ -1,4 +1,5 @@
 site_name: TaxonKit - NCBI Taxonomy Toolkit
+site_url: https://bioinf.shenwei.me/taxonkit
 pages:
 - Home: index.md
 - Download: download.md
