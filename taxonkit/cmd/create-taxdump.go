@@ -40,8 +40,8 @@ import (
 // createTaxDumpCmd represents the create-TaxDump command
 var createTaxDumpCmd = &cobra.Command{
 	Use:   "create-taxdump",
-	Short: "Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB",
-	Long: `Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB
+	Short: "Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV",
+	Long: `Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV
 
 Input format: 
   0. For GTDB taxonomy file, just use --gtdb

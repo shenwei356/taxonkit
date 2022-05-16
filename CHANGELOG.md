@@ -1,6 +1,6 @@
 - [TaxonKit v0.11.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.11.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.11.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.11.0)
-    - new command `taxonkit create-taxdump`: Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB. [#56](https://github.com/shenwei356/taxonkit/issues/56)
+    - new command `taxonkit create-taxdump`: Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV. [#56](https://github.com/shenwei356/taxonkit/issues/56)
 - [TaxonKit v0.10.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.10.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.10.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.10.1)
     - `taxonkit cami2-filter`: fix option `--show-rank` which did not work in v0.10.0.

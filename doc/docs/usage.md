@@ -1444,7 +1444,7 @@ Flags:
 Usage
 
 ```text
-Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB
+Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV
 
 Input format: 
   0. For GTDB taxonomy file, just use --gtdb
@@ -1517,6 +1517,8 @@ Examples:
         16:42:35.611 [INFO] 401815 records saved to taxdump/names.dmp
         16:42:35.611 [INFO] 0 records saved to taxdump/merged.dmp
         16:42:35.611 [INFO] 0 records saved to taxdump/delnodes.dmp
+
+1. ICTV, See more: https://github.com/shenwei356/ictv-taxdump
 
 1. [MGV](https://www.nature.com/articles/s41564-021-00928-6). Only Order, Family, Genus information are available.
 
