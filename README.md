@@ -20,7 +20,7 @@ Related projects:
 
 - [**Taxid-Changelog**](https://github.com/shenwei356/taxid-changelog): Tracking all changes of TaxIds, including deletion, new adding, merge, reuse, and rank/name changes.
 - [GTDB taxdump](https://github.com/shenwei356/gtdb-taxdump): GTDB taxonomy taxdump files with trackable TaxIds.
-
+- [ICTV taxdump](https://github.com/shenwei356/ictv-taxdump): NCBI-style taxdump files for International Committee on Taxonomy of Viruses (ICTV)
 
 ## Table of Contents
 
