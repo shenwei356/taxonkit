@@ -425,8 +425,8 @@ Attentions:
 				if _, ok = nullMap[val]; !ok {
 					t.Class = val
 
-					t.Names[3] = t.Order
-					t.TaxIds[3] = uint32(xxhash.Sum64String(strings.ToLower(t.Order)))
+					t.Names[2] = t.Class
+					t.TaxIds[2] = uint32(xxhash.Sum64String(strings.ToLower(t.Class)))
 				}
 			}
 
