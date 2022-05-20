@@ -1,3 +1,6 @@
+- [TaxonKit v0.11.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.11.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.11.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.11.1)
+    - `taxonkit create-taxdump`: fix bug of missing Class rank, contributed by @apcamargo. The flag `--gtdb` was not effected. [#57](https://github.com/shenwei356/taxonkit/issues/57)
 - [TaxonKit v0.11.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.11.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.11.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.11.0)
     - new command `taxonkit create-taxdump`: Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV. [#56](https://github.com/shenwei356/taxonkit/issues/56)
