@@ -21,17 +21,18 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"path/filepath"
 	"regexp"
 	"runtime"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 
 	"github.com/cespare/xxhash/v2"
 	"github.com/shenwei356/bio/taxdump"
-	"github.com/shenwei356/breader"
 	"github.com/shenwei356/util/pathutil"
 	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
@@ -44,35 +45,41 @@ var createTaxDumpCmd = &cobra.Command{
 	Long: `Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV
 
 Input format: 
-  0. For GTDB taxonomy file, just use --gtdb
-  1. The input file should be tab-delimited
-  2. At least one column is needed, please specify the filed index:
-     1) Kingdom/Superkingdom/Domain,     -K/--field-kingdom
-     2) Phylum,                          -P/--field-phylum
-     3) Class,                           -C/--field-class
-     4) Order,                           -O/--field-order
-     5) Family,                          -F/--field-family
-     6) Genus,                           -G/--field-genus
-     7) Species (needed),                -S/--field-species
-     8) Subspecies,                      -T/--field-subspecies
-        For GTDB, we use the numeric assembly accession
-        (without the prefix GCA_ and GCF_, and version number).
+  0. For GTDB taxonomy file, just use --gtdb.
+     We use the numeric assembly accession as the taxon at subspecies rank.
+     (without the prefix GCA_ and GCF_, and version number).
+  1. The input file should be tab-delimited, at least one column is needed.
+  2. Ranks can be given either via the first row or the flag --rank-names.
   3. The column containing the genome/assembly accession is recommended to
      generate TaxId mapping file (taxid.map, id -> taxid).
-     -A/--field-accession,    field contaning genome/assembly accession        
-     --field-accession-re,    regular expression to extract the accession 
+       -A/--field-accession,    field contaning genome/assembly accession      
+       --field-accession-re,    regular expression to extract the accession
+     Note that mutiple TaxIds pointing to the same accession are listed as
+     comma-seperated integers. 
 
 Attentions:
-  1. Names should be distinct in taxa of different rank.
+  1. Names should be distinct in taxa of different ranks.
      But for these missing some taxon nodes, using names of parent nodes is allowed:
 
        GB_GCA_018897955.1      d__Archaea;p__EX4484-52;c__EX4484-52;o__EX4484-52;f__LFW-46;g__LFW-46;s__LFW-46 sp018897155
 
      It can also detect duplicate names with different ranks, e.g.,
-     the Class and Genus have the same name B47-G6, and the Order and Family between them have different names.
-     In this case, we reassign a new TaxId by increasing the TaxId until it being distinct.
+     the Class and Genus have the same name B47-G6, and the Order and Family
+     between them have different names. In this case, we reassign a new TaxId
+     by increasing the TaxId until it being distinct.
 
        GB_GCA_003663585.1      d__Archaea;p__Thermoplasmatota;c__B47-G6;o__B47-G6B;f__47-G6;g__B47-G6;s__B47-G6 sp003663585
+
+  2. Taxa from different parents may have the same name.
+     We will assign different TaxIds to them. 
+
+     E.g., in ICTV, many viruses from different species have the same names.
+     In practice, we set the "Virus names(s)" as a sub-species rank and also
+     specify it as the accession.
+
+       Species             Virus name(s)
+       Jerseyvirus SETP3   Salmonella phage SETP7
+       Jerseyvirus SETP7   Salmonella phage SETP7
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -87,19 +94,8 @@ Attentions:
 		runtime.GOMAXPROCS(config.Threads)
 
 		fAccession := getFlagNonNegativeInt(cmd, "field-accession")
-		fKingdom := getFlagNonNegativeInt(cmd, "field-kingdom")
-		fPhylum := getFlagNonNegativeInt(cmd, "field-phylum")
-		fClass := getFlagNonNegativeInt(cmd, "field-class")
-		fOrder := getFlagNonNegativeInt(cmd, "field-order")
-		fFamily := getFlagNonNegativeInt(cmd, "field-family")
-		fGenus := getFlagNonNegativeInt(cmd, "field-genus")
-		fSpecies := getFlagNonNegativeInt(cmd, "field-species")
-		fSubspe := getFlagNonNegativeInt(cmd, "field-subspecies")
 
 		rankNames := getFlagStringSlice(cmd, "rank-names")
-		if len(rankNames) != 8 {
-			checkError(fmt.Errorf(`the number of --rank-names should be 8`))
-		}
 
 		var err error
 
@@ -137,13 +133,21 @@ Attentions:
 
 		var hasAccession bool
 		var numFields int
+		var useFirstRow bool
 		if isGTDB {
 			numFields = 2
 			hasAccession = true
-		} else if fSpecies == 0 {
-			checkError(fmt.Errorf("flag -S/--field-species needed"))
+			rankNames = []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "no rank"}
 		} else {
-			numFields = MaxInts(fAccession, fSubspe, fKingdom, fPhylum, fClass, fOrder, fFamily, fGenus, fSpecies)
+			if len(rankNames) == 0 {
+				log.Infof("I will use the first row of input as rank names")
+				useFirstRow = true
+			} else {
+				numFields = len(rankNames)
+				if fAccession > numFields {
+					checkError(fmt.Errorf("value of -A/--field-accession (%d) is out of range (%d)", fAccession, numFields))
+				}
+			}
 			hasAccession = fAccession > 0
 		}
 
@@ -221,14 +225,6 @@ Attentions:
 
 		// ------------------------------------------------------------
 
-		hasKingdom := fKingdom > 0
-		hasPhylum := fPhylum > 0
-		hasClass := fClass > 0
-		hasOrder := fOrder > 0
-		hasFamily := fFamily > 0
-		hasGenus := fGenus > 0
-		hasSubspe := fSubspe > 0
-
 		nullMap := make(map[string]interface{})
 		for _, k := range nulls {
 			nullMap[k] = struct{}{}
@@ -236,248 +232,11 @@ Attentions:
 
 		files := getFileList(args)
 
-		pool := &sync.Pool{New: func() interface{} {
-			tmp := make([]string, numFields)
-			return &tmp
-		}}
-		pool7 := &sync.Pool{New: func() interface{} {
-			tmp := make([]string, 7)
-			return &tmp
-		}}
-
 		var reGTDBsubspeNotCaptured bool
 		var reGTDBsubspeNotCapturedExample string
 
 		var reGenomeIDNotCaptured bool
 		var reGenomeIDNotCapturedExample string
-
-		fn := func(line string) (interface{}, bool, error) {
-			line = strings.Trim(line, "\r\n")
-			if line == "" {
-				return nil, false, nil
-			}
-
-			items := pool.Get().(*[]string)
-			defer pool.Put(items)
-
-			stringSplitNByByte(line, '\t', numFields, items)
-			if len(*items) < numFields {
-				return nil, false, nil
-			}
-
-			t := _Taxon{}
-			var val string
-
-			if isGTDB {
-				if reGTDBsubspe != nil {
-					found := reGTDBsubspe.FindAllStringSubmatch((*items)[0], 1)
-					if len(found) == 0 {
-						t.Subspe = (*items)[0]
-						// checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
-						reGTDBsubspeNotCaptured = true
-						reGTDBsubspeNotCapturedExample = (*items)[0]
-					} else {
-						t.Subspe = found[0][1]
-					}
-				}
-
-				if reGenomeID != nil {
-					found := reGenomeID.FindAllStringSubmatch((*items)[0], 1)
-					if len(found) == 0 {
-						t.Accession = (*items)[0]
-						// checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
-						reGTDBsubspeNotCaptured = true
-						reGTDBsubspeNotCapturedExample = (*items)[0]
-					} else {
-						t.Accession = found[0][1]
-					}
-
-				}
-
-				items7 := pool7.Get().(*[]string)
-				defer pool7.Put(items7)
-
-				stringSplitNByByte(CopyString((*items)[1]), ';', 7, items7)
-				if len(*items7) < 7 {
-					checkError(fmt.Errorf("invalid GTDB taxonomy record: %s", line))
-				}
-
-				val = (*items7)[0]
-				if len(val) < 3 || val[0:3] != "d__" {
-					checkError(fmt.Errorf("invalid GTDB taxonomy format (kingdom): %s", val))
-				}
-				t.Kingdom = val[3:]
-
-				val = (*items7)[1]
-				if len(val) < 3 || val[0:3] != "p__" {
-					checkError(fmt.Errorf("invalid GTDB taxonomy format (phylum): %s", val))
-				}
-				t.Phylum = val[3:]
-
-				val = (*items7)[2]
-				if len(val) < 3 || val[0:3] != "c__" {
-					checkError(fmt.Errorf("invalid GTDB taxonomy format (class): %s", val))
-				}
-				t.Class = val[3:]
-
-				val = (*items7)[3]
-				if len(val) < 3 || val[0:3] != "o__" {
-					checkError(fmt.Errorf("invalid GTDB taxonomy format (order): %s", val))
-				}
-				t.Order = val[3:]
-
-				val = (*items7)[4]
-				if len(val) < 3 || val[0:3] != "f__" {
-					checkError(fmt.Errorf("invalid GTDB taxonomy format (family): %s", val))
-				}
-				t.Family = val[3:]
-
-				val = (*items7)[5]
-				if len(val) < 3 || val[0:3] != "g__" {
-					checkError(fmt.Errorf("invalid GTDB taxonomy format (genus): %s", val))
-				}
-				t.Genus = val[3:]
-
-				val = (*items7)[6]
-				if len(val) < 3 || val[0:3] != "s__" {
-					checkError(fmt.Errorf("invalid GTDB taxonomy format (species): %s", val))
-				}
-				t.Species = val[3:]
-
-				// ----------------------------------------
-				t.Names[0] = t.Kingdom
-				t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Kingdom)))
-
-				if t.Phylum != t.Kingdom {
-					t.Names[1] = t.Phylum
-					t.TaxIds[1] = uint32(xxhash.Sum64String(strings.ToLower(t.Phylum)))
-				}
-
-				if t.Class != t.Phylum {
-					t.Names[2] = t.Class
-					t.TaxIds[2] = uint32(xxhash.Sum64String(strings.ToLower(t.Class)))
-				}
-
-				if t.Order != t.Class {
-					t.Names[3] = t.Order
-					t.TaxIds[3] = uint32(xxhash.Sum64String(strings.ToLower(t.Order)))
-				}
-
-				if t.Family != t.Order {
-					t.Names[4] = t.Family
-					t.TaxIds[4] = uint32(xxhash.Sum64String(strings.ToLower(t.Family)))
-				}
-				if t.Genus != t.Family {
-					t.Names[5] = t.Genus
-					t.TaxIds[5] = uint32(xxhash.Sum64String(strings.ToLower(t.Genus)))
-				}
-				if t.Species != t.Genus {
-					t.Names[6] = t.Species
-					t.TaxIds[6] = uint32(xxhash.Sum64String(strings.ToLower(t.Species)))
-				}
-
-				t.Names[7] = t.Subspe
-				t.TaxIds[7] = uint32(xxhash.Sum64String(strings.ToLower(t.Subspe)))
-
-				return &t, true, nil
-			}
-
-			var ok bool
-
-			if hasAccession {
-				val = (*items)[fAccession-1]
-
-				if reGenomeID != nil {
-					found := reGenomeID.FindAllStringSubmatch(val, 1)
-					if len(found) == 0 {
-						t.Accession = val
-						reGenomeIDNotCaptured = true
-						reGenomeIDNotCapturedExample = val
-					} else {
-						t.Accession = found[0][1]
-					}
-				}
-
-			}
-
-			if hasKingdom {
-				val = (*items)[fKingdom-1]
-				if _, ok = nullMap[val]; !ok {
-					t.Kingdom = val
-
-					t.Names[0] = t.Kingdom
-					t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Kingdom)))
-				}
-			}
-
-			if hasPhylum {
-				val = (*items)[fPhylum-1]
-				if _, ok = nullMap[val]; !ok {
-					t.Phylum = val
-
-					t.Names[1] = t.Phylum
-					t.TaxIds[1] = uint32(xxhash.Sum64String(strings.ToLower(t.Phylum)))
-				}
-			}
-
-			if hasClass {
-				val = (*items)[fClass-1]
-				if _, ok = nullMap[val]; !ok {
-					t.Class = val
-
-					t.Names[2] = t.Class
-					t.TaxIds[2] = uint32(xxhash.Sum64String(strings.ToLower(t.Class)))
-				}
-			}
-
-			if hasOrder {
-				val = (*items)[fOrder-1]
-				if _, ok = nullMap[val]; !ok {
-					t.Order = val
-
-					t.Names[3] = t.Order
-					t.TaxIds[3] = uint32(xxhash.Sum64String(strings.ToLower(t.Order)))
-				}
-			}
-
-			if hasFamily {
-				val = (*items)[fFamily-1]
-				if _, ok = nullMap[val]; !ok {
-					t.Family = val
-
-					t.Names[4] = t.Family
-					t.TaxIds[4] = uint32(xxhash.Sum64String(strings.ToLower(t.Family)))
-				}
-			}
-
-			if hasGenus {
-				val = (*items)[fGenus-1]
-				if _, ok = nullMap[val]; !ok {
-					t.Genus = val
-
-					t.Names[5] = t.Genus
-					t.TaxIds[5] = uint32(xxhash.Sum64String(strings.ToLower(t.Genus)))
-				}
-			}
-
-			val = (*items)[fSpecies-1]
-			if _, ok = nullMap[val]; !ok {
-				t.Species = val
-
-				t.Names[6] = t.Species
-				t.TaxIds[6] = uint32(xxhash.Sum64String(strings.ToLower(t.Species)))
-			}
-
-			if hasSubspe {
-				val = (*items)[fSubspe-1]
-				t.Subspe = val
-
-				t.Names[7] = t.Subspe
-				t.TaxIds[7] = uint32(xxhash.Sum64String(strings.ToLower(t.Subspe)))
-			}
-
-			return &t, true, nil
-		}
 
 		// child -> parent
 		tree := make(map[uint32]uint32, 1<<16)
@@ -489,16 +248,14 @@ Attentions:
 		names := make(map[uint32]string, 1<<16)
 
 		// accession -> taxid
-		acc2taxid := make(map[string]uint32, 1<<16)
+		acc2taxid := make(map[string]*[]uint32, 1<<16)
+		var _taxids *[]uint32
 		accIdx := make(map[string]int, 1<<16)
 		var idx int
 
-		for _, file := range files {
-			reader, err := breader.NewBufferedReader(file, config.Threads, 10, fn)
-			checkError(err)
+		var firstLine string
 
-			var t *_Taxon
-			var data interface{}
+		for ifile, file := range files {
 			var i int
 			var prev int
 			var first bool
@@ -508,82 +265,282 @@ Attentions:
 			var ok bool
 			var reAssignTaxid bool
 
-			for chunk := range reader.Ch {
-				checkError(chunk.Err)
+			var n int
+			isFirstLine := true
 
-				for _, data = range chunk.Data {
-					t = data.(*_Taxon)
-					// fmt.Println((*t).String2())
-					// fmt.Println(*t)
-
-					first = true
-					for i = 7; i >= 0; i-- {
-						taxid = t.TaxIds[i]
-						if taxid == 1 { // just in case
-							taxid = 2
-						}
-
-						if taxid == 0 || t.Names[i] == "" {
-							continue
-						}
-
-					REASSIGNTAXID:
-
-						reAssignTaxid = false
-
-						if _name, ok = names[taxid]; ok { // check name
-							if _name != t.Names[i] { // two names hashed to the same uint32
-								if config.Verbose {
-									log.Infof(`"%s" and "%s" having the same taxId: %d`, _name, t.Names[i], taxid)
-								}
-								reAssignTaxid = true
-							}
-						} else {
-							names[taxid] = t.Names[i]
-						}
-
-						if _rank, ok = ranks[taxid]; ok {
-							if int(_rank) != i {
-								if config.Verbose {
-									log.Debug(*t)
-									log.Infof(`duplicate name (%s) with different ranks: "%s" and "%s"`, t.Names[i], rankNames[_rank], rankNames[i])
-								}
-								reAssignTaxid = true
-							}
-						} else {
-							ranks[taxid] = uint8(i)
-						}
-
-						if reAssignTaxid {
-							if config.Verbose {
-								log.Infof(`assign a new TaxId for "%s" (rank: %s): %d -> %d`, names[taxid], rankNames[i], taxid, taxid+1)
-							}
-							taxid++
-							t.TaxIds[i] = taxid
-							goto REASSIGNTAXID
-						}
-
-						if first {
-							if hasAccession {
-								idx++
-								accIdx[t.Accession] = idx
-								acc2taxid[t.Accession] = taxid // the lowest taxid
-							}
-
-							prev = i
-							first = false
-							continue
-						}
-
-						tree[t.TaxIds[prev]] = taxid
-						prev = i
-					}
-
-					// the highest node
-					tree[t.TaxIds[prev]] = 1
-				}
+			var items *[]string
+			if isGTDB || len(rankNames) > 0 {
+				_items := make([]string, numFields)
+				items = &_items
+			}
+			var items7 *[]string
+			if isGTDB {
+				_items7 := make([]string, 7)
+				items7 = &_items7
 			}
 
+			fh, err := xopen.Ropen(file)
+			checkError(err)
+
+			scanner := bufio.NewScanner(fh)
+			var line string
+			var items0 []string
+			var j int
+
+			for scanner.Scan() {
+				n++ // line number
+				line = strings.Trim(scanner.Text(), "\r\n")
+				if line == "" {
+					continue
+				}
+
+				if isFirstLine && useFirstRow {
+					items0 = strings.Split(line, "\t")
+					numFields = len(items0)
+
+					_items := make([]string, numFields)
+					items = &_items
+
+					if ifile > 0 { // later files, need to check whether first row match in multiple files
+						if firstLine != line {
+							checkError(fmt.Errorf("rank names at the first line do not match: %s", file))
+						}
+					} else {
+						firstLine = line
+					}
+
+					rankNames = items0
+
+					isFirstLine = false
+
+					continue
+				}
+
+				stringSplitNByByte(line, '\t', numFields, items)
+				if !isGTDB {
+					if len(*items) < numFields {
+						checkError(fmt.Errorf("the number (%d) of data at line %d does not match that of rank names (%d)", len(*items), n, len(rankNames)))
+					}
+				}
+
+				t := _Taxon{}
+				var val string
+
+				if isGTDB {
+					if reGenomeID != nil {
+						found := reGenomeID.FindAllStringSubmatch((*items)[0], 1)
+						if len(found) == 0 {
+							t.Accession = (*items)[0]
+							// checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+							reGTDBsubspeNotCaptured = true
+							reGTDBsubspeNotCapturedExample = (*items)[0]
+						} else {
+							t.Accession = found[0][1]
+						}
+					}
+
+					stringSplitNByByte(CopyString((*items)[1]), ';', 7, items7)
+					if len(*items7) < 7 {
+						checkError(fmt.Errorf("invalid GTDB taxonomy record: %s", line))
+					}
+
+					val = (*items7)[0]
+					if len(val) < 3 || val[0:3] != "d__" {
+						checkError(fmt.Errorf("invalid GTDB taxonomy format (kingdom): %s", val))
+					}
+					kingdom := val[3:]
+
+					val = (*items7)[1]
+					if len(val) < 3 || val[0:3] != "p__" {
+						checkError(fmt.Errorf("invalid GTDB taxonomy format (phylum): %s", val))
+					}
+					phylum := val[3:]
+
+					val = (*items7)[2]
+					if len(val) < 3 || val[0:3] != "c__" {
+						checkError(fmt.Errorf("invalid GTDB taxonomy format (class): %s", val))
+					}
+					class := val[3:]
+
+					val = (*items7)[3]
+					if len(val) < 3 || val[0:3] != "o__" {
+						checkError(fmt.Errorf("invalid GTDB taxonomy format (order): %s", val))
+					}
+					order := val[3:]
+
+					val = (*items7)[4]
+					if len(val) < 3 || val[0:3] != "f__" {
+						checkError(fmt.Errorf("invalid GTDB taxonomy format (family): %s", val))
+					}
+					family := val[3:]
+
+					val = (*items7)[5]
+					if len(val) < 3 || val[0:3] != "g__" {
+						checkError(fmt.Errorf("invalid GTDB taxonomy format (genus): %s", val))
+					}
+					genus := val[3:]
+
+					val = (*items7)[6]
+					if len(val) < 3 || val[0:3] != "s__" {
+						checkError(fmt.Errorf("invalid GTDB taxonomy format (species): %s", val))
+					}
+					species := val[3:]
+
+					var subspe string
+
+					if reGTDBsubspe != nil {
+						found := reGTDBsubspe.FindAllStringSubmatch((*items)[0], 1)
+						if len(found) == 0 {
+							subspe = (*items)[0]
+							// checkError(fmt.Errorf("invalid GTDB assembly accession: %s", (*items)[0]))
+							reGTDBsubspeNotCaptured = true
+							reGTDBsubspeNotCapturedExample = (*items)[0]
+						} else {
+							subspe = found[0][1]
+						}
+					}
+
+					// ----------------------------------------
+					t.Names = []string{kingdom, phylum, class, order, family, genus, species, subspe}
+					t.TaxIds = make([]uint32, 8)
+
+					for j = 0; j < 8; j++ {
+						if j == 0 {
+							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])))
+							continue
+						}
+						if t.Names[j] != t.Names[j-1] {
+							t.TaxIds[j] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[j])))
+						}
+					}
+				} else {
+					// var ok bool
+
+					if hasAccession {
+						val = (*items)[fAccession-1]
+
+						if reGenomeID != nil {
+							found := reGenomeID.FindAllStringSubmatch(val, 1)
+							if len(found) == 0 {
+								t.Accession = val
+								reGenomeIDNotCaptured = true
+								reGenomeIDNotCapturedExample = val
+							} else {
+								t.Accession = found[0][1]
+							}
+						}
+
+					}
+
+					t.Names = make([]string, numFields)
+					t.TaxIds = make([]uint32, numFields)
+
+					for j = 0; j < numFields; j++ {
+						t.Names[j] = (*items)[j]
+
+						if j == 0 {
+							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])))
+							continue
+						}
+						if t.Names[j] != t.Names[j-1] {
+							t.TaxIds[j] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[j])))
+						}
+					}
+				}
+
+				// ------------------------------------
+
+				first = true
+				for i = len(t.TaxIds) - 1; i >= 0; i-- {
+					taxid = t.TaxIds[i]
+					if taxid == 1 { // just in case
+						taxid = 2
+					}
+
+					if taxid == 0 || t.Names[i] == "" {
+						continue
+					}
+
+				REASSIGNTAXID:
+
+					reAssignTaxid = false
+
+					if _name, ok = names[taxid]; ok { // check name
+						if _name != t.Names[i] { // two names hashed to the same uint32
+							if config.Verbose {
+								log.Infof(`"%s" and "%s" having the same taxId: %d`, _name, t.Names[i], taxid)
+							}
+							reAssignTaxid = true
+						} else if i > 0 { // taxa with different parents may have the same names, many cases in ICTV
+							for j = i - 1; j >= 0; j-- { // find the parent
+								if t.Names[j] != "" && t.TaxIds[j] != 0 {
+									break
+								}
+							}
+							if j >= 0 { // have a non-root parent
+								if tree[taxid] != t.TaxIds[j] && names[tree[taxid]] != t.Names[j] { // not the same parent
+									if config.Verbose {
+										log.Infof(`"%s" (%d) and "%s" (%d) having the same child: %s`,
+											names[tree[taxid]], tree[taxid], t.Names[j], t.TaxIds[j], _name)
+									}
+									reAssignTaxid = true
+								}
+							}
+						}
+					} else {
+						names[taxid] = t.Names[i]
+					}
+
+					if _rank, ok = ranks[taxid]; ok {
+						if int(_rank) != i {
+							if config.Verbose {
+								// log.Debug(t)
+								log.Infof(`duplicate name (%s) with different ranks: "%s" and "%s"`, t.Names[i], rankNames[_rank], rankNames[i])
+							}
+							reAssignTaxid = true
+						}
+					} else {
+						ranks[taxid] = uint8(i)
+					}
+
+					if reAssignTaxid {
+						if config.Verbose {
+							log.Infof(`assign a new TaxId for "%s" (rank: %s): %d -> %d`, names[taxid], rankNames[i], taxid, taxid+1)
+						}
+						taxid++
+						t.TaxIds[i] = taxid
+						goto REASSIGNTAXID
+					}
+
+					if first {
+						if hasAccession {
+							idx++
+							accIdx[t.Accession] = idx
+
+							if _taxids, ok = acc2taxid[t.Accession]; !ok {
+								acc2taxid[t.Accession] = &[]uint32{taxid}
+							} else {
+								*_taxids = append(*_taxids, taxid)
+							}
+						}
+
+						prev = i
+						first = false
+						continue
+					}
+
+					tree[t.TaxIds[prev]] = taxid
+					prev = i
+				}
+
+				// the highest node
+				tree[t.TaxIds[prev]] = 1
+			}
+
+			if err = scanner.Err(); err != nil {
+				checkError(err)
+			}
+			checkError(fh.Close())
 		}
 
 		if isGTDB && reGTDBsubspeNotCaptured {
@@ -611,8 +568,14 @@ Attentions:
 				return accIdx[accs[i]] < accIdx[accs[j]]
 			})
 
+			_taxids := make([]string, 0, 128)
+			var taxid uint32
 			for _, acc := range accs {
-				fmt.Fprintf(outfhAcc2Taxid, "%s\t%d\n", acc, acc2taxid[acc])
+				_taxids = _taxids[:0]
+				for _, taxid = range *acc2taxid[acc] {
+					_taxids = append(_taxids, strconv.Itoa(int(taxid)))
+				}
+				fmt.Fprintf(outfhAcc2Taxid, "%s\t%s\n", acc, strings.Join(_taxids, ","))
 			}
 
 			log.Infof("%d records saved to %s", len(acc2taxid), fileAcc2Taxid)
@@ -755,15 +718,6 @@ Attentions:
 func init() {
 	RootCmd.AddCommand(createTaxDumpCmd)
 
-	createTaxDumpCmd.Flags().IntP("field-kingdom", "K", 0, "field index of kingdom")
-	createTaxDumpCmd.Flags().IntP("field-phylum", "P", 0, "field index of phylum")
-	createTaxDumpCmd.Flags().IntP("field-class", "C", 0, "field index of class")
-	createTaxDumpCmd.Flags().IntP("field-order", "O", 0, "field index of order")
-	createTaxDumpCmd.Flags().IntP("field-family", "F", 0, "field index of family")
-	createTaxDumpCmd.Flags().IntP("field-genus", "G", 0, "field index of genus")
-	createTaxDumpCmd.Flags().IntP("field-species", "S", 0, "field index of species (needed)")
-	createTaxDumpCmd.Flags().IntP("field-subspecies", "T", 0, "field index of subspecies")
-
 	createTaxDumpCmd.Flags().IntP("field-accession", "A", 0, "field index of assembly accession (genome ID), for outputting taxid.map")
 	createTaxDumpCmd.Flags().StringP("field-accession-re", "", `^\w\w_(.+)$`, `regular expression to extract assembly accession`)
 
@@ -775,11 +729,11 @@ func init() {
 	// --------------
 
 	createTaxDumpCmd.Flags().StringSliceP("null", "", []string{"", "NULL", "NA"}, "null value of taxa")
-	createTaxDumpCmd.Flags().StringSliceP("rank-names", "", []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "no rank"}, "names of the 8 ranks, the order maters")
+	createTaxDumpCmd.Flags().StringSliceP("rank-names", "R", []string{}, "names of all ranks, leave it empty to use the first row of input as rank names")
 
 	// --------------
 
-	createTaxDumpCmd.Flags().StringP("out-dir", "", "", `output directory`)
+	createTaxDumpCmd.Flags().StringP("out-dir", "O", "", `output directory`)
 	createTaxDumpCmd.Flags().BoolP("force", "", false, `overwrite existed output directory`)
 
 	// --------------
@@ -794,24 +748,14 @@ func init() {
 type _Taxon struct {
 	Accession string
 
-	Subspe  string
-	Kingdom string
-	Phylum  string
-	Class   string
-	Order   string
-	Family  string
-	Genus   string
-	Species string
-
-	Names  [8]string // Kingdom, phylum ...
-	TaxIds [8]uint32 // Kingdom, phylum ...
+	Names  []string
+	TaxIds []uint32
 }
 
 func (t _Taxon) String() string {
-	return fmt.Sprintf("%s, %v, %v", t.Subspe, t.Names, t.TaxIds)
-}
-
-func (t _Taxon) String2() string {
-	return fmt.Sprintf("%s, k: %s, p: %s, c: %s, o: %s, f: %s, g: %s, s: %s",
-		t.Subspe, t.Kingdom, t.Phylum, t.Class, t.Order, t.Family, t.Genus, t.Species)
+	vs := make([]string, len(t.TaxIds))
+	for i, v := range t.TaxIds {
+		vs[i] = strconv.Itoa(int(v))
+	}
+	return fmt.Sprintf("%s, %s, %s", t.Accession, strings.Join(t.Names, ";"), strings.Join(vs, ";"))
 }
