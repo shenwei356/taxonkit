@@ -405,6 +405,10 @@ Attentions:
 					t.TaxIds = make([]uint32, 8)
 
 					for j = 0; j < 8; j++ {
+						if _, ok = nullMap[t.Names[j]]; ok {
+							continue
+						}
+
 						if j == 0 {
 							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])))
 							continue
@@ -437,6 +441,10 @@ Attentions:
 
 					for j = 0; j < numFields; j++ {
 						t.Names[j] = (*items)[j]
+
+						if _, ok = nullMap[t.Names[j]]; ok {
+							continue
+						}
 
 						if j == 0 {
 							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])))

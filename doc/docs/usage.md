@@ -1447,35 +1447,41 @@ Usage
 Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV
 
 Input format: 
-  0. For GTDB taxonomy file, just use --gtdb
-  1. The input file should be tab-delimited
-  2. At least one column is needed, please specify the filed index:
-     1) Kingdom/Superkingdom/Domain,     -K/--field-kingdom
-     2) Phylum,                          -P/--field-phylum
-     3) Class,                           -C/--field-class
-     4) Order,                           -O/--field-order
-     5) Family,                          -F/--field-family
-     6) Genus,                           -G/--field-genus
-     7) Species (needed),                -S/--field-species
-     8) Subspecies,                      -T/--field-subspecies
-        For GTDB, we use the numeric assembly accession
-        (without the prefix GCA_ and GCF_, and version number).
+  0. For GTDB taxonomy file, just use --gtdb.
+     We use the numeric assembly accession as the taxon at subspecies rank.
+     (without the prefix GCA_ and GCF_, and version number).
+  1. The input file should be tab-delimited, at least one column is needed.
+  2. Ranks can be given either via the first row or the flag --rank-names.
   3. The column containing the genome/assembly accession is recommended to
      generate TaxId mapping file (taxid.map, id -> taxid).
-     -A/--field-accession,    field contaning genome/assembly accession        
-     --field-accession-re,    regular expression to extract the accession 
+       -A/--field-accession,    field contaning genome/assembly accession      
+       --field-accession-re,    regular expression to extract the accession
+     Note that mutiple TaxIds pointing to the same accession are listed as
+     comma-seperated integers. 
 
 Attentions:
-  1. Names should be distinct in taxa of different rank.
+  1. Names should be distinct in taxa of different ranks.
      But for these missing some taxon nodes, using names of parent nodes is allowed:
 
        GB_GCA_018897955.1      d__Archaea;p__EX4484-52;c__EX4484-52;o__EX4484-52;f__LFW-46;g__LFW-46;s__LFW-46 sp018897155
 
      It can also detect duplicate names with different ranks, e.g.,
-     the Class and Genus have the same name B47-G6, and the Order and Family between them have different names.
-     In this case, we reassign a new TaxId by increasing the TaxId until it being distinct.
+     the Class and Genus have the same name B47-G6, and the Order and Family
+     between them have different names. In this case, we reassign a new TaxId
+     by increasing the TaxId until it being distinct.
 
        GB_GCA_003663585.1      d__Archaea;p__Thermoplasmatota;c__B47-G6;o__B47-G6B;f__47-G6;g__B47-G6;s__B47-G6 sp003663585
+
+  2. Taxa from different parents may have the same name.
+     We will assign different TaxIds to them. 
+
+     E.g., in ICTV, many viruses from different species have the same names.
+     In practice, we set the "Virus names(s)" as a subspecies rank and also
+     specify it as the accession.
+
+       Species             Virus name(s)
+       Jerseyvirus SETP3   Salmonella phage SETP7
+       Jerseyvirus SETP7   Salmonella phage SETP7
 
 Usage:
   taxonkit create-taxdump [flags] 
@@ -1484,14 +1490,6 @@ Flags:
   -A, --field-accession int         field index of assembly accession (genome ID), for outputting taxid.map
       --field-accession-re string   regular expression to extract assembly accession (default
                                     "^\\w\\w_(.+)$")
-  -C, --field-class int             field index of class
-  -F, --field-family int            field index of family
-  -G, --field-genus int             field index of genus
-  -K, --field-kingdom int           field index of kingdom
-  -O, --field-order int             field index of order
-  -P, --field-phylum int            field index of phylum
-  -S, --field-species int           field index of species (needed)
-  -T, --field-subspecies int        field index of subspecies
       --force                       overwrite existed output directory
       --gtdb                        input files are GTDB taxonomy file
       --gtdb-re-subs string         regular expression to extract assembly accession as the subspecies
@@ -1502,9 +1500,10 @@ Flags:
       --null strings                null value of taxa (default [,NULL,NA])
   -x, --old-taxdump-dir string      taxdump directory of the previous version, for generating merged.dmp
                                     and delnodes.dmp
-      --out-dir string              output directory
-      --rank-names strings          names of the 8 ranks, the order maters (default
-                                    [superkingdom,phylum,class,order,family,genus,species,no rank])
+  -O, --out-dir string              output directory
+  -R, --rank-names strings          names of all ranks, leave it empty to use the first row of input as
+                                    rank names
+
 ```
 
 Examples:
@@ -1523,11 +1522,11 @@ Examples:
 1. [MGV](https://www.nature.com/articles/s41564-021-00928-6). Only Order, Family, Genus information are available.
 
         $ cat mgv_contig_info.tsv \
-            | csvtk cut -t -f contig_id,votu_id,ictv_order,ictv_family,ictv_genus \
+            | csvtk cut -t -f ictv_order,ictv_family,ictv_genus,votu_id,contig_id \
             | sed 1d \
             > mgv.tsv
 
-        $ taxonkit create-taxdump mgv.tsv --out-dir mgv --force -A 1 -S 2 -O 3 -F 4 -G 5
+        $ taxonkit create-taxdump mgv.tsv --out-dir mgv --force -A 5 -R order,family,genus,species,contig
         16:45:40.555 [WARN] --field-accession-re failed to extract genome accession, the origninal value is used instead. e.g., MGV-GENOME-0231225
         16:45:40.817 [INFO] 189680 records saved to mgv/taxid.map
         16:45:40.846 [INFO] 54224 records saved to mgv/nodes.dmp
@@ -1536,11 +1535,11 @@ Examples:
         16:45:40.864 [INFO] 0 records saved to mgv/delnodes.dmp
         
         $ head -n 5 mgv/taxid.map 
-        MGV-GENOME-0364295      677052301
-        MGV-GENOME-0364296      677052301
-        MGV-GENOME-0364303      1414406025
-        MGV-GENOME-0364311      1849074420
-        MGV-GENOME-0364312      2074846424
+        MGV-GENOME-0364295      3108345579
+        MGV-GENOME-0364296      2356405276
+        MGV-GENOME-0364303      1099424244
+        MGV-GENOME-0364311      4037644503
+        MGV-GENOME-0364312      452745976
         
         $ echo 677052301 | taxonkit lineage --data-dir mgv/ 
         677052301       Caudovirales;crAss-phage;OTU-61123
@@ -1548,8 +1547,8 @@ Examples:
         $ echo 677052301 | taxonkit reformat --data-dir mgv/ -I 1 -P
         677052301       k__;p__;c__;o__Caudovirales;f__crAss-phage;g__;s__OTU-61123
         
-        $ csvtk grep -Ht -f 1 -p MGV-GENOME-0364295 mgv.tsv 
-        MGV-GENOME-0364295      OTU-61123       Caudovirales    crAss-phage     NULL
+        $ grep MGV-GENOME-0364295 mgv.tsv 
+        Caudovirales    crAss-phage     NULL    OTU-61123       MGV-GENOME-0364295
 
 
 ## genautocomplete
