@@ -94,6 +94,7 @@ Attentions:
 		runtime.GOMAXPROCS(config.Threads)
 
 		fAccession := getFlagNonNegativeInt(cmd, "field-accession")
+		accAssubspe := getFlagBool(cmd, "field-accession-as-subspecies")
 
 		rankNames := getFlagStringSlice(cmd, "rank-names")
 
@@ -133,23 +134,41 @@ Attentions:
 
 		var hasAccession bool
 		var numFields int
+		var numRanks int
 		var useFirstRow bool
 		if isGTDB {
 			numFields = 2
 			hasAccession = true
 			rankNames = []string{"superkingdom", "phylum", "class", "order", "family", "genus", "species", "no rank"}
 		} else {
+			hasAccession = fAccession > 0
+
+			if accAssubspe && !hasAccession {
+				checkError(fmt.Errorf("flag -S/--field-accession-as-subspecies should be used along with -A/--field-accession "))
+			}
+
 			if len(rankNames) == 0 {
 				log.Infof("I will use the first row of input as rank names")
 				useFirstRow = true
 			} else {
-				numFields = len(rankNames)
-				if fAccession > numFields {
-					checkError(fmt.Errorf("value of -A/--field-accession (%d) is out of range (%d)", fAccession, numFields))
+				numRanks = len(rankNames)
+
+				if hasAccession {
+					if accAssubspe {
+						numFields = numRanks
+					} else {
+						numFields = numRanks + 1
+					}
+					if fAccession > numFields {
+						checkError(fmt.Errorf("value of -A/--field-accession (%d) is out of range (%d)", fAccession, numFields))
+					}
+				} else {
+					numFields = numRanks
 				}
 			}
-			hasAccession = fAccession > 0
 		}
+
+		fmt.Println(numFields, numRanks)
 
 		outDir := getFlagString(cmd, "out-dir")
 		force := getFlagBool(cmd, "force")
@@ -273,6 +292,7 @@ Attentions:
 				_items := make([]string, numFields)
 				items = &_items
 			}
+
 			var items7 *[]string
 			if isGTDB {
 				_items7 := make([]string, 7)
@@ -294,32 +314,63 @@ Attentions:
 					continue
 				}
 
-				if isFirstLine && useFirstRow {
-					items0 = strings.Split(line, "\t")
-					numFields = len(items0)
+				if isFirstLine {
+					if useFirstRow {
+						items0 = strings.Split(line, "\t")
+						numFields = len(items0)
 
-					_items := make([]string, numFields)
-					items = &_items
-
-					if ifile > 0 { // later files, need to check whether first row match in multiple files
-						if firstLine != line {
-							checkError(fmt.Errorf("inconsistent rank names at the first line: %s", file))
+						if fAccession > numFields {
+							checkError(fmt.Errorf("value of -A/--field-accession (%d) is out of range (%d)", fAccession, numFields))
 						}
-					} else {
-						firstLine = line
+
+						if hasAccession {
+							if accAssubspe {
+								numRanks = numFields
+							} else {
+								numRanks = numFields - 1
+
+								if numRanks == 0 {
+									checkError(fmt.Errorf("at least 2 columns needed for -A/--field-accession when -S/--field-accession-as-subspecies is not given"))
+								}
+							}
+						} else {
+							numRanks = numFields
+						}
+
+						_items := make([]string, numFields)
+						items = &_items
+
+						if ifile > 0 { // later files, need to check whether first row match in multiple files
+							if firstLine != line {
+								checkError(fmt.Errorf("inconsistent rank names at the first line: %s", file))
+							}
+						} else {
+							firstLine = line
+						}
+
+						rankNames = items0
+
+						isFirstLine = false
+
+						continue
 					}
-
-					rankNames = items0
-
-					isFirstLine = false
-
-					continue
 				}
 
-				stringSplitNByByte(line, '\t', numFields, items)
+				// efficient but can't handle cases where len(items) > numFields
+				// stringSplitNByByte(line, '\t', numFields, items)
+				*items = strings.Split(line, "\t")
+
 				if !isGTDB {
 					if len(*items) != numFields {
-						checkError(fmt.Errorf("the number (%d) of data at line %d does not match that of rank names (%d): %s", len(*items), n, len(rankNames), file))
+						if hasAccession && !accAssubspe {
+							checkError(fmt.Errorf("the number (%d, expect %d) of columns at line %d does not match #rank-names + 1 (%d+1): %s", len(*items), numFields, n, len(rankNames), file))
+						} else {
+							checkError(fmt.Errorf("the number (%d, expect %d) of columns at line %d does not match that of rank names (%d): %s", len(*items), numFields, n, len(rankNames), file))
+						}
+					}
+				} else {
+					if len(*items) != numFields {
+						checkError(fmt.Errorf("expect %d columns, while only %d given at line %d ", numFields, len(*items), n))
 					}
 				}
 
@@ -436,10 +487,14 @@ Attentions:
 
 					}
 
-					t.Names = make([]string, numFields)
-					t.TaxIds = make([]uint32, numFields)
+					t.Names = make([]string, numRanks)
+					t.TaxIds = make([]uint32, numRanks)
 
-					for j = 0; j < numFields; j++ {
+					if hasAccession && !accAssubspe {
+						copy((*items)[fAccession-1:len(*items)-1], (*items)[fAccession:])
+					}
+
+					for j = 0; j < numRanks; j++ {
 						t.Names[j] = (*items)[j]
 
 						if _, ok = nullMap[t.Names[j]]; ok {
@@ -736,7 +791,7 @@ func init() {
 
 	createTaxDumpCmd.Flags().IntP("field-accession", "A", 0, "field index of assembly accession (genome ID), for outputting taxid.map")
 	createTaxDumpCmd.Flags().StringP("field-accession-re", "", `^\w\w_(.+)$`, `regular expression to extract assembly accession`)
-
+	createTaxDumpCmd.Flags().BoolP("field-accession-as-subspecies", "S", false, "treate the accession as subspecies rank")
 	// -------------------------------------------------------------------
 
 	createTaxDumpCmd.Flags().BoolP("gtdb", "", false, "input files are GTDB taxonomy file")
