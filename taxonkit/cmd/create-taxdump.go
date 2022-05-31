@@ -74,7 +74,7 @@ Attentions:
      We will assign different TaxIds to them. 
 
      E.g., in ICTV, many viruses from different species have the same names.
-     In practice, we set the "Virus names(s)" as a sub-species rank and also
+     In practice, we set the "Virus names(s)" as a subspecies rank and also
      specify it as the accession.
 
        Species             Virus name(s)
@@ -154,7 +154,7 @@ Attentions:
 		outDir := getFlagString(cmd, "out-dir")
 		force := getFlagBool(cmd, "force")
 		if outDir == "" {
-			checkError(fmt.Errorf("flag --out-dir is needed"))
+			checkError(fmt.Errorf("flag -O/--out-dir is needed"))
 		}
 		makeOutDir(outDir, force)
 
@@ -248,8 +248,8 @@ Attentions:
 		names := make(map[uint32]string, 1<<16)
 
 		// accession -> taxid
-		acc2taxid := make(map[string]*[]uint32, 1<<16)
-		var _taxids *[]uint32
+		acc2taxid := make(map[string]*map[uint32]interface{}, 1<<16)
+		var _taxids *map[uint32]interface{}
 		accIdx := make(map[string]int, 1<<16)
 		var idx int
 
@@ -303,7 +303,7 @@ Attentions:
 
 					if ifile > 0 { // later files, need to check whether first row match in multiple files
 						if firstLine != line {
-							checkError(fmt.Errorf("rank names at the first line do not match: %s", file))
+							checkError(fmt.Errorf("inconsistent rank names at the first line: %s", file))
 						}
 					} else {
 						firstLine = line
@@ -318,8 +318,8 @@ Attentions:
 
 				stringSplitNByByte(line, '\t', numFields, items)
 				if !isGTDB {
-					if len(*items) < numFields {
-						checkError(fmt.Errorf("the number (%d) of data at line %d does not match that of rank names (%d)", len(*items), n, len(rankNames)))
+					if len(*items) != numFields {
+						checkError(fmt.Errorf("the number (%d) of data at line %d does not match that of rank names (%d): %s", len(*items), n, len(rankNames), file))
 					}
 				}
 
@@ -518,9 +518,9 @@ Attentions:
 							accIdx[t.Accession] = idx
 
 							if _taxids, ok = acc2taxid[t.Accession]; !ok {
-								acc2taxid[t.Accession] = &[]uint32{taxid}
+								acc2taxid[t.Accession] = &map[uint32]interface{}{taxid: struct{}{}}
 							} else {
-								*_taxids = append(*_taxids, taxid)
+								(*_taxids)[taxid] = struct{}{}
 							}
 						}
 
@@ -568,12 +568,20 @@ Attentions:
 				return accIdx[accs[i]] < accIdx[accs[j]]
 			})
 
+			_taxidsInt := make([]int, 0, 128)
 			_taxids := make([]string, 0, 128)
 			var taxid uint32
+			var taxidInt int
 			for _, acc := range accs {
 				_taxids = _taxids[:0]
-				for _, taxid = range *acc2taxid[acc] {
-					_taxids = append(_taxids, strconv.Itoa(int(taxid)))
+				_taxidsInt = _taxidsInt[:0]
+				for taxid = range *acc2taxid[acc] {
+					_taxidsInt = append(_taxidsInt, int(taxid))
+				}
+				sort.Ints(_taxidsInt)
+
+				for _, taxidInt = range _taxidsInt {
+					_taxids = append(_taxids, strconv.Itoa(taxidInt))
 				}
 				fmt.Fprintf(outfhAcc2Taxid, "%s\t%s\n", acc, strings.Join(_taxids, ","))
 			}
