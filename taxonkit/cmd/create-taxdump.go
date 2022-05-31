@@ -110,7 +110,7 @@ Attentions:
 
 			reGenomeID, err = regexp.Compile(reGenomeIDStr)
 			if err != nil {
-				checkError(fmt.Errorf("fail to compile regular expression: %s", reGenomeIDStr))
+				checkError(fmt.Errorf("failed to compile regular expression: %s", reGenomeIDStr))
 			}
 		}
 
@@ -126,7 +126,7 @@ Attentions:
 
 			reGTDBsubspe, err = regexp.Compile(reGTDBStr)
 			if err != nil {
-				checkError(fmt.Errorf("fail to compile regular expression: %s", reGTDBStr))
+				checkError(fmt.Errorf("failed to compile regular expression: %s", reGTDBStr))
 			}
 		}
 
@@ -160,15 +160,13 @@ Attentions:
 						numFields = numRanks + 1
 					}
 					if fAccession > numFields {
-						checkError(fmt.Errorf("value of -A/--field-accession (%d) is out of range (%d)", fAccession, numFields))
+						checkError(fmt.Errorf("value of -A/--field-accession (%d) is out of range (%d columns), or inadequate rank names (%d)", fAccession, numFields, numRanks))
 					}
 				} else {
 					numFields = numRanks
 				}
 			}
 		}
-
-		fmt.Println(numFields, numRanks)
 
 		outDir := getFlagString(cmd, "out-dir")
 		force := getFlagBool(cmd, "force")
@@ -320,7 +318,7 @@ Attentions:
 						numFields = len(items0)
 
 						if fAccession > numFields {
-							checkError(fmt.Errorf("value of -A/--field-accession (%d) is out of range (%d)", fAccession, numFields))
+							checkError(fmt.Errorf("value of -A/--field-accession (%d) is out of range (%d columns)", fAccession, numFields))
 						}
 
 						if hasAccession {
