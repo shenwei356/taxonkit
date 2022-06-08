@@ -41,7 +41,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.11.1
+Version: 0.12.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -65,7 +65,7 @@ Usage:
 
 Available Commands:
   cami-filter     Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
-  create-taxdump  Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB
+  create-taxdump  Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV
   filter          Filter TaxIds by taxonomic rank range
   genautocomplete generate shell autocompletion script (bash|zsh|fish|powershell)
   lca             Compute lowest common ancestor (LCA) for TaxIds
@@ -1482,6 +1482,11 @@ Attentions:
        Species             Virus name(s)
        Jerseyvirus SETP3   Salmonella phage SETP7
        Jerseyvirus SETP7   Salmonella phage SETP7
+
+  3. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
+     required this, you can use the script below for convertion:
+     
+     https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
 
 Usage:
   taxonkit create-taxdump [flags] 

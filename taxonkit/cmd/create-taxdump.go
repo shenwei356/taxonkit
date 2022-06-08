@@ -1,4 +1,4 @@
-// Copyright © 2016-2021 Wei Shen <shenwei356@gmail.com>
+// Copyright © 2016-2022 Wei Shen <shenwei356@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -80,6 +80,11 @@ Attentions:
        Species             Virus name(s)
        Jerseyvirus SETP3   Salmonella phage SETP7
        Jerseyvirus SETP7   Salmonella phage SETP7
+
+  3. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
+     required this, you can use the script below for convertion:
+     
+     https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {

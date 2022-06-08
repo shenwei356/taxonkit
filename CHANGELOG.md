@@ -3,6 +3,7 @@
     - `taxonkit create-taxdump`: 
         - accepts arbitrary ranks [#60](https://github.com/shenwei356/taxonkit/issues/60)
         - better handle of taxa with same names.
+        - many flags changed.
 - [TaxonKit v0.11.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.11.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.11.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.11.1)
     - `taxonkit create-taxdump`: fix bug of missing Class rank, contributed by @apcamargo. The flag `--gtdb` was not effected. [#57](https://github.com/shenwei356/taxonkit/issues/57)
