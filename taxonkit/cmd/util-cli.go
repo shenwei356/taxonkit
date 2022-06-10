@@ -69,9 +69,19 @@ func getConfigs(cmd *cobra.Command) Config {
 		dataDir = getFlagString(cmd, "data-dir")
 	}
 
+	whiteList := []string{"create-taxdump", "taxid-changelog"}
+	var skipCheckingDataDir bool
+	currentCmd := cmd.Name()
+	for _, c := range whiteList {
+		if currentCmd == c {
+			skipCheckingDataDir = true
+			break
+		}
+	}
+
 	existed, err := pathutil.DirExists(dataDir)
 	checkError(err)
-	if !existed {
+	if !existed && !skipCheckingDataDir {
 		checkError(os.MkdirAll(dataDir, 0777))
 		errDataNotFound(dataDir)
 	}
@@ -79,14 +89,14 @@ func getConfigs(cmd *cobra.Command) Config {
 	nodesFile := filepath.Join(dataDir, "nodes.dmp")
 	existed, err = pathutil.Exists(nodesFile)
 	checkError(err)
-	if !existed {
+	if !existed && !skipCheckingDataDir {
 		errDataNotFound(dataDir)
 	}
 
 	namesFile := filepath.Join(dataDir, "names.dmp")
 	existed, err = pathutil.Exists(namesFile)
 	checkError(err)
-	if !existed {
+	if !existed && !skipCheckingDataDir {
 		errDataNotFound(dataDir)
 	}
 
