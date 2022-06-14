@@ -241,7 +241,9 @@ Output format can contains some escape charactors like "\t".
 
 				taxidInt, err = strconv.Atoi(data[taxIdField])
 				if err != nil || taxidInt < 0 {
-					checkError(fmt.Errorf("invalid TaxId: %s", data[taxIdField]))
+					// checkError(fmt.Errorf("invalid TaxId: %s", data[taxIdField]))
+					log.Warningf("invalid TaxId: %s", data[taxIdField])
+					return line2flineage{line, "", ""}, true, nil
 				}
 				taxid = uint32(taxidInt)
 
