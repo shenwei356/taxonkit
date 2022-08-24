@@ -699,7 +699,17 @@ Attentions:
 		var merged map[uint32]uint32
 		var ok bool
 
+		// ------------------------------- delnodes.dmp -------------------------
+
+		fileDelNodes := filepath.Join(outDir, "delnodes.dmp")
+		outfhDelNodes, err := xopen.Wopen(fileDelNodes)
+		checkError(err)
+		defer outfhDelNodes.Close()
+
+		var delnodes map[uint32]interface{}
+
 		if taxdb != nil {
+			// --------------------- merged --------------------
 			merged = make(map[uint32]uint32, len(taxdb.MergeNodes))
 			var _parent uint32
 			for child, parent := range tree {
@@ -719,39 +729,11 @@ Attentions:
 				}
 			}
 
-			// append old delnodes.dmp
-			for from, to := range taxdb.MergeNodes {
-				if _, ok = merged[from]; !ok {
-					merged[from] = to
-				}
-			}
+			// we will handle it later
 
-			taxids := make([]uint32, 0, len(merged))
-			for child := range merged {
-				taxids = append(taxids, child)
-			}
-			sort.Slice(taxids, func(i, j int) bool {
-				return taxids[i] < taxids[j]
-			})
+			// --------------------- delnodes --------------------
 
-			for _, child := range taxids {
-				fmt.Fprintf(outfhMerged, "%d\t|\t%d\t|\n", child, merged[child])
-			}
-		}
-
-		log.Infof("%d records saved to %s", len(merged), fileMerged)
-
-		// ------------------------------- delnodes.dmp -------------------------
-
-		fileDelNodes := filepath.Join(outDir, "delnodes.dmp")
-		outfhDelNodes, err := xopen.Wopen(fileDelNodes)
-		checkError(err)
-		defer outfhDelNodes.Close()
-
-		var delnodes []uint32
-
-		if taxdb != nil {
-			delnodes = make([]uint32, 0, len(taxdb.DelNodes))
+			delnodes = make(map[uint32]interface{}, len(taxdb.DelNodes))
 
 			for child := range taxdb.Nodes {
 				if child == 1 {
@@ -766,25 +748,61 @@ Attentions:
 					continue
 				}
 
-				delnodes = append(delnodes, child)
+				delnodes[child] = struct{}{}
 			}
 
 			// append old delnodes.dmp
 			for child := range taxdb.DelNodes {
 				if _, ok = tree[child]; !ok { // some deleted taxids may be reused
-					delnodes = append(delnodes, child)
+					delnodes[child] = struct{}{}
 				}
 			}
 
-			sort.Slice(delnodes, func(i, j int) bool {
-				return delnodes[i] > delnodes[j]
+			// --------------------- merged --------------------
+
+			// append old merged.dmp
+			for from, to := range taxdb.MergeNodes {
+				if _, ok = delnodes[to]; ok { // could not append deleted nodes
+					delnodes[from] = struct{}{} // if the new taxid has been deleted, mark the old taxid too
+					continue
+				}
+				if _, ok = merged[from]; !ok {
+					merged[from] = to
+				}
+			}
+
+			// --------------------------------- write -----------------------------------
+
+			// -------------- write delnodes.dmp ------------
+
+			taxids := make([]uint32, 0, len(delnodes))
+			for child := range delnodes {
+				taxids = append(taxids, child)
+			}
+			sort.Slice(taxids, func(i, j int) bool {
+				return taxids[i] > taxids[j]
 			})
 
-			for _, child := range delnodes {
+			for _, child := range taxids {
 				fmt.Fprintf(outfhDelNodes, "%d\t|\n", child)
+			}
+
+			// -------------- write merged.dmp ------------
+
+			taxids = taxids[:0]
+			for child := range merged {
+				taxids = append(taxids, child)
+			}
+			sort.Slice(taxids, func(i, j int) bool {
+				return taxids[i] < taxids[j]
+			})
+
+			for _, child := range taxids {
+				fmt.Fprintf(outfhMerged, "%d\t|\t%d\t|\n", child, merged[child])
 			}
 		}
 
+		log.Infof("%d records saved to %s", len(merged), fileMerged)
 		log.Infof("%d records saved to %s", len(delnodes), fileDelNodes)
 	},
 }
