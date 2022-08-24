@@ -1555,6 +1555,77 @@ Examples:
         $ grep MGV-GENOME-0364295 mgv.tsv 
         Caudovirales    crAss-phage     NULL    OTU-61123       MGV-GENOME-0364295
 
+1. Custom lineages with the first row as rank names and treating one column as accession.
+
+        $ csvtk pretty -t example/taxonomy.tsv 
+        id                superkingdom   phylum           class                 order              family               genus            species
+        ---------------   ------------   --------------   -------------------   ----------------   ------------------   --------------   --------------------------
+        GCF_001027105.1   Bacteria       Firmicutes       Bacilli               Bacillales         Staphylococcaceae    Staphylococcus   Staphylococcus aureus
+        GCF_001096185.1   Bacteria       Firmicutes       Bacilli               Lactobacillales    Streptococcaceae     Streptococcus    Streptococcus pneumoniae
+        GCF_001544255.1   Bacteria       Firmicutes       Bacilli               Lactobacillales    Enterococcaceae      Enterococcus     Enterococcus faecium
+        GCF_002949675.1   Bacteria       Proteobacteria   Gammaproteobacteria   Enterobacterales   Enterobacteriaceae   Shigella         Shigella dysenteriae
+        GCF_002950215.1   Bacteria       Proteobacteria   Gammaproteobacteria   Enterobacterales   Enterobacteriaceae   Shigella         Shigella flexneri
+        GCF_006742205.1   Bacteria       Firmicutes       Bacilli               Bacillales         Staphylococcaceae    Staphylococcus   Staphylococcus epidermidis
+        GCF_000006945.2   Bacteria       Proteobacteria   Gammaproteobacteria   Enterobacterales   Enterobacteriaceae   Salmonella       Salmonella enterica
+        GCF_000017205.1   Bacteria       Proteobacteria   Gammaproteobacteria   Pseudomonadales    Pseudomonadaceae     Pseudomonas      Pseudomonas aeruginosa
+        GCF_003697165.2   Bacteria       Proteobacteria   Gammaproteobacteria   Enterobacterales   Enterobacteriaceae   Escherichia      Escherichia coli
+        GCF_009759685.1   Bacteria       Proteobacteria   Gammaproteobacteria   Moraxellales       Moraxellaceae        Acinetobacter    Acinetobacter baumannii
+        GCF_000148585.2   Bacteria       Firmicutes       Bacilli               Lactobacillales    Streptococcaceae     Streptococcus    Streptococcus mitis
+        GCF_000392875.1   Bacteria       Firmicutes       Bacilli               Lactobacillales    Enterococcaceae      Enterococcus     Enterococcus faecalis
+        GCF_000742135.1   Bacteria       Proteobacteria   Gammaproteobacteria   Enterobacterales   Enterobacteriaceae   Klebsiella       Klebsiella pneumonia
+
+        # the first column as accession
+        $ taxonkit create-taxdump -A 1 example/taxonomy.tsv -O example/taxdump
+        16:31:31.828 [INFO] I will use the first row of input as rank names
+        16:31:31.841 [WARN] --field-accession-re failed to extract genome accession, the origninal value is used instead. e.g., GCF_000742135.1
+        16:31:31.843 [INFO] 13 records saved to example/taxdump/taxid.map
+        16:31:31.843 [INFO] 39 records saved to example/taxdump/nodes.dmp
+        16:31:31.843 [INFO] 39 records saved to example/taxdump/names.dmp
+        16:31:31.843 [INFO] 0 records saved to example/taxdump/merged.dmp
+        16:31:31.843 [INFO] 0 records saved to example/taxdump/delnodes.dmp
+        
+        
+        $ export TAXONKIT_DB=example/taxdump
+        $ taxonkit list --ids 1 | taxonkit filter -E species | taxonkit lineage -r
+        1527235303      Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus mitis  species
+        2983929374      Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus pneumoniae     species
+        3809813362      Bacteria;Firmicutes;Bacilli;Lactobacillales;Enterococcaceae;Enterococcus;Enterococcus faecalis  species
+        4145431389      Bacteria;Firmicutes;Bacilli;Lactobacillales;Enterococcaceae;Enterococcus;Enterococcus faecium   species
+        1569132721      Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus;Staphylococcus aureus   species
+        1920251658      Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus;Staphylococcus epidermidis      species
+        3843752343      Bacteria;Proteobacteria;Gammaproteobacteria;Pseudomonadales;Pseudomonadaceae;Pseudomonas;Pseudomonas aeruginosa species
+        72054943        Bacteria;Proteobacteria;Gammaproteobacteria;Moraxellales;Moraxellaceae;Acinetobacter;Acinetobacter baumannii    species
+        1678121664      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Salmonella;Salmonella enterica  species
+        524994882       Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella dysenteriae   species
+        2695851945      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella flexneri      species
+        3958205156      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Klebsiella;Klebsiella pneumoniae        species
+        4093283224      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli    species
+        
+        $ head -n 3 example/taxdump/taxid.map
+        GCF_001027105.1 1569132721
+        GCF_001096185.1 2983929374
+        GCF_001544255.1 4145431389
+        
+1. Custom lineages with the first row as rank names (pure lineage data)
+
+        $ csvtk cut -t -f 2- example/taxonomy.tsv | head -n 2 | csvtk pretty -t 
+        superkingdom   phylum       class     order        family              genus            species
+        ------------   ----------   -------   ----------   -----------------   --------------   ---------------------
+        Bacteria       Firmicutes   Bacilli   Bacillales   Staphylococcaceae   Staphylococcus   Staphylococcus aureus
+        
+        $ csvtk cut -t -f 2- example/taxonomy.tsv \
+            | taxonkit create-taxdump -O example/taxdump2
+        16:53:08.604 [INFO] I will use the first row of input as rank names
+        16:53:08.614 [INFO] 39 records saved to example/taxdump2/nodes.dmp
+        16:53:08.614 [INFO] 39 records saved to example/taxdump2/names.dmp
+        16:53:08.614 [INFO] 0 records saved to example/taxdump2/merged.dmp
+        16:53:08.615 [INFO] 0 records saved to example/taxdump2/delnodes.dmp
+        
+        $ export TAXONKIT_DB=example/taxdump2
+        $ taxonkit list --ids 1 | taxonkit filter -E species | taxonkit lineage -r | head -n 2
+        1527235303      Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus mitis  species
+        2983929374      Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus pneumoniae     species
+
 
 ## genautocomplete
 

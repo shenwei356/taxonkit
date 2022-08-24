@@ -33,6 +33,7 @@ names.dmp
 nodes.dmp
 merged.dmp
 delnodes.dmp
+ranks.txt
 *.json
 doc/site
 taxonkit/archive

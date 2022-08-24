@@ -1,7 +1,9 @@
 - [TaxonKit v0.12.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.12.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.12.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.12.1)
+    - `taxonkit create-taxdump`: 
+        - fix merged.dmp and delnodes.dmp. [gtdb-taxdump/issues/2](https://github.com/shenwei356/gtdb-taxdump/issues/2)
+        - fix bug of handling non-GTDB data when using `-A/--field-accession` and no rank names given.
     - `taxonkit reformat`: do not panic for invalid TaxIds, e.g., the column name, when using `-I--taxid-field`.
-    - `taxonkit create-taxdump`: fix merged.dmp and delnodes.dmp. [gtdb-taxdump/issues/2](https://github.com/shenwei356/gtdb-taxdump/issues/2)
 - [TaxonKit v0.12.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.12.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.12.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.12.0)
     - `taxonkit create-taxdump`: 

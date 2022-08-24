@@ -329,15 +329,33 @@ Attentions:
 						if hasAccession {
 							if accAssubspe {
 								numRanks = numFields
+
+								rankNames = rankNames[:0]
+								for i, val := range items0 {
+									if i+1 != fAccession {
+										rankNames = append(rankNames, val)
+									} else {
+										rankNames = append(rankNames, "subspecies")
+									}
+								}
 							} else {
 								numRanks = numFields - 1
 
 								if numRanks == 0 {
 									checkError(fmt.Errorf("at least 2 columns needed for -A/--field-accession when -S/--field-accession-as-subspecies is not given"))
 								}
+
+								rankNames = rankNames[:0]
+								for i, val := range items0 {
+									if i+1 != fAccession {
+										rankNames = append(rankNames, val)
+									}
+								}
 							}
 						} else {
 							numRanks = numFields
+
+							rankNames = items0
 						}
 
 						_items := make([]string, numFields)
@@ -350,8 +368,6 @@ Attentions:
 						} else {
 							firstLine = line
 						}
-
-						rankNames = items0
 
 						isFirstLine = false
 
