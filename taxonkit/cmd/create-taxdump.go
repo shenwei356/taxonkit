@@ -778,13 +778,26 @@ Attentions:
 
 			// append old merged.dmp
 			for from, to := range taxdb.MergeNodes {
-				// https://github.com/shenwei356/gtdb-taxdump/issues/2#issuecomment-1226186877
-				// The history of GCF_001405015.1 showed Clostridium disporicum was renamed to
-				// Clostridium disporicum_A in R95, and changed back in R207.
-				if _, ok = merged[to]; ok && merged[to] == from {
-					// delnodes[to] = struct{}{}
-					continue
+
+				if _, ok = merged[to]; ok {
+					if merged[to] == from {
+						// https://github.com/shenwei356/gtdb-taxdump/issues/2#issuecomment-1226186877
+						// The history of GCF_001405015.1 showed Clostridium disporicum was renamed to
+						// Clostridium disporicum_A in R95, and changed back in R207.
+						continue
+					} else {
+						// https://github.com/shenwei356/gtdb-taxdump/issues/2#issuecomment-1226728018
+						// detect chaining merging:
+						// previous: A -> B
+						// current : B -> C
+						// merge   : change A -> C, delete B->C, and mark B as deleted
+						merged[from] = merged[to]
+						delete(merged, to)
+						delnodes[to] = struct{}{}
+						continue
+					}
 				}
+
 				if _, ok = delnodes[to]; ok { // could not append deleted nodes
 					delnodes[from] = struct{}{} // if the new taxid has been deleted, mark the old taxid too
 					continue
