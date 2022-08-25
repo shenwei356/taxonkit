@@ -62,6 +62,7 @@ Ambiguous names:
 Output format can be formated by flag --format, available placeholders:
 
     {k}: superkingdom
+    {K}: kingdom
     {p}: phylum
     {c}: class
     {o}: order
@@ -114,6 +115,7 @@ Output format can contains some escape charactors like "\t".
 
 		addPrefix := getFlagBool(cmd, "add-prefix")
 		prefixK := getFlagString(cmd, "prefix-k")
+		prefixK2 := getFlagString(cmd, "prefix-K")
 		prefixP := getFlagString(cmd, "prefix-p")
 		prefixC := getFlagString(cmd, "prefix-c")
 		prefixO := getFlagString(cmd, "prefix-o")
@@ -128,6 +130,7 @@ Output format can contains some escape charactors like "\t".
 
 		prefixes := map[string]string{
 			"k": prefixK,
+			"K": prefixK2,
 			"p": prefixP,
 			"c": prefixC,
 			"o": prefixO,
@@ -516,6 +519,7 @@ func init() {
 
 	flineageCmd.Flags().BoolP("add-prefix", "P", false, `add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X`)
 	flineageCmd.Flags().StringP("prefix-k", "", "k__", `prefix for superkingdom, used along with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-K", "", "K__", `prefix for kingdom, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-p", "", "p__", `prefix for phylum, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-c", "", "c__", `prefix for class, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-o", "", "o__", `prefix for order, used along with flag -P/--add-prefix`)

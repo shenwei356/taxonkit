@@ -25,6 +25,7 @@ import "regexp"
 var rankList = []string{
 	"",
 	"superkingdom",
+	"kingdom",
 	"phylum",
 	"class",
 	"order",
@@ -39,6 +40,7 @@ var rankList = []string{
 var srankList = []string{
 	"",
 	"k",
+	"K",
 	"p",
 	"c",
 	"o",
@@ -52,6 +54,7 @@ var srankList = []string{
 
 var rank2symbol = map[string]string{
 	"superkingdom":      "k",
+	"kingdom":           "K",
 	"phylum":            "p",
 	"class":             "c",
 	"order":             "o",
@@ -65,6 +68,7 @@ var rank2symbol = map[string]string{
 
 var symbol2rank = map[string]string{
 	"k": "superkingdom",
+	"K": "kingdom",
 	"p": "phylum",
 	"c": "class",
 	"o": "order",
@@ -77,6 +81,7 @@ var symbol2rank = map[string]string{
 }
 var symbol2weight = map[string]float32{
 	"k": 1,
+	"K": 1.5,
 	"p": 2,
 	"c": 3,
 	"o": 4,
@@ -92,6 +97,7 @@ var reRankPlaceHolder = regexp.MustCompile(`\{(\w)\}`)
 
 var reRankPlaceHolders = map[string]*regexp.Regexp{
 	"k": regexp.MustCompile(`\{k\}`),
+	"K": regexp.MustCompile(`\{K\}`),
 	"p": regexp.MustCompile(`\{p\}`),
 	"c": regexp.MustCompile(`\{c\}`),
 	"o": regexp.MustCompile(`\{o\}`),
