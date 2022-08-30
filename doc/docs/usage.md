@@ -531,6 +531,7 @@ Ambiguous names:
 Output format can be formated by flag --format, available placeholders:
 
     {k}: superkingdom
+    {K}: kingdom
     {p}: phylum
     {c}: class
     {o}: order
@@ -563,6 +564,7 @@ Flags:
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
   -R, --miss-taxid-repl string         replacement string for missing taxid
   -a, --output-ambiguous-result        output one of the ambigous result
+      --prefix-K string                prefix for kingdom, used along with flag -P/--add-prefix (default "K__")
       --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix (default "S__")
       --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default "T__")
       --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default "c__")
