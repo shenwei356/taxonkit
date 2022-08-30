@@ -309,8 +309,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#method-4-for-go-developer-latest-stabledev-version" class="md-nav__link">
-    Method 4: For Go developer (latest stable/dev version)
+  <a href="#method-4-compile-from-source-latest-stabledev-version" class="md-nav__link">
+    Method 4: Compile from source (latest stable/dev version)
   </a>
   
 </li>
@@ -574,8 +574,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#method-4-for-go-developer-latest-stabledev-version" class="md-nav__link">
-    Method 4: For Go developer (latest stable/dev version)
+  <a href="#method-4-compile-from-source-latest-stabledev-version" class="md-nav__link">
+    Method 4: Compile from source (latest stable/dev version)
   </a>
   
 </li>
@@ -651,7 +651,8 @@
 <a href="https://bioinf.shenwei.me/taxonkit/download/"><img alt="Github Releases" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/total.svg?maxAge=3600" /></a>
 <a href="https://bioinf.shenwei.me/taxonkit/download/"><img alt="Cross-platform" src="https://img.shields.io/badge/platform-any-ec2eb4.svg?style=flat" /></a>
 <a href="https://anaconda.org/bioconda/taxonkit"><img alt="Anaconda Cloud" src="https://anaconda.org/bioconda/taxonkit/badges/version.svg" /></a></li>
-<li><strong><a href="#citation">Please cite</a>:</strong> <a href="https://www.sciencedirect.com/science/article/pii/S1673852721000837">https://doi.org/10.1016/j.jgg.2021.03.006</a></li>
+<li><strong><a href="#citation">Please cite</a>:</strong> <a href="https://www.sciencedirect.com/science/article/pii/S1673852721000837">https://doi.org/10.1016/j.jgg.2021.03.006</a>
+<a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=wHF3Lm8AAAAJ&amp;citation_for_view=wHF3Lm8AAAAJ:ULOm3_A8WrAC"><img alt="Citation Badge" src="https://api.juleskreuer.eu/citation-badge.php?doi=10.1016/j.jgg.2021.03.006" /></a></li>
 <li><a href="https://github.com/bioforensics/pytaxonkit">pytaxonkit</a>, Python bindings for TaxonKit.</li>
 </ul>
 <p>Related projects:</p>
@@ -808,9 +809,46 @@ And then:</p>
 <h4 id="method-3-install-via-homebrew-latest-stable-version">Method 3: Install via homebrew (latest stable version)</h4>
 <pre><code>brew install brewsci/bio/taxonkit
 </code></pre>
-<h4 id="method-4-for-go-developer-latest-stabledev-version">Method 4: For Go developer (latest stable/dev version)</h4>
-<pre><code>go get -u github.com/shenwei356/taxonkit/taxonkit
+<h4 id="method-4-compile-from-source-latest-stabledev-version">Method 4: Compile from source (latest stable/dev version)</h4>
+<ol>
+<li>
+<p><a href="https://go.dev/doc/install">Install go</a></p>
+<pre><code>wget https://go.dev/dl/go1.17.13.linux-amd64.tar.gz
+
+tar -zxf go1.17.13.linux-amd64.tar.gz -C $HOME/
+
+# or 
+#   echo "export PATH=$PATH:$HOME/go/bin" &gt;&gt; ~/.bashrc
+#   source ~/.bashrc
+export PATH=$PATH:$HOME/go/bin
 </code></pre>
+</li>
+<li>
+<p>Compile TaxonKit</p>
+<pre><code># ------------- the latest stable version -------------
+
+go get -v -u github.com/shenwei356/taxonkit/taxonkit
+
+# The executable binary file is located in:
+#   ~/go/bin/taxonkit
+# You can also move it to anywhere in the $PATH
+mkdir -p $HOME/bin
+cp ~/go/bin/taxonkit $HOME/bin/
+
+# --------------- the development version --------------
+
+git clone https://github.com/shenwei356/taxonkit
+cd taxonkit/taxonkit/
+go build
+
+# The executable binary file is located in:
+#   ./taxonkit
+# You can also move it to anywhere in the $PATH
+mkdir -p $HOME/bin
+cp ./taxonkit $HOME/bin/
+</code></pre>
+</li>
+</ol>
 <h2 id="bash-completion">Bash-completion</h2>
 <p>Supported shell: bash|zsh|fish|powershell</p>
 <p>Bash:</p>
@@ -837,7 +875,7 @@ echo "autoload -U compinit; compinit" &gt;&gt; ~/.zshrc
 <p>If you use TaxonKit in your work, please cite:</p>
 <blockquote>
 <p>Shen, W., Ren, H., TaxonKit: a practical and efficient NCBI Taxonomy toolkit,
-Journal of Genetics and Genomics, <a href="https://www.sciencedirect.com/science/article/pii/S1673852721000837">https://doi.org/10.1016/j.jgg.2021.03.006</a></p>
+Journal of Genetics and Genomics, <a href="https://www.sciencedirect.com/science/article/pii/S1673852721000837">https://doi.org/10.1016/j.jgg.2021.03.006</a> <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=wHF3Lm8AAAAJ&amp;citation_for_view=wHF3Lm8AAAAJ:ULOm3_A8WrAC"><img alt="Citation Badge" src="https://api.juleskreuer.eu/citation-badge.php?doi=10.1016/j.jgg.2021.03.006" /></a></p>
 </blockquote>
 <h2 id="contact">Contact</h2>
 <p><a href="https://github.com/shenwei356/taxonkit/issues">Create an issue</a> to report bugs,

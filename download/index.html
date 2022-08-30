@@ -316,8 +316,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#method-4-for-go-developer-latest-stabledev-version" class="md-nav__link">
-    Method 4: For Go developer (latest stable/dev version)
+  <a href="#method-4-compile-from-source-latest-stabledev-version" class="md-nav__link">
+    Method 4: Compile from source (latest stable/dev version)
   </a>
   
 </li>
@@ -544,8 +544,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#method-4-for-go-developer-latest-stabledev-version" class="md-nav__link">
-    Method 4: For Go developer (latest stable/dev version)
+  <a href="#method-4-compile-from-source-latest-stabledev-version" class="md-nav__link">
+    Method 4: Compile from source (latest stable/dev version)
   </a>
   
 </li>
@@ -599,12 +599,15 @@
   in <a href="https://github.com/shenwei356/taxonkit/releases">release</a> page.</p>
 <h2 id="current-version">Current Version</h2>
 <ul>
-<li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.12.0">TaxonKit v0.12.0</a>
-<a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.12.0"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.12.0/total.svg" /></a><ul>
+<li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0">TaxonKit v0.13.0</a> <a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.13.0/total.svg" /></a><ul>
+<li><code>taxonkit reformat</code>:<ul>
+<li>add a new placeholder <code>{K}</code> for rank <code>kingdom</code>. <a href="https://github.com/shenwei356/taxonkit/issues/64">#64</a></li>
+<li>do not panic for invalid TaxIds, e.g., the column name, when using <code>-I--taxid-field</code>.</li>
+</ul>
+</li>
 <li><code>taxonkit create-taxdump</code>: <ul>
-<li>accepts arbitrary ranks <a href="https://github.com/shenwei356/taxonkit/issues/60">#60</a></li>
-<li>better handle of taxa with same names.</li>
-<li>many flags changed.</li>
+<li>fix merged.dmp and delnodes.dmp. Thanks to @apcamargo ! <a href="https://github.com/shenwei356/gtdb-taxdump/issues/2">gtdb-taxdump/issues/2</a>.</li>
+<li>fix bug of handling non-GTDB data when using <code>-A/--field-accession</code> and no rank names given.</li>
 </ul>
 </li>
 </ul>
@@ -634,32 +637,32 @@ Journal of Genetics and Genomics, <a href="https://www.sciencedirect.com/science
 <tr>
 <td align="left">Linux</td>
 <td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_linux_amd64.tar.gz"><strong>taxonkit_linux_amd64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_linux_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_linux_amd64.tar.gz"><strong>taxonkit_linux_amd64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz">中国镜像</a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_linux_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">Linux</td>
 <td align="left"><strong>arm64</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_linux_arm64.tar.gz"><strong>taxonkit_linux_arm64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_arm64.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_linux_arm64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_arm64.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_linux_arm64.tar.gz"><strong>taxonkit_linux_arm64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_arm64.tar.gz">中国镜像</a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_linux_arm64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_arm64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">macOS</td>
 <td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_darwin_amd64.tar.gz"><strong>taxonkit_darwin_amd64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_darwin_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_darwin_amd64.tar.gz"><strong>taxonkit_darwin_amd64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz">中国镜像</a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_darwin_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">macOS</td>
 <td align="left"><strong>arm64</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_darwin_arm64.tar.gz"><strong>taxonkit_darwin_arm64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_darwin_arm64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_darwin_arm64.tar.gz"><strong>taxonkit_darwin_arm64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz">中国镜像</a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_darwin_arm64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
 <td align="left">Windows</td>
 <td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_windows_amd64.exe.tar.gz"><strong>taxonkit_windows_amd64.exe.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.12.0/taxonkit_windows_amd64.exe.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600" /></a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_windows_amd64.exe.tar.gz"><strong>taxonkit_windows_amd64.exe.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz">中国镜像</a></td>
+<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.13.0/taxonkit_windows_amd64.exe.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 </tbody>
 </table>
@@ -699,9 +702,46 @@ And then:</p>
 <h4 id="method-3-install-via-homebrew-may-not-the-lastest-version">Method 3: Install via homebrew (may not the lastest version)</h4>
 <pre><code>brew install brewsci/bio/taxonkit
 </code></pre>
-<h4 id="method-4-for-go-developer-latest-stabledev-version">Method 4: For Go developer (latest stable/dev version)</h4>
-<pre><code>go get -u github.com/shenwei356/taxonkit/taxonkit
+<h4 id="method-4-compile-from-source-latest-stabledev-version">Method 4: Compile from source (latest stable/dev version)</h4>
+<ol>
+<li>
+<p><a href="https://go.dev/doc/install">Install go</a></p>
+<pre><code>wget https://go.dev/dl/go1.17.13.linux-amd64.tar.gz
+
+tar -zxf go1.17.13.linux-amd64.tar.gz -C $HOME/
+
+# or 
+#   echo "export PATH=$PATH:$HOME/go/bin" &gt;&gt; ~/.bashrc
+#   source ~/.bashrc
+export PATH=$PATH:$HOME/go/bin
 </code></pre>
+</li>
+<li>
+<p>Compile TaxonKit</p>
+<pre><code># ------------- the latest stable version -------------
+
+go get -v -u github.com/shenwei356/taxonkit/taxonkit
+
+# The executable binary file is located in:
+#   ~/go/bin/taxonkit
+# You can also move it to anywhere in the $PATH
+mkdir -p $HOME/bin
+cp ~/go/bin/taxonkit $HOME/bin/
+
+# --------------- the development version --------------
+
+git clone https://github.com/shenwei356/taxonkit
+cd taxonkit/taxonkit/
+go build
+
+# The executable binary file is located in:
+#   ./taxonkit
+# You can also move it to anywhere in the $PATH
+mkdir -p $HOME/bin
+cp ./taxonkit $HOME/bin/
+</code></pre>
+</li>
+</ol>
 <h2 id="bash-completion">Bash-completion</h2>
 <p>Supported shell: bash|zsh|fish|powershell</p>
 <p>Bash:</p>
