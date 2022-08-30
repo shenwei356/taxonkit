@@ -130,10 +130,45 @@ And then:
 #### Method 3: Install via homebrew (latest stable version)
 
     brew install brewsci/bio/taxonkit
+    
+#### Method 4: Compile from source (latest stable/dev version)
 
-#### Method 4: For Go developer (latest stable/dev version)
+1. [Install go](https://go.dev/doc/install)
 
-    go get -u github.com/shenwei356/taxonkit/taxonkit
+        wget https://go.dev/dl/go1.17.13.linux-amd64.tar.gz
+
+        tar -zxf go1.17.13.linux-amd64.tar.gz -C $HOME/
+
+        # or 
+        #   echo "export PATH=$PATH:$HOME/go/bin" >> ~/.bashrc
+        #   source ~/.bashrc
+        export PATH=$PATH:$HOME/go/bin
+
+2. Compile TaxonKit
+
+        # ------------- the latest stable version -------------
+
+        go get -v -u github.com/shenwei356/taxonkit/taxonkit
+
+        # The executable binary file is located in:
+        #   ~/go/bin/taxonkit
+        # You can also move it to anywhere in the $PATH
+        mkdir -p $HOME/bin
+        cp ~/go/bin/taxonkit $HOME/bin/
+
+
+        # --------------- the development version --------------
+
+        git clone https://github.com/shenwei356/taxonkit
+        cd taxonkit/taxonkit/
+        go build
+
+        # The executable binary file is located in:
+        #   ./taxonkit
+        # You can also move it to anywhere in the $PATH
+        mkdir -p $HOME/bin
+        cp ./taxonkit $HOME/bin/
+
 
 ## Bash-completion
 

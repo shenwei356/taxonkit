@@ -13,6 +13,7 @@
     - `taxonkit create-taxdump`: 
         - fix merged.dmp and delnodes.dmp. Thanks to @apcamargo ! [gtdb-taxdump/issues/2](https://github.com/shenwei356/gtdb-taxdump/issues/2).
         - fix bug of handling non-GTDB data when using `-A/--field-accession` and no rank names given.
+
 ### Please cite
 
 > Shen, W., Ren, H., TaxonKit: a practical and efficient NCBI Taxonomy toolkit,
@@ -68,9 +69,43 @@ And then:
 
     brew install brewsci/bio/taxonkit
 
-#### Method 4: For Go developer (latest stable/dev version)
+#### Method 4: Compile from source (latest stable/dev version)
 
-    go get -u github.com/shenwei356/taxonkit/taxonkit
+1. [Install go](https://go.dev/doc/install)
+
+        wget https://go.dev/dl/go1.17.13.linux-amd64.tar.gz
+
+        tar -zxf go1.17.13.linux-amd64.tar.gz -C $HOME/
+
+        # or 
+        #   echo "export PATH=$PATH:$HOME/go/bin" >> ~/.bashrc
+        #   source ~/.bashrc
+        export PATH=$PATH:$HOME/go/bin
+
+2. Compile TaxonKit
+
+        # ------------- the latest stable version -------------
+
+        go get -v -u github.com/shenwei356/taxonkit/taxonkit
+
+        # The executable binary file is located in:
+        #   ~/go/bin/taxonkit
+        # You can also move it to anywhere in the $PATH
+        mkdir -p $HOME/bin
+        cp ~/go/bin/taxonkit $HOME/bin/
+
+
+        # --------------- the development version --------------
+
+        git clone https://github.com/shenwei356/taxonkit
+        cd taxonkit/taxonkit/
+        go build
+
+        # The executable binary file is located in:
+        #   ./taxonkit
+        # You can also move it to anywhere in the $PATH
+        mkdir -p $HOME/bin
+        cp ./taxonkit $HOME/bin/
 
 ## Bash-completion
 
