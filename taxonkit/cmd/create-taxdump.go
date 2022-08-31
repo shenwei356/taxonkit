@@ -725,7 +725,7 @@ Attentions:
 		var delnodes map[uint32]interface{}
 
 		if taxdb != nil {
-			// --------------------- merged --------------------
+			// --------------------- newly merged --------------------
 			merged = make(map[uint32]uint32, len(taxdb.MergeNodes))
 			var _parent uint32
 			for child, parent := range tree {
@@ -733,7 +733,9 @@ Attentions:
 					if parent != _parent && // its parent changed
 						tree[parent] == taxdb.Nodes[_parent] { // while parents of the parents not changed
 						if _, ok = tree[_parent]; !ok { // and the old parent disappeared
+							// then the old parent is merged into the new parent
 
+							// For example, phylum 'Desulfobacteraeota' was merged into 'Desulfobacterota':
 							// R80
 							// GB_GCA_002299865.1	d__Bacteria;p__Desulfobacteraeota_A;c__Desulfovibrionia;o__Desulfovibrionales;f__Desulfonatronaceae;g__UBA663;s__
 							// R83
@@ -745,9 +747,7 @@ Attentions:
 				}
 			}
 
-			// we will handle it later
-
-			// --------------------- delnodes --------------------
+			// --------------------- newly deleted --------------------
 
 			delnodes = make(map[uint32]interface{}, len(taxdb.DelNodes))
 
@@ -767,44 +767,77 @@ Attentions:
 				delnodes[child] = struct{}{}
 			}
 
-			// append old delnodes.dmp
+			// --------------------- append old delnodes.dmp ---------------------
 			for child := range taxdb.DelNodes {
 				if _, ok = tree[child]; !ok { // some deleted taxids may be reused
 					delnodes[child] = struct{}{}
 				}
 			}
 
-			// --------------------- merged --------------------
+			// --------------------- append old merged --------------------
 
 			// append old merged.dmp
+			var toNew uint32
 			for from, to := range taxdb.MergeNodes {
+				// previoulsly merged reads may be reused again, it happens both in GTDB and NCBI Taxonomy
+				if _, ok = tree[from]; ok {
+					// discard the old record
+					continue
+				}
 
-				if _, ok = merged[to]; ok {
-					if merged[to] == from {
+				// need to check the new taxid
+
+				// the new taxid is merged
+				if toNew, ok = merged[to]; ok {
+					if toNew == from { // changed back to the old taxid
 						// https://github.com/shenwei356/gtdb-taxdump/issues/2#issuecomment-1226186877
+						// https://gtdb.ecogenomic.org/genome?gid=GCF_001405015.1
 						// The history of GCF_001405015.1 showed Clostridium disporicum was renamed to
 						// Clostridium disporicum_A in R95, and changed back in R207.
+
+						// discard the old record
 						continue
-					} else {
+					} else { // merged to a new taxid
 						// https://github.com/shenwei356/gtdb-taxdump/issues/2#issuecomment-1226728018
 						// detect chaining merging:
 						// previous: A -> B
 						// current : B -> C
-						// merge   : change A -> C, delete B->C, and mark B as deleted
-						merged[from] = merged[to]
+						// how     : change A -> C, delete B->C, and mark B as deleted
+						merged[from] = toNew
 						delete(merged, to)
-						delnodes[to] = struct{}{}
+
+						if _, ok = delnodes[to]; !ok {
+							delnodes[to] = struct{}{}
+						}
 						continue
 					}
 				}
 
-				if _, ok = delnodes[to]; ok { // could not append deleted nodes
-					delnodes[from] = struct{}{} // if the new taxid has been deleted, mark the old taxid too
+				// the new taxid is deleted
+				if _, ok = delnodes[to]; ok {
+					// if the new taxid has been deleted, mark the old taxid too
+					if _, ok = tree[from]; !ok {
+						delnodes[from] = struct{}{}
+					}
 					continue
 				}
-				if _, ok = merged[from]; !ok {
-					merged[from] = to
+
+				// the old taxid is merged to a new taxid, e.g.,
+				// gtdb-taxdump/R089/nodes.dmp: from: 1996042274, oldto: 1424454668, newto: 1975216569
+				if toNew, ok = merged[from]; ok {
+					// fmt.Printf("%s: from: %d, oldto: %d, newto: %d\n", fileNodes, from, to, toNew)
+					if to != toNew {
+						if _, ok = tree[to]; !ok {
+							if _, ok = delnodes[to]; !ok {
+								delnodes[to] = struct{}{}
+							}
+						}
+					}
+					continue
 				}
+
+				// append
+				merged[from] = to
 			}
 
 			// --------------------------------- write -----------------------------------
