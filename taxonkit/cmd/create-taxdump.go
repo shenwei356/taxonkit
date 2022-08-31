@@ -741,6 +741,7 @@ Attentions:
 							// R83
 							// GB_GCA_002299865.1	d__Bacteria;p__Desulfobacterota;c__Desulfovibrionia;o__Desulfovibrionales;f__Desulfonatronaceae;g__Desulfonatronum;s__
 
+							// multiple nodes may merged to one node.
 							merged[_parent] = parent
 						}
 					}
@@ -767,14 +768,11 @@ Attentions:
 				delnodes[child] = struct{}{}
 			}
 
-			// --------------------- append old delnodes.dmp ---------------------
-			for child := range taxdb.DelNodes {
-				if _, ok = tree[child]; !ok { // some deleted taxids may be reused
-					delnodes[child] = struct{}{}
-				}
-			}
-
 			// --------------------- append old merged --------------------
+
+			newMerged := make(map[uint32]uint32, 256)
+			toDeleteMerged := make(map[uint32]interface{}, 256)
+			toDelete := make(map[uint32]interface{}, 256)
 
 			// append old merged.dmp
 			var toNew uint32
@@ -802,13 +800,11 @@ Attentions:
 						// detect chaining merging:
 						// previous: A -> B
 						// current : B -> C
-						// how     : change A -> C, delete B->C, and mark B as deleted
-						merged[from] = toNew
-						delete(merged, to)
-
-						if _, ok = delnodes[to]; !ok {
-							delnodes[to] = struct{}{}
+						// how     : change A -> C, and keep B -> C
+						if _, ok = newMerged[from]; !ok {
+							newMerged[from] = toNew
 						}
+
 						continue
 					}
 				}
@@ -816,28 +812,58 @@ Attentions:
 				// the new taxid is deleted
 				if _, ok = delnodes[to]; ok {
 					// if the new taxid has been deleted, mark the old taxid too
-					if _, ok = tree[from]; !ok {
-						delnodes[from] = struct{}{}
-					}
+					toDelete[from] = struct{}{}
 					continue
 				}
 
 				// the old taxid is merged to a new taxid, e.g.,
 				// gtdb-taxdump/R089/nodes.dmp: from: 1996042274, oldto: 1424454668, newto: 1975216569
+				// previous: A -> B
+				// current : A -> C
+				// how     : mark B as deleted
 				if toNew, ok = merged[from]; ok {
-					// fmt.Printf("%s: from: %d, oldto: %d, newto: %d\n", fileNodes, from, to, toNew)
 					if to != toNew {
-						if _, ok = tree[to]; !ok {
-							if _, ok = delnodes[to]; !ok {
-								delnodes[to] = struct{}{}
-							}
-						}
+						toDelete[to] = struct{}{}
 					}
 					continue
 				}
 
 				// append
+				// merged[from] = to
+				if _, ok = tree[to]; !ok {
+					newMerged[from] = to
+				}
+			}
+
+			// apply changes
+			for child := range toDeleteMerged {
+				delete(merged, child)
+			}
+			for from, to := range newMerged {
 				merged[from] = to
+			}
+			for child := range toDelete {
+				if _, ok = tree[child]; ok {
+					continue
+				}
+				if _, ok = merged[child]; ok {
+					continue
+				}
+
+				delnodes[child] = struct{}{}
+			}
+
+			// --------------------- append old delnodes.dmp ---------------------
+			for child := range taxdb.DelNodes {
+				if _, ok = tree[child]; ok { // some deleted taxids may be reused
+					continue
+				}
+
+				if _, ok = merged[child]; ok {
+					continue
+				}
+
+				delnodes[child] = struct{}{}
 			}
 
 			// --------------------------------- write -----------------------------------
