@@ -6,6 +6,8 @@
     - `taxonkit create-taxdump`: 
         - fix merged.dmp and delnodes.dmp. Thanks to @apcamargo ! [gtdb-taxdump/issues/2](https://github.com/shenwei356/gtdb-taxdump/issues/2).
         - fix bug of handling non-GTDB data when using `-A/--field-accession` and no rank names given.
+    - `taxonkit list`:
+        - fix warning message of merged taxids.
 - [TaxonKit v0.12.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.12.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.12.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.12.0)
     - `taxonkit create-taxdump`: 

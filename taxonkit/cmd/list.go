@@ -148,20 +148,19 @@ Examples:
 			outfh.WriteString("{\n")
 		}
 		var newtaxid uint32
-		var child uint32
 		for i, id := range ids {
 			if _, ok := tree[uint32(id)]; !ok {
 				// check if it was deleted
 				if _, ok = delnodes[uint32(id)]; ok {
-					log.Warningf("taxid %d was deleted", child)
+					log.Warningf("taxid %d was deleted", id)
 					continue
 				}
 				// check if it was merged
 				if newtaxid, ok = merged[uint32(id)]; ok {
-					log.Warningf("taxid %d was merged into %d", child, newtaxid)
+					log.Warningf("taxid %d was merged into %d", id, newtaxid)
 					id = int(newtaxid)
 				} else {
-					log.Warningf("taxid %d not found", child)
+					log.Warningf("taxid %d not found", id)
 					continue
 				}
 			}
