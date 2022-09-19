@@ -105,7 +105,13 @@ Attentions:
 
 		var err error
 
+		isGTDB := getFlagBool(cmd, "gtdb")
+
 		reGenomeIDStr := getFlagString(cmd, "field-accession-re")
+
+		if isGTDB && !cmd.Flags().Lookup("field-accession-re").Changed {
+			reGenomeIDStr = `^\w\w_(.+)$`
+		}
 
 		var reGenomeID *regexp.Regexp
 		if reGenomeIDStr != "" {
@@ -119,7 +125,6 @@ Attentions:
 			}
 		}
 
-		isGTDB := getFlagBool(cmd, "gtdb")
 		reGTDBStr := getFlagString(cmd, "gtdb-re-subs")
 
 		var reGTDBsubspe *regexp.Regexp
@@ -906,7 +911,7 @@ func init() {
 	RootCmd.AddCommand(createTaxDumpCmd)
 
 	createTaxDumpCmd.Flags().IntP("field-accession", "A", 0, "field index of assembly accession (genome ID), for outputting taxid.map")
-	createTaxDumpCmd.Flags().StringP("field-accession-re", "", `^\w\w_(.+)$`, `regular expression to extract assembly accession`)
+	createTaxDumpCmd.Flags().StringP("field-accession-re", "", `^(.+)$`, `regular expression to extract assembly accession`)
 	createTaxDumpCmd.Flags().BoolP("field-accession-as-subspecies", "S", false, "treate the accession as subspecies rank")
 	// -------------------------------------------------------------------
 

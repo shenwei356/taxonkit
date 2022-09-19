@@ -5,7 +5,9 @@
         - do not panic for invalid TaxIds, e.g., the column name, when using `-I--taxid-field`.
     - `taxonkit create-taxdump`: 
         - fix merged.dmp and delnodes.dmp. Thanks to @apcamargo ! [gtdb-taxdump/issues/2](https://github.com/shenwei356/gtdb-taxdump/issues/2).
-        - fix bug of handling non-GTDB data when using `-A/--field-accession` and no rank names given.
+        - fix bug of handling non-GTDB data when using `-A/--field-accession` and no rank names given:
+          the colname of the accession column would be treated as one of the ranks, which messed up all the ranks.
+        - fix the default option value of `--field-accession-re` which wrongly remove prefix like `Sp_`. [#65](https://github.com/shenwei356/taxonkit/issues/65)
     - `taxonkit list`:
         - fix warning message of merged taxids.
 - [TaxonKit v0.12.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.12.0)
