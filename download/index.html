@@ -599,7 +599,8 @@
   in <a href="https://github.com/shenwei356/taxonkit/releases">release</a> page.</p>
 <h2 id="current-version">Current Version</h2>
 <ul>
-<li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0">TaxonKit v0.13.0</a> <a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.13.0/total.svg" /></a><ul>
+<li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0">TaxonKit v0.13.0</a>
+<a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.13.0/total.svg" /></a><ul>
 <li><code>taxonkit reformat</code>:<ul>
 <li>add a new placeholder <code>{K}</code> for rank <code>kingdom</code>. <a href="https://github.com/shenwei356/taxonkit/issues/64">#64</a></li>
 <li>do not panic for invalid TaxIds, e.g., the column name, when using <code>-I--taxid-field</code>.</li>
@@ -607,7 +608,13 @@
 </li>
 <li><code>taxonkit create-taxdump</code>: <ul>
 <li>fix merged.dmp and delnodes.dmp. Thanks to @apcamargo ! <a href="https://github.com/shenwei356/gtdb-taxdump/issues/2">gtdb-taxdump/issues/2</a>.</li>
-<li>fix bug of handling non-GTDB data when using <code>-A/--field-accession</code> and no rank names given.</li>
+<li>fix bug of handling non-GTDB data when using <code>-A/--field-accession</code> and no rank names given:
+  the colname of the accession column would be treated as one of the ranks, which messed up all the ranks.</li>
+<li>fix the default option value of <code>--field-accession-re</code> which wrongly remove prefix like <code>Sp_</code>. <a href="https://github.com/shenwei356/taxonkit/issues/65">#65</a></li>
+</ul>
+</li>
+<li><code>taxonkit list</code>:<ul>
+<li>fix warning message of merged taxids.</li>
 </ul>
 </li>
 </ul>

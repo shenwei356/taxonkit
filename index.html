@@ -638,7 +638,6 @@
 
 
 <h1 id="taxonkit-a-practical-and-efficient-ncbi-taxonomy-toolkit">TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit</h1>
-<p><img src="taxonkit.jpg" alt="taxonkit" width="800" align="center" /></p>
 <ul>
 <li><strong>Documents:</strong> <a href="https://bioinf.shenwei.me/taxonkit">https://bioinf.shenwei.me/taxonkit</a>
 (<a href="https://bioinf.shenwei.me/taxonkit/usage/"><strong>Usage&amp;Examples</strong></a>,
@@ -696,8 +695,9 @@
 <li><strong>Versatile commands</strong> <ul>
 <li><a href="http://bioinf.shenwei.me/taxonkit/usage/">Usage and examples</a></li>
 <li>Featured command: <a href="https://github.com/shenwei356/taxid-changelog">tracking monthly changelog of all TaxIds</a></li>
-<li>Featured command: <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat">reformating lineage into format of seven-level ("superkingdom, phylum, class, order, family, genus, species"</a></li>
+<li>Featured command: <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat">reformating lineage into format of seven-level ("superkingdom/kingdom, phylum, class, order, family, genus, species"</a></li>
 <li>Featured command: <a href="http://bioinf.shenwei.me/taxonkit/usage/#filter">filtering taxiDs by a rank range</a>, e.g., at or below genus rank.</li>
+<li>Featured command: <a href="https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump"><strong>Create NCBI-style taxdump files for custom taxonomy</strong></a></li>
 </ul>
 </li>
 </ul>
@@ -739,19 +739,21 @@
 <td align="left">Create TaxId changelog from dump archives</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#profile2cami"><code>profile2cami</code></a></td>
+<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#profile2cami"><code>profile2cami</code></a><sup>*</sup></td>
 <td align="left">Convert metagenomic profile table to CAMI format</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#cami-filter"><code>cami-filter</code></a></td>
+<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#cami-filter"><code>cami-filter</code></a><sup>*</sup></td>
 <td align="left">Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump"><code>create-taxdump</code></a></td>
+<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump"><code>create-taxdump</code></a><sup>*</sup></td>
 <td align="left">Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV</td>
 </tr>
 </tbody>
 </table>
+<p>Note: <sup>*</sup>New commands since the publication.</p>
+<p><img src="taxonkit.jpg" alt="taxonkit" width="700" align="center" /></p>
 <h2 id="benchmark">Benchmark</h2>
 <ol>
 <li>Getting complete lineage for given TaxIds</li>

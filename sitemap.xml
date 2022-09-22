@@ -2,42 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://bioinf.shenwei.me/taxonkit/</loc>
-         <lastmod>2022-08-30</lastmod>
+         <lastmod>2022-09-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bioinf.shenwei.me/taxonkit/bioinf/</loc>
-         <lastmod>2022-08-30</lastmod>
+         <lastmod>2022-09-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bioinf.shenwei.me/taxonkit/chinese-dev/</loc>
-         <lastmod>2022-08-30</lastmod>
+         <lastmod>2022-09-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bioinf.shenwei.me/taxonkit/chinese/</loc>
-         <lastmod>2022-08-30</lastmod>
+         <lastmod>2022-09-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bioinf.shenwei.me/taxonkit/download/</loc>
-         <lastmod>2022-08-30</lastmod>
+         <lastmod>2022-09-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bioinf.shenwei.me/taxonkit/tutorial/</loc>
-         <lastmod>2022-08-30</lastmod>
+         <lastmod>2022-09-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bioinf.shenwei.me/taxonkit/usage/</loc>
-         <lastmod>2022-08-30</lastmod>
+         <lastmod>2022-09-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://bioinf.shenwei.me/taxonkit/bench/</loc>
-         <lastmod>2022-08-30</lastmod>
+         <lastmod>2022-09-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

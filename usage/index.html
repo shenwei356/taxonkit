@@ -2127,20 +2127,19 @@ Flags:
     | sed 1d \
     &gt; mgv.tsv
 
-$ taxonkit create-taxdump mgv.tsv --out-dir mgv --force -A 5 -R order,family,genus,species,contig
-16:45:40.555 [WARN] --field-accession-re failed to extract genome accession, the origninal value is used instead. e.g., MGV-GENOME-0231225
-16:45:40.817 [INFO] 189680 records saved to mgv/taxid.map
-16:45:40.846 [INFO] 54224 records saved to mgv/nodes.dmp
-16:45:40.864 [INFO] 54224 records saved to mgv/names.dmp
-16:45:40.864 [INFO] 0 records saved to mgv/merged.dmp
-16:45:40.864 [INFO] 0 records saved to mgv/delnodes.dmp
+$ taxonkit create-taxdump mgv.tsv --out-dir mgv --force -A 5 -R order,family,genus,species
+23:33:18.098 [INFO] 189680 records saved to mgv/taxid.map
+23:33:18.131 [INFO] 58102 records saved to mgv/nodes.dmp
+23:33:18.150 [INFO] 58102 records saved to mgv/names.dmp
+23:33:18.150 [INFO] 0 records saved to mgv/merged.dmp
+23:33:18.150 [INFO] 0 records saved to mgv/delnodes.dmp
 
 $ head -n 5 mgv/taxid.map 
-MGV-GENOME-0364295      3108345579
-MGV-GENOME-0364296      2356405276
-MGV-GENOME-0364303      1099424244
-MGV-GENOME-0364311      4037644503
-MGV-GENOME-0364312      452745976
+MGV-GENOME-0364295      677052301
+MGV-GENOME-0364296      677052301
+MGV-GENOME-0364303      1414406025
+MGV-GENOME-0364311      1849074420
+MGV-GENOME-0364312      2074846424
 
 $ echo 677052301 | taxonkit lineage --data-dir mgv/ 
 677052301       Caudovirales;crAss-phage;OTU-61123
@@ -2174,7 +2173,6 @@ GCF_000742135.1   Bacteria       Proteobacteria   Gammaproteobacteria   Enteroba
 # the first column as accession
 $ taxonkit create-taxdump -A 1 example/taxonomy.tsv -O example/taxdump
 16:31:31.828 [INFO] I will use the first row of input as rank names
-16:31:31.841 [WARN] --field-accession-re failed to extract genome accession, the origninal value is used instead. e.g., GCF_000742135.1
 16:31:31.843 [INFO] 13 records saved to example/taxdump/taxid.map
 16:31:31.843 [INFO] 39 records saved to example/taxdump/nodes.dmp
 16:31:31.843 [INFO] 39 records saved to example/taxdump/names.dmp
