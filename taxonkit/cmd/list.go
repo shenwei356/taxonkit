@@ -38,6 +38,10 @@ var listCmd = &cobra.Command{
 	Short: "List taxonomic subtrees of given TaxIds",
 	Long: `List taxonomic subtrees of given TaxIds
 
+Attentions:
+  1. When multiple taxids are given, the output may contain duplicated records
+     if some taxids are descendants of others.
+
 Examples:
 
     $ taxonkit list --ids 9606 -n -r --indent "    "
@@ -75,7 +79,8 @@ Examples:
 		var names map[uint32]string
 		var delnodes map[uint32]struct{}
 		var merged map[uint32]uint32
-		var tree map[uint32]map[uint32]bool // different from that in lineage.go
+		// var tree map[uint32]map[uint32]bool // different from that in lineage.go
+		var tree map[uint32]map[uint32]interface{} // different from that in lineage.go
 		var ranks map[uint32]string
 
 		var wg sync.WaitGroup
@@ -88,7 +93,8 @@ Examples:
 
 		wg.Add(1)
 		go func() {
-			tree = make(map[uint32]map[uint32]bool, mapInitialSize)
+			// tree = make(map[uint32]map[uint32]bool, mapInitialSize)
+			tree = make(map[uint32]map[uint32]interface{}, mapInitialSize)
 			ranks = make(map[uint32]string, mapInitialSize)
 
 			fh, err := xopen.Ropen(config.NodesFile)
@@ -121,13 +127,16 @@ Examples:
 
 				if child > 1 {
 					if _, ok = tree[parent]; !ok {
-						tree[parent] = make(map[uint32]bool)
+						// tree[parent] = make(map[uint32]bool)
+						tree[parent] = make(map[uint32]interface{})
 					}
-					tree[parent][child] = false
+					// tree[parent][child] = false
+					tree[parent][child] = struct{}{}
 				}
 
 				if _, ok = tree[child]; !ok {
-					tree[child] = make(map[uint32]bool)
+					// tree[child] = make(map[uint32]bool)
+					tree[child] = make(map[uint32]interface{})
 				}
 				if printRank {
 					ranks[child] = rank
@@ -229,7 +238,8 @@ func init() {
 }
 
 func traverseTree(
-	tree map[uint32]map[uint32]bool,
+	// tree map[uint32]map[uint32]bool,
+	tree map[uint32]map[uint32]interface{},
 	parent uint32,
 	outfh *xopen.Writer,
 	indent string,
@@ -257,9 +267,9 @@ func traverseTree(
 	var child uint32
 	for i, c := range children {
 		child = uint32(c)
-		if tree[parent][child] {
-			continue
-		}
+		// if tree[parent][child] {
+		// 	continue
+		// }
 
 		outfh.WriteString(strings.Repeat(indent, level))
 
@@ -291,7 +301,7 @@ func traverseTree(
 			outfh.Flush()
 		}
 
-		tree[parent][child] = true
+		// tree[parent][child] = true
 
 		traverseTree(tree, child, outfh, indent, level+1, names, printName,
 			ranks, printRank, jsonFormat, config)

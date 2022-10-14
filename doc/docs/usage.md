@@ -41,7 +41,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.13.0
+Version: 0.13.1
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -93,6 +93,10 @@ Usage
 
 ```text
 List taxonomic subtrees of given TaxIds
+
+Attentions:
+  1. When multiple taxids are given, the output may contain duplicated records
+     if some taxids are descendants of others.
 
 Examples:
 
