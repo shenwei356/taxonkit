@@ -1,9 +1,7 @@
 - [TaxonKit v0.14.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.0)
-   - `taxonkit create-taxdump`:
+    - `taxonkit create-taxdump`:
         - save taxIds in `int32` instead of `uint32`, as BLAST and DIAMOND do. [#70](https://github.com/shenwei356/taxonkit/issues/70)
-- [TaxonKit v0.13.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.13.1)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.13.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.13.1)
     - `taxonkit list`:
         - do not skip visited subtrees when some of give taxids are descendants of others. [#68](https://github.com/shenwei356/taxonkit/issues/68)
 - [TaxonKit v0.13.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0)
