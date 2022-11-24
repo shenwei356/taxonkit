@@ -485,11 +485,11 @@ Attentions:
 						}
 
 						if j == 0 {
-							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])))
+							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])) & 2147483647)
 							continue
 						}
 						if t.Names[j] != t.Names[j-1] {
-							t.TaxIds[j] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[j])))
+							t.TaxIds[j] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[j])) & 2147483647)
 						}
 					}
 				} else {
@@ -526,11 +526,11 @@ Attentions:
 						}
 
 						if j == 0 {
-							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])))
+							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])) & 2147483647)
 							continue
 						}
 						if t.Names[j] != t.Names[j-1] {
-							t.TaxIds[j] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[j])))
+							t.TaxIds[j] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[j])) & 2147483647)
 						}
 					}
 				}
