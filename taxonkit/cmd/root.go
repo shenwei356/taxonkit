@@ -73,7 +73,10 @@ Dataset:
     "%s"
 
     or some other directory, and later you can refer to using flag --data-dir,
-    or environment variable TAXONKIT_DB
+    or environment variable TAXONKIT_DB.
+
+	When environment variable TAXONKIT_DB is set, explicitly setting --data-dir will
+    overide the value of TAXONKIT_DB.
 
 `, VERSION, defaulDataDir)
 

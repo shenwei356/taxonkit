@@ -41,7 +41,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.13.1
+Version: 0.14.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -59,6 +59,9 @@ Dataset:
 
     or some other directory, and later you can refer to using flag --data-dir,
     or environment variable TAXONKIT_DB
+    
+    When environment variable TAXONKIT_DB is set, explicitly setting --data-dir will
+    overide the value of TAXONKIT_DB.
 
 Usage:
   taxonkit [command] 

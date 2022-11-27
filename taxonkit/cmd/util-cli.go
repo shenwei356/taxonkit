@@ -64,7 +64,11 @@ func getConfigs(cmd *cobra.Command) Config {
 
 	var val, dataDir string
 	if val = os.Getenv("TAXONKIT_DB"); val != "" {
-		dataDir = val
+		if cmd.Flags().Lookup("data-dir").Changed { // users explicitly set the option
+			dataDir = getFlagString(cmd, "data-dir")
+		} else {
+			dataDir = val
+		}
 	} else {
 		dataDir = getFlagString(cmd, "data-dir")
 	}
