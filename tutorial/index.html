@@ -324,6 +324,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#merging-gtdb-and-ncbi-taxonomy" class="md-nav__link">
+    Merging GTDB and NCBI taxonomy
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -468,6 +475,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#merging-gtdb-and-ncbi-taxonomy" class="md-nav__link">
+    Merging GTDB and NCBI taxonomy
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -495,6 +509,7 @@
 <li><a href="#parsing-krakenbraken-result">Parsing kraken/bracken result</a></li>
 <li><a href="#making-nr-blastdb-for-specific-taxids">Making nr blastdb for specific taxids</a></li>
 <li><a href="#summaries-of-taxonomy-data">Summaries of taxonomy data</a></li>
+<li><a href="#merging-gtdb-and-ncbi-taxonomy">Merging GTDB and NCBI taxonomy</a></li>
 </ul>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1354,6 +1369,107 @@ subvariety        5
 </code></pre>
 </li>
 </ol>
+<h2 id="merging-gtdb-and-ncbi-taxonomy">Merging GTDB and NCBI taxonomy</h2>
+<p>Sometimes (<a href="https://github.com/shenwei356/gtdb-taxdump/issues/6">1</a>) one needs to build a database including bacteria and archaea (from GTDB) and viral database from NCBI.
+The idea is to export lineages from both GTDB and NCBI using <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat">taxonkit reformat</a>, and then create taxdump files from them with <a href="https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump">taxonkit create-taxdump</a>.</p>
+<ol>
+<li>
+<p>Exporting taxonomic lineages of taxa with rank equal to species from <a href="https://github.com/shenwei356/gtdb-taxdump">GTDB-taxdump</a>.</p>
+<pre><code>taxonkit list --data-dir gtdb-taxdump/R207/ --ids 1 --indent "" \
+    | taxonkit filter --data-dir gtdb-taxdump/R207/ --equal-to species \
+    | taxonkit reformat --data-dir gtdb-taxdump/R207/ --taxid-field 1 \
+        --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" \
+        -o gtdb.tsv
+</code></pre>
+</li>
+<li>
+<p>Exporting taxonomic lineages of viral taxa with rank equal to or lower than species from NCBI taxdump.
+   Since the lineage of many viruses are incomplete, we can fill in missing taxa, e.g.,
+   "327830  Viruses;Polydnaviriformidae;Ichnoviriform;unclassified Ichnovirus" -&gt;
+   "Viruses;unclassified Viruses phylum;unclassified Viruses class;unclassified Viruses order;Polydnaviriformidae;Ichnoviriform;unclassified Ichnoviriform species;unclassified Ichnovirus".</p>
+<pre><code># taxid of Viruses: 10239
+taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent "" \
+    | taxonkit filter --data-dir ~/.taxonkit --equal-to species --lower-than species \
+    | taxonkit reformat --data-dir ~/.taxonkit --taxid-field 1 \
+        --fill-miss-rank --pseudo-strain --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        -o ncbi-viral.tsv
+</code></pre>
+</li>
+<li>
+<p>Creating taxdump from lineages above.</p>
+<pre><code>(awk '{print $_"\t"}' gtdb.tsv; cat ncbi-viral.tsv) \
+    | taxonkit create-taxdump \
+        --field-accession 1 \
+        -R "superkingdom,phylum,class,order,family,genus,species,strain" \
+        -O taxdump
+</code></pre>
+<p># we use --field-accession  1 to output the mapping file between old taxids and new ones.
+   $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
+   2697049 21630522</p>
+</li>
+</ol>
+<p>Some tests:</p>
+<pre><code># SARS-COV-2 in NCBI taxonomy
+$ echo 2697049 \
+    | taxonkit lineage -t --data-dir ~/.taxonkit \
+    | csvtk cut -Ht -f 3 \
+    | csvtk unfold -Ht -f 1 -s ";" \
+    | taxonkit lineage -r -n -L --data-dir ~/.taxonkit \
+    | csvtk cut -Ht -f 1,3,2 \
+    | csvtk pretty -Ht
+10239     superkingdom   Viruses
+2559587   clade          Riboviria
+2732396   kingdom        Orthornavirae
+2732408   phylum         Pisuviricota
+2732506   class          Pisoniviricetes
+76804     order          Nidovirales
+2499399   suborder       Cornidovirineae
+11118     family         Coronaviridae
+2501931   subfamily      Orthocoronavirinae
+694002    genus          Betacoronavirus
+2509511   subgenus       Sarbecovirus
+694009    species        Severe acute respiratory syndrome-related coronavirus
+2697049   no rank        Severe acute respiratory syndrome coronavirus 2
+
+$ echo "Severe acute respiratory syndrome coronavirus 2" | taxonkit name2taxid --data-dir taxdump/
+Severe acute respiratory syndrome coronavirus 2 216305222
+
+$ echo 216305222 \
+    | taxonkit lineage -t --data-dir taxdump/ \
+    | csvtk cut -Ht -f 3 \
+    | csvtk unfold -Ht -f 1 -s ";" \
+    | taxonkit lineage -r -n -L --data-dir taxdump/ \
+    | csvtk cut -Ht -f 1,3,2 \
+    | csvtk pretty -Ht
+1287770734   superkingdom   Viruses
+1506901452   phylum         Pisuviricota
+1091693597   class          Pisoniviricetes
+37745009     order          Nidovirales
+738421640    family         Coronaviridae
+906833049    genus          Betacoronavirus
+1015862491   species        Severe acute respiratory syndrome-related coronavirus
+216305222    strain         Severe acute respiratory syndrome coronavirus 2
+
+
+
+$ echo "Escherichia coli"  | taxonkit name2taxid --data-dir taxdump/
+Escherichia coli        1945799576
+
+$ echo 1945799576 \
+    | taxonkit lineage -t --data-dir taxdump/ \
+    | csvtk cut -Ht -f 3 \
+    | csvtk unfold -Ht -f 1 -s ";" \
+    | taxonkit lineage -r -n -L --data-dir taxdump/ \
+    | csvtk cut -Ht -f 1,3,2 \
+    | csvtk pretty -Ht
+609216830    superkingdom   Bacteria
+1641076285   phylum         Proteobacteria
+329474883    class          Gammaproteobacteria
+1012954932   order          Enterobacterales
+87250111     family         Enterobacteriaceae
+1187493883   genus          Escherichia
+1945799576   species        Escherichia coli
+</code></pre>
 <div id="disqus_thread"></div>
 <script>
 
