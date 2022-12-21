@@ -1384,14 +1384,12 @@ The idea is to export lineages from both GTDB and NCBI using <a href="https://bi
 </li>
 <li>
 <p>Exporting taxonomic lineages of viral taxa with rank equal to or lower than species from NCBI taxdump.
-   Since the lineage of many viruses are incomplete, we can fill in missing taxa, e.g.,
-   "327830  Viruses;Polydnaviriformidae;Ichnoviriform;unclassified Ichnovirus" -&gt;
-   "Viruses;unclassified Viruses phylum;unclassified Viruses class;unclassified Viruses order;Polydnaviriformidae;Ichnoviriform;unclassified Ichnoviriform species;unclassified Ichnovirus".</p>
+   For taxa whose rank is "no rank" below the species, we treat them as tax of strain rank (<code>--pseudo-strain</code>, taxonkit v0.14.1 needed).</p>
 <pre><code># taxid of Viruses: 10239
 taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent "" \
     | taxonkit filter --data-dir ~/.taxonkit --equal-to species --lower-than species \
     | taxonkit reformat --data-dir ~/.taxonkit --taxid-field 1 \
-        --fill-miss-rank --pseudo-strain --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        --pseudo-strain --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         -o ncbi-viral.tsv
 </code></pre>
 </li>
@@ -1402,10 +1400,11 @@ taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent "" \
         --field-accession 1 \
         -R "superkingdom,phylum,class,order,family,genus,species,strain" \
         -O taxdump
+
+# we use --field-accession  1 to output the mapping file between old taxids and new ones.
+$ grep 2697049  taxdump/taxid.map  # SARS-COV-2
+2697049 21630522
 </code></pre>
-<p># we use --field-accession  1 to output the mapping file between old taxids and new ones.
-   $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
-   2697049 21630522</p>
 </li>
 </ol>
 <p>Some tests:</p>
