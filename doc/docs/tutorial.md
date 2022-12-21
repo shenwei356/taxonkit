@@ -714,15 +714,13 @@ The idea is to export lineages from both GTDB and NCBI using [taxonkit reformat]
                 -o gtdb.tsv
 
 1. Exporting taxonomic lineages of viral taxa with rank equal to or lower than species from NCBI taxdump.
-   Since the lineage of many viruses are incomplete, we can fill in missing taxa, e.g.,
-   "327830  Viruses;Polydnaviriformidae;Ichnoviriform;unclassified Ichnovirus" ->
-   "Viruses;unclassified Viruses phylum;unclassified Viruses class;unclassified Viruses order;Polydnaviriformidae;Ichnoviriform;unclassified Ichnoviriform species;unclassified Ichnovirus".
+   For taxa whose rank is "no rank" below the species, we treat them as tax of strain rank (`--pseudo-strain`, taxonkit v0.14.1 needed).
 
         # taxid of Viruses: 10239
         taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent "" \
             | taxonkit filter --data-dir ~/.taxonkit --equal-to species --lower-than species \
             | taxonkit reformat --data-dir ~/.taxonkit --taxid-field 1 \
-                --fill-miss-rank --pseudo-strain --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+                --pseudo-strain --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
                 -o ncbi-viral.tsv
 
 1. Creating taxdump from lineages above.
@@ -737,7 +735,7 @@ The idea is to export lineages from both GTDB and NCBI using [taxonkit reformat]
        $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
        2697049 21630522
 
-### Some tests
+Some tests:
 
     # SARS-COV-2 in NCBI taxonomy
     $ echo 2697049 \

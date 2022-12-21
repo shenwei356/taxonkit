@@ -1,3 +1,8 @@
+- [TaxonKit v0.14.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.1)
+    - `taxonkit reformat`:
+        - The flag `-S/--pseudo-strain` does not require `-F/--fill-miss-rank` now.
+        - For taxa of rank >= species, `{t}`, `{S}`, and `T` outputs nothing when using `-S/--pseudo-strain`.
 - [TaxonKit v0.14.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.0)
     - `taxonkit create-taxdump`:

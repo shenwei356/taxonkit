@@ -74,7 +74,7 @@ Output format can be formated by flag --format, available placeholders:
     {S}: subspecies
     {T}: strain
 
-When these's no nodes of rank "subspecies" nor "strain",
+When these're no nodes of rank "subspecies" nor "strain",
 you can switch on -S/--pseudo-strain to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than "species". 
 This flag affects {t}, {S}, {T}.
@@ -158,10 +158,11 @@ Output format can contains some escape charactors like "\t".
 			}
 		}
 		if flag {
-			if pseudoStrain && !fill {
-				fill = true
-				log.Infof("-F/--fill-miss-rank is switched on when giving flag -S/--pseudo-strain")
-			}
+			// do not require this.
+			// if pseudoStrain && !fill {
+			// 	fill = true
+			// 	log.Infof("-F/--fill-miss-rank is switched on when giving flag -S/--pseudo-strain")
+			// }
 		} else if pseudoStrain {
 			log.Warningf(`flag -S/--pseudo-strain will not work because none of "{t}", "{S}", "{T}" is found in -f/--format`)
 		}
@@ -396,6 +397,40 @@ Output format can contains some escape charactors like "\t".
 			}
 
 			if fill {
+				var j, lastI int
+				var srank2 string
+				for _, srank = range srankList {
+					if srank == "" {
+						continue
+					}
+
+					if _, ok = srank2idx[srank]; ok {
+						continue
+					}
+
+					if trim && symbol2weight[srank] > maxRankWeight {
+						continue
+					}
+
+					// missing some ranks.
+					// find the nearst higher formal rank
+					for j, rank = range ranks {
+						srank2 = sranks[j]
+						if _, ok = srank2idx[srank2]; ok {
+							if symbol2weight[srank2] < symbol2weight[srank] {
+								lastI = j
+							} else {
+								break
+							}
+						}
+					}
+
+					replacements[srank] = prefix + names[lastI] + " " + symbol2rank[srank]
+					// replacements[srank] = fmt.Sprintf("%s%s %s", prefix, names[lastI], symbol2rank[srank])
+				}
+			}
+
+			if pseudoStrain {
 				_, hasRankSubspecies := srank2idx["S"]
 				_, hasRankStrain := srank2idx["T"]
 
@@ -427,17 +462,12 @@ Output format can contains some escape charactors like "\t".
 						}
 					}
 
-					if pseudoStrain {
-						if symbol2weight[srank] > weightOfSpecies && // lower than species
-							!(hasRankSubspecies || hasRankStrain) && // does not have strain or subspecies
-							lastI < len(names)-1 { // not itself
-							replacements[srank] = names[len(names)-1]
-							continue
-						}
+					if symbol2weight[srank] > weightOfSpecies && // lower than species
+						!(hasRankSubspecies || hasRankStrain) && // does not have strain or subspecies
+						lastI < len(names)-1 { // not itself
+						replacements[srank] = names[len(names)-1]
+						continue
 					}
-
-					replacements[srank] = prefix + names[lastI] + " " + symbol2rank[srank]
-					// replacements[srank] = fmt.Sprintf("%s%s %s", prefix, names[lastI], symbol2rank[srank])
 				}
 			}
 
