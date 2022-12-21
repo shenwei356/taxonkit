@@ -13,7 +13,7 @@
     - `taxonkit list`:
         - do not skip visited subtrees when some of give taxids are descendants of others. [#68](https://github.com/shenwei356/taxonkit/issues/68)
     - `taxonkit`:
-        - when environment variable `TAXONKIT_DB` is set, explicitly setting --data-dir will override the value of `TAXONKIT_DB`.
+        - when environment variable `TAXONKIT_DB` is set, explicitly setting `--data-dir` will override the value of `TAXONKIT_DB`.
 
 ### Please cite
 
