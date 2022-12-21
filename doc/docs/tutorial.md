@@ -731,9 +731,9 @@ The idea is to export lineages from both GTDB and NCBI using [taxonkit reformat]
                 -R "superkingdom,phylum,class,order,family,genus,species,strain" \
                 -O taxdump
 
-       # we use --field-accession  1 to output the mapping file between old taxids and new ones.
-       $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
-       2697049 21630522
+        # we use --field-accession  1 to output the mapping file between old taxids and new ones.
+        $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
+        2697049 21630522
 
 Some tests:
 

@@ -699,23 +699,23 @@ Examples:
 
 1. **When these's no nodes of rank "subspecies" nor "strain",
    you can switch `-S/--pseudo-strain` to use the node with lowest rank
-   as subspecies/strain name, if which rank is lower than "species"**.
+   as subspecies/strain name, if which rank is lower than "species"**. Recommend using v0.14.1 or later versions.
 
         $ echo -ne "239935\n83333\n1408252\n2697049\n2605619\n" \
             | taxonkit lineage -n -r \
-            | taxonkit reformat -f '{t};{S};{T}' --fill-miss-rank  --pseudo-strain \
+            | taxonkit reformat -f '{t};{S};{T}' --pseudo-strain \
             | csvtk -H -t cut -f 1,4,3,5 \
             | csvtk -H -t sep -f 4 -s ';' -R \
             | csvtk -H -t add-header -n "taxid,rank,name,subspecies/strain,subspecies,strain" \
             | csvtk pretty -t
             
-        taxid     rank         name                                              subspecies/strain                                        subspecies                                        strain
-        -------   ----------   -----------------------------------------------   ------------------------------------------------------   -----------------------------------------------   -----------------------------------------------
-        239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain   unclassified Akkermansia muciniphila subspecies   unclassified Akkermansia muciniphila strain
-        83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                    unclassified Escherichia coli subspecies          Escherichia coli K-12
-        1408252   subspecies   Escherichia coli R178                             Escherichia coli R178                                    Escherichia coli R178                             unclassified Escherichia coli R178 strain
-        2697049   no rank      Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2          Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2
-        2605619   no rank      Escherichia coli O16:H48                          Escherichia coli O16:H48                                 Escherichia coli O16:H48                          Escherichia coli O16:H48
+        taxid     rank         name                                              subspecies/strain                                 subspecies                                        strain
+        -------   ----------   -----------------------------------------------   -----------------------------------------------   -----------------------------------------------   -----------------------------------------------
+        239935    species      Akkermansia muciniphila
+        83333     strain       Escherichia coli K-12                             Escherichia coli K-12                                                                               Escherichia coli K-12
+        1408252   subspecies   Escherichia coli R178                             Escherichia coli R178                             Escherichia coli R178
+        2697049   no rank      Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2   Severe acute respiratory syndrome coronavirus 2
+        2605619   no rank      Escherichia coli O16:H48                          Escherichia coli O16:H48                          Escherichia coli O16:H48                          Escherichia coli O16:H48
 
 1. Add prefix (`-P/--add-prefix`).
 
@@ -836,7 +836,17 @@ Examples:
 
         $ echo -ne "2\n239934\n239935\n" \
             | taxonkit lineage \
-            | taxonkit reformat -T \
+            | taxonkit reformat -F \
+            | sed -r "s/;+$//" \
+            | csvtk -H -t cut -f 1,3
+
+        2       Bacteria;unclassified Bacteria phylum;unclassified Bacteria class;unclassified Bacteria order;unclassified Bacteria family;unclassified Bacteria genus;unclassified Bacteria species
+        239934  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;unclassified Akkermansia species
+        239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+
+        $ echo -ne "2\n239934\n239935\n" \
+            | taxonkit lineage \
+            | taxonkit reformat -F -T \
             | sed -r "s/;+$//" \
             | csvtk -H -t cut -f 1,3 
             

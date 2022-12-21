@@ -6,14 +6,11 @@
 
 ## Current Version
 
-- [TaxonKit v0.14.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.0)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.0)
-    - `taxonkit create-taxdump`:
-        - save taxIds in `int32` instead of `uint32`, as BLAST and DIAMOND do. [#70](https://github.com/shenwei356/taxonkit/issues/70)
-    - `taxonkit list`:
-        - do not skip visited subtrees when some of give taxids are descendants of others. [#68](https://github.com/shenwei356/taxonkit/issues/68)
-    - `taxonkit`:
-        - when environment variable `TAXONKIT_DB` is set, explicitly setting `--data-dir` will override the value of `TAXONKIT_DB`.
+- [TaxonKit v0.14.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.1)
+    - `taxonkit reformat`:
+        - The flag `-S/--pseudo-strain` does not require `-F/--fill-miss-rank` now.
+        - For taxa of rank >= species, `{t}`, `{S}`, and `T` outputs nothing when using `-S/--pseudo-strain`.
 
 ### Please cite
 
@@ -30,11 +27,11 @@
 
 OS     |Arch      |File, 中国镜像                                                                                                                                                                              |Download Count
 :------|:---------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Linux  |**64-bit**|[**taxonkit_linux_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_linux_amd64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_linux_amd64.tar.gz)
-Linux  |**arm64** |[**taxonkit_linux_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_linux_arm64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_linux_arm64.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_linux_arm64.tar.gz)
-macOS  |**64-bit**|[**taxonkit_darwin_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_darwin_amd64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_darwin_amd64.tar.gz)
-macOS  |**arm64** |[**taxonkit_darwin_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_darwin_arm64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_darwin_arm64.tar.gz)
-Windows|**64-bit**|[**taxonkit_windows_amd64.exe.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_windows_amd64.exe.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz)|[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.0/taxonkit_windows_amd64.exe.tar.gz)
+Linux  |**64-bit**|[**taxonkit_linux_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_linux_amd64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_linux_amd64.tar.gz)
+Linux  |**arm64** |[**taxonkit_linux_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_linux_arm64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_linux_arm64.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_linux_arm64.tar.gz)
+macOS  |**64-bit**|[**taxonkit_darwin_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_darwin_amd64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_darwin_amd64.tar.gz)
+macOS  |**arm64** |[**taxonkit_darwin_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_darwin_arm64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_darwin_arm64.tar.gz)
+Windows|**64-bit**|[**taxonkit_windows_amd64.exe.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_windows_amd64.exe.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz)|[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.14.1/taxonkit_windows_amd64.exe.tar.gz)
 
 ## Installation
 
@@ -155,6 +152,14 @@ All-in-one command:
 
 ## Release history
 
+- [TaxonKit v0.14.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.0)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.0)
+    - `taxonkit create-taxdump`:
+        - save taxIds in `int32` instead of `uint32`, as BLAST and DIAMOND do. [#70](https://github.com/shenwei356/taxonkit/issues/70)
+    - `taxonkit list`:
+        - do not skip visited subtrees when some of give taxids are descendants of others. [#68](https://github.com/shenwei356/taxonkit/issues/68)
+    - `taxonkit`:
+        - when environment variable `TAXONKIT_DB` is set, explicitly setting `--data-dir` will override the value of `TAXONKIT_DB`.
 - [TaxonKit v0.13.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.13.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.13.0)
     - `taxonkit reformat`:
