@@ -55,7 +55,7 @@ Related projects:
     - Featured command: [tracking monthly changelog of all TaxIds](https://github.com/shenwei356/taxid-changelog)
     - Featured command: [reformating lineage into format of seven-level ("superkingdom/kingdom, phylum, class, order, family, genus, species"](https://bioinf.shenwei.me/taxonkit/usage/#reformat)
     - Featured command: [filtering taxiDs by a rank range](http://bioinf.shenwei.me/taxonkit/usage/#filter), e.g., at or below genus rank.
-    - Featured command: [**Create NCBI-style taxdump files for custom taxonomy**](https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump)
+    - Featured command: [**Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV**](https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump)
 
 ## Subcommands
 
