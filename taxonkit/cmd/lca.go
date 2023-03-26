@@ -27,6 +27,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/shenwei356/util/bytesize"
 	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
 )
@@ -74,6 +75,15 @@ Examples:
 		skipDeleted := getFlagBool(cmd, "skip-deleted")
 		skipUnfound := getFlagBool(cmd, "skip-unfound")
 
+		bufferSizeS := getFlagString(cmd, "buffer-size")
+		if bufferSizeS == "" {
+			checkError(fmt.Errorf("value of buffer size. supported unit: K, M, G"))
+		}
+		bufferSize, err := bytesize.ParseByteSize(bufferSizeS)
+		if err != nil {
+			checkError(fmt.Errorf("invalid value of buffer size. supported unit: K, M, G"))
+		}
+
 		taxondb := loadTaxonomy(&config, false)
 		nodes := taxondb.Nodes
 		merged := taxondb.MergeNodes
@@ -83,12 +93,16 @@ Examples:
 		checkError(err)
 		defer outfh.Close()
 
+		buf := make([]byte, bufferSize)
+
 		taxids := make([]uint32, 0, 128)
 		for _, file := range files {
 			fh, err := xopen.Ropen(file)
 			checkError(err)
 
 			scanner := bufio.NewScanner(fh)
+			scanner.Buffer(buf, int(bufferSize))
+
 			var _taxid int
 			var line, item string
 			var items []string
@@ -188,6 +202,7 @@ func init() {
 	lcaCmd.Flags().StringP("separater", "s", " ", "separater for TaxIds")
 	lcaCmd.Flags().BoolP("skip-deleted", "D", false, "skip deleted TaxIds and compute with left ones")
 	lcaCmd.Flags().BoolP("skip-unfound", "U", false, "skip unfound TaxIds and compute with left ones")
+	lcaCmd.Flags().StringP("buffer-size", "b", "1M", `size of buffer, supported unit: K, M, G. You need increase the value when "bufio.Scanner: token too long" error occured`)
 
 }
 

@@ -1250,6 +1250,8 @@ Usage:
   taxonkit lca [flags]
 
 Flags:
+  -b, --buffer-size string   size of buffer, supported unit: K, M, G. You need increase the value when
+                             "bufio.Scanner: token too long" error occured (default "1M")
   -h, --help               help for lca
   -s, --separater string   separater for TaxIds (default " ")
   -D, --skip-deleted       skip deleted TaxIds and compute with left ones

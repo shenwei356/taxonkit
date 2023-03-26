@@ -1,3 +1,7 @@
+- [TaxonKit v0.14.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.2)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.2)
+    - `taxonkit lca`:
+        - add a new flag `-b/--buffer-size` to set the size of the line buffer. [#75](https://github.com/shenwei356/taxonkit/issues/75)
 - [TaxonKit v0.14.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.1)
     - `taxonkit reformat`:
