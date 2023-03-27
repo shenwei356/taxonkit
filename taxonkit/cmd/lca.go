@@ -42,8 +42,8 @@ Attention:
 
   1. This command computes LCA TaxId for a list of TaxIds 
      in a field ("-i/--taxids-field) of tab-delimited file or STDIN.
-  2. TaxIDs should have the same separater ("-s/--separater"),
-     single charactor separater is prefered.
+  2. TaxIDs should have the same separator ("-s/--separator"),
+     single charactor separator is prefered.
   3. Empty lines or lines without valid TaxIds in the field are omitted.
   4. If some TaxIds are not found in database, it returns 0.
   
@@ -68,10 +68,17 @@ Examples:
 		}
 
 		field := getFlagPositiveInt(cmd, "taxids-field") - 1
+
 		separater := getFlagString(cmd, "separater")
-		if separater == "" {
-			checkError(fmt.Errorf("flag -s (--separater) needed"))
+		separator := getFlagString(cmd, "separator")
+		if separater == "" && separator == "" {
+			checkError(fmt.Errorf("flag -s (--separator) needed"))
 		}
+
+		if cmd.Flags().Lookup("separater").Changed && !cmd.Flags().Lookup("separator").Changed { // using --separater
+			separator = separater
+		}
+
 		skipDeleted := getFlagBool(cmd, "skip-deleted")
 		skipUnfound := getFlagBool(cmd, "skip-unfound")
 
@@ -125,7 +132,7 @@ Examples:
 					continue
 				}
 
-				items = strings.Split(items[field], separater)
+				items = strings.Split(items[field], separator)
 
 				taxids = taxids[:0]
 
@@ -197,12 +204,13 @@ Examples:
 func init() {
 	RootCmd.AddCommand(lcaCmd)
 
-	lcaCmd.Flags().IntP("taxids-field", "i", 1, "field index of taxid. input data should be tab-separated")
+	lcaCmd.Flags().IntP("taxids-field", "i", 1, "field index of TaxIds. Input data should be tab-separated")
 
-	lcaCmd.Flags().StringP("separater", "s", " ", "separater for TaxIds")
+	lcaCmd.Flags().StringP("separater", "", " ", "separater for TaxIds. This flag is same to --separator.")
+	lcaCmd.Flags().StringP("separator", "s", " ", "separator for TaxIds")
 	lcaCmd.Flags().BoolP("skip-deleted", "D", false, "skip deleted TaxIds and compute with left ones")
 	lcaCmd.Flags().BoolP("skip-unfound", "U", false, "skip unfound TaxIds and compute with left ones")
-	lcaCmd.Flags().StringP("buffer-size", "b", "1M", `size of buffer, supported unit: K, M, G. You need increase the value when "bufio.Scanner: token too long" error occured`)
+	lcaCmd.Flags().StringP("buffer-size", "b", "1M", `size of line buffer, supported unit: K, M, G. You need increase the value when "bufio.Scanner: token too long" error occured`)
 
 }
 

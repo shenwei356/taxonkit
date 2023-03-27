@@ -1233,8 +1233,8 @@ Attention:
 
   1. This command computes LCA TaxId for a list of TaxIds 
      in a field ("-i/--taxids-field) of tab-delimited file or STDIN.
-  2. TaxIDs should have the same separater ("-s/--separater"),
-     single charactor separater is prefered.
+  2. TaxIDs should have the same separator ("-s/--separator"),
+     single charactor separator is prefered.
   3. Empty lines or lines without valid TaxIds in the field are omitted.
   4. If some TaxIds are not found in database, it returns 0.
   
@@ -1243,20 +1243,21 @@ Examples:
     $ echo 239934, 239935, 349741 | taxonkit lca  -s ", "
     239934, 239935, 349741  239934
 
-    $ echo 239934  239935  349741 9606  | taxonkit lca
+    $ time echo 239934  239935  349741 9606  | taxonkit lca
     239934 239935 349741 9606       131567
 
 Usage:
-  taxonkit lca [flags]
+  taxonkit lca [flags] 
 
 Flags:
-  -b, --buffer-size string   size of buffer, supported unit: K, M, G. You need increase the value when
-                             "bufio.Scanner: token too long" error occured (default "1M")
-  -h, --help               help for lca
-  -s, --separater string   separater for TaxIds (default " ")
-  -D, --skip-deleted       skip deleted TaxIds and compute with left ones
-  -U, --skip-unfound       skip unfound TaxIds and compute with left ones
-  -i, --taxids-field int   field index of taxid. input data should be tab-separated (default 1)
+  -b, --buffer-size string   size of line buffer, supported unit: K, M, G. You need increase the value
+                             when "bufio.Scanner: token too long" error occured (default "1M")
+  -h, --help                 help for lca
+      --separater string     separater for TaxIds. This flag is same to --separator. (default " ")
+  -s, --separator string     separator for TaxIds (default " ")
+  -D, --skip-deleted         skip deleted TaxIds and compute with left ones
+  -U, --skip-unfound         skip unfound TaxIds and compute with left ones
+  -i, --taxids-field int     field index of TaxIds. Input data should be tab-separated (default 1)
 
 ```
 
@@ -1278,7 +1279,7 @@ Examples:
         $ echo 63221 2665953 | taxonkit lca
         63221 2665953   9605
         
-1. Custom field (`-i/--taxids-field`) and separater (`-s/--separater`).
+1. Custom field (`-i/--taxids-field`) and separater (`-s/--separator`).
 
         $ echo -ne "a\t63221,2665953\nb\t63221, 741158\n"
         a       63221,2665953
