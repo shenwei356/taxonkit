@@ -210,7 +210,7 @@ func init() {
 	lcaCmd.Flags().StringP("separator", "s", " ", "separator for TaxIds")
 	lcaCmd.Flags().BoolP("skip-deleted", "D", false, "skip deleted TaxIds and compute with left ones")
 	lcaCmd.Flags().BoolP("skip-unfound", "U", false, "skip unfound TaxIds and compute with left ones")
-	lcaCmd.Flags().StringP("buffer-size", "b", "1M", `size of line buffer, supported unit: K, M, G. You need increase the value when "bufio.Scanner: token too long" error occured`)
+	lcaCmd.Flags().StringP("buffer-size", "b", "1M", `size of line buffer, supported unit: K, M, G. You need to increase the value when "bufio.Scanner: token too long" error occured`)
 
 }
 

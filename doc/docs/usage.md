@@ -1250,8 +1250,8 @@ Usage:
   taxonkit lca [flags] 
 
 Flags:
-  -b, --buffer-size string   size of line buffer, supported unit: K, M, G. You need increase the value
-                             when "bufio.Scanner: token too long" error occured (default "1M")
+  -b, --buffer-size string   size of line buffer, supported unit: K, M, G. You need to increase the
+                             value when "bufio.Scanner: token too long" error occured (default "1M")
   -h, --help                 help for lca
       --separater string     separater for TaxIds. This flag is same to --separator. (default " ")
   -s, --separator string     separator for TaxIds (default " ")
