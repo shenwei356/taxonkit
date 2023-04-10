@@ -82,6 +82,8 @@ Note: <sup>*</sup>New commands since the publication.
 
    <img src="bench/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" />
 
+   Versions: ETE=3.1.2, taxopy=0.5.0 ([faster since 0.6.0](https://github.com/shenwei356/taxonkit/issues/47)), TaxonKit=0.7.2.
+
 ## Dataset
 
 1. Download and uncompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 

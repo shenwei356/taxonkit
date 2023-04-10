@@ -209,6 +209,15 @@ Output format can contains some escape charactors like "\t".
 
 		weightOfSpecies := symbol2weight["s"]
 
+		blankS := format
+		iblankS := format
+		for _, re := range reRankPlaceHolders {
+			blankS = re.ReplaceAllString(blankS, blank)
+		}
+		for _, re := range reRankPlaceHolders {
+			iblankS = re.ReplaceAllString(iblankS, iblank)
+		}
+
 		fn := func(line string) (interface{}, bool, error) {
 			if len(line) == 0 || line[0] == '#' {
 				return nil, false, nil
@@ -333,7 +342,8 @@ Output format can contains some escape charactors like "\t".
 
 			names, ranks, taxids, ok = queryNamesRanksTaxids(tree0, ranks0, names0, delnodes0, merged0, taxid)
 			if !ok { // taxid not found
-				return line2flineage{line, "", ""}, true, nil
+				// return line2flineage{line, "", ""}, true, nil
+				return line2flineage{line, unescape(blankS), unescape(iblankS)}, true, nil
 			}
 
 			sranks := poolStringsN16.Get().([]string)
