@@ -226,6 +226,20 @@ func (f *rankFilter) isPassed(taxid uint32) (bool, error) {
 		}
 	}
 
+	// checking taxid
+	if _, ok := f.taxondb.Nodes[taxid]; !ok {
+		if _, ok = f.taxondb.DelNodes[taxid]; ok {
+			log.Warningf("taxid %d was deleted", taxid)
+			return false, nil
+		} else if newtaxid, ok := f.taxondb.MergeNodes[taxid]; ok {
+			log.Warningf("taxid %d was merged into %d", taxid, newtaxid)
+			taxid = newtaxid
+		} else {
+			log.Warningf("taxid %d not found", taxid)
+			return false, nil
+		}
+	}
+
 	var pass bool
 
 	if isNoRank && f.limitLower && f.saveKnownNoRank {
