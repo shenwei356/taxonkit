@@ -47,8 +47,10 @@ Attentions:
      your list by -r/--rank-file, the format specification is below.
   3. All ranks in taxonomy database should be defined in rank file.
   4. Ranks can be removed with black list via -B/--black-list.
-  5. TaxIDs with no rank can be optionally discarded by -N/--discard-noranks.
-  6. But when filtering with -L/--lower-than, you can use
+
+  5. TaxIDs with no rank are kept by default!!!
+     They can be optionally discarded by -N/--discard-noranks.
+  6. [Recommended] When filtering with -L/--lower-than, you can use
     -n/--save-predictable-norank to save some special ranks without order,
     where rank of the closest higher node is still lower than rank cutoff.
 
@@ -99,7 +101,10 @@ Rank file:
 		}
 
 		if saveNorank {
-			discardNoRank = true
+			if !discardNoRank {
+				discardNoRank = true
+				log.Infof("flag -N/--discard-noranks is automatically switched on when using -n/--save-predictable-norank")
+			}
 
 			if lower == "" {
 				checkError(fmt.Errorf("flag -n/--save-predictable-norank only works along with -L/--lower-than"))
