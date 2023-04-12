@@ -67,6 +67,9 @@ Steps:
 
     ls taxdmp*.zip | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}'
 
+    # optionally compress .dmp files with pigz, for saving disk space
+    fd .dmp$ | rush -j 4 'pigz {}'
+
     # --------- create log ---------
 
     cd ..
@@ -324,19 +327,51 @@ func createChangelog(config Config, path string, dirs []string) {
 		var wg sync.WaitGroup
 		wg.Add(4)
 		go func() {
-			taxid2lineageTaxids, taxid2rank = getTaxid2LineageTaxids(filepath.Join(path, dir, "nodes.dmp"))
+			_path := filepath.Join(path, dir, "nodes.dmp")
+			_pathGz := _path + ".gz"
+			if existed, err := pathutil.Exists(_pathGz); err != nil {
+				checkError(fmt.Errorf("checking %s: %s", _pathGz, err))
+			} else if existed {
+				taxid2lineageTaxids, taxid2rank = getTaxid2LineageTaxids(_pathGz)
+			} else {
+				taxid2lineageTaxids, taxid2rank = getTaxid2LineageTaxids(_path)
+			}
 			wg.Done()
 		}()
 		go func() {
-			taxid2name = getTaxonNames(filepath.Join(path, dir, "names.dmp"))
+			_path := filepath.Join(path, dir, "names.dmp")
+			_pathGz := _path + ".gz"
+			if existed, err := pathutil.Exists(_pathGz); err != nil {
+				checkError(fmt.Errorf("checking %s: %s", _pathGz, err))
+			} else if existed {
+				taxid2name = getTaxonNames(_pathGz)
+			} else {
+				taxid2name = getTaxonNames(_path)
+			}
 			wg.Done()
 		}()
 		go func() {
-			delTaxids = getDelnodes(filepath.Join(path, dir, "delnodes.dmp"))
+			_path := filepath.Join(path, dir, "delnodes.dmp")
+			_pathGz := _path + ".gz"
+			if existed, err := pathutil.Exists(_pathGz); err != nil {
+				checkError(fmt.Errorf("checking %s: %s", _pathGz, err))
+			} else if existed {
+				delTaxids = getDelnodes(_pathGz)
+			} else {
+				delTaxids = getDelnodes(_path)
+			}
 			wg.Done()
 		}()
 		go func() {
-			merges = getMergedNodes(filepath.Join(path, dir, "merged.dmp"))
+			_path := filepath.Join(path, dir, "merged.dmp")
+			_pathGz := _path + ".gz"
+			if existed, err := pathutil.Exists(_pathGz); err != nil {
+				checkError(fmt.Errorf("checking %s: %s", _pathGz, err))
+			} else if existed {
+				merges = getMergedNodes(_pathGz)
+			} else {
+				merges = getMergedNodes(_path)
+			}
 			wg.Done()
 		}()
 		wg.Wait()
@@ -697,6 +732,10 @@ func checkFile(file string) {
 	if exists, err := pathutil.Exists(file); err != nil {
 		checkError(fmt.Errorf("checking %s: %s", file, err))
 	} else if !exists {
-		checkError(fmt.Errorf("path not found: %s", file))
+		if exists, err := pathutil.Exists(file + ".gz"); err != nil {
+			checkError(fmt.Errorf("checking %s: %s", file+".gz", err))
+		} else if !exists {
+			checkError(fmt.Errorf("neither %s or %s found in %s", filepath.Base(file), filepath.Base(file)+".gz", filepath.Dir(file)))
+		}
 	}
 }

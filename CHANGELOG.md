@@ -7,6 +7,8 @@
         - fix typo: `--separater` -> `--separater`, the former is still available for backward compatibility.
     - `taxonkit reformat`:
         - output compatible format for TaxIds not found in the database. [#79](https://github.com/shenwei356/taxonkit/issues/79)
+    - `taxonkit taxid-changelog`:
+        - support gzip-compressed taxdump files for saving space. [#78](https://github.com/shenwei356/taxonkit/issues/78)
 - [TaxonKit v0.14.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.1)
     - `taxonkit reformat`:

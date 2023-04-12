@@ -1351,6 +1351,9 @@ Steps:
 
     ls taxdmp*.zip | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}'
 
+    # optionally compress .dmp files with pigz, for saving disk space
+    fd .dmp$ | rush -j 4 'pigz {}'
+
     # --------- create log ---------
 
     cd ..

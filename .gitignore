@@ -34,6 +34,10 @@ nodes.dmp
 merged.dmp
 delnodes.dmp
 ranks.txt
+names.dmp.gz
+nodes.dmp.gz
+merged.dmp.gz
+delnodes.dmp.gz
 *.json
 doc/site
 taxonkit/archive
