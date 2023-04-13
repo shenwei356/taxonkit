@@ -41,7 +41,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.14.0
+Version: 0.14.2
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -58,13 +58,13 @@ Dataset:
     "/home/shenwei/.taxonkit"
 
     or some other directory, and later you can refer to using flag --data-dir,
-    or environment variable TAXONKIT_DB
-    
+    or environment variable TAXONKIT_DB.
+
     When environment variable TAXONKIT_DB is set, explicitly setting --data-dir will
     overide the value of TAXONKIT_DB.
 
 Usage:
-  taxonkit [command] 
+  taxonkit [command]
 
 Available Commands:
   cami-filter     Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
@@ -83,7 +83,8 @@ Available Commands:
 Flags:
       --data-dir string   directory containing nodes.dmp and names.dmp (default "/home/shenwei/.taxonkit")
   -h, --help              help for taxonkit
-      --line-buffered     use line buffering on output, i.e., immediately writing to stdin/file for every line of output
+      --line-buffered     use line buffering on output, i.e., immediately writing to stdin/file for
+                          every line of output
   -o, --out-file string   out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
   -j, --threads int       number of CPUs. 4 is enough (default 4)
       --verbose           print verbose information
@@ -1115,10 +1116,11 @@ Examples
             | csvtk pretty -H -t
         2   superkingdom   Bacteria
 
-1. "no rank" and "clade" have no rank and can be filter out via `-N/--discard-noranks`.
-  Futher ranks can be removed with black list via `-B/--black-list`
+1. TaxIDs with no rank are kept by default!!!
+  "no rank" and "clade" have no rank and can be filter out via `-N/--discard-noranks`.
+  Futher ranks can be removed with black list via `-B/--black-list`.
 
-        # 562 is TaxId of Escherichia coli
+        # 562 is the TaxId of Escherichia coli
         $ taxonkit list --ids 562 \
             | taxonkit filter -L species \
             | taxonkit lineage -r -n -L \

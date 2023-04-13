@@ -132,7 +132,7 @@ And then:
 
     conda install -c bioconda taxonkit
 
-#### Method 3: Install via homebrew (latest stable version)
+#### Method 3: Install via homebrew (out of date)
 
     brew install brewsci/bio/taxonkit
     

@@ -4,7 +4,7 @@
         - fix checking merged/deleted/not-found taxids. [#80](https://github.com/shenwei356/taxonkit/issues/80)
     - `taxonkit lca`:
         - add a new flag `-b/--buffer-size` to set the size of the line buffer. [#75](https://github.com/shenwei356/taxonkit/issues/75)
-        - fix typo: `--separater` -> `--separater`, the former is still available for backward compatibility.
+        - fix typos: `--separater` -> `--separater`, the former is still available for backward compatibility.
     - `taxonkit reformat`:
         - output compatible format for TaxIds not found in the database. [#79](https://github.com/shenwei356/taxonkit/issues/79)
     - `taxonkit taxid-changelog`:
