@@ -636,7 +636,7 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h2 id="taxonkit">taxonkit</h2>
 <pre><code class="language-text">TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.14.0
+Version: 0.14.2
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -653,13 +653,13 @@ Dataset:
     &quot;/home/shenwei/.taxonkit&quot;
 
     or some other directory, and later you can refer to using flag --data-dir,
-    or environment variable TAXONKIT_DB
+    or environment variable TAXONKIT_DB.
 
     When environment variable TAXONKIT_DB is set, explicitly setting --data-dir will
     overide the value of TAXONKIT_DB.
 
 Usage:
-  taxonkit [command] 
+  taxonkit [command]
 
 Available Commands:
   cami-filter     Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
@@ -678,7 +678,8 @@ Available Commands:
 Flags:
       --data-dir string   directory containing nodes.dmp and names.dmp (default &quot;/home/shenwei/.taxonkit&quot;)
   -h, --help              help for taxonkit
-      --line-buffered     use line buffering on output, i.e., immediately writing to stdin/file for every line of output
+      --line-buffered     use line buffering on output, i.e., immediately writing to stdin/file for
+                          every line of output
   -o, --out-file string   out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
   -j, --threads int       number of CPUs. 4 is enough (default 4)
       --verbose           print verbose information
@@ -1611,8 +1612,10 @@ Attentions:
      your list by -r/--rank-file, the format specification is below.
   3. All ranks in taxonomy database should be defined in rank file.
   4. Ranks can be removed with black list via -B/--black-list.
-  5. TaxIDs with no rank can be optionally discarded by -N/--discard-noranks.
-  6. But when filtering with -L/--lower-than, you can use
+
+  5. TaxIDs with no rank are kept by default!!!
+     They can be optionally discarded by -N/--discard-noranks.
+  6. [Recommended] When filtering with -L/--lower-than, you can use
     -n/--save-predictable-norank to save some special ranks without order,
     where rank of the closest higher node is still lower than rank cutoff.
 
@@ -1706,9 +1709,10 @@ $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty
 </code></pre>
 </li>
 <li>
-<p>"no rank" and "clade" have no rank and can be filter out via <code>-N/--discard-noranks</code>.
-  Futher ranks can be removed with black list via <code>-B/--black-list</code></p>
-<pre><code># 562 is TaxId of Escherichia coli
+<p>TaxIDs with no rank are kept by default!!!
+  "no rank" and "clade" have no rank and can be filter out via <code>-N/--discard-noranks</code>.
+  Futher ranks can be removed with black list via <code>-B/--black-list</code>.</p>
+<pre><code># 562 is the TaxId of Escherichia coli
 $ taxonkit list --ids 562 \
     | taxonkit filter -L species \
     | taxonkit lineage -r -n -L \
@@ -1824,8 +1828,8 @@ Attention:
 
   1. This command computes LCA TaxId for a list of TaxIds 
      in a field (&quot;-i/--taxids-field) of tab-delimited file or STDIN.
-  2. TaxIDs should have the same separater (&quot;-s/--separater&quot;),
-     single charactor separater is prefered.
+  2. TaxIDs should have the same separator (&quot;-s/--separator&quot;),
+     single charactor separator is prefered.
   3. Empty lines or lines without valid TaxIds in the field are omitted.
   4. If some TaxIds are not found in database, it returns 0.
 
@@ -1834,18 +1838,21 @@ Examples:
     $ echo 239934, 239935, 349741 | taxonkit lca  -s &quot;, &quot;
     239934, 239935, 349741  239934
 
-    $ echo 239934  239935  349741 9606  | taxonkit lca
+    $ time echo 239934  239935  349741 9606  | taxonkit lca
     239934 239935 349741 9606       131567
 
 Usage:
-  taxonkit lca [flags]
+  taxonkit lca [flags] 
 
 Flags:
-  -h, --help               help for lca
-  -s, --separater string   separater for TaxIds (default &quot; &quot;)
-  -D, --skip-deleted       skip deleted TaxIds and compute with left ones
-  -U, --skip-unfound       skip unfound TaxIds and compute with left ones
-  -i, --taxids-field int   field index of taxid. input data should be tab-separated (default 1)
+  -b, --buffer-size string   size of line buffer, supported unit: K, M, G. You need to increase the
+                             value when &quot;bufio.Scanner: token too long&quot; error occured (default &quot;1M&quot;)
+  -h, --help                 help for lca
+      --separater string     separater for TaxIds. This flag is same to --separator. (default &quot; &quot;)
+  -s, --separator string     separator for TaxIds (default &quot; &quot;)
+  -D, --skip-deleted         skip deleted TaxIds and compute with left ones
+  -U, --skip-unfound         skip unfound TaxIds and compute with left ones
+  -i, --taxids-field int     field index of TaxIds. Input data should be tab-separated (default 1)
 
 </code></pre>
 <p>Examples:</p>
@@ -1869,7 +1876,7 @@ Flags:
 </code></pre>
 </li>
 <li>
-<p>Custom field (<code>-i/--taxids-field</code>) and separater (<code>-s/--separater</code>).</p>
+<p>Custom field (<code>-i/--taxids-field</code>) and separater (<code>-s/--separator</code>).</p>
 <pre><code>$ echo -ne "a\t63221,2665953\nb\t63221, 741158\n"
 a       63221,2665953
 b       63221, 741158
@@ -1939,6 +1946,9 @@ Steps:
     # --------- unzip ---------
 
     ls taxdmp*.zip | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}'
+
+    # optionally compress .dmp files with pigz, for saving disk space
+    fd .dmp$ | rush -j 4 'pigz {}'
 
     # --------- create log ---------
 
