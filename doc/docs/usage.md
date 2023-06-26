@@ -14,6 +14,7 @@ Table of Contents
   - [lca](#lca)
   - [taxid-changelog](#taxid-changelog)
   - [profile2cami](#profile2cami)
+  - [cami-filter](#cami-filter)
   - [create-taxdump](#create-taxdump)
   - [genautocomplete](#genautocomplete)
 <!-- /TOC -->
