@@ -490,7 +490,11 @@ Output format can contains some escape charactors like "\t".
 
 			for srank, re := range reRankPlaceHolders {
 				if addPrefix {
-					flineage = re.ReplaceAllString(flineage, prefixes[srank]+replacements[srank])
+					if trim && replacements[srank] == "" {
+						flineage = re.ReplaceAllString(flineage, "")
+					} else {
+						flineage = re.ReplaceAllString(flineage, prefixes[srank]+replacements[srank])
+					}
 				} else {
 					flineage = re.ReplaceAllString(flineage, replacements[srank])
 				}
@@ -570,5 +574,5 @@ func init() {
 	flineageCmd.Flags().StringP("prefix-S", "", "S__", `prefix for subspecies, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-T", "", "T__", `prefix for strain, used along with flag -P/--add-prefix`)
 
-	flineageCmd.Flags().BoolP("trim", "T", false, "do not fill missing rank lower than current rank")
+	flineageCmd.Flags().BoolP("trim", "T", false, "do not fill or add prefix for missing rank lower than current rank")
 }

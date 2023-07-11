@@ -122,7 +122,8 @@ Flags:
   -h, --help            help for list
   -i, --ids string      TaxId(s), multiple values should be separated by comma
   -I, --indent string   indent (default "  ")
-  -J, --json            output in JSON format. you can save the result in file with suffix ".json" and open with modern text editor
+  -J, --json            output in JSON format. you can save the result in file with suffix ".json" and
+                        open with modern text editor
   -n, --show-name       output scientific name
   -r, --show-rank       output rank
 
@@ -376,6 +377,55 @@ Examples
         92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
         1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raicheisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
 
+
+        # wrapped table with csvtk pretty (>v0.26.0)
+        $ taxonkit lineage taxids.txt | csvtk pretty -Ht -x ';' -W 70 -S bold
+        ┏━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+        ┃ 9606    ┃ cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria; ┃
+        ┃         ┃ Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;   ┃
+        ┃         ┃ Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;     ┃
+        ┃         ┃ Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;      ┃
+        ┃         ┃ Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;     ┃
+        ┃         ┃ Homo;Homo sapiens                                                      ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 9913    ┃ cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria; ┃
+        ┃         ┃ Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;   ┃
+        ┃         ┃ Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;     ┃
+        ┃         ┃ Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Artiodactyla;    ┃
+        ┃         ┃ Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus                       ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 376619  ┃ cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;        ┃
+        ┃         ┃ Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;      ┃
+        ┃         ┃ Francisella tularensis subsp. holarctica;                              ┃
+        ┃         ┃ Francisella tularensis subsp. holarctica LVS                           ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 349741  ┃ cellular organisms;Bacteria;PVC group;Verrucomicrobia;                 ┃
+        ┃         ┃ Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;       ┃
+        ┃         ┃ Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835           ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 239935  ┃ cellular organisms;Bacteria;PVC group;Verrucomicrobia;                 ┃
+        ┃         ┃ Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;       ┃
+        ┃         ┃ Akkermansia muciniphila                                                ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 314101  ┃ cellular organisms;Bacteria;environmental samples;                     ┃
+        ┃         ┃ uncultured murine large bowel bacterium BAC 54B                        ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 11932   ┃ Viruses;Riboviria;Pararnavirae;Artverviricota;Revtraviricetes;         ┃
+        ┃         ┃ Ortervirales;Retroviridae;unclassified Retroviridae;                   ┃
+        ┃         ┃ Intracisternal A-particles;Mouse Intracisternal A-particle             ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 1327037 ┃ Viruses;Duplodnaviria;Heunggongvirae;Uroviricota;Caudoviricetes;       ┃
+        ┃         ┃ Caudovirales;Siphoviridae;unclassified Siphoviridae;                   ┃
+        ┃         ┃ Croceibacter phage P2559Y                                              ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 92489   ┃ cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;        ┃
+        ┃         ┃ Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae                     ┃
+        ┣━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+        ┃ 1458427 ┃ cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;         ┃
+        ┃         ┃ Burkholderiales;Comamonadaceae;Serpentinomonas;                        ┃
+        ┃         ┃ Serpentinomonas raichei                                                ┃
+        ┗━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
 1. Speed.
 
         $ time echo 9606 | taxonkit lineage 
@@ -530,10 +580,10 @@ Output:
   1. Input line data.
   2. Reformated lineage.
   3. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
-  
+
 Ambiguous names:
 
-  - Some TaxIds have the same complete lineage, empty result is returned 
+  - Some TaxIds have the same complete lineage, empty result is returned
     by default. You can use the flag -a/--output-ambiguous-result to
     return one possible result
 
@@ -548,46 +598,60 @@ Output format can be formated by flag --format, available placeholders:
     {g}: genus
     {s}: species
     {t}: subspecies/strain
-    
+
     {S}: subspecies
     {T}: strain
 
-When these are no nodes of rank "subspecies" nor "strain",
+When these're no nodes of rank "subspecies" nor "strain",
 you can switch on -S/--pseudo-strain to use the node with lowest rank
-as subspecies/strain name, if which rank is lower than "species". 
+as subspecies/strain name, if which rank is lower than "species".
 This flag affects {t}, {S}, {T}.
-    
+
 Output format can contains some escape charactors like "\t".
 
 Usage:
   taxonkit reformat [flags]
 
 Flags:
-  -P, --add-prefix                     add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X
+  -P, --add-prefix                     add prefixes for all ranks, single prefix for a rank is defined
+                                       by flag --prefix-X
   -d, --delimiter string               field delimiter in input lineage (default ";")
   -F, --fill-miss-rank                 fill missing rank with lineage information of the next higher rank
-  -f, --format string                  output format, placeholders of rank are needed (default "{k};{p};{c};{o};{f};{g};{s}")
+  -f, --format string                  output format, placeholders of rank are needed (default
+                                       "{k};{p};{c};{o};{f};{g};{s}")
   -h, --help                           help for reformat
   -i, --lineage-field int              field index of lineage. data should be tab-separated (default 2)
   -r, --miss-rank-repl string          replacement string for missing rank
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
   -R, --miss-taxid-repl string         replacement string for missing taxid
   -a, --output-ambiguous-result        output one of the ambigous result
-      --prefix-K string                prefix for kingdom, used along with flag -P/--add-prefix (default "K__")
-      --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix (default "S__")
-      --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default "T__")
+      --prefix-K string                prefix for kingdom, used along with flag -P/--add-prefix (default
+                                       "K__")
+      --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix
+                                       (default "S__")
+      --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default
+                                       "T__")
       --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default "c__")
-      --prefix-f string                prefix for family, used along with flag -P/--add-prefix (default "f__")
+      --prefix-f string                prefix for family, used along with flag -P/--add-prefix (default
+                                       "f__")
       --prefix-g string                prefix for genus, used along with flag -P/--add-prefix (default "g__")
-      --prefix-k string                prefix for superkingdom, used along with flag -P/--add-prefix (default "k__")
+      --prefix-k string                prefix for superkingdom, used along with flag -P/--add-prefix
+                                       (default "k__")
       --prefix-o string                prefix for order, used along with flag -P/--add-prefix (default "o__")
-      --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default "p__")
-      --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default "s__")
-      --prefix-t string                prefix for subspecies/strain, used along with flag -P/--add-prefix (default "t__")
-  -S, --pseudo-strain                  use the node with lowest rank as strain name, only if which rank is lower than "species" and not "subpecies" nor "strain". It affects {t}, {S}, {T}. This flag needs flag -F
+      --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default
+                                       "p__")
+      --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default
+                                       "s__")
+      --prefix-t string                prefix for subspecies/strain, used along with flag
+                                       -P/--add-prefix (default "t__")
+  -S, --pseudo-strain                  use the node with lowest rank as strain name, only if which rank
+                                       is lower than "species" and not "subpecies" nor "strain". It
+                                       affects {t}, {S}, {T}. This flag needs flag -F
   -t, --show-lineage-taxids            show corresponding taxids of reformated lineage
-  -I, --taxid-field int                field index of taxid. input data should be tab-separated. it overrides -i/--lineage-field
-  -T, --trim                           do not fill missing rank lower than current rank
+  -I, --taxid-field int                field index of taxid. input data should be tab-separated. it
+                                       overrides -i/--lineage-field
+  -T, --trim                           do not fill or add prefix for missing rank lower than current rank
+
 
 ```
 
@@ -1044,15 +1108,19 @@ Flags:
   -B, --black-list strings        black list of ranks to discard, e.g., '-B "no rank" -B "clade"
   -N, --discard-noranks           discard all ranks without order, type "taxonkit filter --help" for details
   -R, --discard-root              discard root taxid, defined by --root-taxid
-  -E, --equal-to strings          output TaxIds with rank equal to some ranks, multiple values can be separated with comma "," (e.g., -E "genus,species"), or give multiple times (e.g., -E genus -E species)
+  -E, --equal-to strings          output TaxIds with rank equal to some ranks, multiple values can be
+                                  separated with comma "," (e.g., -E "genus,species"), or give multiple
+                                  times (e.g., -E genus -E species)
   -h, --help                      help for filter
   -H, --higher-than string        output TaxIds with rank higher than a rank, exclusive with --lower-than
       --list-order                list user defined ranks in order, from "$HOME/.taxonkit/ranks.txt"
       --list-ranks                list ordered ranks in taxonomy database, sorted in user defined order
   -L, --lower-than string         output TaxIds with rank lower than a rank, exclusive with --higher-than
-  -r, --rank-file string          user-defined ordered taxonomic ranks, type "taxonkit filter --help" for details
+  -r, --rank-file string          user-defined ordered taxonomic ranks, type "taxonkit filter --help"
+                                  for details
       --root-taxid uint32         root taxid (default 1)
-  -n, --save-predictable-norank   do not discard some special ranks without order when using -L, where rank of the closest higher node is still lower than rank cutoff
+  -n, --save-predictable-norank   do not discard some special ranks without order when using -L, where
+                                  rank of the closest higher node is still lower than rank cutoff
   -i, --taxid-field int           field index of taxid. input data should be tab-separated (default 1)
 
 ```
@@ -1726,7 +1794,8 @@ Flags:
   -p, --percentage            abundance is in percentage
   -R, --recompute-abd         recompute abundance if some TaxIds are deleted in current taxonomy version
   -s, --sample-id string      sample ID in result file
-  -r, --show-rank strings     only show TaxIds and names of these ranks (default [superkingdom,phylum,class,order,family,genus,species,strain])
+  -r, --show-rank strings     only show TaxIds and names of these ranks (default
+                              [superkingdom,phylum,class,order,family,genus,species,strain])
   -i, --taxid-field int       field index of taxid. input data should be tab-separated (default 1)
   -t, --taxonomy-id string    taxonomy ID in result file
 
@@ -1836,7 +1905,8 @@ Flags:
       --field-taxpathsn int    field index of TAXPATHSN (default 4)
   -h, --help                   help for cami-filter
       --leaf-ranks strings     only consider leaves at these ranks (default [species,strain,no rank])
-      --show-rank strings      only show TaxIds and names of these ranks (default [superkingdom,phylum,class,order,family,genus,species,strain])
+      --show-rank strings      only show TaxIds and names of these ranks (default
+                               [superkingdom,phylum,class,order,family,genus,species,strain])
       --taxid-sep string       separator of taxid in TAXPATH and TAXPATHSN (default "|")
   -t, --taxids strings         the parent taxid(s) to filter out
   -f, --taxids-file strings    file(s) for the parent taxid(s) to filter out, one taxid per line
