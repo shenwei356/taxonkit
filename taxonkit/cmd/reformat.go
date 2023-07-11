@@ -304,34 +304,53 @@ Output format can contains some escape charactors like "\t".
 					name = strings.ToLower(names[n-1])  // name
 					pname = strings.ToLower(names[n-2]) // parent name
 					var tmp map[string]uint32
+					found := true
 
 					if tmp, ok = name2parent2taxid[name]; !ok {
-						log.Warningf(`failed to query the TaxIds for: %s. Possible reasons: `, data[field])
-						log.Warningf(`  1) the lineage were produced with different taxonomy data files, please re-run taxonkit lineage;`)
-						log.Warningf(`  2) some taxon names contain delimiter (%s), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d "/"`, delimiter)
-						return line2flineage{line, "", ""}, true, nil
+						found = false
 					}
-
 					if taxid, ok = tmp[pname]; !ok {
-						log.Warningf(`failed to query the TaxIds for: %s. Possible reasons: `, data[field])
-						log.Warningf(`  1) the lineage were produced with different taxonomy data files, please re-run taxonkit lineage;`)
-						log.Warningf(`  2) some taxon names contain delimiter (%s), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d "/"`, delimiter)
-						return line2flineage{line, "", ""}, true, nil
+						found = false
 					}
-
-					// for cases where child-parent pairs are shared by multiple taxids.
-					pair := name + "__" + pname
-					var _ambids []uint32
-					if _ambids, ok = ambigous[pair]; ok {
-						tmp := make([]string, len(_ambids))
-						for _i, _taxid := range _ambids {
-							tmp[_i] = strconv.Itoa(int(_taxid))
-						}
-						log.Warningf("we can't distinguish the TaxIds (%s) for lineage: %s. But you can use -a/--output-ambiguous-result to return one possible result",
-							strings.Join(tmp, ", "), data[field])
-
-						if !outputAmbigous {
+					if !found { // try use the last node
+						// direct query via name2taxids
+						_taxids := name2taxids[strings.ToLower(names[n-1])]
+						if _taxids == nil {
+							log.Warningf(`failed to query the TaxId of: %s. Possible reasons: `, data[field])
+							log.Warningf(`  1) the lineage were produced with different taxonomy data files, please re-run taxonkit lineage;`)
+							log.Warningf(`  2) some taxon names contain delimiter (%s), please re-run taxonkit lineage and taxonkit reformat with different flag value of -d, e.g., -d "/"`, delimiter)
 							return line2flineage{line, "", ""}, true, nil
+						}
+
+						if len(*_taxids) == 1 { // found
+							taxid = (*_taxids)[0]
+						} else { // ambiguous name
+							tmp := make([]string, len(*_taxids))
+							for _i, _taxid := range *_taxids {
+								tmp[_i] = strconv.Itoa(int(_taxid))
+							}
+							log.Warningf(`we can't distinguish the TaxIds (%s) for lineage: %s. But you can use -a/--output-ambiguous-result to return one possible result`,
+								strings.Join(tmp, ", "), data[field])
+
+							if !outputAmbigous {
+								return line2flineage{line, "", ""}, true, nil
+							}
+						}
+					} else {
+						// for cases where child-parent pairs are shared by multiple taxids.
+						pair := name + "__" + pname
+						var _ambids []uint32
+						if _ambids, ok = ambigous[pair]; ok {
+							tmp := make([]string, len(_ambids))
+							for _i, _taxid := range _ambids {
+								tmp[_i] = strconv.Itoa(int(_taxid))
+							}
+							log.Warningf("we can't distinguish the TaxIds (%s) for lineage: %s. But you can use -a/--output-ambiguous-result to return one possible result",
+								strings.Join(tmp, ", "), data[field])
+
+							if !outputAmbigous {
+								return line2flineage{line, "", ""}, true, nil
+							}
 						}
 					}
 				}
