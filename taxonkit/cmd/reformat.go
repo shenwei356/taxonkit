@@ -89,6 +89,8 @@ Output format can contains some escape charactors like "\t".
 		delimiter := getFlagString(cmd, "delimiter")
 		blank := getFlagString(cmd, "miss-rank-repl")
 		prefix := getFlagString(cmd, "miss-rank-repl-prefix")
+		suffix := getFlagString(cmd, "miss-rank-repl-suffix")
+
 		iblank := getFlagString(cmd, "miss-taxid-repl")
 		fill := getFlagBool(cmd, "fill-miss-rank")
 		pseudoStrain := getFlagBool(cmd, "pseudo-strain")
@@ -454,8 +456,12 @@ Output format can contains some escape charactors like "\t".
 						}
 					}
 
-					replacements[srank] = prefix + names[lastI] + " " + symbol2rank[srank]
-					// replacements[srank] = fmt.Sprintf("%s%s %s", prefix, names[lastI], symbol2rank[srank])
+					if suffix == "rank" {
+						replacements[srank] = prefix + names[lastI] + " " + symbol2rank[srank]
+						// replacements[srank] = fmt.Sprintf("%s%s %s", prefix, names[lastI], symbol2rank[srank])
+					} else {
+						replacements[srank] = prefix + names[lastI] + suffix
+					}
 				}
 			}
 
@@ -569,7 +575,8 @@ func init() {
 	flineageCmd.Flags().StringP("format", "f", "{k};{p};{c};{o};{f};{g};{s}", "output format, placeholders of rank are needed")
 	flineageCmd.Flags().StringP("delimiter", "d", ";", "field delimiter in input lineage")
 	flineageCmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank`)
-	flineageCmd.Flags().StringP("miss-rank-repl-prefix", "p", "unclassified ", `prefix for estimated taxon level`)
+	flineageCmd.Flags().StringP("miss-rank-repl-prefix", "p", "unclassified ", `prefix for estimated taxon names`)
+	flineageCmd.Flags().StringP("miss-rank-repl-suffix", "s", "rank", `suffix for estimated taxon names. "rank" for rank name, "" for no suffix`)
 	flineageCmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
 
 	flineageCmd.Flags().BoolP("fill-miss-rank", "F", false, "fill missing rank with lineage information of the next higher rank")

@@ -3,6 +3,7 @@
     - `taxonkit reformat`:
         - For lineages with more than one node, if it fails to query TaxId with the parent-child pair, use the last child only. [#82](https://github.com/shenwei356/taxonkit/issues/82)
         - The flag `-T/--trim` also does not add prefix for missing rank lower than current rank. [#82](https://github.com/shenwei356/taxonkit/issues/82)
+        - New flag `-s/--miss-rank-repl-suffix` to set the suffix for estimated taxon names. [#85](https://github.com/shenwei356/taxonkit/issues/85)
 - [TaxonKit v0.14.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.2)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.14.2)
     - `taxonkit filter`:

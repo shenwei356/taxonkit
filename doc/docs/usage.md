@@ -623,6 +623,8 @@ Flags:
   -i, --lineage-field int              field index of lineage. data should be tab-separated (default 2)
   -r, --miss-rank-repl string          replacement string for missing rank
   -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
+  -s, --miss-rank-repl-suffix string   suffix for estimated taxon names. "rank" for rank name, "" for no
+                                       suffix (default "rank")
   -R, --miss-taxid-repl string         replacement string for missing taxid
   -a, --output-ambiguous-result        output one of the ambigous result
       --prefix-K string                prefix for kingdom, used along with flag -P/--add-prefix (default
@@ -875,6 +877,13 @@ Examples:
         1327037   Viruses     Uroviricota                    Caudoviricetes                Caudovirales                  Siphoviridae                   unclassified Siphoviridae genus   Croceibacter phage P2559Y
         92489     Bacteria    Proteobacteria                 Gammaproteobacteria           Enterobacterales              Erwiniaceae                    Erwinia                           Erwinia oleae
         1458427   Bacteria    Proteobacteria                 Betaproteobacteria            Burkholderiales               Comamonadaceae                 Serpentinomonas                   Serpentinomonas raichei
+
+    Do not add prefix or suffix for estimated nodes:
+
+        $ echo 314101 |  taxonkit reformat -I  1
+        314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
+        $ echo 314101 |  taxonkit reformat -I 1 -F -p "" -s ""
+        314101  Bacteria;Bacteria;Bacteria;Bacteria;Bacteria;Bacteria;uncultured murine large bowel bacterium BAC 54B
 
 1. Only some ranks.
 
