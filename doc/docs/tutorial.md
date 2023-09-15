@@ -182,6 +182,52 @@ where rank of the closest higher node is still lower than rank cutoff**.
     species   Severe acute respiratory syndrome-related coronavirus
     strain    Severe acute respiratory syndrome coronavirus 2
     
+## Add taxonomy information to BLAST result
+
+An blast result file `blast_result.txt`, where the second column is the accession of matched sequences.
+
+    head -n 5 blast_result.txt | csvtk pretty -Ht
+    
+    xxxxxxxxxxxxxxxxxxxxx/2/ccs    XM_013496560.1   78.745    494   99    3    6361    6851    895        1385       6.53e-83    326 
+    xxxxxxxxxxxxxxxxxxxxx/2/ccs    XM_013496560.1   78.543    494   100   3    17168   17658   895        1385       3.04e-81    320 
+    xxxxxxxxxxxxxxxxxxxxx/76/ccs   LR699760.1       100.000   37    0     0    8139    8175    14507874   14507910   4.27e-06    69.4
+    xxxxxxxxxxxxxxxxxxxxx/80/ccs   HG994975.1       80.556    540   81    16   8269    8798    3821290    3820765    8.65e-104   394 
+    xxxxxxxxxxxxxxxxxxxxx/80/ccs   HG994975.1       77.805    410   89    2    9590    9998    3819858    3819450    5.51e-61    252
+
+Prepare `acc2taxid.tsv` file from [nucl_gb.accession2taxid.gz](https://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz) file.
+Here we use the `accession` column instead of `accession.version` column, in case of unmatched versions for some accessions.
+
+    zcat nucl_gb.accession2taxid.gz | cut -f 1,3 | gzip -c > acc2taxid.tsv.gz
+
+Extract needed acc2taxid subset to reduce memory usage.
+    
+    # extract accession and deduplicate and remove versions
+    cut -f 2 blast_result.txt | csvtk uniq -Ht | csvtk replace -Ht -p '\.\d+$' > acc.txt
+    
+    # grep from acc2taxid.tsv.gz
+    zcat acc2taxid.tsv.gz | grep -w -f acc.txt >  hit.acc2taxid.tsv
+
+Prepare `taxid2name.tsv`, species name are retrived for the taxids.
+
+    cut -f 2 hit.acc2taxid.tsv | taxonkit reformat -f '{s}' -I 1 > hit.taxid2name.tsv
+
+Append taxids according to the accessions, and append species names for the taxids.
+
+    csvtk add-header -t --names "qseqid,sseqid,pident,length,mismatch,gapopen,qstart,qend,sstart,send,evalue,bitscore"  blast_result.txt \
+        | csvtk mutate -t -f sseqid -n taxid \
+        | csvtk replace -t -k hit.acc2taxid.tsv -f taxid -p '(.+)\.\d+' -r '{kv}' \
+        | csvtk mutate -t -f taxid -n species \
+        | csvtk replace -t -k hit.taxid2name.tsv -f species -p '(.+)' -r '{kv}' \
+        | head -n 5 | csvtk pretty -t
+
+    qseqid                         sseqid           pident    length   mismatch   gapopen   qstart   qend    sstart     send       evalue      bitscore   taxid   species             
+    ----------------------------   --------------   -------   ------   --------   -------   ------   -----   --------   --------   ---------   --------   -----   --------------------
+    xxxxxxxxxxxxxxxxxxxxx/2/ccs    XM_013496560.1   78.745    494      99         3         6361     6851    895        1385       6.53e-83    326        44415   Eimeria mitis       
+    xxxxxxxxxxxxxxxxxxxxx/2/ccs    XM_013496560.1   78.543    494      100        3         17168    17658   895        1385       3.04e-81    320        44415   Eimeria mitis       
+    xxxxxxxxxxxxxxxxxxxxx/76/ccs   LR699760.1       100.000   37       0          0         8139     8175    14507874   14507910   4.27e-06    69.4       3702    Arabidopsis thaliana
+    xxxxxxxxxxxxxxxxxxxxx/80/ccs   HG994975.1       80.556    540      81         16        8269     8798    3821290    3820765    8.65e-104   394        5802    Eimeria tenella
+
+    
 ## Parsing kraken/bracken result
 
 Example Data
