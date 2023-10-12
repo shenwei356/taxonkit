@@ -56,11 +56,12 @@ func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]uint32 {
 			if items[6] != "scientific name" {
 				continue
 			}
-		} else {
-			if !(items[6] == "scientific name" || items[6] == "synonym") {
-				continue
-			}
 		}
+		// else {
+		// 	if !(items[6] == "scientific name" || items[6] == "synonym") {
+		// 		continue
+		// 	}
+		// }
 		name = items[2]
 
 		id, err = strconv.Atoi(items[0])

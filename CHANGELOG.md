@@ -1,3 +1,7 @@
+- [TaxonKit v0.15.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.15.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.15.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.15.1)
+    - `taxonkit name2taxid`:
+        - remove the restriction of name types. [#87](https://github.com/shenwei356/taxonkit/issues/87)
 - [TaxonKit v0.15.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.15.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.15.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.15.0)
     - `taxonkit reformat`:
