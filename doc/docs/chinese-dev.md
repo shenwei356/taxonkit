@@ -148,7 +148,8 @@ TaxonKit为命令行工具，采用子命令的方式来执行不同功能，大
 
 ## 局限性
 
-- 分类学数据库有很多，TaxonKit目前只支持应用最广泛的NCBI Taxonomy。
-- 对于GTDB Taxonomy，可以通过现有工具，如[gtdb_to_taxdump](https://github.com/nick-youngblut/gtdb_to_taxdump)，
-  将其数据转换为NCBI taxdump文件。
+- <s>分类学数据库有很多，TaxonKit目前只支持应用最广泛的NCBI Taxonomy。</s>
+  可以用[create-taxdump](https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump)命令把任意（gtdb, ictv，自定义）的分类学数据库转为NCBI taxdump格式 。
+- <s>对于GTDB Taxonomy，可以通过现有工具，如[gtdb_to_taxdump](https://github.com/nick-youngblut/gtdb_to_taxdump)，
+  将其数据转换为NCBI taxdump文件。</s>用taxonkit就好，https://github.com/shenwei356/gtdb-taxdump。
  

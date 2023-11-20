@@ -1,6 +1,6 @@
 site_name: TaxonKit - NCBI Taxonomy Toolkit
 site_url: https://bioinf.shenwei.me/taxonkit
-pages:
+nav:
 - Home: index.md
 - Download: download.md
 - Usage: usage.md
@@ -24,7 +24,7 @@ theme:
 extra:
   manifest: manifest.webmanifest
   
-arkdown_extensions:
+markdown_extensions:
   - admonition
   - codehilite:
       guess_lang: true
