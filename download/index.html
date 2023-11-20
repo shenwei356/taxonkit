@@ -14,8 +14,15 @@
       
         <link rel="canonical" href="https://bioinf.shenwei.me/taxonkit/download/">
       
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../usage/">
+      
+      
       <link rel="icon" href="../files/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.5">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -23,31 +30,33 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ee0f47ba.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4b4a2bd9.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
-        
-          
-          
-          <meta name="theme-color" content="#00bdd6">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
       
-    
+      
+
+
     
     
       
+    
+    
+      
+        
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
+    
     
     
   </head>
@@ -58,7 +67,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
   
     
     
@@ -80,16 +89,19 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-header__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -108,10 +120,13 @@
       </div>
     </div>
     
+      
+    
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -119,13 +134,16 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -136,7 +154,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -145,10 +163,10 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -178,22 +196,23 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-nav__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     TaxonKit - NCBI Taxonomy Toolkit
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -205,14 +224,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Home
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
       </a>
     </li>
   
@@ -220,8 +243,6 @@
     
       
       
-      
-
   
   
     
@@ -229,19 +250,31 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Download
+          
+  
+  <span class="md-ellipsis">
+    Download
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Download
+        
+  
+  <span class="md-ellipsis">
+    Download
+  </span>
+  
+
       </a>
       
         
@@ -358,14 +391,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../usage/" class="md-nav__link">
-        Usage
+        
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
       </a>
     </li>
   
@@ -373,14 +410,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../tutorial/" class="md-nav__link">
-        Tutorial
+        
+  
+  <span class="md-ellipsis">
+    Tutorial
+  </span>
+  
+
       </a>
     </li>
   
@@ -388,14 +429,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../bench/" class="md-nav__link">
-        Benchmark
+        
+  
+  <span class="md-ellipsis">
+    Benchmark
+  </span>
+  
+
       </a>
     </li>
   
@@ -403,14 +448,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../chinese/" class="md-nav__link">
-        中文介绍
+        
+  
+  <span class="md-ellipsis">
+    中文介绍
+  </span>
+  
+
       </a>
     </li>
   
@@ -418,14 +467,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../chinese-dev/" class="md-nav__link">
-        开发笔记
+        
+  
+  <span class="md-ellipsis">
+    开发笔记
+  </span>
+  
+
       </a>
     </li>
   
@@ -433,14 +486,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356/taxid-changelog" class="md-nav__link">
-        Taxid-Changelog
+        
+  
+  <span class="md-ellipsis">
+    Taxid-Changelog
+  </span>
+  
+
       </a>
     </li>
   
@@ -448,14 +505,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356" class="md-nav__link">
-        More tools
+        
+  
+  <span class="md-ellipsis">
+    More tools
+  </span>
+  
+
       </a>
     </li>
   
@@ -584,20 +645,21 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-<a href="https://github.com/shenwei356/taxonkit/edit/master/docs/download.md" title="Edit this page" class="md-content__button md-icon">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-</a>
+                  
+
+  
+  
 
 
-<h1 id="download">Download</h1>
+<h1 id="download">Download<a class="headerlink" href="#download" title="Permanent link">Link</a></h1>
 <p><code>TaxonKit</code> is implemented in <a href="https://golang.org/">Go</a> programming language,
  executable binary files <strong>for most popular operating systems</strong> are freely available
   in <a href="https://github.com/shenwei356/taxonkit/releases">release</a> page.</p>
-<h2 id="current-version">Current Version</h2>
+<h2 id="current-version">Current Version<a class="headerlink" href="#current-version" title="Permanent link">Link</a></h2>
 <ul>
 <li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.15.0">TaxonKit v0.15.0</a>
 <a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.15.0"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.15.0/total.svg" /></a><ul>
@@ -610,12 +672,12 @@
 </ul>
 </li>
 </ul>
-<h3 id="please-cite">Please cite</h3>
+<h3 id="please-cite">Please cite<a class="headerlink" href="#please-cite" title="Permanent link">Link</a></h3>
 <blockquote>
 <p>Shen, W., Ren, H., TaxonKit: a practical and efficient NCBI Taxonomy toolkit,
 Journal of Genetics and Genomics, <a href="https://www.sciencedirect.com/science/article/pii/S1673852721000837">https://doi.org/10.1016/j.jgg.2021.03.006</a></p>
 </blockquote>
-<h3 id="links">Links</h3>
+<h3 id="links">Links<a class="headerlink" href="#links" title="Permanent link">Link</a></h3>
 <p><strong><em>Tips</em></strong></p>
 <ul>
 <li>run <code>taxonkit version</code> to check update !!!</li>
@@ -624,51 +686,51 @@ Journal of Genetics and Genomics, <a href="https://www.sciencedirect.com/science
 <table>
 <thead>
 <tr>
-<th align="left">OS</th>
-<th align="left">Arch</th>
-<th align="left">File, 中国镜像</th>
-<th align="left">Download Count</th>
+<th style="text-align: left;">OS</th>
+<th style="text-align: left;">Arch</th>
+<th style="text-align: left;">File, 中国镜像</th>
+<th style="text-align: left;">Download Count</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">Linux</td>
-<td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_linux_amd64.tar.gz"><strong>taxonkit_linux_amd64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_linux_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600" /></a></td>
+<td style="text-align: left;">Linux</td>
+<td style="text-align: left;"><strong>64-bit</strong></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_linux_amd64.tar.gz"><strong>taxonkit_linux_amd64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz">中国镜像</a></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_linux_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
-<td align="left">Linux</td>
-<td align="left"><strong>arm64</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_linux_arm64.tar.gz"><strong>taxonkit_linux_arm64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_arm64.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_linux_arm64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_arm64.tar.gz.svg?maxAge=3600" /></a></td>
+<td style="text-align: left;">Linux</td>
+<td style="text-align: left;"><strong>arm64</strong></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_linux_arm64.tar.gz"><strong>taxonkit_linux_arm64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_linux_arm64.tar.gz">中国镜像</a></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_linux_arm64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_arm64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
-<td align="left">macOS</td>
-<td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_darwin_amd64.tar.gz"><strong>taxonkit_darwin_amd64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_darwin_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600" /></a></td>
+<td style="text-align: left;">macOS</td>
+<td style="text-align: left;"><strong>64-bit</strong></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_darwin_amd64.tar.gz"><strong>taxonkit_darwin_amd64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz">中国镜像</a></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_darwin_amd64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
-<td align="left">macOS</td>
-<td align="left"><strong>arm64</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_darwin_arm64.tar.gz"><strong>taxonkit_darwin_arm64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_darwin_arm64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600" /></a></td>
+<td style="text-align: left;">macOS</td>
+<td style="text-align: left;"><strong>arm64</strong></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_darwin_arm64.tar.gz"><strong>taxonkit_darwin_arm64.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz">中国镜像</a></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_darwin_arm64.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 <tr>
-<td align="left">Windows</td>
-<td align="left"><strong>64-bit</strong></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_windows_amd64.exe.tar.gz"><strong>taxonkit_windows_amd64.exe.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz">中国镜像</a></td>
-<td align="left"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_windows_amd64.exe.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600" /></a></td>
+<td style="text-align: left;">Windows</td>
+<td style="text-align: left;"><strong>64-bit</strong></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_windows_amd64.exe.tar.gz"><strong>taxonkit_windows_amd64.exe.tar.gz</strong></a>,<br/> <a href="http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz">中国镜像</a></td>
+<td style="text-align: left;"><a href="https://github.com/shenwei356/taxonkit/releases/download/v0.15.0/taxonkit_windows_amd64.exe.tar.gz"><img alt="Github Releases (by Asset)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600" /></a></td>
 </tr>
 </tbody>
 </table>
-<h2 id="installation">Installation</h2>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">Link</a></h2>
 <p><a href="https://github.com/shenwei356/taxonkit/releases">Download Page</a></p>
 <p><code>TaxonKit</code> is implemented in <a href="https://golang.org/">Go</a> programming language,
  executable binary files <strong>for most popular operating systems</strong> are freely available
   in <a href="https://github.com/shenwei356/taxonkit/releases">release</a> page.</p>
-<h4 id="method-1-download-binaries-latest-stabledev-version">Method 1: Download binaries (latest stable/dev version)</h4>
+<h4 id="method-1-download-binaries-latest-stabledev-version">Method 1: Download binaries (latest stable/dev version)<a class="headerlink" href="#method-1-download-binaries-latest-stabledev-version" title="Permanent link">Link</a></h4>
 <p>Just <a href="https://github.com/shenwei356/taxonkit/releases">download</a> compressed
 executable file of your operating system,
 and uncompress it with <code>tar -zxvf *.tar.gz</code> command or other tools.
@@ -679,13 +741,15 @@ And then:</p>
 <ol>
 <li>
 <p>If you have root privilege simply copy it to <code>/usr/local/bin</code>:</p>
-<pre><code>sudo cp taxonkit /usr/local/bin/
-</code></pre>
+<div class="codehilite"><pre><span></span><code>sudo cp taxonkit /usr/local/bin/
+</code></pre></div>
+
 </li>
 <li>
 <p>Or copy to anywhere in the environment variable <code>PATH</code>:</p>
-<pre><code>mkdir -p $HOME/bin/; cp taxonkit $HOME/bin/
-</code></pre>
+<div class="codehilite"><pre><span></span><code>mkdir -p $HOME/bin/; cp taxonkit $HOME/bin/
+</code></pre></div>
+
 </li>
 </ol>
 </li>
@@ -693,75 +757,82 @@ And then:</p>
 <p><strong>For windows</strong>, just copy <code>taxonkit.exe</code> to <code>C:\WINDOWS\system32</code>.</p>
 </li>
 </ol>
-<h4 id="method-2-install-via-conda-latest-stable-version">Method 2: Install via conda  (latest stable version) <a href="http://bioinf.shenwei.me/taxonkit/download/"><img alt="Install-with-conda" src="https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg" /></a> <a href="https://anaconda.org/bioconda/taxonkit"><img alt="Anaconda Cloud" src="https://anaconda.org/bioconda/taxonkit/badges/version.svg" /></a> <a href="https://anaconda.org/bioconda/taxonkit"><img alt="downloads" src="https://anaconda.org/bioconda/taxonkit/badges/downloads.svg" /></a></h4>
-<pre><code>conda install -c bioconda taxonkit
-</code></pre>
-<h4 id="method-3-install-via-homebrew-may-not-the-lastest-version">Method 3: Install via homebrew (may not the lastest version)</h4>
-<pre><code>brew install brewsci/bio/taxonkit
-</code></pre>
-<h4 id="method-4-compile-from-source-latest-stabledev-version">Method 4: Compile from source (latest stable/dev version)</h4>
+<h4 id="method-2-install-via-conda-latest-stable-version">Method 2: Install via conda  (latest stable version) <a href="http://bioinf.shenwei.me/taxonkit/download/"><img alt="Install-with-conda" src="https://anaconda.org/bioconda/taxonkit/badges/installer/conda.svg" /></a> <a href="https://anaconda.org/bioconda/taxonkit"><img alt="Anaconda Cloud" src="https://anaconda.org/bioconda/taxonkit/badges/version.svg" /></a> <a href="https://anaconda.org/bioconda/taxonkit"><img alt="downloads" src="https://anaconda.org/bioconda/taxonkit/badges/downloads.svg" /></a><a class="headerlink" href="#method-2-install-via-conda-latest-stable-version" title="Permanent link">Link</a></h4>
+<div class="codehilite"><pre><span></span><code>conda install -c bioconda taxonkit
+</code></pre></div>
+
+<h4 id="method-3-install-via-homebrew-may-not-the-lastest-version">Method 3: Install via homebrew (may not the lastest version)<a class="headerlink" href="#method-3-install-via-homebrew-may-not-the-lastest-version" title="Permanent link">Link</a></h4>
+<div class="codehilite"><pre><span></span><code>brew install brewsci/bio/taxonkit
+</code></pre></div>
+
+<h4 id="method-4-compile-from-source-latest-stabledev-version">Method 4: Compile from source (latest stable/dev version)<a class="headerlink" href="#method-4-compile-from-source-latest-stabledev-version" title="Permanent link">Link</a></h4>
 <ol>
 <li>
 <p><a href="https://go.dev/doc/install">Install go</a></p>
-<pre><code>wget https://go.dev/dl/go1.17.13.linux-amd64.tar.gz
+<div class="codehilite"><pre><span></span><code><span class="n">wget</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">go</span><span class="o">.</span><span class="n">dev</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">go1</span><span class="o">.</span><span class="mf">17.13</span><span class="o">.</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 
-tar -zxf go1.17.13.linux-amd64.tar.gz -C $HOME/
+<span class="n">tar</span><span class="w"> </span><span class="o">-</span><span class="n">zxf</span><span class="w"> </span><span class="n">go1</span><span class="o">.</span><span class="mf">17.13</span><span class="o">.</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">$</span><span class="n">HOME</span><span class="o">/</span>
 
-# or 
-#   echo "export PATH=$PATH:$HOME/go/bin" &gt;&gt; ~/.bashrc
-#   source ~/.bashrc
-export PATH=$PATH:$HOME/go/bin
-</code></pre>
+<span class="c1"># or </span>
+<span class="c1">#   echo &quot;export PATH=$PATH:$HOME/go/bin&quot; &gt;&gt; ~/.bashrc</span>
+<span class="c1">#   source ~/.bashrc</span>
+<span class="k">export</span><span class="w"> </span><span class="n">PATH</span><span class="o">=$</span><span class="n">PATH</span><span class="p">:</span><span class="o">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">go</span><span class="o">/</span><span class="n">bin</span>
+</code></pre></div>
+
 </li>
 <li>
 <p>Compile TaxonKit</p>
-<pre><code># ------------- the latest stable version -------------
+<div class="codehilite"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="o">-------------</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">latest</span><span class="w"> </span><span class="n">stable</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">-------------</span>
 
-go get -v -u github.com/shenwei356/taxonkit/taxonkit
+<span class="k">go</span><span class="w"> </span><span class="k">get</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">shenwei356</span><span class="o">/</span><span class="n">taxonkit</span><span class="o">/</span><span class="n">taxonkit</span>
 
-# The executable binary file is located in:
-#   ~/go/bin/taxonkit
-# You can also move it to anywhere in the $PATH
-mkdir -p $HOME/bin
-cp ~/go/bin/taxonkit $HOME/bin/
+<span class="err">#</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">executable</span><span class="w"> </span><span class="nc">binary</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">located</span><span class="w"> </span><span class="ow">in</span><span class="err">:</span>
+<span class="err">#</span><span class="w">   </span><span class="o">~/</span><span class="k">go</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">taxonkit</span>
+<span class="err">#</span><span class="w"> </span><span class="n">You</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">also</span><span class="w"> </span><span class="n">move</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">anywhere</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="err">$</span><span class="k">PATH</span>
+<span class="n">mkdir</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="err">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">bin</span>
+<span class="n">cp</span><span class="w"> </span><span class="o">~/</span><span class="k">go</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">taxonkit</span><span class="w"> </span><span class="err">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span>
 
-# --------------- the development version --------------
+<span class="err">#</span><span class="w"> </span><span class="o">---------------</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">development</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">--------------</span>
 
-git clone https://github.com/shenwei356/taxonkit
-cd taxonkit/taxonkit/
-go build
+<span class="n">git</span><span class="w"> </span><span class="n">clone</span><span class="w"> </span><span class="nl">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">shenwei356</span><span class="o">/</span><span class="n">taxonkit</span>
+<span class="n">cd</span><span class="w"> </span><span class="n">taxonkit</span><span class="o">/</span><span class="n">taxonkit</span><span class="o">/</span>
+<span class="k">go</span><span class="w"> </span><span class="n">build</span>
 
-# The executable binary file is located in:
-#   ./taxonkit
-# You can also move it to anywhere in the $PATH
-mkdir -p $HOME/bin
-cp ./taxonkit $HOME/bin/
-</code></pre>
+<span class="err">#</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">executable</span><span class="w"> </span><span class="nc">binary</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">located</span><span class="w"> </span><span class="ow">in</span><span class="err">:</span>
+<span class="err">#</span><span class="w">   </span><span class="p">.</span><span class="o">/</span><span class="n">taxonkit</span>
+<span class="err">#</span><span class="w"> </span><span class="n">You</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">also</span><span class="w"> </span><span class="n">move</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">anywhere</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="err">$</span><span class="k">PATH</span>
+<span class="n">mkdir</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="err">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">bin</span>
+<span class="n">cp</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">taxonkit</span><span class="w"> </span><span class="err">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span>
+</code></pre></div>
+
 </li>
 </ol>
-<h2 id="bash-completion">Bash-completion</h2>
+<h2 id="bash-completion">Bash-completion<a class="headerlink" href="#bash-completion" title="Permanent link">Link</a></h2>
 <p>Supported shell: bash|zsh|fish|powershell</p>
 <p>Bash:</p>
-<pre><code># generate completion shell
+<div class="codehilite"><pre><span></span><code><span class="gh">#</span> generate completion shell
 taxonkit genautocomplete --shell bash
 
-# configure if never did.
-# install bash-completion if the "complete" command is not found.
-echo "for bcfile in ~/.bash_completion.d/* ; do source \$bcfile; done" &gt;&gt; ~/.bash_completion
-echo "source ~/.bash_completion" &gt;&gt; ~/.bashrc
-</code></pre>
-<p>Zsh:</p>
-<pre><code># generate completion shell
-taxonkit genautocomplete --shell zsh --file ~/.zfunc/_taxonkit
+<span class="gh">#</span> configure if never did.
+<span class="gh">#</span> install bash-completion if the &quot;complete&quot; command is not found.
+echo &quot;for bcfile in ~/.bash_completion.d/* ; do source \$bcfile; done&quot; &gt;&gt; ~/.bash_completion
+echo &quot;source ~/.bash_completion&quot; &gt;&gt; ~/.bashrc
+</code></pre></div>
 
-# configure if never did
-echo 'fpath=( ~/.zfunc "${fpath[@]}" )' &gt;&gt; ~/.zshrc
-echo "autoload -U compinit; compinit" &gt;&gt; ~/.zshrc
-</code></pre>
+<p>Zsh:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># generate completion shell</span>
+<span class="n">taxonkit</span><span class="w"> </span><span class="n">genautocomplete</span><span class="w"> </span><span class="o">--</span><span class="n">shell</span><span class="w"> </span><span class="n">zsh</span><span class="w"> </span><span class="o">--</span><span class="n">file</span><span class="w"> </span><span class="o">~/.</span><span class="n">zfunc</span><span class="o">/</span><span class="n">_taxonkit</span>
+
+<span class="c1"># configure if never did</span>
+<span class="n">echo</span><span class="w"> </span><span class="s1">&#39;fpath=( ~/.zfunc &quot;${fpath[@]}&quot; )&#39;</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">~/.</span><span class="n">zshrc</span>
+<span class="n">echo</span><span class="w"> </span><span class="s2">&quot;autoload -U compinit; compinit&quot;</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">~/.</span><span class="n">zshrc</span>
+</code></pre></div>
+
 <p>fish:</p>
-<pre><code>taxonkit genautocomplete --shell fish --file ~/.config/fish/completions/taxonkit.fish
-</code></pre>
-<h2 id="dataset">Dataset</h2>
+<div class="codehilite"><pre><span></span><code>taxonkit genautocomplete --shell fish --file ~/.config/fish/completions/taxonkit.fish
+</code></pre></div>
+
+<h2 id="dataset">Dataset<a class="headerlink" href="#dataset" title="Permanent link">Link</a></h2>
 <ol>
 <li>Download and uncompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
 <li>Copy <code>names.dmp</code>, <code>nodes.dmp</code>, <code>delnodes.dmp</code> and <code>merged.dmp</code> to data directory: <code>$HOME/.taxonkit</code>,
@@ -770,14 +841,15 @@ e.g., <code>/home/shenwei/.taxonkit</code> ,</li>
 or environment variable <code>TAXONKIT_DB</code>.</li>
 </ol>
 <p>All-in-one command:</p>
-<pre><code>wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+<div class="codehilite"><pre><span></span><code>wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
 tar -zxvf taxdump.tar.gz
 
 mkdir -p $HOME/.taxonkit
 cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
-</code></pre>
+</code></pre></div>
+
 <p><strong>Update dataset</strong>: Simply re-download the taxdump files, uncompress and override old ones.</p>
-<h2 id="release-history">Release history</h2>
+<h2 id="release-history">Release history<a class="headerlink" href="#release-history" title="Permanent link">Link</a></h2>
 <ul>
 <li><a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.14.2">TaxonKit v0.14.2</a>
 <a href="https://github.com/shenwei356/taxonkit/releases/tag/v0.14.2"><img alt="Github Releases (by Release)" src="https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.14.2/total.svg" /></a><ul>
@@ -1130,49 +1202,20 @@ s.setAttribute('data-timestamp', +new Date());
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-              
-            </article>
-          </div>
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
       
         <footer class="md-footer">
-  
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
-      
-        
-        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Home
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../usage/" class="md-footer__link md-footer__link--next" aria-label="Next: Usage" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Usage
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1194,10 +1237,12 @@ s.setAttribute('data-timestamp', +new Date());
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.b6ff8c07.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.5e13d264.min.js"></script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>

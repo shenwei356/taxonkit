@@ -14,8 +14,11 @@
       
         <link rel="canonical" href="https://bioinf.shenwei.me/taxonkit/bench/">
       
+      
+      
+      
       <link rel="icon" href="../files/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.5">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -23,31 +26,33 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ee0f47ba.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4b4a2bd9.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
-        
-          
-          
-          <meta name="theme-color" content="#00bdd6">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
       
-    
+      
+
+
     
     
       
+    
+    
+      
+        
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
+    
     
     
   </head>
@@ -58,7 +63,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
   
     
     
@@ -80,16 +85,19 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-header__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -108,10 +116,13 @@
       </div>
     </div>
     
+      
+    
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -119,13 +130,16 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -136,7 +150,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -145,10 +159,10 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -178,22 +192,23 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-nav__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     TaxonKit - NCBI Taxonomy Toolkit
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -205,14 +220,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Home
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
       </a>
     </li>
   
@@ -220,14 +239,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../download/" class="md-nav__link">
-        Download
+        
+  
+  <span class="md-ellipsis">
+    Download
+  </span>
+  
+
       </a>
     </li>
   
@@ -235,14 +258,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../usage/" class="md-nav__link">
-        Usage
+        
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
       </a>
     </li>
   
@@ -250,14 +277,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../tutorial/" class="md-nav__link">
-        Tutorial
+        
+  
+  <span class="md-ellipsis">
+    Tutorial
+  </span>
+  
+
       </a>
     </li>
   
@@ -265,14 +296,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="./" class="md-nav__link">
-        Benchmark
+        
+  
+  <span class="md-ellipsis">
+    Benchmark
+  </span>
+  
+
       </a>
     </li>
   
@@ -280,14 +315,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../chinese/" class="md-nav__link">
-        中文介绍
+        
+  
+  <span class="md-ellipsis">
+    中文介绍
+  </span>
+  
+
       </a>
     </li>
   
@@ -295,14 +334,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../chinese-dev/" class="md-nav__link">
-        开发笔记
+        
+  
+  <span class="md-ellipsis">
+    开发笔记
+  </span>
+  
+
       </a>
     </li>
   
@@ -310,14 +353,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356/taxid-changelog" class="md-nav__link">
-        Taxid-Changelog
+        
+  
+  <span class="md-ellipsis">
+    Taxid-Changelog
+  </span>
+  
+
       </a>
     </li>
   
@@ -325,14 +372,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356" class="md-nav__link">
-        More tools
+        
+  
+  <span class="md-ellipsis">
+    More tools
+  </span>
+  
+
       </a>
     </li>
   
@@ -427,18 +478,19 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-<a href="https://github.com/shenwei356/taxonkit/edit/master/docs/bench/README.md" title="Edit this page" class="md-content__button md-icon">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-</a>
+                  
+
+  
+  
 
 
-<h1 id="benchmark">Benchmark</h1>
-<h2 id="benchmark-1-getting-lineage">Benchmark 1: Getting lineage</h2>
-<h3 id="data-set">Data set</h3>
+<h1 id="benchmark">Benchmark<a class="headerlink" href="#benchmark" title="Permanent link">Link</a></h1>
+<h2 id="benchmark-1-getting-lineage">Benchmark 1: Getting lineage<a class="headerlink" href="#benchmark-1-getting-lineage" title="Permanent link">Link</a></h2>
+<h3 id="data-set">Data set<a class="headerlink" href="#data-set" title="Permanent link">Link</a></h3>
 <ul>
 <li>
 <p><a href="ftp://ftp.ncbi.nih.gov/taxonomy">NCBI taxonomy</a>, version 2021-01-21</p>
@@ -447,17 +499,18 @@
 <p>TaxIDs. Root node <code>1</code> is removed. 
   And These data should be updated along with NCBI taxonomy dataset.
   Seven sizes of TaxIds are sampled from <code>nodes.dmp</code>.</p>
-<pre><code># shuffle all taxids
-cut -f 1 nodes.dmp | grep -w -v 1 | shuf &gt; ids.txt
+<div class="codehilite"><pre><span></span><code>#<span class="w"> </span><span class="nv">shuffle</span><span class="w"> </span><span class="nv">all</span><span class="w"> </span><span class="nv">taxids</span>
+<span class="nv">cut</span><span class="w"> </span><span class="o">-</span><span class="nv">f</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="nv">nodes</span>.<span class="nv">dmp</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">grep</span><span class="w"> </span><span class="o">-</span><span class="nv">w</span><span class="w"> </span><span class="o">-</span><span class="nv">v</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nv">shuf</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nv">ids</span>.<span class="nv">txt</span>
 
-# extract n taxids for testing
-for n in 1 10 100 1000 2000 4000 6000 8000 10000 20000 40000 60000 80000 100000; do 
-    head -n $n ids.txt &gt; taxids.n$n.txt
-done
-</code></pre>
+#<span class="w"> </span><span class="nv">extract</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="nv">taxids</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">testing</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="mi">2000</span><span class="w"> </span><span class="mi">4000</span><span class="w"> </span><span class="mi">6000</span><span class="w"> </span><span class="mi">8000</span><span class="w"> </span><span class="mi">10000</span><span class="w"> </span><span class="mi">20000</span><span class="w"> </span><span class="mi">40000</span><span class="w"> </span><span class="mi">60000</span><span class="w"> </span><span class="mi">80000</span><span class="w"> </span><span class="mi">100000</span><span class="c1">; do </span>
+<span class="w">    </span><span class="nv">head</span><span class="w"> </span><span class="o">-</span><span class="nv">n</span><span class="w"> </span>$<span class="nv">n</span><span class="w"> </span><span class="nv">ids</span>.<span class="nv">txt</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nv">taxids</span>.<span class="nv">n</span>$<span class="nv">n</span>.<span class="nv">txt</span>
+<span class="nv">done</span>
+</code></pre></div>
+
 </li>
 </ul>
-<h3 id="software">Software</h3>
+<h3 id="software">Software<a class="headerlink" href="#software" title="Permanent link">Link</a></h3>
 <ul>
 <li>Loading database from local database:<ul>
 <li>ETE, version: <a href="https://pypi.org/project/ete3/3.1.2/">3.1.2</a></li>
@@ -469,113 +522,122 @@ done
 </ul>
 </li>
 </ul>
-<h3 id="environment">Environment</h3>
+<h3 id="environment">Environment<a class="headerlink" href="#environment" title="Permanent link">Link</a></h3>
 <ul>
 <li>OS: Linux 5.4.89-1-MANJARO</li>
 <li>CPU: AMD Ryzen 7 2700X Eight-Core Processor, 3.7GHz</li>
 <li>RAM: 64GB DDR4 3000MHz</li>
 <li>SSD: Samsung 970EVO 500G NVMe SSD</li>
 </ul>
-<h3 id="installation-and-configurations">Installation and Configurations</h3>
+<h3 id="installation-and-configurations">Installation and Configurations<a class="headerlink" href="#installation-and-configurations" title="Permanent link">Link</a></h3>
 <ul>
 <li>
 <p>ETE</p>
-<pre><code>sudo pip3 install ete3
+<div class="codehilite"><pre><span></span><code><span class="n">sudo</span> <span class="n">pip3</span> <span class="n">install</span> <span class="n">ete3</span>
 
-# create database
-# http://etetoolkit.org/docs/latest/tutorial/tutorial_ncbitaxonomy.html#upgrading-the-local-database
-from ete3 import NCBITaxa
-ncbi = NCBITaxa()
-ncbi.update_taxonomy_database()
-</code></pre>
+<span class="c1"># create database</span>
+<span class="c1"># http://etetoolkit.org/docs/latest/tutorial/tutorial_ncbitaxonomy.html#upgrading-the-local-database</span>
+<span class="kn">from</span> <span class="nn">ete3</span> <span class="kn">import</span> <span class="n">NCBITaxa</span>
+<span class="n">ncbi</span> <span class="o">=</span> <span class="n">NCBITaxa</span><span class="p">()</span>
+<span class="n">ncbi</span><span class="o">.</span><span class="n">update_taxonomy_database</span><span class="p">()</span>
+</code></pre></div>
+
 </li>
 <li>
 <p>TaxonKit</p>
-<pre><code>mkdir -p $HOME/.taxonkit
-mkdir -p $HOME/bin/
+<div class="codehilite"><pre><span></span><code><span class="n">mkdir</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="o">$</span><span class="n">HOME</span><span class="o">/.</span><span class="n">taxonkit</span>
+<span class="n">mkdir</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="o">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span>
 
-# data
-wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
-tar -zxvf taxdump.tar.gz -C $HOME/.taxonkit
+<span class="c1"># data</span>
+<span class="n">wget</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="n">ftp</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">ncbi</span><span class="o">.</span><span class="n">nih</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">pub</span><span class="o">/</span><span class="n">taxonomy</span><span class="o">/</span><span class="n">taxdump</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span>
+<span class="n">tar</span><span class="w"> </span><span class="o">-</span><span class="n">zxvf</span><span class="w"> </span><span class="n">taxdump</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">$</span><span class="n">HOME</span><span class="o">/.</span><span class="n">taxonkit</span>
 
-# binary
-wget https://github.com/shenwei356/taxonkit/releases/download/v0.7.2/taxonkit_linux_amd64.tar.gz
-tar -zxvf taxonkit_linux_amd64.tar.gz -C $HOME/bin/
-</code></pre>
+<span class="c1"># binary</span>
+<span class="n">wget</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">shenwei356</span><span class="o">/</span><span class="n">taxonkit</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v0</span><span class="o">.</span><span class="mf">7.2</span><span class="o">/</span><span class="n">taxonkit_linux_amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span><span class="w"> </span><span class="o">-</span><span class="n">zxvf</span><span class="w"> </span><span class="n">taxonkit_linux_amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">$</span><span class="n">HOME</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span>
+</code></pre></div>
+
 </li>
 <li>
 <p>taxopy</p>
-<pre><code>sudo pip3 install -U taxopy
+<div class="codehilite"><pre><span></span><code>sudo pip3 install -U taxopy
 
 # taxoopy identical dump files copied from taxonkit
 mkdir -p ~/.taxopy
 cp ~/.taxonkit/{nodes.dmp,names.dmp} ~/.taxopy
-</code></pre>
+</code></pre></div>
+
 </li>
 </ul>
-<h3 id="scripts-and-commands">Scripts and Commands</h3>
+<h3 id="scripts-and-commands">Scripts and Commands<a class="headerlink" href="#scripts-and-commands" title="Permanent link">Link</a></h3>
 <p>Scripts/Command as listed below.
 Python scripts were written following to the official documents,
 and <strong>parallelized querying were not used, including TaxonKit</strong>.</p>
-<pre><code>ETE             get_lineage.ete.py                              &lt; $infile &gt; $outfile
+<div class="codehilite"><pre><span></span><code>ETE             get_lineage.ete.py                              &lt; $infile &gt; $outfile
 taxopy          get_lineage.taxopy.py                           &lt; $infile &gt; $outfile
-taxonkit        taxonkit lineage --threads 1 --delimiter "; "   &lt; $infile &gt; $outfile
-</code></pre>
+taxonkit        taxonkit lineage --threads 1 --delimiter &quot;; &quot;   &lt; $infile &gt; $outfile
+</code></pre></div>
+
 <p>A Python script <a href="https://github.com/shenwei356/memusg">memusg</a> was used
 to computate running time and peak memory usage of a process.
 A Perl scripts
 <a href="https://github.com/shenwei356/seqkit/blob/master/bench/run.pl"><code>run.pl</code></a>
 is used to automatically running tests and generate data for plotting.</p>
 <p>Running benchmark:</p>
-<pre><code>$ # emptying the buffers cache
-$ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="c1"># emptying the buffers cache</span>
+$<span class="w"> </span>su<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free&quot;</span>
 
-time perl run.pl -n 3 run_benchmark.sh -o bench.get_lineage.tsv
-</code></pre>
+<span class="nb">time</span><span class="w"> </span>perl<span class="w"> </span>run.pl<span class="w"> </span>-n<span class="w"> </span><span class="m">3</span><span class="w"> </span>run_benchmark.sh<span class="w"> </span>-o<span class="w"> </span>bench.get_lineage.tsv
+</code></pre></div>
+
 <p>Checking result:</p>
-<pre><code>$ md5sum taxids.n*.lineage
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>md5sum<span class="w"> </span>taxids.n*.lineage
 
-# clear
-$ rm *.lineage *.out
-</code></pre>
+<span class="c1"># clear</span>
+$<span class="w"> </span>rm<span class="w"> </span>*.lineage<span class="w"> </span>*.out
+</code></pre></div>
+
 <p>Plotting benchmark result. 
 R libraries <code>dplyr</code>, <code>ggplot2</code>, <code>scales</code>, <code>ggthemes</code>, <code>ggrepel</code> are needed.</p>
-<pre><code># reformat dataset
-# tools: https://github.com/shenwei356/csvtk/
+<div class="codehilite"><pre><span></span><code><span class="c1"># reformat dataset</span>
+<span class="c1"># tools: https://github.com/shenwei356/csvtk/</span>
 
-for f in taxids.n*.txt;  do wc -l $f; done \
-    | sort -k 1,1n \
-    | awk '{ print($2"\t"$1) }' \
-    &gt; dataset_rename.tsv
+<span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">taxids</span><span class="o">.</span><span class="n">n</span><span class="o">*.</span><span class="n">txt</span><span class="p">;</span><span class="w">  </span><span class="n">do</span><span class="w"> </span><span class="n">wc</span><span class="w"> </span><span class="o">-</span><span class="n">l</span><span class="w"> </span><span class="o">$</span><span class="n">f</span><span class="p">;</span><span class="w"> </span><span class="n">done</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="o">-</span><span class="n">k</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">n</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">awk</span><span class="w"> </span><span class="s1">&#39;{ print($2&quot;</span><span class="se">\t</span><span class="s1">&quot;$1) }&#39;</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">&gt;</span><span class="w"> </span><span class="n">dataset_rename</span><span class="o">.</span><span class="n">tsv</span>
 
-cat bench.get_lineage.tsv \
-    | csvtk sort -t -L dataset:&lt;(cut -f 1 dataset_rename.tsv) -k dataset:u -k app \
-    | csvtk replace -t -f dataset -k dataset_rename.tsv -p '(.+)' -r '{kv}' \
-    &gt; bench.get_lineage.reformat.tsv
+<span class="n">cat</span><span class="w"> </span><span class="n">bench</span><span class="o">.</span><span class="n">get_lineage</span><span class="o">.</span><span class="n">tsv</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">-</span><span class="n">L</span><span class="w"> </span><span class="n">dataset</span><span class="p">:</span><span class="o">&lt;</span><span class="p">(</span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">dataset_rename</span><span class="o">.</span><span class="n">tsv</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="n">k</span><span class="w"> </span><span class="n">dataset</span><span class="p">:</span><span class="n">u</span><span class="w"> </span><span class="o">-</span><span class="n">k</span><span class="w"> </span><span class="n">app</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">replace</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="n">dataset</span><span class="w"> </span><span class="o">-</span><span class="n">k</span><span class="w"> </span><span class="n">dataset_rename</span><span class="o">.</span><span class="n">tsv</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="s1">&#39;(.+)&#39;</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="s1">&#39;{kv}&#39;</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">&gt;</span><span class="w"> </span><span class="n">bench</span><span class="o">.</span><span class="n">get_lineage</span><span class="o">.</span><span class="n">reformat</span><span class="o">.</span><span class="n">tsv</span>
 
-./plot2.R -i bench.get_lineage.reformat.tsv --width 6 --height 4 --dpi 600 \
-    --labcolor "log10(queries)" --labshape "Tools"
-</code></pre>
+<span class="o">./</span><span class="n">plot2</span><span class="o">.</span><span class="n">R</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="n">bench</span><span class="o">.</span><span class="n">get_lineage</span><span class="o">.</span><span class="n">reformat</span><span class="o">.</span><span class="n">tsv</span><span class="w"> </span><span class="o">--</span><span class="n">width</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">--</span><span class="n">height</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">--</span><span class="n">dpi</span><span class="w"> </span><span class="mi">600</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">--</span><span class="n">labcolor</span><span class="w"> </span><span class="s2">&quot;log10(queries)&quot;</span><span class="w"> </span><span class="o">--</span><span class="n">labshape</span><span class="w"> </span><span class="s2">&quot;Tools&quot;</span>
+</code></pre></div>
+
 <p>Result</p>
 <p><img src="bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" /></p>
-<h2 id="benchmark-2-taxonkit-multi-threaded-scalability">Benchmark 2: TaxonKit multi-threaded scalability</h2>
+<h2 id="benchmark-2-taxonkit-multi-threaded-scalability">Benchmark 2: TaxonKit multi-threaded scalability<a class="headerlink" href="#benchmark-2-taxonkit-multi-threaded-scalability" title="Permanent link">Link</a></h2>
 <p>Running benchmark:</p>
-<pre><code>$ # emptying the buffers cache
-$ su -c "free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free"
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="c1"># emptying the buffers cache</span>
+$<span class="w"> </span>su<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;free &amp;&amp; sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches &amp;&amp; free&quot;</span>
 
 
-$ time perl run.pl -n 3 run_benchmark_taxonkit.sh -o bench.taxonkit.tsv
-$ rm *.lineage *.out
-</code></pre>
+$<span class="w"> </span><span class="nb">time</span><span class="w"> </span>perl<span class="w"> </span>run.pl<span class="w"> </span>-n<span class="w"> </span><span class="m">3</span><span class="w"> </span>run_benchmark_taxonkit.sh<span class="w"> </span>-o<span class="w"> </span>bench.taxonkit.tsv
+$<span class="w"> </span>rm<span class="w"> </span>*.lineage<span class="w"> </span>*.out
+</code></pre></div>
+
 <p>Plotting benchmark result.</p>
-<pre><code>cat bench.taxonkit.tsv \
+<div class="codehilite"><pre><span></span><code>cat bench.taxonkit.tsv \
     | csvtk sort -t -L dataset:&lt;(cut -f 1 dataset_rename.tsv) -k dataset:u -k app \
-    | csvtk replace -t -f dataset -k dataset_rename.tsv -p '(.+)' -r '{kv}' \
-    &gt; bench.taxonkit.reformat.tsv
+    | csvtk replace -t -f dataset -k dataset_rename.tsv -p &#39;(.+)&#39; -r &#39;{kv}&#39; \
+<span class="k">    &gt; </span><span class="ge">bench.taxonkit.reformat.tsv</span>
 
 ./plot_threads2.R -i bench.taxonkit.reformat.tsv --width 6 --height 4 --dpi 600 \
-    --labcolor "log10(queries)" --labshape "Threads"
-</code></pre>
+    --labcolor &quot;log10(queries)&quot; --labshape &quot;Threads&quot;
+</code></pre></div>
+
 <p>Result</p>
 <p><img src="bench.taxonkit.reformat.tsv.png" alt="" width="600" align="center" /></p>
 <div id="disqus_thread"></div>
@@ -599,9 +661,15 @@ s.setAttribute('data-timestamp', +new Date());
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-              
-            </article>
-          </div>
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
@@ -628,10 +696,12 @@ s.setAttribute('data-timestamp', +new Date());
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.b6ff8c07.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.5e13d264.min.js"></script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>

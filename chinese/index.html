@@ -14,8 +14,15 @@
       
         <link rel="canonical" href="https://bioinf.shenwei.me/taxonkit/chinese/">
       
+      
+        <link rel="prev" href="../tutorial/">
+      
+      
+        <link rel="next" href="../chinese-dev/">
+      
+      
       <link rel="icon" href="../files/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.5">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -23,31 +30,33 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ee0f47ba.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4b4a2bd9.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
-        
-          
-          
-          <meta name="theme-color" content="#00bdd6">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
       
-    
+      
+
+
     
     
       
+    
+    
+      
+        
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
+    
     
     
   </head>
@@ -58,7 +67,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
   
     
     
@@ -80,16 +89,19 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-header__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -108,10 +120,13 @@
       </div>
     </div>
     
+      
+    
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -119,13 +134,16 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -136,7 +154,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -145,10 +163,10 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -178,22 +196,23 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-nav__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     TaxonKit - NCBI Taxonomy Toolkit
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -205,14 +224,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Home
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
       </a>
     </li>
   
@@ -220,14 +243,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../download/" class="md-nav__link">
-        Download
+        
+  
+  <span class="md-ellipsis">
+    Download
+  </span>
+  
+
       </a>
     </li>
   
@@ -235,14 +262,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../usage/" class="md-nav__link">
-        Usage
+        
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
       </a>
     </li>
   
@@ -250,14 +281,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../tutorial/" class="md-nav__link">
-        Tutorial
+        
+  
+  <span class="md-ellipsis">
+    Tutorial
+  </span>
+  
+
       </a>
     </li>
   
@@ -265,14 +300,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../bench/" class="md-nav__link">
-        Benchmark
+        
+  
+  <span class="md-ellipsis">
+    Benchmark
+  </span>
+  
+
       </a>
     </li>
   
@@ -280,8 +319,6 @@
     
       
       
-      
-
   
   
     
@@ -289,19 +326,31 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          中文介绍
+          
+  
+  <span class="md-ellipsis">
+    中文介绍
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        中文介绍
+        
+  
+  <span class="md-ellipsis">
+    中文介绍
+  </span>
+  
+
       </a>
       
         
@@ -398,14 +447,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../chinese-dev/" class="md-nav__link">
-        开发笔记
+        
+  
+  <span class="md-ellipsis">
+    开发笔记
+  </span>
+  
+
       </a>
     </li>
   
@@ -413,14 +466,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356/taxid-changelog" class="md-nav__link">
-        Taxid-Changelog
+        
+  
+  <span class="md-ellipsis">
+    Taxid-Changelog
+  </span>
+  
+
       </a>
     </li>
   
@@ -428,14 +485,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356" class="md-nav__link">
-        More tools
+        
+  
+  <span class="md-ellipsis">
+    More tools
+  </span>
+  
+
       </a>
     </li>
   
@@ -544,17 +605,18 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-<a href="https://github.com/shenwei356/taxonkit/edit/master/docs/chinese.md" title="Edit this page" class="md-content__button md-icon">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-</a>
+                  
+
+  
+  
 
 
-<h1 id="taxonkit-ncbi">TaxonKit: 小巧、高效、实用的NCBI分类学数据命令行工具集</h1>
-<h2 id="ncbi-taxonomy">NCBI Taxonomy 数据库</h2>
+<h1 id="taxonkit-ncbi">TaxonKit: 小巧、高效、实用的NCBI分类学数据命令行工具集<a class="headerlink" href="#taxonkit-ncbi" title="Permanent link">Link</a></h1>
+<h2 id="ncbi-taxonomy">NCBI Taxonomy 数据库<a class="headerlink" href="#ncbi-taxonomy" title="Permanent link">Link</a></h2>
 <p>从事生物多样性的研究者对NCBI Taxonomy数据库一定不会陌生，
 它包含了NCBI所有核酸和蛋白序列数据库中每条序列对应的物种名称与分类学信息。
 大多数生态学研究对物种组成的描述都是基于NCBI Taxonomy数据库，
@@ -563,7 +625,7 @@
 1996年推出网页版。NCBI Taxonomy数据库官方地址为 https://www.ncbi.nlm.nih.gov/taxonomy ，
 公开数据下载地址为 https://ftp.ncbi.nih.gov/pub/taxonomy/  ，
 数据每小时更新，每个月初生成一份数据归档存于 taxdump_archive 目录，最早可追溯到2014年8月。</p>
-<h2 id="taxonkit">TaxonKit 使用</h2>
+<h2 id="taxonkit">TaxonKit 使用<a class="headerlink" href="#taxonkit" title="Permanent link">Link</a></h2>
 <p>TaxonKit是采用Go语言编写的命令行工具，
 提供Linux, Windows, macOS操作系统不同架构（x86-64/arm64）的静态编译的可执行二进制文件。
 发布的压缩包不足3Mb，除了Github托管外，还提供国内镜像供下载，同时还支持conda和homebrew安装。
@@ -573,59 +635,61 @@
 <li>文档 http://bioinf.shenwei.me/taxonkit （介绍、使用说明、例子、教程）</li>
 </ul>
 <p>选择系统对应的版本下载最新版 https://github.com/shenwei356/taxonkit/releases ，解压后添加环境变量即可使用。或可选conda安装</p>
-<pre><code>conda install taxonkit -c bioconda -y
+<div class="codehilite"><pre><span></span><code>conda install taxonkit -c bioconda -y
 # 表格数据处理，推荐使用 csvtk 更高效
 conda install csvtk -c bioconda -y
-</code></pre>
+</code></pre></div>
+
 <p>测试数据下载可直接 https://github.com/shenwei356/taxonkit 下载项目压缩包，或使用git clone下载项目文件夹，其中的example为测试数据</p>
-<pre><code>git clone https://github.com/shenwei356/taxonkit
-</code></pre>
+<div class="codehilite"><pre><span></span><code>git clone https://github.com/shenwei356/taxonkit
+</code></pre></div>
+
 <p>TaxonKit为命令行工具，采用子命令的方式来执行不同功能，
 大多数子命令支持标准输入/输出，便于使用命令行管道进行流水作业，
 轻松整合进分析流程中。</p>
 <table>
 <thead>
 <tr>
-<th align="left">子命令</th>
-<th align="left">功能</th>
+<th style="text-align: left;">子命令</th>
+<th style="text-align: left;">功能</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#list"><code>list</code></a></td>
-<td align="left">列出指定TaxId下所有子单元的的TaxID</td>
+<td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#list"><code>list</code></a></td>
+<td style="text-align: left;">列出指定TaxId下所有子单元的的TaxID</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#lineage"><code>lineage</code></a></td>
-<td align="left">根据TaxID获取完整谱系（lineage）</td>
+<td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#lineage"><code>lineage</code></a></td>
+<td style="text-align: left;">根据TaxID获取完整谱系（lineage）</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat"><code>reformat</code></a></td>
-<td align="left">将完整谱系转化为“界门纲目科属种株"的自定义格式</td>
+<td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat"><code>reformat</code></a></td>
+<td style="text-align: left;">将完整谱系转化为“界门纲目科属种株"的自定义格式</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#name2taxid"><code>name2taxid</code></a></td>
-<td align="left">将分类单元名称转化为TaxID</td>
+<td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#name2taxid"><code>name2taxid</code></a></td>
+<td style="text-align: left;">将分类单元名称转化为TaxID</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#filter"><code>filter</code></a></td>
-<td align="left">按分类学水平范围过滤TaxIDs</td>
+<td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#filter"><code>filter</code></a></td>
+<td style="text-align: left;">按分类学水平范围过滤TaxIDs</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#lca"><code>lca</code></a></td>
-<td align="left">计算最低公共祖先(LCA)</td>
+<td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#lca"><code>lca</code></a></td>
+<td style="text-align: left;">计算最低公共祖先(LCA)</td>
 </tr>
 <tr>
-<td align="left"><a href="https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog"><code>taxid-changelog</code></a></td>
-<td align="left">追踪TaxID变更记录</td>
+<td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog"><code>taxid-changelog</code></a></td>
+<td style="text-align: left;">追踪TaxID变更记录</td>
 </tr>
 <tr>
-<td align="left"><code>version</code></td>
-<td align="left">显示版本信息、检测新版本</td>
+<td style="text-align: left;"><code>version</code></td>
+<td style="text-align: left;">显示版本信息、检测新版本</td>
 </tr>
 <tr>
-<td align="left"><code>genautocomplete</code></td>
-<td align="left">生成shell自动补全配置脚本</td>
+<td style="text-align: left;"><code>genautocomplete</code></td>
+<td style="text-align: left;">生成shell自动补全配置脚本</td>
 </tr>
 </tbody>
 </table>
@@ -647,101 +711,107 @@ conda install csvtk -c bioconda -y
 </ul>
 <p>TaxonKit直接解析NCBI Taxonomy数据文件（2秒左右），配置更容易，也便于更新数据，占用内存在500Mb-1.5G左右。
 数据下载：</p>
-<pre><code># 有时下载失败，可多试几次；或尝试浏览器下载此链接
+<div class="codehilite"><pre><span></span><code># 有时下载失败，可多试几次；或尝试浏览器下载此链接
 wget -c https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
 tar -zxvf taxdump.tar.gz
 
 # 解压文件存于家目录中.taxonkit/，程序默认数据库默认目录
 mkdir -p $HOME/.taxonkit
 cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
-</code></pre>
-<h3 id="list-taxidtaxid">list 列出指定TaxId所在子树的所有TaxID</h3>
+</code></pre></div>
+
+<h3 id="list-taxidtaxid">list 列出指定TaxId所在子树的所有TaxID<a class="headerlink" href="#list-taxidtaxid" title="Permanent link">Link</a></h3>
 <p><code>taxonkit list</code>用于列出指定TaxID所在分类学单元（taxon）的子树（subtree）的所有taxon的TaxID，可选显示名称和分类学水平。
 此功能与NCBI Taxonomy网页版类似。</p>
 <p>如，</p>
-<pre><code># 以人属(9605)和肠道中著名的Akk菌属(239934)为例
-$ taxonkit list --show-rank --show-name --indent "    " --ids 9605,239934
-9605 [genus] Homo
-    9606 [species] Homo sapiens
-        63221 [subspecies] Homo sapiens neanderthalensis
-        741158 [subspecies] Homo sapiens subsp. 'Denisova'
-    1425170 [species] Homo heidelbergensis
-    2665952 [no rank] environmental samples
-        2665953 [species] Homo sapiens environmental sample
+<div class="codehilite"><pre><span></span><code><span class="cp"># 以人属(9605)和肠道中著名的Akk菌属(239934)为例</span>
+<span class="n">$</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">--</span><span class="n">show</span><span class="o">-</span><span class="n">rank</span><span class="w"> </span><span class="o">--</span><span class="n">show</span><span class="o">-</span><span class="n">name</span><span class="w"> </span><span class="o">--</span><span class="n">indent</span><span class="w"> </span><span class="s">&quot;    &quot;</span><span class="w"> </span><span class="o">--</span><span class="n">ids</span><span class="w"> </span><span class="mi">9605</span><span class="p">,</span><span class="mi">239934</span>
+<span class="mi">9605</span><span class="w"> </span><span class="p">[</span><span class="n">genus</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span>
+<span class="w">    </span><span class="mi">9606</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span>
+<span class="w">        </span><span class="mi">63221</span><span class="w"> </span><span class="p">[</span><span class="n">subspecies</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span><span class="w"> </span><span class="n">neanderthalensis</span>
+<span class="w">        </span><span class="mi">741158</span><span class="w"> </span><span class="p">[</span><span class="n">subspecies</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span><span class="w"> </span><span class="n">subsp</span><span class="p">.</span><span class="w"> </span><span class="err">&#39;</span><span class="n">Denisova</span><span class="err">&#39;</span>
+<span class="w">    </span><span class="mi">1425170</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">heidelbergensis</span>
+<span class="w">    </span><span class="mi">2665952</span><span class="w"> </span><span class="p">[</span><span class="n">no</span><span class="w"> </span><span class="n">rank</span><span class="p">]</span><span class="w"> </span><span class="n">environmental</span><span class="w"> </span><span class="n">samples</span>
+<span class="w">        </span><span class="mi">2665953</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span><span class="w"> </span><span class="n">environmental</span><span class="w"> </span><span class="n">sample</span>
 
-239934 [genus] Akkermansia
-    239935 [species] Akkermansia muciniphila
-        349741 [strain] Akkermansia muciniphila ATCC BAA-835
-    512293 [no rank] environmental samples
-        512294 [species] uncultured Akkermansia sp.
-        1131822 [species] uncultured Akkermansia sp. SMG25
-        1262691 [species] Akkermansia sp. CAG:344
-        1263034 [species] Akkermansia muciniphila CAG:154
-    1679444 [species] Akkermansia glycaniphila
-    2608915 [no rank] unclassified Akkermansia
-        1131336 [species] Akkermansia sp. KLE1605
-    ...
-</code></pre>
+<span class="mi">239934</span><span class="w"> </span><span class="p">[</span><span class="n">genus</span><span class="p">]</span><span class="w"> </span><span class="n">Akkermansia</span>
+<span class="w">    </span><span class="mi">239935</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">muciniphila</span>
+<span class="w">        </span><span class="mi">349741</span><span class="w"> </span><span class="p">[</span><span class="n">strain</span><span class="p">]</span><span class="w"> </span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">muciniphila</span><span class="w"> </span><span class="n">ATCC</span><span class="w"> </span><span class="n">BAA</span><span class="mi">-835</span>
+<span class="w">    </span><span class="mi">512293</span><span class="w"> </span><span class="p">[</span><span class="n">no</span><span class="w"> </span><span class="n">rank</span><span class="p">]</span><span class="w"> </span><span class="n">environmental</span><span class="w"> </span><span class="n">samples</span>
+<span class="w">        </span><span class="mi">512294</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">uncultured</span><span class="w"> </span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">sp</span><span class="p">.</span>
+<span class="w">        </span><span class="mi">1131822</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">uncultured</span><span class="w"> </span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">sp</span><span class="p">.</span><span class="w"> </span><span class="n">SMG25</span>
+<span class="w">        </span><span class="mi">1262691</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">sp</span><span class="p">.</span><span class="w"> </span><span class="n">CAG</span><span class="o">:</span><span class="mi">344</span>
+<span class="w">        </span><span class="mi">1263034</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">muciniphila</span><span class="w"> </span><span class="n">CAG</span><span class="o">:</span><span class="mi">154</span>
+<span class="w">    </span><span class="mi">1679444</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">glycaniphila</span>
+<span class="w">    </span><span class="mi">2608915</span><span class="w"> </span><span class="p">[</span><span class="n">no</span><span class="w"> </span><span class="n">rank</span><span class="p">]</span><span class="w"> </span><span class="n">unclassified</span><span class="w"> </span><span class="n">Akkermansia</span>
+<span class="w">        </span><span class="mi">1131336</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">sp</span><span class="p">.</span><span class="w"> </span><span class="n">KLE1605</span>
+<span class="w">    </span><span class="p">...</span>
+</code></pre></div>
+
 <p>list使用最广泛的的功能是获取某个类别（比如细菌、病毒、某个属等）下所有的TaxID，
 用来从NCBI nt/nr中获取对应的核酸/蛋白序列，从而搭建特异性的BLAST数据库。
 官网提供了相应的详细步骤： http://bioinf.shenwei.me/taxonkit/tutorial 。</p>
-<pre><code># 所有细菌的TaxID
-$ taxonkit list --show-rank --show-name --ids 2 &gt; /dev/null
-</code></pre>
-<h3 id="lineage-taxid">lineage 根据TaxID获取完整谱系</h3>
+<div class="codehilite"><pre><span></span><code>#<span class="w"> </span>所有细菌的<span class="nv">TaxID</span>
+$<span class="w"> </span><span class="nv">taxonkit</span><span class="w"> </span><span class="nv">list</span><span class="w"> </span><span class="o">--</span><span class="k">show</span><span class="o">-</span><span class="nv">rank</span><span class="w"> </span><span class="o">--</span><span class="k">show</span><span class="o">-</span><span class="nv">name</span><span class="w"> </span><span class="o">--</span><span class="nv">ids</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">/</span><span class="nv">dev</span><span class="o">/</span><span class="nv">null</span>
+</code></pre></div>
+
+<h3 id="lineage-taxid">lineage 根据TaxID获取完整谱系<a class="headerlink" href="#lineage-taxid" title="Permanent link">Link</a></h3>
 <p>分类学数据相关最常见的功能就是根据TaxID获取完整谱系。
 TaxonKit可根据输入文件提供的TaxID列表快速计算lineage，并可选提供名称，分类学水平，以及谱系对应的TaxID。</p>
 <p>值得注意的是，随着Taxonomy数据的频繁更新，有的TaxID可能被删除、或合并（merge）到其它TaxID中，
 TaxonKit会自动识别，并进行提示，对于被合并的TaxID，TaxonKit会按新TaxID进行计算。</p>
-<pre><code># 使用example中的测试数据
-$ head taxids.txt
-9606
-9913
-376619
-# 查找指定taxids列表的物种信息，tee可输出屏幕并写入文件
-$ taxonkit lineage taxids.txt | tee lineage.txt 
-19:22:13.077 [WARN] taxid 92489 was merged into 796334
-19:22:13.077 [WARN] taxid 1458427 was merged into 1458425
-19:22:13.077 [WARN] taxid 123124124 not found
-19:22:13.077 [WARN] taxid 3 was deleted
-9606    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Euarchontoglires;Primates;Haplorrhini;Simiiformes;Catarrhini;Hominoidea;Hominidae;Homininae;Homo;Homo sapiens
-9913    cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Mammalia;Theria;Eutheria;Boreoeutheria;Laurasiatheria;Artiodactyla;Ruminantia;Pecora;Bovidae;Bovinae;Bos;Bos taurus
-376619  cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica;Francisella tularensis subsp. holarctica LVS
-349741  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-239935  cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
-11932   Viruses;Riboviria;Pararnavirae;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;unclassified Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-1327037 Viruses;Duplodnaviria;Heunggongvirae;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
-123124124
-3
-92489   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Erwiniaceae;Erwinia;Erwinia oleae
-1458427 cellular organisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raicheisms;Bacteria;Proteobacteria;Betaproteobacteria;Burkholderiales;Comamonadaceae;Serpentinomonas;Serpentinomonas raichei
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="n">使用example中的测试数据</span>
+<span class="err">$</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="n">taxids</span><span class="p">.</span><span class="n">txt</span>
+<span class="mi">9606</span>
+<span class="mi">9913</span>
+<span class="mi">376619</span>
+<span class="err">#</span><span class="w"> </span><span class="n">查找指定taxids列表的物种信息</span><span class="err">，</span><span class="n">tee可输出屏幕并写入文件</span>
+<span class="err">$</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="n">taxids</span><span class="p">.</span><span class="n">txt</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">tee</span><span class="w"> </span><span class="n">lineage</span><span class="p">.</span><span class="n">txt</span><span class="w"> </span>
+<span class="mi">19</span><span class="err">:</span><span class="mi">22</span><span class="err">:</span><span class="mf">13.077</span><span class="w"> </span><span class="o">[</span><span class="n">WARN</span><span class="o">]</span><span class="w"> </span><span class="n">taxid</span><span class="w"> </span><span class="mi">92489</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="n">merged</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="mi">796334</span>
+<span class="mi">19</span><span class="err">:</span><span class="mi">22</span><span class="err">:</span><span class="mf">13.077</span><span class="w"> </span><span class="o">[</span><span class="n">WARN</span><span class="o">]</span><span class="w"> </span><span class="n">taxid</span><span class="w"> </span><span class="mi">1458427</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="n">merged</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="mi">1458425</span>
+<span class="mi">19</span><span class="err">:</span><span class="mi">22</span><span class="err">:</span><span class="mf">13.077</span><span class="w"> </span><span class="o">[</span><span class="n">WARN</span><span class="o">]</span><span class="w"> </span><span class="n">taxid</span><span class="w"> </span><span class="mi">123124124</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">found</span>
+<span class="mi">19</span><span class="err">:</span><span class="mi">22</span><span class="err">:</span><span class="mf">13.077</span><span class="w"> </span><span class="o">[</span><span class="n">WARN</span><span class="o">]</span><span class="w"> </span><span class="n">taxid</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="n">deleted</span>
+<span class="mi">9606</span><span class="w">    </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Eukaryota</span><span class="p">;</span><span class="n">Opisthokonta</span><span class="p">;</span><span class="n">Metazoa</span><span class="p">;</span><span class="n">Eumetazoa</span><span class="p">;</span><span class="n">Bilateria</span><span class="p">;</span><span class="n">Deuterostomia</span><span class="p">;</span><span class="n">Chordata</span><span class="p">;</span><span class="n">Craniata</span><span class="p">;</span><span class="n">Vertebrata</span><span class="p">;</span><span class="n">Gnathostomata</span><span class="p">;</span><span class="n">Teleostomi</span><span class="p">;</span><span class="n">Euteleostomi</span><span class="p">;</span><span class="n">Sarcopterygii</span><span class="p">;</span><span class="n">Dipnotetrapodomorpha</span><span class="p">;</span><span class="n">Tetrapoda</span><span class="p">;</span><span class="n">Amniota</span><span class="p">;</span><span class="n">Mammalia</span><span class="p">;</span><span class="n">Theria</span><span class="p">;</span><span class="n">Eutheria</span><span class="p">;</span><span class="n">Boreoeutheria</span><span class="p">;</span><span class="n">Euarchontoglires</span><span class="p">;</span><span class="n">Primates</span><span class="p">;</span><span class="n">Haplorrhini</span><span class="p">;</span><span class="n">Simiiformes</span><span class="p">;</span><span class="n">Catarrhini</span><span class="p">;</span><span class="n">Hominoidea</span><span class="p">;</span><span class="n">Hominidae</span><span class="p">;</span><span class="n">Homininae</span><span class="p">;</span><span class="n">Homo</span><span class="p">;</span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span>
+<span class="mi">9913</span><span class="w">    </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Eukaryota</span><span class="p">;</span><span class="n">Opisthokonta</span><span class="p">;</span><span class="n">Metazoa</span><span class="p">;</span><span class="n">Eumetazoa</span><span class="p">;</span><span class="n">Bilateria</span><span class="p">;</span><span class="n">Deuterostomia</span><span class="p">;</span><span class="n">Chordata</span><span class="p">;</span><span class="n">Craniata</span><span class="p">;</span><span class="n">Vertebrata</span><span class="p">;</span><span class="n">Gnathostomata</span><span class="p">;</span><span class="n">Teleostomi</span><span class="p">;</span><span class="n">Euteleostomi</span><span class="p">;</span><span class="n">Sarcopterygii</span><span class="p">;</span><span class="n">Dipnotetrapodomorpha</span><span class="p">;</span><span class="n">Tetrapoda</span><span class="p">;</span><span class="n">Amniota</span><span class="p">;</span><span class="n">Mammalia</span><span class="p">;</span><span class="n">Theria</span><span class="p">;</span><span class="n">Eutheria</span><span class="p">;</span><span class="n">Boreoeutheria</span><span class="p">;</span><span class="n">Laurasiatheria</span><span class="p">;</span><span class="n">Artiodactyla</span><span class="p">;</span><span class="n">Ruminantia</span><span class="p">;</span><span class="n">Pecora</span><span class="p">;</span><span class="n">Bovidae</span><span class="p">;</span><span class="n">Bovinae</span><span class="p">;</span><span class="n">Bos</span><span class="p">;</span><span class="n">Bos</span><span class="w"> </span><span class="n">taurus</span>
+<span class="mi">376619</span><span class="w">  </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Thiotrichales</span><span class="p">;</span><span class="n">Francisellaceae</span><span class="p">;</span><span class="n">Francisella</span><span class="p">;</span><span class="n">Francisella</span><span class="w"> </span><span class="n">tularensis</span><span class="p">;</span><span class="n">Francisella</span><span class="w"> </span><span class="n">tularensis</span><span class="w"> </span><span class="n">subsp</span><span class="p">.</span><span class="w"> </span><span class="n">holarctica</span><span class="p">;</span><span class="n">Francisella</span><span class="w"> </span><span class="n">tularensis</span><span class="w"> </span><span class="n">subsp</span><span class="p">.</span><span class="w"> </span><span class="n">holarctica</span><span class="w"> </span><span class="n">LVS</span>
+<span class="mi">349741</span><span class="w">  </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Bacteria</span><span class="p">;</span><span class="n">PVC</span><span class="w"> </span><span class="k">group</span><span class="p">;</span><span class="n">Verrucomicrobia</span><span class="p">;</span><span class="n">Verrucomicrobiae</span><span class="p">;</span><span class="n">Verrucomicrobiales</span><span class="p">;</span><span class="n">Akkermansiaceae</span><span class="p">;</span><span class="n">Akkermansia</span><span class="p">;</span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">muciniphila</span><span class="p">;</span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">muciniphila</span><span class="w"> </span><span class="n">ATCC</span><span class="w"> </span><span class="n">BAA</span><span class="o">-</span><span class="mi">835</span>
+<span class="mi">239935</span><span class="w">  </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Bacteria</span><span class="p">;</span><span class="n">PVC</span><span class="w"> </span><span class="k">group</span><span class="p">;</span><span class="n">Verrucomicrobia</span><span class="p">;</span><span class="n">Verrucomicrobiae</span><span class="p">;</span><span class="n">Verrucomicrobiales</span><span class="p">;</span><span class="n">Akkermansiaceae</span><span class="p">;</span><span class="n">Akkermansia</span><span class="p">;</span><span class="n">Akkermansia</span><span class="w"> </span><span class="n">muciniphila</span>
+<span class="mi">314101</span><span class="w">  </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Bacteria</span><span class="p">;</span><span class="n">environmental</span><span class="w"> </span><span class="n">samples</span><span class="p">;</span><span class="n">uncultured</span><span class="w"> </span><span class="n">murine</span><span class="w"> </span><span class="k">large</span><span class="w"> </span><span class="n">bowel</span><span class="w"> </span><span class="n">bacterium</span><span class="w"> </span><span class="n">BAC</span><span class="w"> </span><span class="mi">54</span><span class="n">B</span>
+<span class="mi">11932</span><span class="w">   </span><span class="n">Viruses</span><span class="p">;</span><span class="n">Riboviria</span><span class="p">;</span><span class="n">Pararnavirae</span><span class="p">;</span><span class="n">Artverviricota</span><span class="p">;</span><span class="n">Revtraviricetes</span><span class="p">;</span><span class="n">Ortervirales</span><span class="p">;</span><span class="n">Retroviridae</span><span class="p">;</span><span class="n">unclassified</span><span class="w"> </span><span class="n">Retroviridae</span><span class="p">;</span><span class="n">Intracisternal</span><span class="w"> </span><span class="n">A</span><span class="o">-</span><span class="n">particles</span><span class="p">;</span><span class="n">Mouse</span><span class="w"> </span><span class="n">Intracisternal</span><span class="w"> </span><span class="n">A</span><span class="o">-</span><span class="n">particle</span>
+<span class="mi">1327037</span><span class="w"> </span><span class="n">Viruses</span><span class="p">;</span><span class="n">Duplodnaviria</span><span class="p">;</span><span class="n">Heunggongvirae</span><span class="p">;</span><span class="n">Uroviricota</span><span class="p">;</span><span class="n">Caudoviricetes</span><span class="p">;</span><span class="n">Caudovirales</span><span class="p">;</span><span class="n">Siphoviridae</span><span class="p">;</span><span class="n">unclassified</span><span class="w"> </span><span class="n">Siphoviridae</span><span class="p">;</span><span class="n">Croceibacter</span><span class="w"> </span><span class="n">phage</span><span class="w"> </span><span class="n">P2559Y</span>
+<span class="mi">123124124</span>
+<span class="mi">3</span>
+<span class="mi">92489</span><span class="w">   </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Erwiniaceae</span><span class="p">;</span><span class="n">Erwinia</span><span class="p">;</span><span class="n">Erwinia</span><span class="w"> </span><span class="n">oleae</span>
+<span class="mi">1458427</span><span class="w"> </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Betaproteobacteria</span><span class="p">;</span><span class="n">Burkholderiales</span><span class="p">;</span><span class="n">Comamonadaceae</span><span class="p">;</span><span class="n">Serpentinomonas</span><span class="p">;</span><span class="n">Serpentinomonas</span><span class="w"> </span><span class="n">raicheisms</span><span class="p">;</span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Betaproteobacteria</span><span class="p">;</span><span class="n">Burkholderiales</span><span class="p">;</span><span class="n">Comamonadaceae</span><span class="p">;</span><span class="n">Serpentinomonas</span><span class="p">;</span><span class="n">Serpentinomonas</span><span class="w"> </span><span class="n">raichei</span>
+</code></pre></div>
+
 <p>与其它软件的性能相比，当查询数量较少时ETE较快，数量较多时则TaxonKit更快。
 在不同数据量规模上 TaxonKit速度一直很稳定，均为2-3秒，时间主要花在解析Taxonomy数据文件上。</p>
 <p>列出lineage每个分类学单元的的TaxId和rank和名称，比如SARS-COV-2。</p>
-<pre><code># lineage提取SARS-COV-2的世系
-$ echo "2697049" \
+<div class="codehilite"><pre><span></span><code># lineage提取SARS-COV-2的世系
+$ echo &quot;2697049&quot; \
     | taxonkit lineage -t -R \
-    | sed "s/\t/\n/g"
+    | sed &quot;s/\t/\n/g&quot;
 2697049
 Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
 10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
 superkingdom;clade;kingdom;phylum;class;order;suborder;family;subfamily;genus;subgenus;species;no rank
-</code></pre>
-<h3 id="reformat">reformat 生成标准层级物种注释</h3>
+</code></pre></div>
+
+<h3 id="reformat">reformat 生成标准层级物种注释<a class="headerlink" href="#reformat" title="Permanent link">Link</a></h3>
 <p>有时候，我们并不需要完整的分类学谱系（complete lineage），因为很多级别即不常用，而且不完整。通常只想保留界门纲目科属种。</p>
 <p>值得注意的是，<strong>不是所有物种都有完整的界门纲目科属种水平，特别是病毒以及一些环境样品</strong>。
 TaxonKit可以用自定义内容替代缺失的分类单元，如用“__”替代。
 更<s>厉害</s>有用的是，<strong>TaxonKit还可以用更高层级的分类单元信息来补齐缺失的层级</strong> (<code>-F/--fill-miss-rank</code>)，比如</p>
-<pre><code># 没有genus的病毒
+<div class="codehilite"><pre><span></span><code># 没有genus的病毒
 $ echo 1327037 | taxonkit lineage | taxonkit reformat | cut -f 1,3
 1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
 
 # -F参数会用family信息来补齐genus信息
 $ echo 1327037 | taxonkit lineage | taxonkit reformat -F | cut -f 1,3
 1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;unclassified Siphoviridae genus;Croceibacter phage P2559Y
-</code></pre>
+</code></pre></div>
+
 <p>输出格式可选只输出部分分类学水平，还支持制表符（<code>"\t"</code>），再配合作者的另一个工具csvtk，可以输出漂亮的结果。</p>
 <p>其它有用的选项：</p>
 <ul>
@@ -751,153 +821,160 @@ $ echo 1327037 | taxonkit lineage | taxonkit reformat -F | cut -f 1,3
 <li><code>-S/--pseudo-strain</code>: 对于低于species且rank既不是subspecies也不是strain的taxid，使用水平最低taxon名称做为菌株名称。</li>
 </ul>
 <p>例，</p>
-<pre><code>$ echo -ne "349741\n1327037"\
-    | taxonkit lineage \
-    | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" -F -P \
-    | csvtk cut -t -f -2 \
-    | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
-    | csvtk pretty -t
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-ne<span class="w"> </span><span class="s2">&quot;349741\n1327037&quot;</span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}&quot;</span><span class="w"> </span>-F<span class="w"> </span>-P<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-t<span class="w"> </span>-f<span class="w"> </span>-2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>add-header<span class="w"> </span>-t<span class="w"> </span>-n<span class="w"> </span>taxid,kindom,phylum,class,order,family,genus,species<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-t
 
-taxid     kindom        phylum               class                 order                   family               genus                                species
-349741    k__Bacteria   p__Verrucomicrobia   c__Verrucomicrobiae   o__Verrucomicrobiales   f__Akkermansiaceae   g__Akkermansia                       s__Akkermansia muciniphila
-1327037   k__Viruses    p__Uroviricota       c__Caudoviricetes     o__Caudovirales         f__Siphoviridae      g__unclassified Siphoviridae genus   s__Croceibacter phage P2559Y
+taxid<span class="w">     </span>kindom<span class="w">        </span>phylum<span class="w">               </span>class<span class="w">                 </span>order<span class="w">                   </span>family<span class="w">               </span>genus<span class="w">                                </span>species
+<span class="m">349741</span><span class="w">    </span>k__Bacteria<span class="w">   </span>p__Verrucomicrobia<span class="w">   </span>c__Verrucomicrobiae<span class="w">   </span>o__Verrucomicrobiales<span class="w">   </span>f__Akkermansiaceae<span class="w">   </span>g__Akkermansia<span class="w">                       </span>s__Akkermansia<span class="w"> </span>muciniphila
+<span class="m">1327037</span><span class="w">   </span>k__Viruses<span class="w">    </span>p__Uroviricota<span class="w">       </span>c__Caudoviricetes<span class="w">     </span>o__Caudovirales<span class="w">         </span>f__Siphoviridae<span class="w">      </span>g__unclassified<span class="w"> </span>Siphoviridae<span class="w"> </span>genus<span class="w">   </span>s__Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y
 
-# 便于小屏幕查看，用csvtk进行转置
-$ echo -ne "349741\n1327037"\
-    | taxonkit lineage \
-    | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" -F -P \
-    | csvtk cut -t -f -2 \
-    | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species \
-    | csvtk transpose -t \
-    | csvtk pretty -H -t
+<span class="c1"># 便于小屏幕查看，用csvtk进行转置</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-ne<span class="w"> </span><span class="s2">&quot;349741\n1327037&quot;</span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}&quot;</span><span class="w"> </span>-F<span class="w"> </span>-P<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-t<span class="w"> </span>-f<span class="w"> </span>-2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>add-header<span class="w"> </span>-t<span class="w"> </span>-n<span class="w"> </span>taxid,kindom,phylum,class,order,family,genus,species<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>transpose<span class="w"> </span>-t<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
 
-taxid     349741                       1327037
-kindom    k__Bacteria                  k__Viruses
-phylum    p__Verrucomicrobia           p__Uroviricota
-class     c__Verrucomicrobiae          c__Caudoviricetes
-order     o__Verrucomicrobiales        o__Caudovirales
-family    f__Akkermansiaceae           f__Siphoviridae
-genus     g__Akkermansia               g__unclassified Siphoviridae genus
-species   s__Akkermansia muciniphila   s__Croceibacter phage P2559Y
+taxid<span class="w">     </span><span class="m">349741</span><span class="w">                       </span><span class="m">1327037</span>
+kindom<span class="w">    </span>k__Bacteria<span class="w">                  </span>k__Viruses
+phylum<span class="w">    </span>p__Verrucomicrobia<span class="w">           </span>p__Uroviricota
+class<span class="w">     </span>c__Verrucomicrobiae<span class="w">          </span>c__Caudoviricetes
+order<span class="w">     </span>o__Verrucomicrobiales<span class="w">        </span>o__Caudovirales
+family<span class="w">    </span>f__Akkermansiaceae<span class="w">           </span>f__Siphoviridae
+genus<span class="w">     </span>g__Akkermansia<span class="w">               </span>g__unclassified<span class="w"> </span>Siphoviridae<span class="w"> </span>genus
+species<span class="w">   </span>s__Akkermansia<span class="w"> </span>muciniphila<span class="w">   </span>s__Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y
 
-# 到株水平，以sars-cov-2为例
-$ echo -ne "2697049"\
-    | taxonkit lineage \
-    | taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" -F -P -S \
-    | csvtk cut -t -f -2 \
-    | csvtk add-header -t -n taxid,kindom,phylum,class,order,family,genus,species,strain \
-    | csvtk transpose -t \
-    | csvtk pretty -H -t
+<span class="c1"># 到株水平，以sars-cov-2为例</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-ne<span class="w"> </span><span class="s2">&quot;2697049&quot;</span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}&quot;</span><span class="w"> </span>-F<span class="w"> </span>-P<span class="w"> </span>-S<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-t<span class="w"> </span>-f<span class="w"> </span>-2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>add-header<span class="w"> </span>-t<span class="w"> </span>-n<span class="w"> </span>taxid,kindom,phylum,class,order,family,genus,species,strain<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>transpose<span class="w"> </span>-t<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
 
-taxid     2697049
-kindom    k__Viruses
-phylum    p__Pisuviricota
-class     c__Pisoniviricetes
-order     o__Nidovirales
-family    f__Coronaviridae
-genus     g__Betacoronavirus
-species   s__Severe acute respiratory syndrome-related coronavirus
-strain    t__Severe acute respiratory syndrome coronavirus 2
-</code></pre>
-<h3 id="name2taxid-taxid">name2taxid 将分类单元名称转化为TaxID</h3>
+taxid<span class="w">     </span><span class="m">2697049</span>
+kindom<span class="w">    </span>k__Viruses
+phylum<span class="w">    </span>p__Pisuviricota
+class<span class="w">     </span>c__Pisoniviricetes
+order<span class="w">     </span>o__Nidovirales
+family<span class="w">    </span>f__Coronaviridae
+genus<span class="w">     </span>g__Betacoronavirus
+species<span class="w">   </span>s__Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus
+strain<span class="w">    </span>t__Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome<span class="w"> </span>coronavirus<span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+
+<h3 id="name2taxid-taxid">name2taxid 将分类单元名称转化为TaxID<a class="headerlink" href="#name2taxid-taxid" title="Permanent link">Link</a></h3>
 <p>将分类单元名称转化为TaxID非常容易理解，唯一要注意的是<strong>某些TaxId对应相同的名称</strong>，比如</p>
-<pre><code># -i指定列，-r显示级别，-L不显示世系
+<div class="codehilite"><pre><span></span><code># -i指定列，-r显示级别，-L不显示世系
 $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L
 Drosophila      7215    genus
 Drosophila      32281   subgenus
 Drosophila      2081351 genus
-</code></pre>
+</code></pre></div>
+
 <p>获取TaxID之后，可以立即传给taxonkit进行后续操作，但要注意用<code>-i</code>指定TaxId所在列。</p>
-<h3 id="filter-taxids">filter 按分类学水平范围过滤TaxIDs</h3>
+<h3 id="filter-taxids">filter 按分类学水平范围过滤TaxIDs<a class="headerlink" href="#filter-taxids" title="Permanent link">Link</a></h3>
 <p>filter可以按<strong>分类学水平范围</strong>过滤TaxIDs，注意，不仅仅是特定的Rank，而是一个<strong>范围</strong>。
 比如genus及以下的分类学水平，用<code>-L genus -E genus</code>，类似于 <code>&lt;= genus</code>。</p>
-<pre><code>$ cat taxids2.txt \
-    | taxonkit filter -L genus -E genus  \
-    | taxonkit lineage -r -n -L \
-    | csvtk -Ht cut -f 1,3,2 \
-    | csvtk pretty -H -t
-239934   genus     Akkermansia
-239935   species   Akkermansia muciniphila
-349741   strain    Akkermansia muciniphila ATCC BAA-835
-</code></pre>
-<h3 id="lca-lca">lca 计算最低公共祖先(LCA)</h3>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-L<span class="w"> </span>genus<span class="w"> </span>-E<span class="w"> </span>genus<span class="w">  </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span>-n<span class="w"> </span>-L<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>-Ht<span class="w"> </span>cut<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
+<span class="m">239934</span><span class="w">   </span>genus<span class="w">     </span>Akkermansia
+<span class="m">239935</span><span class="w">   </span>species<span class="w">   </span>Akkermansia<span class="w"> </span>muciniphila
+<span class="m">349741</span><span class="w">   </span>strain<span class="w">    </span>Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>ATCC<span class="w"> </span>BAA-835
+</code></pre></div>
+
+<h3 id="lca-lca">lca 计算最低公共祖先(LCA)<a class="headerlink" href="#lca-lca" title="Permanent link">Link</a></h3>
 <p>比如人属的例子</p>
-<pre><code>$ taxonkit list --ids 9605 -nr --indent "    "    
-9605 [genus] Homo
-    9606 [species] Homo sapiens
-        63221 [subspecies] Homo sapiens neanderthalensis
-        741158 [subspecies] Homo sapiens subsp. 'Denisova'
-    1425170 [species] Homo heidelbergensis
-    2665952 [no rank] environmental samples
-        2665953 [species] Homo sapiens environmental sample
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">--</span><span class="n">ids</span><span class="w"> </span><span class="mi">9605</span><span class="w"> </span><span class="o">-</span><span class="n">nr</span><span class="w"> </span><span class="o">--</span><span class="n">indent</span><span class="w"> </span><span class="s">&quot;    &quot;</span><span class="w">    </span>
+<span class="mi">9605</span><span class="w"> </span><span class="p">[</span><span class="n">genus</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span>
+<span class="w">    </span><span class="mi">9606</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span>
+<span class="w">        </span><span class="mi">63221</span><span class="w"> </span><span class="p">[</span><span class="n">subspecies</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span><span class="w"> </span><span class="n">neanderthalensis</span>
+<span class="w">        </span><span class="mi">741158</span><span class="w"> </span><span class="p">[</span><span class="n">subspecies</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span><span class="w"> </span><span class="n">subsp</span><span class="p">.</span><span class="w"> </span><span class="err">&#39;</span><span class="n">Denisova</span><span class="err">&#39;</span>
+<span class="w">    </span><span class="mi">1425170</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">heidelbergensis</span>
+<span class="w">    </span><span class="mi">2665952</span><span class="w"> </span><span class="p">[</span><span class="n">no</span><span class="w"> </span><span class="n">rank</span><span class="p">]</span><span class="w"> </span><span class="n">environmental</span><span class="w"> </span><span class="n">samples</span>
+<span class="w">        </span><span class="mi">2665953</span><span class="w"> </span><span class="p">[</span><span class="n">species</span><span class="p">]</span><span class="w"> </span><span class="n">Homo</span><span class="w"> </span><span class="n">sapiens</span><span class="w"> </span><span class="n">environmental</span><span class="w"> </span><span class="n">sample</span>
+</code></pre></div>
+
 <p>TaxID的分隔符可用<code>-s/--separater</code>指定，默认为" "。</p>
-<pre><code># 计算两个物种的最近共同祖先，以上面尼安德特人亚种和海德堡人种
+<div class="codehilite"><pre><span></span><code># 计算两个物种的最近共同祖先，以上面尼安德特人亚种和海德堡人种
 $ echo 63221 2665953 | taxonkit lca
 63221 2665953   9605
 
 # 其它分隔符，且不小心多了空格
-$ echo -ne "a\t63221,2665953\nb\t63221, 741158\n"
+$ echo -ne &quot;a\t63221,2665953\nb\t63221, 741158\n&quot;
 a       63221,2665953
 b       63221, 741158
 
-$ echo -ne "a\t63221,2665953\nb\t63221, 741158\n" \
-    | taxonkit lca -i 2 -s ","
+$ echo -ne &quot;a\t63221,2665953\nb\t63221, 741158\n&quot; \
+    | taxonkit lca -i 2 -s &quot;,&quot;
 a       63221,2665953   9605
 b       63221, 741158   9606
-</code></pre>
-<h2 id="taxid-changelog-taxid">TaxID changelog 追踪TaxID变更记录</h2>
+</code></pre></div>
+
+<h2 id="taxid-changelog-taxid">TaxID changelog 追踪TaxID变更记录<a class="headerlink" href="#taxid-changelog-taxid" title="Permanent link">Link</a></h2>
 <p>NCBI Taxonomy数据每天都在更新，每月初（大多为1号）的数据作为存档保存在 <code>taxdump_archive/</code> 目录，
 旧版本最早数据到2014年8月，新版本只到2018年12月。</p>
 <p>TaxonKit可以追踪所有TaxID每个月的变化，输出到csv文件中，可以通过命令行工具进行查询。
 数据和文档单独托管在 https://github.com/shenwei356/taxid-changelog 。</p>
 <p>除了简单的增加、删除、合并之外，作者将TaxID改变做了细分。输出格式如下</p>
-<pre><code># 列            备注
-taxid           # taxid
-version         # version / time of archive, e.g, 2019-07-01
-change          # change, values:
-                #   NEW             新增
-                #   REUSE_DEL       前期被删除，现在又重新加入
-                #   REUSE_MER       前期被合并，现在又重新加入
-                #   DELETE          删除
-                #   MERGE           合并到另一个TaxID
-                #   ABSORB          其他TaxID合并到当前TaxID
-                #   CHANGE_NAME     名称改变
-                #   CHANGE_RANK     分类学水平改变
-                #   CHANGE_LIN_LIN  谱系的TaxID没有变化，谱系改变（某些TaxID的名称变了）
-                #   CHANGE_LIN_TAX  谱系的TaxID改变
-                #   CHANGE_LIN_LEN  谱系的长度/深度发生变化
-change-value    # variable values for changes: 
-                #   1) new taxid for MERGE
-                #   2) merged taxids for ABSORB
-                #   3) empty for others
-name            # scientific name
-rank            # rank
-lineage         # complete lineage of the taxid
-lineage-taxids  # taxids of the lineage
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 列            备注</span>
+<span class="n">taxid</span><span class="w">           </span><span class="c1"># taxid</span>
+<span class="n">version</span><span class="w">         </span><span class="c1"># version / time of archive, e.g, 2019-07-01</span>
+<span class="n">change</span><span class="w">          </span><span class="c1"># change, values:</span>
+<span class="w">                </span><span class="c1">#   NEW             新增</span>
+<span class="w">                </span><span class="c1">#   REUSE_DEL       前期被删除，现在又重新加入</span>
+<span class="w">                </span><span class="c1">#   REUSE_MER       前期被合并，现在又重新加入</span>
+<span class="w">                </span><span class="c1">#   DELETE          删除</span>
+<span class="w">                </span><span class="c1">#   MERGE           合并到另一个TaxID</span>
+<span class="w">                </span><span class="c1">#   ABSORB          其他TaxID合并到当前TaxID</span>
+<span class="w">                </span><span class="c1">#   CHANGE_NAME     名称改变</span>
+<span class="w">                </span><span class="c1">#   CHANGE_RANK     分类学水平改变</span>
+<span class="w">                </span><span class="c1">#   CHANGE_LIN_LIN  谱系的TaxID没有变化，谱系改变（某些TaxID的名称变了）</span>
+<span class="w">                </span><span class="c1">#   CHANGE_LIN_TAX  谱系的TaxID改变</span>
+<span class="w">                </span><span class="c1">#   CHANGE_LIN_LEN  谱系的长度/深度发生变化</span>
+<span class="n">change</span><span class="o">-</span><span class="n">value</span><span class="w">    </span><span class="c1"># variable values for changes: </span>
+<span class="w">                </span><span class="c1">#   1) new taxid for MERGE</span>
+<span class="w">                </span><span class="c1">#   2) merged taxids for ABSORB</span>
+<span class="w">                </span><span class="c1">#   3) empty for others</span>
+<span class="n">name</span><span class="w">            </span><span class="c1"># scientific name</span>
+<span class="n">rank</span><span class="w">            </span><span class="c1"># rank</span>
+<span class="n">lineage</span><span class="w">         </span><span class="c1"># complete lineage of the taxid</span>
+<span class="n">lineage</span><span class="o">-</span><span class="n">taxids</span><span class="w">  </span><span class="c1"># taxids of the lineage</span>
+</code></pre></div>
+
 <p>数据文件可以在前面网站上下载，<code>taxid-changelog.csv.gz</code>，130M左右，解压后2.2G，因为是gzip格式，完全不需要解压即可分析。
 下文使用了<code>pigz</code>代替<code>zcat</code>和<code>gzip</code>提高解压速度。</p>
 <p>例1 superkingdom也能消失 ，比如类病毒(Viroids)在2019年5月被删除了。
 作者是在某一天无意中发现此事，所以决定刨根问底，开发了这个子命令。</p>
-<pre><code># 下载
-wget -c https://github.com/shenwei356/taxid-changelog/releases/download/v2021.01/taxid-changelog.csv.gz
-# 安装多线程解压索软件。或者用gzip替换。
-conda install pigz
+<div class="codehilite"><pre><span></span><code><span class="c1"># 下载</span>
+<span class="n">wget</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">shenwei356</span><span class="o">/</span><span class="n">taxid</span><span class="o">-</span><span class="n">changelog</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v2021</span><span class="o">.</span><span class="mi">01</span><span class="o">/</span><span class="n">taxid</span><span class="o">-</span><span class="n">changelog</span><span class="o">.</span><span class="n">csv</span><span class="o">.</span><span class="n">gz</span>
+<span class="c1"># 安装多线程解压索软件。或者用gzip替换。</span>
+<span class="n">conda</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="n">pigz</span>
 
-$ pigz -cd taxid-changelog.csv.gz \
-    | csvtk grep -f rank -p superkingdom \
-    | csvtk pretty 
-taxid   version      change   change-value   name        rank           lineage                        lineage-taxids
-2       2014-08-01   NEW                     Bacteria    superkingdom   cellular organisms;Bacteria    131567;2
-2157    2014-08-01   NEW                     Archaea     superkingdom   cellular organisms;Archaea     131567;2157
-2759    2014-08-01   NEW                     Eukaryota   superkingdom   cellular organisms;Eukaryota   131567;2759
-10239   2014-08-01   NEW                     Viruses     superkingdom   Viruses                        10239
-12884   2014-08-01   NEW                     Viroids     superkingdom   Viroids                        12884
-12884   2019-05-01   DELETE                  Viroids     superkingdom   Viroids                        12884
-</code></pre>
+<span class="o">$</span><span class="w"> </span><span class="n">pigz</span><span class="w"> </span><span class="o">-</span><span class="n">cd</span><span class="w"> </span><span class="n">taxid</span><span class="o">-</span><span class="n">changelog</span><span class="o">.</span><span class="n">csv</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="n">rank</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="n">superkingdom</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">pretty</span><span class="w"> </span>
+<span class="n">taxid</span><span class="w">   </span><span class="n">version</span><span class="w">      </span><span class="n">change</span><span class="w">   </span><span class="n">change</span><span class="o">-</span><span class="n">value</span><span class="w">   </span><span class="n">name</span><span class="w">        </span><span class="n">rank</span><span class="w">           </span><span class="n">lineage</span><span class="w">                        </span><span class="n">lineage</span><span class="o">-</span><span class="n">taxids</span>
+<span class="mi">2</span><span class="w">       </span><span class="mi">2014</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">01</span><span class="w">   </span><span class="n">NEW</span><span class="w">                     </span><span class="n">Bacteria</span><span class="w">    </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Bacteria</span><span class="w">    </span><span class="mi">131567</span><span class="p">;</span><span class="mi">2</span>
+<span class="mi">2157</span><span class="w">    </span><span class="mi">2014</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">01</span><span class="w">   </span><span class="n">NEW</span><span class="w">                     </span><span class="n">Archaea</span><span class="w">     </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Archaea</span><span class="w">     </span><span class="mi">131567</span><span class="p">;</span><span class="mi">2157</span>
+<span class="mi">2759</span><span class="w">    </span><span class="mi">2014</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">01</span><span class="w">   </span><span class="n">NEW</span><span class="w">                     </span><span class="n">Eukaryota</span><span class="w">   </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">cellular</span><span class="w"> </span><span class="n">organisms</span><span class="p">;</span><span class="n">Eukaryota</span><span class="w">   </span><span class="mi">131567</span><span class="p">;</span><span class="mi">2759</span>
+<span class="mi">10239</span><span class="w">   </span><span class="mi">2014</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">01</span><span class="w">   </span><span class="n">NEW</span><span class="w">                     </span><span class="n">Viruses</span><span class="w">     </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">Viruses</span><span class="w">                        </span><span class="mi">10239</span>
+<span class="mi">12884</span><span class="w">   </span><span class="mi">2014</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">01</span><span class="w">   </span><span class="n">NEW</span><span class="w">                     </span><span class="n">Viroids</span><span class="w">     </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">Viroids</span><span class="w">                        </span><span class="mi">12884</span>
+<span class="mi">12884</span><span class="w">   </span><span class="mi">2019</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">01</span><span class="w">   </span><span class="n">DELETE</span><span class="w">                  </span><span class="n">Viroids</span><span class="w">     </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">Viroids</span><span class="w">                        </span><span class="mi">12884</span>
+</code></pre></div>
+
 <p>例2 SARS-CoV-2 。可见新冠病毒在2020年2月加入，随后3月和6月份改了名称，谱系等信息。查询速度也很快。</p>
-<pre><code># 本例子只显示了部分列。
+<div class="codehilite"><pre><span></span><code><span class="gh">#</span> 本例子只显示了部分列。
 $ time pigz -cd taxid-changelog.csv.gz \
     | csvtk grep -f taxid -p 2697049 \
     | csvtk cut -f version,change,name,rank \
@@ -915,52 +992,24 @@ version      change           name                                              
 real    0m7.644s
 user    0m16.749s
 sys     0m3.985s
-</code></pre>
+</code></pre></div>
+
 <p>更多有意思的发现详见<a href="https://github.com/shenwei356/taxid-changelog">taxid-changelog</a></p>
 
-              
-            </article>
-          </div>
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
       
         <footer class="md-footer">
-  
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
-      
-        
-        <a href="../tutorial/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Tutorial" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Tutorial
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../chinese-dev/" class="md-footer__link md-footer__link--next" aria-label="Next: 开发笔记" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              开发笔记
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -982,10 +1031,12 @@ sys     0m3.985s
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.b6ff8c07.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.5e13d264.min.js"></script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>

@@ -14,8 +14,13 @@
       
         <link rel="canonical" href="https://bioinf.shenwei.me/taxonkit/chinese-dev/">
       
+      
+        <link rel="prev" href="../chinese/">
+      
+      
+      
       <link rel="icon" href="../files/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.5">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -23,31 +28,33 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ee0f47ba.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4b4a2bd9.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
-        
-          
-          
-          <meta name="theme-color" content="#00bdd6">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
       
-    
+      
+
+
     
     
       
+    
+    
+      
+        
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
+    
     
     
   </head>
@@ -58,7 +65,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
   
     
     
@@ -80,16 +87,19 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-header__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -108,10 +118,13 @@
       </div>
     </div>
     
+      
+    
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -119,13 +132,16 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -136,7 +152,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -145,10 +161,10 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -178,22 +194,23 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-nav__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     TaxonKit - NCBI Taxonomy Toolkit
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -205,14 +222,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Home
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
       </a>
     </li>
   
@@ -220,14 +241,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../download/" class="md-nav__link">
-        Download
+        
+  
+  <span class="md-ellipsis">
+    Download
+  </span>
+  
+
       </a>
     </li>
   
@@ -235,14 +260,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../usage/" class="md-nav__link">
-        Usage
+        
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
       </a>
     </li>
   
@@ -250,14 +279,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../tutorial/" class="md-nav__link">
-        Tutorial
+        
+  
+  <span class="md-ellipsis">
+    Tutorial
+  </span>
+  
+
       </a>
     </li>
   
@@ -265,14 +298,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../bench/" class="md-nav__link">
-        Benchmark
+        
+  
+  <span class="md-ellipsis">
+    Benchmark
+  </span>
+  
+
       </a>
     </li>
   
@@ -280,14 +317,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../chinese/" class="md-nav__link">
-        中文介绍
+        
+  
+  <span class="md-ellipsis">
+    中文介绍
+  </span>
+  
+
       </a>
     </li>
   
@@ -295,8 +336,6 @@
     
       
       
-      
-
   
   
     
@@ -304,17 +343,29 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          开发笔记
+          
+  
+  <span class="md-ellipsis">
+    开发笔记
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        开发笔记
+        
+  
+  <span class="md-ellipsis">
+    开发笔记
+  </span>
+  
+
       </a>
       
         
@@ -368,14 +419,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356/taxid-changelog" class="md-nav__link">
-        Taxid-Changelog
+        
+  
+  <span class="md-ellipsis">
+    Taxid-Changelog
+  </span>
+  
+
       </a>
     </li>
   
@@ -383,14 +438,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356" class="md-nav__link">
-        More tools
+        
+  
+  <span class="md-ellipsis">
+    More tools
+  </span>
+  
+
       </a>
     </li>
   
@@ -456,72 +515,74 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-<a href="https://github.com/shenwei356/taxonkit/edit/master/docs/chinese-dev.md" title="Edit this page" class="md-content__button md-icon">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-</a>
+                  
+
+  
+  
 
 
   <h1>开发笔记</h1>
 
-<h2 id="_1">现有工具比较</h2>
+<h2 id="_1">现有工具比较<a class="headerlink" href="#_1" title="Permanent link">Link</a></h2>
 <p>想要从NCBI获取生物的谱系信息，可以在 NCBI Taxonomy网站上用TaxID或者名称查询。
 比如可以用<code>Homo sapiens</code>或<code>9606</code>搜索“人”的分类学信息，以及密码子表，Entrez记录统计等。</p>
 <p>同时也可以通过NCBI的官方工具包 <a href="https://www.ncbi.nlm.nih.gov/books/NBK179288/">E-utilities</a>
 (<a href="https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/">ftp</a>)。</p>
-<pre><code>$ esearch -db taxonomy -query "txid9606 [Organism]" \
-    | efetch -format xml \
-    | xtract -pattern Lineage -element Lineage
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="err">$</span><span class="w"> </span><span class="n">esearch</span><span class="w"> </span><span class="o">-</span><span class="n">db</span><span class="w"> </span><span class="n">taxonomy</span><span class="w"> </span><span class="o">-</span><span class="n">query</span><span class="w"> </span><span class="ss">&quot;txid9606 [Organism]&quot;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">efetch</span><span class="w"> </span><span class="o">-</span><span class="nf">format</span><span class="w"> </span><span class="nc">xml</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">xtract</span><span class="w"> </span><span class="o">-</span><span class="n">pattern</span><span class="w"> </span><span class="n">Lineage</span><span class="w"> </span><span class="o">-</span><span class="k">element</span><span class="w"> </span><span class="n">Lineage</span>
+</code></pre></div>
+
 <p>此外也有一些工具提供类似的功能，部分软件：</p>
 <table>
 <thead>
 <tr>
-<th align="left">工具</th>
-<th align="left">编程语言</th>
-<th align="left">数据获取方式</th>
-<th align="left">使用方式</th>
-<th align="left">备注</th>
+<th style="text-align: left;">工具</th>
+<th style="text-align: left;">编程语言</th>
+<th style="text-align: left;">数据获取方式</th>
+<th style="text-align: left;">使用方式</th>
+<th style="text-align: left;">备注</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">E-utilities</td>
-<td align="left">shell/Perl/C++</td>
-<td align="left">远程Web调用</td>
-<td align="left">命令行</td>
-<td align="left">官方程序，Taxonomy操作仅为其部分功能</td>
+<td style="text-align: left;">E-utilities</td>
+<td style="text-align: left;">shell/Perl/C++</td>
+<td style="text-align: left;">远程Web调用</td>
+<td style="text-align: left;">命令行</td>
+<td style="text-align: left;">官方程序，Taxonomy操作仅为其部分功能</td>
 </tr>
 <tr>
-<td align="left">BioPython</td>
-<td align="left">Python</td>
-<td align="left">远程Web调用</td>
-<td align="left">脚本</td>
-<td align="left">包装entrez接口，Taxonomy操作仅为其部分功能</td>
+<td style="text-align: left;">BioPython</td>
+<td style="text-align: left;">Python</td>
+<td style="text-align: left;">远程Web调用</td>
+<td style="text-align: left;">脚本</td>
+<td style="text-align: left;">包装entrez接口，Taxonomy操作仅为其部分功能</td>
 </tr>
 <tr>
-<td align="left">ETE Toolkit</td>
-<td align="left">Python</td>
-<td align="left">本地数据库</td>
-<td align="left">脚本/命令行</td>
-<td align="left">Taxonomy操作仅为其部分功能</td>
+<td style="text-align: left;">ETE Toolkit</td>
+<td style="text-align: left;">Python</td>
+<td style="text-align: left;">本地数据库</td>
+<td style="text-align: left;">脚本/命令行</td>
+<td style="text-align: left;">Taxonomy操作仅为其部分功能</td>
 </tr>
 <tr>
-<td align="left">Taxize</td>
-<td align="left">R</td>
-<td align="left">远程Web调用</td>
-<td align="left">脚本</td>
-<td align="left">ropensci；支持多种数据库；功能较丰富</td>
+<td style="text-align: left;">Taxize</td>
+<td style="text-align: left;">R</td>
+<td style="text-align: left;">远程Web调用</td>
+<td style="text-align: left;">脚本</td>
+<td style="text-align: left;">ropensci；支持多种数据库；功能较丰富</td>
 </tr>
 <tr>
-<td align="left">Taxopy</td>
-<td align="left">Python</td>
-<td align="left">本地数据文件</td>
-<td align="left">脚本/命令行</td>
-<td align="left">仅基本功能</td>
+<td style="text-align: left;">Taxopy</td>
+<td style="text-align: left;">Python</td>
+<td style="text-align: left;">本地数据文件</td>
+<td style="text-align: left;">脚本/命令行</td>
+<td style="text-align: left;">仅基本功能</td>
 </tr>
 </tbody>
 </table>
@@ -537,11 +598,11 @@
 <p>最初我想要的功能只是根据获取"界门纲目科属种"格式的谱系，发现没有现成工具，而后又有新的需求无法满足，即获取某个类别所有的TaxID。
 故开始编写工具来实现，并逐步扩展其功能。</p>
 <p>其实最简单的方法就是自己下载数据文件进行解析。</p>
-<h2 id="ncbi-taxonomy">NCBI Taxonomy 数据文件</h2>
+<h2 id="ncbi-taxonomy">NCBI Taxonomy 数据文件<a class="headerlink" href="#ncbi-taxonomy" title="Permanent link">Link</a></h2>
 <p>NCBI Taxonomy数据库将所有生物的<strong>分类学关系</strong>组织为一棵“有根树”（rooted tree）,
 与进化树（Phylogenetic tree）不同: 进化树是按<strong>进化关系</strong>”组织，且可以为“无根树”(unrooted tree)。</p>
 <p>NCBI Taxonomy公开数据格式有两种，旧的名称为 <code>taxdump.tar.gz</code> ，文件大小约50Mb，内含以下文件。</p>
-<pre><code>nodes.dmp       # [当前版本] 节点信息
+<div class="codehilite"><pre><span></span><code>nodes.dmp       # [当前版本] 节点信息
                 #    重要内容： tax_id, parent tax_id, rank
 names.dmp       # [当前版本] 名称信息
                 #    重要内容： tax_id, name_txt
@@ -555,7 +616,8 @@ division.dmp    # division信息
 gencode.dmp     # 遗传编码信息
 gc.prt          # 遗传编码表
 readme.txt      # 说明文档
-</code></pre>
+</code></pre></div>
+
 <p>其中最主要的是前4个文件：</p>
 <ol>
 <li><code>nodes.dmp</code> 主要包含当前版本的所有分类学单元节点（taxon）
@@ -571,27 +633,28 @@ readme.txt      # 说明文档
 相对旧版，新版本文件数量和内容更多，主要是因为增加了lineage和类型信息。
 事实上lineage是可以从<code>nodes.dmp</code>和<code>names.dmp</code>计算而来。
 新版格式所含文件如下：</p>
-<pre><code>nodes.dmp
-names.dmp
-merged.dmp
-delnodes.dmp
+<div class="codehilite"><pre><span></span><code><span class="nx">nodes</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">names</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">merged</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">delnodes</span><span class="p">.</span><span class="nx">dmp</span>
 
-fullnamelineage.dmp
-TaxIDlineage.dmp
-rankedlineage.dmp
+<span class="nx">fullnamelineage</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">TaxIDlineage</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">rankedlineage</span><span class="p">.</span><span class="nx">dmp</span>
 
-host.dmp
-typeoftype.dmp
-typematerial.dmp
+<span class="nx">host</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">typeoftype</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">typematerial</span><span class="p">.</span><span class="nx">dmp</span>
 
-citations.dmp
-division.dmp
-gencode.dmp
-readme.txt
-</code></pre>
+<span class="nx">citations</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">division</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">gencode</span><span class="p">.</span><span class="nx">dmp</span>
+<span class="nx">readme</span><span class="p">.</span><span class="nx">txt</span>
+</code></pre></div>
+
 <p>NCBI Taxonomy数据每天都在更新，每月初（大多为1号）的数据作为存档保存在 <code>taxdump_archive/</code> 目录，
 旧版本最早数据到2014年8月，新版本只到2018年12月。</p>
-<h2 id="taxonkit">TaxonKit 开发思路</h2>
+<h2 id="taxonkit">TaxonKit 开发思路<a class="headerlink" href="#taxonkit" title="Permanent link">Link</a></h2>
 <p>大家应该都有安装生物信息软件的痛苦回忆，在conda出现之前，很多软件都需要手动安装依赖、再编译安装。
 不同操作系统，操作系统版本，编译器版本给软件安装带来了巨大的困难。
 如果开发者没注意软件的跨平台、可移植性更是如此。</p>
@@ -650,41 +713,28 @@ macOS等操作系统的不同架构（x86/arm）的可执行二进制文件。
 完全不用搭建数据库，配置更容易，也便于更新数据。
 近日又进一步优化到2秒左右，非常快速。内存也在500Mb-1.5G左右，完全可以接受。</p>
 <p>TaxonKit为命令行工具，采用子命令的方式来执行不同功能，大多数子命令支持标准输入/输出，便于使用命令行管道进行流水作业。</p>
-<h2 id="_2">局限性</h2>
+<h2 id="_2">局限性<a class="headerlink" href="#_2" title="Permanent link">Link</a></h2>
 <ul>
-<li>分类学数据库有很多，TaxonKit目前只支持应用最广泛的NCBI Taxonomy。</li>
-<li>对于GTDB Taxonomy，可以通过现有工具，如<a href="https://github.com/nick-youngblut/gtdb_to_taxdump">gtdb_to_taxdump</a>，
-  将其数据转换为NCBI taxdump文件。</li>
+<li><s>分类学数据库有很多，TaxonKit目前只支持应用最广泛的NCBI Taxonomy。</s>
+  可以用<a href="https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump">create-taxdump</a>命令把任意（gtdb, ictv，自定义）的分类学数据库转为NCBI taxdump格式 。</li>
+<li><s>对于GTDB Taxonomy，可以通过现有工具，如<a href="https://github.com/nick-youngblut/gtdb_to_taxdump">gtdb_to_taxdump</a>，
+  将其数据转换为NCBI taxdump文件。</s>用taxonkit就好，https://github.com/shenwei356/gtdb-taxdump。</li>
 </ul>
 
-              
-            </article>
-          </div>
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
       
         <footer class="md-footer">
-  
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
-      
-        
-        <a href="../chinese/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 中文介绍" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              中文介绍
-            </div>
-          </div>
-        </a>
-      
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -706,10 +756,12 @@ macOS等操作系统的不同架构（x86/arm）的可执行二进制文件。
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.b6ff8c07.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.5e13d264.min.js"></script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>

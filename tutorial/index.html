@@ -14,8 +14,15 @@
       
         <link rel="canonical" href="https://bioinf.shenwei.me/taxonkit/tutorial/">
       
+      
+        <link rel="prev" href="../usage/">
+      
+      
+        <link rel="next" href="../chinese/">
+      
+      
       <link rel="icon" href="../files/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.5">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -23,31 +30,33 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ee0f47ba.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4b4a2bd9.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
-        
-          
-          
-          <meta name="theme-color" content="#00bdd6">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
       
-    
+      
+
+
     
     
       
+    
+    
+      
+        
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
+    
     
     
   </head>
@@ -58,7 +67,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="blue-grey">
   
     
     
@@ -80,16 +89,19 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-header__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -108,10 +120,13 @@
       </div>
     </div>
     
+      
+    
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -119,13 +134,16 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -136,7 +154,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -145,10 +163,10 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -178,22 +196,23 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="TaxonKit - NCBI Taxonomy Toolkit" class="md-nav__button md-logo" aria-label="TaxonKit - NCBI Taxonomy Toolkit" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     TaxonKit - NCBI Taxonomy Toolkit
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/shenwei356/taxonkit/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/shenwei356/taxonkit" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -205,14 +224,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Home
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
       </a>
     </li>
   
@@ -220,14 +243,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../download/" class="md-nav__link">
-        Download
+        
+  
+  <span class="md-ellipsis">
+    Download
+  </span>
+  
+
       </a>
     </li>
   
@@ -235,14 +262,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../usage/" class="md-nav__link">
-        Usage
+        
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
       </a>
     </li>
   
@@ -250,8 +281,6 @@
     
       
       
-      
-
   
   
     
@@ -259,19 +288,31 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Tutorial
+          
+  
+  <span class="md-ellipsis">
+    Tutorial
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Tutorial
+        
+  
+  <span class="md-ellipsis">
+    Tutorial
+  </span>
+  
+
       </a>
       
         
@@ -348,14 +389,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../bench/" class="md-nav__link">
-        Benchmark
+        
+  
+  <span class="md-ellipsis">
+    Benchmark
+  </span>
+  
+
       </a>
     </li>
   
@@ -363,14 +408,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../chinese/" class="md-nav__link">
-        中文介绍
+        
+  
+  <span class="md-ellipsis">
+    中文介绍
+  </span>
+  
+
       </a>
     </li>
   
@@ -378,14 +427,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="../chinese-dev/" class="md-nav__link">
-        开发笔记
+        
+  
+  <span class="md-ellipsis">
+    开发笔记
+  </span>
+  
+
       </a>
     </li>
   
@@ -393,14 +446,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356/taxid-changelog" class="md-nav__link">
-        Taxid-Changelog
+        
+  
+  <span class="md-ellipsis">
+    Taxid-Changelog
+  </span>
+  
+
       </a>
     </li>
   
@@ -408,14 +465,18 @@
     
       
       
-      
-
   
   
   
     <li class="md-nav__item">
       <a href="https://github.com/shenwei356" class="md-nav__link">
-        More tools
+        
+  
+  <span class="md-ellipsis">
+    More tools
+  </span>
+  
+
       </a>
     </li>
   
@@ -504,17 +565,18 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-<a href="https://github.com/shenwei356/taxonkit/edit/master/docs/tutorial.md" title="Edit this page" class="md-content__button md-icon">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-</a>
+                  
+
+  
+  
 
 
-<h1 id="tutorial">Tutorial</h1>
-<h2 id="table-of-contents">Table of Contents</h2>
+<h1 id="tutorial">Tutorial<a class="headerlink" href="#tutorial" title="Permanent link">Link</a></h1>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">Link</a></h2>
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -527,193 +589,205 @@
 </ul>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-<h2 id="formatting-lineage">Formatting lineage</h2>
+<h2 id="formatting-lineage">Formatting lineage<a class="headerlink" href="#formatting-lineage" title="Permanent link">Link</a></h2>
 <p>Show lineage detail of a TaxId.
 The command below works on Windows with help of <a href="http://bioinf.shenwei.me/csvtk">csvtk</a>.</p>
-<pre><code>$ echo "2697049" \
-    | taxonkit lineage -t \
-    | csvtk cut -Ht -f 3 \
-    | csvtk unfold -Ht -f 1 -s ";" \
-    | taxonkit lineage -r -n -L \
-    | csvtk cut -Ht -f 1,3,2 \
-    | csvtk pretty -Ht
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;2697049&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-t<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>unfold<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;;&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span>-n<span class="w"> </span>-L<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-Ht
 
-10239     superkingdom   Viruses
-2559587   clade          Riboviria
-2732396   kingdom        Orthornavirae
-2732408   phylum         Pisuviricota
-2732506   class          Pisoniviricetes
-76804     order          Nidovirales
-2499399   suborder       Cornidovirineae
-11118     family         Coronaviridae
-2501931   subfamily      Orthocoronavirinae
-694002    genus          Betacoronavirus
-2509511   subgenus       Sarbecovirus
-694009    species        Severe acute respiratory syndrome-related coronavirus
-2697049   no rank        Severe acute respiratory syndrome coronavirus 2
-</code></pre>
+<span class="m">10239</span><span class="w">     </span>superkingdom<span class="w">   </span>Viruses
+<span class="m">2559587</span><span class="w">   </span>clade<span class="w">          </span>Riboviria
+<span class="m">2732396</span><span class="w">   </span>kingdom<span class="w">        </span>Orthornavirae
+<span class="m">2732408</span><span class="w">   </span>phylum<span class="w">         </span>Pisuviricota
+<span class="m">2732506</span><span class="w">   </span>class<span class="w">          </span>Pisoniviricetes
+<span class="m">76804</span><span class="w">     </span>order<span class="w">          </span>Nidovirales
+<span class="m">2499399</span><span class="w">   </span>suborder<span class="w">       </span>Cornidovirineae
+<span class="m">11118</span><span class="w">     </span>family<span class="w">         </span>Coronaviridae
+<span class="m">2501931</span><span class="w">   </span>subfamily<span class="w">      </span>Orthocoronavirinae
+<span class="m">694002</span><span class="w">    </span>genus<span class="w">          </span>Betacoronavirus
+<span class="m">2509511</span><span class="w">   </span>subgenus<span class="w">       </span>Sarbecovirus
+<span class="m">694009</span><span class="w">    </span>species<span class="w">        </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus
+<span class="m">2697049</span><span class="w">   </span>no<span class="w"> </span>rank<span class="w">        </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome<span class="w"> </span>coronavirus<span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+
 <p>Example data.</p>
-<pre><code>$ cat taxids3.txt
-376619
-349741
-239935
-314101
-11932
-1327037
-83333
-1408252
-2605619
-2697049
-</code></pre>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids3.txt
+<span class="m">376619</span>
+<span class="m">349741</span>
+<span class="m">239935</span>
+<span class="m">314101</span>
+<span class="m">11932</span>
+<span class="m">1327037</span>
+<span class="m">83333</span>
+<span class="m">1408252</span>
+<span class="m">2605619</span>
+<span class="m">2697049</span>
+</code></pre></div>
+
 <p>Format to 7-level ranks ("superkingdom phylum class order family genus species").</p>
-<pre><code>$ cat taxids3.txt \
-    | taxonkit reformat -I 1
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids3.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span>
 
-376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
-349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
-11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
-83333   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
-1408252 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
-2605619 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
-2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Severe acute respiratory syndrome-related coronavirus
-</code></pre>
+<span class="m">376619</span><span class="w">  </span>Bacteria<span class="p">;</span>Proteobacteria<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Thiotrichales<span class="p">;</span>Francisellaceae<span class="p">;</span>Francisella<span class="p">;</span>Francisella<span class="w"> </span>tularensis
+<span class="m">349741</span><span class="w">  </span>Bacteria<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila
+<span class="m">239935</span><span class="w">  </span>Bacteria<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila
+<span class="m">314101</span><span class="w">  </span>Bacteria<span class="p">;;;;;;</span>uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B
+<span class="m">11932</span><span class="w">   </span>Viruses<span class="p">;</span>Artverviricota<span class="p">;</span>Revtraviricetes<span class="p">;</span>Ortervirales<span class="p">;</span>Retroviridae<span class="p">;</span>Intracisternal<span class="w"> </span>A-particles<span class="p">;</span>Mouse<span class="w"> </span>Intracisternal<span class="w"> </span>A-particle
+<span class="m">1327037</span><span class="w"> </span>Viruses<span class="p">;</span>Uroviricota<span class="p">;</span>Caudoviricetes<span class="p">;</span>Caudovirales<span class="p">;</span>Siphoviridae<span class="p">;;</span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y
+<span class="m">83333</span><span class="w">   </span>Bacteria<span class="p">;</span>Proteobacteria<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli
+<span class="m">1408252</span><span class="w"> </span>Bacteria<span class="p">;</span>Proteobacteria<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli
+<span class="m">2605619</span><span class="w"> </span>Bacteria<span class="p">;</span>Proteobacteria<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli
+<span class="m">2697049</span><span class="w"> </span>Viruses<span class="p">;</span>Pisuviricota<span class="p">;</span>Pisoniviricetes<span class="p">;</span>Nidovirales<span class="p">;</span>Coronaviridae<span class="p">;</span>Betacoronavirus<span class="p">;</span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus
+</code></pre></div>
+
 <p>Format to 8-level ranks ("superkingdom phylum class order family genus species subspecies/rank").</p>
-<pre><code>$ cat taxids3.txt \
-    | taxonkit reformat -I 1 -f "{k};{p};{c};{o};{f};{g};{s};{t}"
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids3.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k};{p};{c};{o};{f};{g};{s};{t}&quot;</span>
 
-376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica LVS
-349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;
-314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B;
-11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle;
-1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y;
-83333   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
-1408252 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli R178
-2605619 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;
-2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Severe acute respiratory syndrome-related coronavirus;
-</code></pre>
+<span class="m">376619</span><span class="w">  </span>Bacteria<span class="p">;</span>Proteobacteria<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Thiotrichales<span class="p">;</span>Francisellaceae<span class="p">;</span>Francisella<span class="p">;</span>Francisella<span class="w"> </span>tularensis<span class="p">;</span>Francisella<span class="w"> </span>tularensis<span class="w"> </span>subsp.<span class="w"> </span>holarctica<span class="w"> </span>LVS
+<span class="m">349741</span><span class="w">  </span>Bacteria<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>ATCC<span class="w"> </span>BAA-835
+<span class="m">239935</span><span class="w">  </span>Bacteria<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila<span class="p">;</span>
+<span class="m">314101</span><span class="w">  </span>Bacteria<span class="p">;;;;;;</span>uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B<span class="p">;</span>
+<span class="m">11932</span><span class="w">   </span>Viruses<span class="p">;</span>Artverviricota<span class="p">;</span>Revtraviricetes<span class="p">;</span>Ortervirales<span class="p">;</span>Retroviridae<span class="p">;</span>Intracisternal<span class="w"> </span>A-particles<span class="p">;</span>Mouse<span class="w"> </span>Intracisternal<span class="w"> </span>A-particle<span class="p">;</span>
+<span class="m">1327037</span><span class="w"> </span>Viruses<span class="p">;</span>Uroviricota<span class="p">;</span>Caudoviricetes<span class="p">;</span>Caudovirales<span class="p">;</span>Siphoviridae<span class="p">;;</span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y<span class="p">;</span>
+<span class="m">83333</span><span class="w">   </span>Bacteria<span class="p">;</span>Proteobacteria<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12
+<span class="m">1408252</span><span class="w"> </span>Bacteria<span class="p">;</span>Proteobacteria<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>R178
+<span class="m">2605619</span><span class="w"> </span>Bacteria<span class="p">;</span>Proteobacteria<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>
+<span class="m">2697049</span><span class="w"> </span>Viruses<span class="p">;</span>Pisuviricota<span class="p">;</span>Pisoniviricetes<span class="p">;</span>Nidovirales<span class="p">;</span>Coronaviridae<span class="p">;</span>Betacoronavirus<span class="p">;</span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus<span class="p">;</span>
+</code></pre></div>
+
 <p>Replace missing ranks with <code>Unassigned</code> and output tab-delimited format.</p>
-<pre><code>$ cat taxids3.txt \
-    | taxonkit reformat -I 1 -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
-    | csvtk pretty -H -t
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids3.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;Unassigned&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
 
-376619    Bacteria   Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae      Francisella                  Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
-349741    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
-239935    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Unassigned
-314101    Bacteria   Unassigned        Unassigned            Unassigned           Unassigned           Unassigned                   uncultured murine large bowel bacterium BAC 54B         Unassigned
-11932     Viruses    Artverviricota    Revtraviricetes       Ortervirales         Retroviridae         Intracisternal A-particles   Mouse Intracisternal A-particle                         Unassigned
-1327037   Viruses    Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae         Unassigned                   Croceibacter phage P2559Y                               Unassigned
-83333     Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Escherichia coli K-12
-1408252   Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Escherichia coli R178
-2605619   Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Unassigned
-2697049   Viruses    Pisuviricota      Pisoniviricetes       Nidovirales          Coronaviridae        Betacoronavirus              Severe acute respiratory syndrome-related coronavirus   Unassigned
-</code></pre>
+<span class="m">376619</span><span class="w">    </span>Bacteria<span class="w">   </span>Proteobacteria<span class="w">    </span>Gammaproteobacteria<span class="w">   </span>Thiotrichales<span class="w">        </span>Francisellaceae<span class="w">      </span>Francisella<span class="w">                  </span>Francisella<span class="w"> </span>tularensis<span class="w">                                  </span>Francisella<span class="w"> </span>tularensis<span class="w"> </span>subsp.<span class="w"> </span>holarctica<span class="w"> </span>LVS
+<span class="m">349741</span><span class="w">    </span>Bacteria<span class="w">   </span>Verrucomicrobia<span class="w">   </span>Verrucomicrobiae<span class="w">      </span>Verrucomicrobiales<span class="w">   </span>Akkermansiaceae<span class="w">      </span>Akkermansia<span class="w">                  </span>Akkermansia<span class="w"> </span>muciniphila<span class="w">                                 </span>Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>ATCC<span class="w"> </span>BAA-835
+<span class="m">239935</span><span class="w">    </span>Bacteria<span class="w">   </span>Verrucomicrobia<span class="w">   </span>Verrucomicrobiae<span class="w">      </span>Verrucomicrobiales<span class="w">   </span>Akkermansiaceae<span class="w">      </span>Akkermansia<span class="w">                  </span>Akkermansia<span class="w"> </span>muciniphila<span class="w">                                 </span>Unassigned
+<span class="m">314101</span><span class="w">    </span>Bacteria<span class="w">   </span>Unassigned<span class="w">        </span>Unassigned<span class="w">            </span>Unassigned<span class="w">           </span>Unassigned<span class="w">           </span>Unassigned<span class="w">                   </span>uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B<span class="w">         </span>Unassigned
+<span class="m">11932</span><span class="w">     </span>Viruses<span class="w">    </span>Artverviricota<span class="w">    </span>Revtraviricetes<span class="w">       </span>Ortervirales<span class="w">         </span>Retroviridae<span class="w">         </span>Intracisternal<span class="w"> </span>A-particles<span class="w">   </span>Mouse<span class="w"> </span>Intracisternal<span class="w"> </span>A-particle<span class="w">                         </span>Unassigned
+<span class="m">1327037</span><span class="w">   </span>Viruses<span class="w">    </span>Uroviricota<span class="w">       </span>Caudoviricetes<span class="w">        </span>Caudovirales<span class="w">         </span>Siphoviridae<span class="w">         </span>Unassigned<span class="w">                   </span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y<span class="w">                               </span>Unassigned
+<span class="m">83333</span><span class="w">     </span>Bacteria<span class="w">   </span>Proteobacteria<span class="w">    </span>Gammaproteobacteria<span class="w">   </span>Enterobacterales<span class="w">     </span>Enterobacteriaceae<span class="w">   </span>Escherichia<span class="w">                  </span>Escherichia<span class="w"> </span>coli<span class="w">                                        </span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12
+<span class="m">1408252</span><span class="w">   </span>Bacteria<span class="w">   </span>Proteobacteria<span class="w">    </span>Gammaproteobacteria<span class="w">   </span>Enterobacterales<span class="w">     </span>Enterobacteriaceae<span class="w">   </span>Escherichia<span class="w">                  </span>Escherichia<span class="w"> </span>coli<span class="w">                                        </span>Escherichia<span class="w"> </span>coli<span class="w"> </span>R178
+<span class="m">2605619</span><span class="w">   </span>Bacteria<span class="w">   </span>Proteobacteria<span class="w">    </span>Gammaproteobacteria<span class="w">   </span>Enterobacterales<span class="w">     </span>Enterobacteriaceae<span class="w">   </span>Escherichia<span class="w">                  </span>Escherichia<span class="w"> </span>coli<span class="w">                                        </span>Unassigned
+<span class="m">2697049</span><span class="w">   </span>Viruses<span class="w">    </span>Pisuviricota<span class="w">      </span>Pisoniviricetes<span class="w">       </span>Nidovirales<span class="w">          </span>Coronaviridae<span class="w">        </span>Betacoronavirus<span class="w">              </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus<span class="w">   </span>Unassigned
+</code></pre></div>
+
 <p>Fill missing ranks and add prefixes.</p>
-<pre><code>$ cat taxids3.txt \
-    | taxonkit reformat -I 1 -F -P -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
-    | csvtk pretty -H -t
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids3.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-F<span class="w"> </span>-P<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
 
-376619    k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Thiotrichales                 f__Francisellaceae                g__Francisella                       s__Francisella tularensis                                  t__Francisella tularensis subsp. holarctica LVS
-349741    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__Akkermansia muciniphila ATCC BAA-835
-239935    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__unclassified Akkermansia muciniphila subspecies/strain
-314101    k__Bacteria   p__unclassified Bacteria phylum   c__unclassified Bacteria class   o__unclassified Bacteria order   f__unclassified Bacteria family   g__unclassified Bacteria genus       s__uncultured murine large bowel bacterium BAC 54B         t__unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
-11932     k__Viruses    p__Artverviricota                 c__Revtraviricetes               o__Ortervirales                  f__Retroviridae                   g__Intracisternal A-particles        s__Mouse Intracisternal A-particle                         t__unclassified Mouse Intracisternal A-particle subspecies/strain
-1327037   k__Viruses    p__Uroviricota                    c__Caudoviricetes                o__Caudovirales                  f__Siphoviridae                   g__unclassified Siphoviridae genus   s__Croceibacter phage P2559Y                               t__unclassified Croceibacter phage P2559Y subspecies/strain
-83333     k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__Escherichia coli K-12
-1408252   k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__Escherichia coli R178
-2605619   k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__unclassified Escherichia coli subspecies/strain
-2697049   k__Viruses    p__Pisuviricota                   c__Pisoniviricetes               o__Nidovirales                   f__Coronaviridae                  g__Betacoronavirus                   s__Severe acute respiratory syndrome-related coronavirus   t__unclassified Severe acute respiratory syndrome-related coronavirus subspecies/strain
-</code></pre>
+<span class="m">376619</span><span class="w">    </span>k__Bacteria<span class="w">   </span>p__Proteobacteria<span class="w">                 </span>c__Gammaproteobacteria<span class="w">           </span>o__Thiotrichales<span class="w">                 </span>f__Francisellaceae<span class="w">                </span>g__Francisella<span class="w">                       </span>s__Francisella<span class="w"> </span>tularensis<span class="w">                                  </span>t__Francisella<span class="w"> </span>tularensis<span class="w"> </span>subsp.<span class="w"> </span>holarctica<span class="w"> </span>LVS
+<span class="m">349741</span><span class="w">    </span>k__Bacteria<span class="w">   </span>p__Verrucomicrobia<span class="w">                </span>c__Verrucomicrobiae<span class="w">              </span>o__Verrucomicrobiales<span class="w">            </span>f__Akkermansiaceae<span class="w">                </span>g__Akkermansia<span class="w">                       </span>s__Akkermansia<span class="w"> </span>muciniphila<span class="w">                                 </span>t__Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>ATCC<span class="w"> </span>BAA-835
+<span class="m">239935</span><span class="w">    </span>k__Bacteria<span class="w">   </span>p__Verrucomicrobia<span class="w">                </span>c__Verrucomicrobiae<span class="w">              </span>o__Verrucomicrobiales<span class="w">            </span>f__Akkermansiaceae<span class="w">                </span>g__Akkermansia<span class="w">                       </span>s__Akkermansia<span class="w"> </span>muciniphila<span class="w">                                 </span>t__unclassified<span class="w"> </span>Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>subspecies/strain
+<span class="m">314101</span><span class="w">    </span>k__Bacteria<span class="w">   </span>p__unclassified<span class="w"> </span>Bacteria<span class="w"> </span>phylum<span class="w">   </span>c__unclassified<span class="w"> </span>Bacteria<span class="w"> </span>class<span class="w">   </span>o__unclassified<span class="w"> </span>Bacteria<span class="w"> </span>order<span class="w">   </span>f__unclassified<span class="w"> </span>Bacteria<span class="w"> </span>family<span class="w">   </span>g__unclassified<span class="w"> </span>Bacteria<span class="w"> </span>genus<span class="w">       </span>s__uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B<span class="w">         </span>t__unclassified<span class="w"> </span>uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B<span class="w"> </span>subspecies/strain
+<span class="m">11932</span><span class="w">     </span>k__Viruses<span class="w">    </span>p__Artverviricota<span class="w">                 </span>c__Revtraviricetes<span class="w">               </span>o__Ortervirales<span class="w">                  </span>f__Retroviridae<span class="w">                   </span>g__Intracisternal<span class="w"> </span>A-particles<span class="w">        </span>s__Mouse<span class="w"> </span>Intracisternal<span class="w"> </span>A-particle<span class="w">                         </span>t__unclassified<span class="w"> </span>Mouse<span class="w"> </span>Intracisternal<span class="w"> </span>A-particle<span class="w"> </span>subspecies/strain
+<span class="m">1327037</span><span class="w">   </span>k__Viruses<span class="w">    </span>p__Uroviricota<span class="w">                    </span>c__Caudoviricetes<span class="w">                </span>o__Caudovirales<span class="w">                  </span>f__Siphoviridae<span class="w">                   </span>g__unclassified<span class="w"> </span>Siphoviridae<span class="w"> </span>genus<span class="w">   </span>s__Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y<span class="w">                               </span>t__unclassified<span class="w"> </span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y<span class="w"> </span>subspecies/strain
+<span class="m">83333</span><span class="w">     </span>k__Bacteria<span class="w">   </span>p__Proteobacteria<span class="w">                 </span>c__Gammaproteobacteria<span class="w">           </span>o__Enterobacterales<span class="w">              </span>f__Enterobacteriaceae<span class="w">             </span>g__Escherichia<span class="w">                       </span>s__Escherichia<span class="w"> </span>coli<span class="w">                                        </span>t__Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12
+<span class="m">1408252</span><span class="w">   </span>k__Bacteria<span class="w">   </span>p__Proteobacteria<span class="w">                 </span>c__Gammaproteobacteria<span class="w">           </span>o__Enterobacterales<span class="w">              </span>f__Enterobacteriaceae<span class="w">             </span>g__Escherichia<span class="w">                       </span>s__Escherichia<span class="w"> </span>coli<span class="w">                                        </span>t__Escherichia<span class="w"> </span>coli<span class="w"> </span>R178
+<span class="m">2605619</span><span class="w">   </span>k__Bacteria<span class="w">   </span>p__Proteobacteria<span class="w">                 </span>c__Gammaproteobacteria<span class="w">           </span>o__Enterobacterales<span class="w">              </span>f__Enterobacteriaceae<span class="w">             </span>g__Escherichia<span class="w">                       </span>s__Escherichia<span class="w"> </span>coli<span class="w">                                        </span>t__unclassified<span class="w"> </span>Escherichia<span class="w"> </span>coli<span class="w"> </span>subspecies/strain
+<span class="m">2697049</span><span class="w">   </span>k__Viruses<span class="w">    </span>p__Pisuviricota<span class="w">                   </span>c__Pisoniviricetes<span class="w">               </span>o__Nidovirales<span class="w">                   </span>f__Coronaviridae<span class="w">                  </span>g__Betacoronavirus<span class="w">                   </span>s__Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus<span class="w">   </span>t__unclassified<span class="w"> </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus<span class="w"> </span>subspecies/strain
+</code></pre></div>
+
 <p><strong>When these's no nodes of rank "subspecies" nor "strain",
 we can switch <code>-S/--pseudo-strain</code> to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than "species"</strong>.</p>
-<pre><code>$ cat taxids3.txt \
-    | taxonkit lineage -r -L \
-    | taxonkit reformat -I 1 -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
-    | cut -f 1,2,9,10 \
-    | csvtk add-header -t -n "taxid,rank,species,strain" \
-    | csvtk pretty -t
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids3.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span>-L<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-F<span class="w"> </span>-S<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,2,9,10<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>add-header<span class="w"> </span>-t<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;taxid,rank,species,strain&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-t
 
-taxid     rank         species                                                 strain
--------   ----------   -----------------------------------------------------   ------------------------------------------------------------------------------
-376619    strain       Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
-349741    strain       Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
-239935    species      Akkermansia muciniphila                                 unclassified Akkermansia muciniphila subspecies/strain
-314101    species      uncultured murine large bowel bacterium BAC 54B         unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
-11932     species      Mouse Intracisternal A-particle                         unclassified Mouse Intracisternal A-particle subspecies/strain
-1327037   species      Croceibacter phage P2559Y                               unclassified Croceibacter phage P2559Y subspecies/strain
-83333     strain       Escherichia coli                                        Escherichia coli K-12
-1408252   subspecies   Escherichia coli                                        Escherichia coli R178
-2605619   no rank      Escherichia coli                                        Escherichia coli O16:H48
-2697049   no rank      Severe acute respiratory syndrome-related coronavirus   Severe acute respiratory syndrome coronavirus 2
-</code></pre>
+taxid<span class="w">     </span>rank<span class="w">         </span>species<span class="w">                                                 </span>strain
+-------<span class="w">   </span>----------<span class="w">   </span>-----------------------------------------------------<span class="w">   </span>------------------------------------------------------------------------------
+<span class="m">376619</span><span class="w">    </span>strain<span class="w">       </span>Francisella<span class="w"> </span>tularensis<span class="w">                                  </span>Francisella<span class="w"> </span>tularensis<span class="w"> </span>subsp.<span class="w"> </span>holarctica<span class="w"> </span>LVS
+<span class="m">349741</span><span class="w">    </span>strain<span class="w">       </span>Akkermansia<span class="w"> </span>muciniphila<span class="w">                                 </span>Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>ATCC<span class="w"> </span>BAA-835
+<span class="m">239935</span><span class="w">    </span>species<span class="w">      </span>Akkermansia<span class="w"> </span>muciniphila<span class="w">                                 </span>unclassified<span class="w"> </span>Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>subspecies/strain
+<span class="m">314101</span><span class="w">    </span>species<span class="w">      </span>uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B<span class="w">         </span>unclassified<span class="w"> </span>uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B<span class="w"> </span>subspecies/strain
+<span class="m">11932</span><span class="w">     </span>species<span class="w">      </span>Mouse<span class="w"> </span>Intracisternal<span class="w"> </span>A-particle<span class="w">                         </span>unclassified<span class="w"> </span>Mouse<span class="w"> </span>Intracisternal<span class="w"> </span>A-particle<span class="w"> </span>subspecies/strain
+<span class="m">1327037</span><span class="w">   </span>species<span class="w">      </span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y<span class="w">                               </span>unclassified<span class="w"> </span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y<span class="w"> </span>subspecies/strain
+<span class="m">83333</span><span class="w">     </span>strain<span class="w">       </span>Escherichia<span class="w"> </span>coli<span class="w">                                        </span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12
+<span class="m">1408252</span><span class="w">   </span>subspecies<span class="w">   </span>Escherichia<span class="w"> </span>coli<span class="w">                                        </span>Escherichia<span class="w"> </span>coli<span class="w"> </span>R178
+<span class="m">2605619</span><span class="w">   </span>no<span class="w"> </span>rank<span class="w">      </span>Escherichia<span class="w"> </span>coli<span class="w">                                        </span>Escherichia<span class="w"> </span>coli<span class="w"> </span>O16:H48
+<span class="m">2697049</span><span class="w">   </span>no<span class="w"> </span>rank<span class="w">      </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus<span class="w">   </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome<span class="w"> </span>coronavirus<span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+
 <p>List eight-level lineage for all TaxIds of rank lower than or equal to species, including some nodes with "no rank".
 But when filtering with <code>-L/--lower-than</code>, you can use
 <code>-n/--save-predictable-norank</code> to <strong>save some special ranks without order,
 where rank of the closest higher node is still lower than rank cutoff</strong>.</p>
-<pre><code>$ time taxonkit list --ids 1 \
-    | taxonkit filter -L species -E species -R -N -n \
-    | taxonkit lineage -n -r -L \
-    | taxonkit reformat -I 1 -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
-    | csvtk cut -Ht -l -f 1,3,2,1,4-11 \
-    | csvtk add-header -t -n "taxid,rank,name,lineage,kingdom,phylum,class,order,family,genus,species,strain" \
-    | pigz -c &gt; result.tsv.gz
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">time</span><span class="w"> </span>taxonkit<span class="w"> </span>list<span class="w"> </span>--ids<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-L<span class="w"> </span>species<span class="w"> </span>-E<span class="w"> </span>species<span class="w"> </span>-R<span class="w"> </span>-N<span class="w"> </span>-n<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-n<span class="w"> </span>-r<span class="w"> </span>-L<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-F<span class="w"> </span>-S<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-l<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2,1,4-11<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>add-header<span class="w"> </span>-t<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;taxid,rank,name,lineage,kingdom,phylum,class,order,family,genus,species,strain&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>pigz<span class="w"> </span>-c<span class="w"> </span>&gt;<span class="w"> </span>result.tsv.gz
 
-real    0m25.167s
-user    2m14.809s
-sys     0m7.197s
+real<span class="w">    </span>0m25.167s
+user<span class="w">    </span>2m14.809s
+sys<span class="w">     </span>0m7.197s
 
-$ pigz -cd result.tsv.gz \
-    | csvtk grep -t -f taxid -p 2697049 \
-    | csvtk transpose -t \
-    | csvtk pretty -H -t
+$<span class="w"> </span>pigz<span class="w"> </span>-cd<span class="w"> </span>result.tsv.gz<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>grep<span class="w"> </span>-t<span class="w"> </span>-f<span class="w"> </span>taxid<span class="w"> </span>-p<span class="w"> </span><span class="m">2697049</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>transpose<span class="w"> </span>-t<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
 
-taxid     2697049
-rank      no rank
-name      Severe acute respiratory syndrome coronavirus 2
-lineage   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
-kingdom   Viruses
-phylum    Pisuviricota
-class     Pisoniviricetes
-order     Nidovirales
-family    Coronaviridae
-genus     Betacoronavirus
-species   Severe acute respiratory syndrome-related coronavirus
-strain    Severe acute respiratory syndrome coronavirus 2
-</code></pre>
-<h2 id="add-taxonomy-information-to-blast-result">Add taxonomy information to BLAST result</h2>
+taxid<span class="w">     </span><span class="m">2697049</span>
+rank<span class="w">      </span>no<span class="w"> </span>rank
+name<span class="w">      </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome<span class="w"> </span>coronavirus<span class="w"> </span><span class="m">2</span>
+lineage<span class="w">   </span>Viruses<span class="p">;</span>Riboviria<span class="p">;</span>Orthornavirae<span class="p">;</span>Pisuviricota<span class="p">;</span>Pisoniviricetes<span class="p">;</span>Nidovirales<span class="p">;</span>Cornidovirineae<span class="p">;</span>Coronaviridae<span class="p">;</span>Orthocoronavirinae<span class="p">;</span>Betacoronavirus<span class="p">;</span>Sarbecovirus<span class="p">;</span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus<span class="p">;</span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome<span class="w"> </span>coronavirus<span class="w"> </span><span class="m">2</span>
+kingdom<span class="w">   </span>Viruses
+phylum<span class="w">    </span>Pisuviricota
+class<span class="w">     </span>Pisoniviricetes
+order<span class="w">     </span>Nidovirales
+family<span class="w">    </span>Coronaviridae
+genus<span class="w">     </span>Betacoronavirus
+species<span class="w">   </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus
+strain<span class="w">    </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome<span class="w"> </span>coronavirus<span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+
+<h2 id="add-taxonomy-information-to-blast-result">Add taxonomy information to BLAST result<a class="headerlink" href="#add-taxonomy-information-to-blast-result" title="Permanent link">Link</a></h2>
 <p>An blast result file <code>blast_result.txt</code>, where the second column is the accession of matched sequences.</p>
-<pre><code>head -n 5 blast_result.txt | csvtk pretty -Ht
+<div class="codehilite"><pre><span></span><code>head -n 5 blast_result.txt | csvtk pretty -Ht
 
 xxxxxxxxxxxxxxxxxxxxx/2/ccs    XM_013496560.1   78.745    494   99    3    6361    6851    895        1385       6.53e-83    326 
 xxxxxxxxxxxxxxxxxxxxx/2/ccs    XM_013496560.1   78.543    494   100   3    17168   17658   895        1385       3.04e-81    320 
 xxxxxxxxxxxxxxxxxxxxx/76/ccs   LR699760.1       100.000   37    0     0    8139    8175    14507874   14507910   4.27e-06    69.4
 xxxxxxxxxxxxxxxxxxxxx/80/ccs   HG994975.1       80.556    540   81    16   8269    8798    3821290    3820765    8.65e-104   394 
 xxxxxxxxxxxxxxxxxxxxx/80/ccs   HG994975.1       77.805    410   89    2    9590    9998    3819858    3819450    5.51e-61    252
-</code></pre>
+</code></pre></div>
+
 <p>Prepare <code>acc2taxid.tsv</code> file from <a href="https://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz">nucl_gb.accession2taxid.gz</a> file.
 Here we use the <code>accession</code> column instead of <code>accession.version</code> column, in case of unmatched versions for some accessions.</p>
-<pre><code>zcat nucl_gb.accession2taxid.gz | cut -f 1,3 | gzip -c &gt; acc2taxid.tsv.gz
-</code></pre>
-<p>Extract needed acc2taxid subset to reduce memory usage.</p>
-<pre><code># extract accession and deduplicate and remove versions
-cut -f 2 blast_result.txt | csvtk uniq -Ht | csvtk replace -Ht -p '\.\d+$' &gt; acc.txt
+<div class="codehilite"><pre><span></span><code>zcat nucl_gb.accession2taxid.gz | cut -f 1,3 | gzip -c &gt; acc2taxid.tsv.gz
+</code></pre></div>
 
-# grep from acc2taxid.tsv.gz
+<p>Extract needed acc2taxid subset to reduce memory usage.</p>
+<div class="codehilite"><pre><span></span><code><span class="gh">#</span> extract accession and deduplicate and remove versions
+cut -f 2 blast_result.txt | csvtk uniq -Ht | csvtk replace -Ht -p &#39;\.\d+$&#39; &gt; acc.txt
+
+<span class="gh">#</span> grep from acc2taxid.tsv.gz
 zcat acc2taxid.tsv.gz | grep -w -f acc.txt &gt;  hit.acc2taxid.tsv
-</code></pre>
+</code></pre></div>
+
 <p>Prepare <code>taxid2name.tsv</code>, species name are retrived for the taxids.</p>
-<pre><code>cut -f 2 hit.acc2taxid.tsv | taxonkit reformat -f '{s}' -I 1 &gt; hit.taxid2name.tsv
-</code></pre>
+<div class="codehilite"><pre><span></span><code>cut -f 2 hit.acc2taxid.tsv | taxonkit reformat -f &#39;{s}&#39; -I 1 &gt; hit.taxid2name.tsv
+</code></pre></div>
+
 <p>Append taxids according to the accessions, and append species names for the taxids.</p>
-<pre><code>csvtk add-header -t --names "qseqid,sseqid,pident,length,mismatch,gapopen,qstart,qend,sstart,send,evalue,bitscore"  blast_result.txt \
+<div class="codehilite"><pre><span></span><code>csvtk add-header -t --names &quot;qseqid,sseqid,pident,length,mismatch,gapopen,qstart,qend,sstart,send,evalue,bitscore&quot;  blast_result.txt \
     | csvtk mutate -t -f sseqid -n taxid \
-    | csvtk replace -t -k hit.acc2taxid.tsv -f taxid -p '(.+)\.\d+' -r '{kv}' \
+    | csvtk replace -t -k hit.acc2taxid.tsv -f taxid -p &#39;(.+)\.\d+&#39; -r &#39;{kv}&#39; \
     | csvtk mutate -t -f taxid -n species \
-    | csvtk replace -t -k hit.taxid2name.tsv -f species -p '(.+)' -r '{kv}' \
+    | csvtk replace -t -k hit.taxid2name.tsv -f species -p &#39;(.+)&#39; -r &#39;{kv}&#39; \
     | head -n 5 | csvtk pretty -t
 
 qseqid                         sseqid           pident    length   mismatch   gapopen   qstart   qend    sstart     send       evalue      bitscore   taxid   species             
@@ -722,138 +796,145 @@ xxxxxxxxxxxxxxxxxxxxx/2/ccs    XM_013496560.1   78.745    494      99         3 
 xxxxxxxxxxxxxxxxxxxxx/2/ccs    XM_013496560.1   78.543    494      100        3         17168    17658   895        1385       3.04e-81    320        44415   Eimeria mitis       
 xxxxxxxxxxxxxxxxxxxxx/76/ccs   LR699760.1       100.000   37       0          0         8139     8175    14507874   14507910   4.27e-06    69.4       3702    Arabidopsis thaliana
 xxxxxxxxxxxxxxxxxxxxx/80/ccs   HG994975.1       80.556    540      81         16        8269     8798    3821290    3820765    8.65e-104   394        5802    Eimeria tenella
-</code></pre>
-<h2 id="parsing-krakenbracken-result">Parsing kraken/bracken result</h2>
+</code></pre></div>
+
+<h2 id="parsing-krakenbracken-result">Parsing kraken/bracken result<a class="headerlink" href="#parsing-krakenbracken-result" title="Permanent link">Link</a></h2>
 <p>Example Data</p>
 <ul>
 <li><a href="https://github.com/biobakery/biobakery/raw/master/demos/biobakery_demos/data/metaphlan2/input/SRS014459-Stool.fasta.gz">SRS014459-Stool.fasta.gz</a></li>
 </ul>
 <p>Run Kraken2 and Bracken</p>
-<pre><code>KRAKEN_DB=/home/shenwei/ws/db/kraken/k2_pluspf
-THREADS=16
+<div class="codehilite"><pre><span></span><code><span class="n">KRAKEN_DB</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">shenwei</span><span class="o">/</span><span class="n">ws</span><span class="o">/</span><span class="n">db</span><span class="o">/</span><span class="n">kraken</span><span class="o">/</span><span class="n">k2_pluspf</span>
+<span class="n">THREADS</span><span class="o">=</span><span class="mi">16</span>
 
-CLASSIFICATION_LVL=S
-THRESHOLD=10
+<span class="n">CLASSIFICATION_LVL</span><span class="o">=</span><span class="n">S</span>
+<span class="n">THRESHOLD</span><span class="o">=</span><span class="mi">10</span>
 
-READ_LEN=100
-SAMPLE=SRS014459-Stool.fasta.gz
+<span class="n">READ_LEN</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">SAMPLE</span><span class="o">=</span><span class="n">SRS014459</span><span class="o">-</span><span class="n">Stool</span><span class="o">.</span><span class="n">fasta</span><span class="o">.</span><span class="n">gz</span>
 
-BRACKEN_OUTPUT_FILE=$SAMPLE
+<span class="n">BRACKEN_OUTPUT_FILE</span><span class="o">=$</span><span class="n">SAMPLE</span>
 
-kraken2 --db ${KRAKEN_DB} --threads ${THREADS} -report ${SAMPLE}.kreport $SAMPLE &gt; ${SAMPLE}.kraken
+<span class="n">kraken2</span><span class="w"> </span><span class="o">--</span><span class="n">db</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">KRAKEN_DB</span><span class="p">}</span><span class="w"> </span><span class="o">--</span><span class="n">threads</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">THREADS</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="n">report</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">SAMPLE</span><span class="p">}</span><span class="o">.</span><span class="n">kreport</span><span class="w"> </span><span class="o">$</span><span class="n">SAMPLE</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">SAMPLE</span><span class="p">}</span><span class="o">.</span><span class="n">kraken</span>
 
-est_abundance.py -i ${SAMPLE}.kreport -k ${KRAKEN_DB}/database${READ_LEN}mers.kmer_distrib \
-    -l ${CLASSIFICATION_LVL} -t ${THRESHOLD} -o ${BRACKEN_OUTPUT_FILE}.bracken
-</code></pre>
+<span class="n">est_abundance</span><span class="o">.</span><span class="n">py</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">SAMPLE</span><span class="p">}</span><span class="o">.</span><span class="n">kreport</span><span class="w"> </span><span class="o">-</span><span class="n">k</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">KRAKEN_DB</span><span class="p">}</span><span class="o">/</span><span class="n">database</span><span class="o">$</span><span class="p">{</span><span class="n">READ_LEN</span><span class="p">}</span><span class="n">mers</span><span class="o">.</span><span class="n">kmer_distrib</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">-</span><span class="n">l</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">CLASSIFICATION_LVL</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">THRESHOLD</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="n">o</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">BRACKEN_OUTPUT_FILE</span><span class="p">}</span><span class="o">.</span><span class="n">bracken</span>
+</code></pre></div>
+
 <p>Orignial format</p>
-<pre><code>$ head -n 15 SRS014459-Stool.fasta.gz_bracken_species.kreport
-100.00  9491    0       R       1       root
-99.85   9477    0       R1      131567    cellular organisms
-99.85   9477    0       D       2           Bacteria
-66.08   6271    0       D1      1783270       FCB group
-66.08   6271    0       D2      68336           Bacteroidetes/Chlorobi group
-66.08   6271    0       P       976               Bacteroidetes
-66.08   6271    0       C       200643              Bacteroidia
-66.08   6271    0       O       171549                Bacteroidales
-34.45   3270    0       F       815                     Bacteroidaceae
-34.45   3270    0       G       816                       Bacteroides
-10.43   990     990     S       246787                      Bacteroides cellulosilyticus
-7.98    757     757     S       28116                       Bacteroides ovatus
-3.10    293     0       G1      2646097                     unclassified Bacteroides
-1.06    100     100     S       2755405                       Bacteroides sp. CACC 737
-0.49    46      46      S       2650157                       Bacteroides sp. HF-5287
-</code></pre>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">15</span><span class="w"> </span>SRS014459-Stool.fasta.gz_bracken_species.kreport
+<span class="m">100</span>.00<span class="w">  </span><span class="m">9491</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>R<span class="w">       </span><span class="m">1</span><span class="w">       </span>root
+<span class="m">99</span>.85<span class="w">   </span><span class="m">9477</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>R1<span class="w">      </span><span class="m">131567</span><span class="w">    </span>cellular<span class="w"> </span>organisms
+<span class="m">99</span>.85<span class="w">   </span><span class="m">9477</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>D<span class="w">       </span><span class="m">2</span><span class="w">           </span>Bacteria
+<span class="m">66</span>.08<span class="w">   </span><span class="m">6271</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>D1<span class="w">      </span><span class="m">1783270</span><span class="w">       </span>FCB<span class="w"> </span>group
+<span class="m">66</span>.08<span class="w">   </span><span class="m">6271</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>D2<span class="w">      </span><span class="m">68336</span><span class="w">           </span>Bacteroidetes/Chlorobi<span class="w"> </span>group
+<span class="m">66</span>.08<span class="w">   </span><span class="m">6271</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>P<span class="w">       </span><span class="m">976</span><span class="w">               </span>Bacteroidetes
+<span class="m">66</span>.08<span class="w">   </span><span class="m">6271</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>C<span class="w">       </span><span class="m">200643</span><span class="w">              </span>Bacteroidia
+<span class="m">66</span>.08<span class="w">   </span><span class="m">6271</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>O<span class="w">       </span><span class="m">171549</span><span class="w">                </span>Bacteroidales
+<span class="m">34</span>.45<span class="w">   </span><span class="m">3270</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>F<span class="w">       </span><span class="m">815</span><span class="w">                     </span>Bacteroidaceae
+<span class="m">34</span>.45<span class="w">   </span><span class="m">3270</span><span class="w">    </span><span class="m">0</span><span class="w">       </span>G<span class="w">       </span><span class="m">816</span><span class="w">                       </span>Bacteroides
+<span class="m">10</span>.43<span class="w">   </span><span class="m">990</span><span class="w">     </span><span class="m">990</span><span class="w">     </span>S<span class="w">       </span><span class="m">246787</span><span class="w">                      </span>Bacteroides<span class="w"> </span>cellulosilyticus
+<span class="m">7</span>.98<span class="w">    </span><span class="m">757</span><span class="w">     </span><span class="m">757</span><span class="w">     </span>S<span class="w">       </span><span class="m">28116</span><span class="w">                       </span>Bacteroides<span class="w"> </span>ovatus
+<span class="m">3</span>.10<span class="w">    </span><span class="m">293</span><span class="w">     </span><span class="m">0</span><span class="w">       </span>G1<span class="w">      </span><span class="m">2646097</span><span class="w">                     </span>unclassified<span class="w"> </span>Bacteroides
+<span class="m">1</span>.06<span class="w">    </span><span class="m">100</span><span class="w">     </span><span class="m">100</span><span class="w">     </span>S<span class="w">       </span><span class="m">2755405</span><span class="w">                       </span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>CACC<span class="w"> </span><span class="m">737</span>
+<span class="m">0</span>.49<span class="w">    </span><span class="m">46</span><span class="w">      </span><span class="m">46</span><span class="w">      </span>S<span class="w">       </span><span class="m">2650157</span><span class="w">                       </span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>HF-5287
+</code></pre></div>
+
 <p>Converting to MetaPhlAn2 format. (Similar to <a href="https://github.com/jenniferlu717/KrakenTools/blob/master/kreport2mpa.py">kreport2mpa.py</a>)</p>
-<pre><code>$ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
-    | csvtk cut -Ht -f 5,1 \
-    | taxonkit lineage \
-    | taxonkit reformat -i 3 -P -f "{k}|{p}|{c}|{o}|{f}|{g}|{s}" \
-    | csvtk cut -Ht -f 4,2 \
-    | csvtk replace -Ht -p "(\|[kpcofgs]__)+$" \
-    | csvtk replace -Ht -p "\|[kpcofgs]__\|" -r "|" \
-    | csvtk uniq -Ht \
-    | csvtk grep -Ht -p k__ -v \
-    &gt; SRS014459-Stool.fasta.gz_bracken_species.kreport.format
+<div class="codehilite"><pre><span></span><code><span class="err">$</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="n">SRS014459</span><span class="o">-</span><span class="n">Stool</span><span class="p">.</span><span class="n">fasta</span><span class="p">.</span><span class="n">gz_bracken_species</span><span class="p">.</span><span class="n">kreport</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">reformat</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">-</span><span class="n">P</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="ss">&quot;{k}|{p}|{c}|{o}|{f}|{g}|{s}&quot;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="nf">replace</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="ss">&quot;(\|[kpcofgs]__)+$&quot;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="nf">replace</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="ss">&quot;\|[kpcofgs]__\|&quot;</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="ss">&quot;|&quot;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">uniq</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="n">k__</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">&gt;</span><span class="w"> </span><span class="n">SRS014459</span><span class="o">-</span><span class="n">Stool</span><span class="p">.</span><span class="n">fasta</span><span class="p">.</span><span class="n">gz_bracken_species</span><span class="p">.</span><span class="n">kreport</span><span class="p">.</span><span class="nf">format</span>
 
-$ head -n 10 SRS014459-Stool.fasta.gz_bracken_species.kreport.format
+<span class="err">$</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="n">SRS014459</span><span class="o">-</span><span class="n">Stool</span><span class="p">.</span><span class="n">fasta</span><span class="p">.</span><span class="n">gz_bracken_species</span><span class="p">.</span><span class="n">kreport</span><span class="p">.</span><span class="nf">format</span>
 
-k__Bacteria     99.85
-k__Bacteria|p__Bacteroidetes    66.08
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia     66.08
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales    66.08
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae  34.45
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides   34.45
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides cellulosilyticus   10.43
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides ovatus     7.98
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. CACC 737       1.06
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. HF-5287        0.49
-</code></pre>
+<span class="n">k__Bacteria</span><span class="w">     </span><span class="mf">99.85</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="w">    </span><span class="mf">66.08</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="o">|</span><span class="n">c__Bacteroidia</span><span class="w">     </span><span class="mf">66.08</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="o">|</span><span class="n">c__Bacteroidia</span><span class="o">|</span><span class="n">o__Bacteroidales</span><span class="w">    </span><span class="mf">66.08</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="o">|</span><span class="n">c__Bacteroidia</span><span class="o">|</span><span class="n">o__Bacteroidales</span><span class="o">|</span><span class="n">f__Bacteroidaceae</span><span class="w">  </span><span class="mf">34.45</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="o">|</span><span class="n">c__Bacteroidia</span><span class="o">|</span><span class="n">o__Bacteroidales</span><span class="o">|</span><span class="n">f__Bacteroidaceae</span><span class="o">|</span><span class="n">g__Bacteroides</span><span class="w">   </span><span class="mf">34.45</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="o">|</span><span class="n">c__Bacteroidia</span><span class="o">|</span><span class="n">o__Bacteroidales</span><span class="o">|</span><span class="n">f__Bacteroidaceae</span><span class="o">|</span><span class="n">g__Bacteroides</span><span class="o">|</span><span class="n">s__Bacteroides</span><span class="w"> </span><span class="n">cellulosilyticus</span><span class="w">   </span><span class="mf">10.43</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="o">|</span><span class="n">c__Bacteroidia</span><span class="o">|</span><span class="n">o__Bacteroidales</span><span class="o">|</span><span class="n">f__Bacteroidaceae</span><span class="o">|</span><span class="n">g__Bacteroides</span><span class="o">|</span><span class="n">s__Bacteroides</span><span class="w"> </span><span class="n">ovatus</span><span class="w">     </span><span class="mf">7.98</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="o">|</span><span class="n">c__Bacteroidia</span><span class="o">|</span><span class="n">o__Bacteroidales</span><span class="o">|</span><span class="n">f__Bacteroidaceae</span><span class="o">|</span><span class="n">g__Bacteroides</span><span class="o">|</span><span class="n">s__Bacteroides</span><span class="w"> </span><span class="n">sp</span><span class="p">.</span><span class="w"> </span><span class="n">CACC</span><span class="w"> </span><span class="mi">737</span><span class="w">       </span><span class="mf">1.06</span>
+<span class="n">k__Bacteria</span><span class="o">|</span><span class="n">p__Bacteroidetes</span><span class="o">|</span><span class="n">c__Bacteroidia</span><span class="o">|</span><span class="n">o__Bacteroidales</span><span class="o">|</span><span class="n">f__Bacteroidaceae</span><span class="o">|</span><span class="n">g__Bacteroides</span><span class="o">|</span><span class="n">s__Bacteroides</span><span class="w"> </span><span class="n">sp</span><span class="p">.</span><span class="w"> </span><span class="n">HF</span><span class="o">-</span><span class="mi">5287</span><span class="w">        </span><span class="mf">0.49</span>
+</code></pre></div>
+
 <p>Converting to Qiime format</p>
-<pre><code>$ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
-    | csvtk cut -Ht -f 5,1 \
-    | taxonkit lineage \
-    | taxonkit reformat -i 3 -P -f "{k}; {p}; {c}; {o}; {f}; {g}; {s}" \
-    | csvtk cut -Ht -f 4,2 \
-    | csvtk replace -Ht -p "(; [kpcofgs]__)+$" \
-    | csvtk replace -Ht -p "; [kpcofgs]__; " -r "; " \
-    | csvtk uniq -Ht \
-    | csvtk grep -Ht -p k__ -v \
-    | head -n 10
+<div class="codehilite"><pre><span></span><code><span class="err">$</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="n">SRS014459</span><span class="o">-</span><span class="n">Stool</span><span class="p">.</span><span class="n">fasta</span><span class="p">.</span><span class="n">gz_bracken_species</span><span class="p">.</span><span class="n">kreport</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">reformat</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">-</span><span class="n">P</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="ss">&quot;{k}; {p}; {c}; {o}; {f}; {g}; {s}&quot;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="nf">replace</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="ss">&quot;(; [kpcofgs]__)+$&quot;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="nf">replace</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="ss">&quot;; [kpcofgs]__; &quot;</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="ss">&quot;; &quot;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">uniq</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="n">k__</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span><span class="mi">10</span>
 
-k__Bacteria     99.85
-k__Bacteria; p__Bacteroidetes   66.08
-k__Bacteria; p__Bacteroidetes; c__Bacteroidia   66.08
-k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales 66.08
-k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae      34.45
-k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides      34.45
-k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides cellulosilyticus     10.43
-k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides ovatus       7.98
-k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides sp. CACC 737 1.06
-k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides sp. HF-5287  0.49
-</code></pre>
+<span class="n">k__Bacteria</span><span class="w">     </span><span class="mf">99.85</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="w">   </span><span class="mf">66.08</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="p">;</span><span class="w"> </span><span class="n">c__Bacteroidia</span><span class="w">   </span><span class="mf">66.08</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="p">;</span><span class="w"> </span><span class="n">c__Bacteroidia</span><span class="p">;</span><span class="w"> </span><span class="n">o__Bacteroidales</span><span class="w"> </span><span class="mf">66.08</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="p">;</span><span class="w"> </span><span class="n">c__Bacteroidia</span><span class="p">;</span><span class="w"> </span><span class="n">o__Bacteroidales</span><span class="p">;</span><span class="w"> </span><span class="n">f__Bacteroidaceae</span><span class="w">      </span><span class="mf">34.45</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="p">;</span><span class="w"> </span><span class="n">c__Bacteroidia</span><span class="p">;</span><span class="w"> </span><span class="n">o__Bacteroidales</span><span class="p">;</span><span class="w"> </span><span class="n">f__Bacteroidaceae</span><span class="p">;</span><span class="w"> </span><span class="n">g__Bacteroides</span><span class="w">      </span><span class="mf">34.45</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="p">;</span><span class="w"> </span><span class="n">c__Bacteroidia</span><span class="p">;</span><span class="w"> </span><span class="n">o__Bacteroidales</span><span class="p">;</span><span class="w"> </span><span class="n">f__Bacteroidaceae</span><span class="p">;</span><span class="w"> </span><span class="n">g__Bacteroides</span><span class="p">;</span><span class="w"> </span><span class="n">s__Bacteroides</span><span class="w"> </span><span class="n">cellulosilyticus</span><span class="w">     </span><span class="mf">10.43</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="p">;</span><span class="w"> </span><span class="n">c__Bacteroidia</span><span class="p">;</span><span class="w"> </span><span class="n">o__Bacteroidales</span><span class="p">;</span><span class="w"> </span><span class="n">f__Bacteroidaceae</span><span class="p">;</span><span class="w"> </span><span class="n">g__Bacteroides</span><span class="p">;</span><span class="w"> </span><span class="n">s__Bacteroides</span><span class="w"> </span><span class="n">ovatus</span><span class="w">       </span><span class="mf">7.98</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="p">;</span><span class="w"> </span><span class="n">c__Bacteroidia</span><span class="p">;</span><span class="w"> </span><span class="n">o__Bacteroidales</span><span class="p">;</span><span class="w"> </span><span class="n">f__Bacteroidaceae</span><span class="p">;</span><span class="w"> </span><span class="n">g__Bacteroides</span><span class="p">;</span><span class="w"> </span><span class="n">s__Bacteroides</span><span class="w"> </span><span class="n">sp</span><span class="p">.</span><span class="w"> </span><span class="n">CACC</span><span class="w"> </span><span class="mi">737</span><span class="w"> </span><span class="mf">1.06</span>
+<span class="n">k__Bacteria</span><span class="p">;</span><span class="w"> </span><span class="n">p__Bacteroidetes</span><span class="p">;</span><span class="w"> </span><span class="n">c__Bacteroidia</span><span class="p">;</span><span class="w"> </span><span class="n">o__Bacteroidales</span><span class="p">;</span><span class="w"> </span><span class="n">f__Bacteroidaceae</span><span class="p">;</span><span class="w"> </span><span class="n">g__Bacteroides</span><span class="p">;</span><span class="w"> </span><span class="n">s__Bacteroides</span><span class="w"> </span><span class="n">sp</span><span class="p">.</span><span class="w"> </span><span class="n">HF</span><span class="o">-</span><span class="mi">5287</span><span class="w">  </span><span class="mf">0.49</span>
+</code></pre></div>
+
 <p>Save taxon proportion and taxid, and get lineage, name and rank.</p>
-<pre><code>$ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
-    | csvtk cut -Ht -f 1,5 \
-    | taxonkit lineage -i 2 -n -r \
-    | csvtk cut -Ht -f 1,2,5,4,3 \
-    | head -n 10 \
-    | csvtk pretty -Ht
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>SRS014459-Stool.fasta.gz_bracken_species.kreport<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,5<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>-n<span class="w"> </span>-r<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,2,5,4,3<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-Ht
 
-100.00   1         no rank        root                           root
-99.85    131567    no rank        cellular organisms             cellular organisms
-99.85    2         superkingdom   Bacteria                       cellular organisms;Bacteria
-66.08    1783270   clade          FCB group                      cellular organisms;Bacteria;FCB group
-66.08    68336     clade          Bacteroidetes/Chlorobi group   cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group
-66.08    976       phylum         Bacteroidetes                  cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes
-66.08    200643    class          Bacteroidia                    cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia
-66.08    171549    order          Bacteroidales                  cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales
-34.45    815       family         Bacteroidaceae                 cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae
-34.45    816       genus          Bacteroides                    cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides
-</code></pre>
+<span class="m">100</span>.00<span class="w">   </span><span class="m">1</span><span class="w">         </span>no<span class="w"> </span>rank<span class="w">        </span>root<span class="w">                           </span>root
+<span class="m">99</span>.85<span class="w">    </span><span class="m">131567</span><span class="w">    </span>no<span class="w"> </span>rank<span class="w">        </span>cellular<span class="w"> </span>organisms<span class="w">             </span>cellular<span class="w"> </span>organisms
+<span class="m">99</span>.85<span class="w">    </span><span class="m">2</span><span class="w">         </span>superkingdom<span class="w">   </span>Bacteria<span class="w">                       </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria
+<span class="m">66</span>.08<span class="w">    </span><span class="m">1783270</span><span class="w">   </span>clade<span class="w">          </span>FCB<span class="w"> </span>group<span class="w">                      </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>FCB<span class="w"> </span>group
+<span class="m">66</span>.08<span class="w">    </span><span class="m">68336</span><span class="w">     </span>clade<span class="w">          </span>Bacteroidetes/Chlorobi<span class="w"> </span>group<span class="w">   </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>FCB<span class="w"> </span>group<span class="p">;</span>Bacteroidetes/Chlorobi<span class="w"> </span>group
+<span class="m">66</span>.08<span class="w">    </span><span class="m">976</span><span class="w">       </span>phylum<span class="w">         </span>Bacteroidetes<span class="w">                  </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>FCB<span class="w"> </span>group<span class="p">;</span>Bacteroidetes/Chlorobi<span class="w"> </span>group<span class="p">;</span>Bacteroidetes
+<span class="m">66</span>.08<span class="w">    </span><span class="m">200643</span><span class="w">    </span>class<span class="w">          </span>Bacteroidia<span class="w">                    </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>FCB<span class="w"> </span>group<span class="p">;</span>Bacteroidetes/Chlorobi<span class="w"> </span>group<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia
+<span class="m">66</span>.08<span class="w">    </span><span class="m">171549</span><span class="w">    </span>order<span class="w">          </span>Bacteroidales<span class="w">                  </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>FCB<span class="w"> </span>group<span class="p">;</span>Bacteroidetes/Chlorobi<span class="w"> </span>group<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales
+<span class="m">34</span>.45<span class="w">    </span><span class="m">815</span><span class="w">       </span>family<span class="w">         </span>Bacteroidaceae<span class="w">                 </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>FCB<span class="w"> </span>group<span class="p">;</span>Bacteroidetes/Chlorobi<span class="w"> </span>group<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae
+<span class="m">34</span>.45<span class="w">    </span><span class="m">816</span><span class="w">       </span>genus<span class="w">          </span>Bacteroides<span class="w">                    </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>FCB<span class="w"> </span>group<span class="p">;</span>Bacteroidetes/Chlorobi<span class="w"> </span>group<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides
+</code></pre></div>
+
 <p>Only save species or lower level and get lineage in format of "superkingdom phylum class order family genus species".</p>
-<pre><code>$ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
-    | csvtk cut -Ht -f 1,5 \
-    | taxonkit filter -N -E species -L species -i 2 \
-    | taxonkit lineage -i 2 -n -r \
-    | taxonkit reformat -i 3 -f "{k};{p};{c};{o};{f};{g};{s}" \
-    | csvtk cut -Ht -f 1,2,5,4,6 \
-    | csvtk add-header -t -n abundance,taxid,rank,name,lineage \
-    | head -n 10 \
-    | csvtk pretty -t
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>SRS014459-Stool.fasta.gz_bracken_species.kreport<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,5<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-N<span class="w"> </span>-E<span class="w"> </span>species<span class="w"> </span>-L<span class="w"> </span>species<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>-n<span class="w"> </span>-r<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w"> </span>-i<span class="w"> </span><span class="m">3</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k};{p};{c};{o};{f};{g};{s}&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,2,5,4,6<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>add-header<span class="w"> </span>-t<span class="w"> </span>-n<span class="w"> </span>abundance,taxid,rank,name,lineage<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-t
 
-abundance   taxid     rank      name                           lineage
----------   -------   -------   ----------------------------   --------------------------------------------------------------------------------------------------------
-10.43       246787    species   Bacteroides cellulosilyticus   Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides cellulosilyticus
-7.98        28116     species   Bacteroides ovatus             Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides ovatus
-1.06        2755405   species   Bacteroides sp. CACC 737       Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. CACC 737
-0.49        2650157   species   Bacteroides sp. HF-5287        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. HF-5287
-0.99        2528203   species   Bacteroides sp. A1C1           Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. A1C1
-0.28        2763022   species   Bacteroides sp. M10            Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. M10
-0.16        2650158   species   Bacteroides sp. HF-5141        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. HF-5141
-0.12        2715212   species   Bacteroides sp. CBA7301        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. CBA7301
-5.10        817       species   Bacteroides fragilis           Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides fragilis
-</code></pre>
-<h2 id="making-nr-blastdb-for-specific-taxids">Making nr blastdb for specific taxids</h2>
+abundance<span class="w">   </span>taxid<span class="w">     </span>rank<span class="w">      </span>name<span class="w">                           </span>lineage
+---------<span class="w">   </span>-------<span class="w">   </span>-------<span class="w">   </span>----------------------------<span class="w">   </span>--------------------------------------------------------------------------------------------------------
+<span class="m">10</span>.43<span class="w">       </span><span class="m">246787</span><span class="w">    </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>cellulosilyticus<span class="w">   </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>cellulosilyticus
+<span class="m">7</span>.98<span class="w">        </span><span class="m">28116</span><span class="w">     </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>ovatus<span class="w">             </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>ovatus
+<span class="m">1</span>.06<span class="w">        </span><span class="m">2755405</span><span class="w">   </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>CACC<span class="w"> </span><span class="m">737</span><span class="w">       </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>CACC<span class="w"> </span><span class="m">737</span>
+<span class="m">0</span>.49<span class="w">        </span><span class="m">2650157</span><span class="w">   </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>HF-5287<span class="w">        </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>HF-5287
+<span class="m">0</span>.99<span class="w">        </span><span class="m">2528203</span><span class="w">   </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>A1C1<span class="w">           </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>A1C1
+<span class="m">0</span>.28<span class="w">        </span><span class="m">2763022</span><span class="w">   </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>M10<span class="w">            </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>M10
+<span class="m">0</span>.16<span class="w">        </span><span class="m">2650158</span><span class="w">   </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>HF-5141<span class="w">        </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>HF-5141
+<span class="m">0</span>.12<span class="w">        </span><span class="m">2715212</span><span class="w">   </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>CBA7301<span class="w">        </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>sp.<span class="w"> </span>CBA7301
+<span class="m">5</span>.10<span class="w">        </span><span class="m">817</span><span class="w">       </span>species<span class="w">   </span>Bacteroides<span class="w"> </span>fragilis<span class="w">           </span>Bacteria<span class="p">;</span>Bacteroidetes<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Bacteroidaceae<span class="p">;</span>Bacteroides<span class="p">;</span>Bacteroides<span class="w"> </span>fragilis
+</code></pre></div>
+
+<h2 id="making-nr-blastdb-for-specific-taxids">Making nr blastdb for specific taxids<a class="headerlink" href="#making-nr-blastdb-for-specific-taxids" title="Permanent link">Link</a></h2>
 <p>Attention:</p>
 <ul>
 <li><a href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/01/04/blast-2-8-1-with-new-databases-and-better-performance/">BLAST+ 2.8.1 is released with new databases</a>,
@@ -894,7 +975,7 @@ So you don't need to build blastdb for specific taxids now.</li>
 <ol>
 <li>
 <p>Listing all taxids below <code>$id</code> using taxonkit.</p>
-<pre><code>id=6656
+<div class="codehilite"><pre><span></span><code>id=6656
 
 # 6656 is the phylum Arthropoda
 # echo 6656 | taxonkit lineage | taxonkit reformat
@@ -906,20 +987,21 @@ So you don't need to build blastdb for specific taxids now.</li>
 # 10239 virus
 
 # time: 2s
-taxonkit list --ids $id --indent "" &gt; $id.taxid.txt
+taxonkit list --ids $id --indent &quot;&quot; &gt; $id.taxid.txt
 
-# taxonkit list --ids 2,4751,10239 --indent "" &gt; microbe.taxid.txt
+# taxonkit list --ids 2,4751,10239 --indent &quot;&quot; &gt; microbe.taxid.txt
 
 wc -l $id.taxid.txt
 # 518373 6656.taxid.txt
-</code></pre>
+</code></pre></div>
+
 </li>
 <li>
 <p>Retrieving target accessions. There are two options:</p>
 <ol>
 <li>
 <p>From prot.accession2taxid.gz (<strong>faster, recommended</strong>). <em>Note that some accessions are not in <code>nr</code></em>.</p>
-<pre><code># time: 4min
+<div class="codehilite"><pre><span></span><code># time: 4min
 pigz -dc prot.accession2taxid.gz \
     | csvtk grep -t -f taxid -P $id.taxid.txt \
     | csvtk cut -t -f accession.version,taxid \
@@ -930,25 +1012,27 @@ cut -f 1 $id.acc2taxid.txt &gt; $id.acc.txt
 
 wc -l $id.acc.txt
 # 8174609 6656.acc.txt
-</code></pre>
+</code></pre></div>
+
 </li>
 <li>
 <p>From pre-formated <code>nr</code> blastdb</p>
-<pre><code># time: 40min
-blastdbcmd -db nr -entry all -outfmt "%a %T" | pigz -c &gt; nr.acc2taxid.txt.gz
+<div class="codehilite"><pre><span></span><code># time: 40min
+blastdbcmd -db nr -entry all -outfmt &quot;%a %T&quot; | pigz -c &gt; nr.acc2taxid.txt.gz
 
 pigz -dc nr.acc2taxid.txt.gz | wc -l
 # 555220892
 
 # time: 3min
 pigz -dc nr.acc2taxid.txt.gz \
-    | csvtk grep -d ' ' -D ' ' -f 2 -P $id.taxid.txt \
-    | cut -d ' '  -f 1 \
+    | csvtk grep -d &#39; &#39; -D &#39; &#39; -f 2 -P $id.taxid.txt \
+    | cut -d &#39; &#39;  -f 1 \
     &gt; $id.acc.txt
 
 wc -l $id.acc.txt
 # 6928021 6656.acc.txt
-</code></pre>
+</code></pre></div>
+
 </li>
 </ol>
 </li>
@@ -959,569 +1043,580 @@ wc -l $id.acc.txt
 <p>From <code>nr.fa</code> exported from pre-formated blastdb (<strong>faster, smaller output file, recommended</strong>).
    <strong>DO NOT directly download <code>nr.gz</code> from <a href="ftp://ftp.ncbi.nih.gov/blast/db/FASTA/nr.gz">ncbi ftp</a></strong>,
    in which the FASTA headers are not well formated.</p>
-<pre><code># 1. exporting nr.fa from pre-formated blastdb
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. exporting nr.fa from pre-formated blastdb</span>
 
-# time: 117min (run only once)
-blastdbcmd -db nr -dbtype prot -entry all -outfmt "%f" -out - | pigz -c &gt; nr.fa.gz
+<span class="c1"># time: 117min (run only once)</span>
+<span class="n">blastdbcmd</span><span class="w"> </span><span class="o">-</span><span class="n">db</span><span class="w"> </span><span class="n">nr</span><span class="w"> </span><span class="o">-</span><span class="n">dbtype</span><span class="w"> </span><span class="n">prot</span><span class="w"> </span><span class="o">-</span><span class="n">entry</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="o">-</span><span class="n">outfmt</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">%f</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">-</span><span class="n">out</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">pigz</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">nr</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
 
-# =====================================================================
+<span class="c1"># =====================================================================</span>
 
-# 2. filtering sequence belong to $taxid
+<span class="c1"># 2. filtering sequence belong to $taxid</span>
 
-# ---------------------------------------------------------------------
+<span class="c1"># ---------------------------------------------------------------------</span>
 
-# methond 1) (for cases where $id.acc.txt is not very huge)
-# time: 80min
-# perl one-liner is used to unfold records having mulitple accessions
-time cat &lt;(echo) &lt;(pigz -dc nr.fa.gz) \
-    | perl -e 'BEGIN{ $/ = "\n&gt;"; &lt;&gt;; } while(&lt;&gt;){s/&gt;$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ /&gt;/) { print "&gt;$_"; next; }; $h = "&gt;$h"; while($h =~ /&gt;([^ ]+ .+?) ?(?=&gt;|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print "&gt;$h1\n$s";} } ' \
-    | seqkit grep -f $id.acc.txt -o nr.$id.fa.gz
+<span class="c1"># methond 1) (for cases where $id.acc.txt is not very huge)</span>
+<span class="c1"># time: 80min</span>
+<span class="c1"># perl one-liner is used to unfold records having mulitple accessions</span>
+<span class="n">time</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="o">&lt;</span><span class="p">(</span><span class="n">echo</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="p">(</span><span class="n">pigz</span><span class="w"> </span><span class="o">-</span><span class="n">dc</span><span class="w"> </span><span class="n">nr</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="p">)</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">perl</span><span class="w"> </span><span class="o">-</span><span class="n">e</span><span class="w"> </span><span class="s1">&#39;BEGIN{ $/ = &quot;</span><span class="se">\n</span><span class="s1">&gt;&quot;; &lt;&gt;; } while(&lt;&gt;){s/&gt;$//;  $i = index $_, &quot;</span><span class="se">\n</span><span class="s1">&quot;; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ /&gt;/) { print &quot;&gt;$_&quot;; next; }; $h = &quot;&gt;$h&quot;; while($h =~ /&gt;([^ ]+ .+?) ?(?=&gt;|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print &quot;&gt;$h1</span><span class="se">\n</span><span class="s1">$s&quot;;} } &#39;</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">seqkit</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="o">$</span><span class="n">id</span><span class="o">.</span><span class="n">acc</span><span class="o">.</span><span class="n">txt</span><span class="w"> </span><span class="o">-</span><span class="n">o</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
 
-# ---------------------------------------------------------------------
+<span class="c1"># ---------------------------------------------------------------------</span>
 
-# method 2) (**faster**)
+<span class="c1"># method 2) (**faster**)</span>
 
-# 33min (run only once)
-# (1). split nr.fa.gz. # Note: I have 16 cpus.
-$ time seqkit split2 -p 15 nr.fa.gz
+<span class="c1"># 33min (run only once)</span>
+<span class="c1"># (1). split nr.fa.gz. # Note: I have 16 cpus.</span>
+<span class="o">$</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="n">seqkit</span><span class="w"> </span><span class="n">split2</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="n">nr</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
 
-# (2). parallize unfolding
-$ cat _unfold_blastdb_fa.sh
-#!/bin/sh
-perl -e 'BEGIN{ $/ = "\n&gt;"; &lt;&gt;; } while(&lt;&gt;){s/&gt;$//;  $i = index $_, "\n"; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ /&gt;/) { print "&gt;$_"; next; }; $h = "&gt;$h"; while($h =~ /&gt;([^ ]+ .+?) ?(?=&gt;|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print "&gt;$h1\n$s";} } '
+<span class="c1"># (2). parallize unfolding</span>
+<span class="o">$</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="n">_unfold_blastdb_fa</span><span class="o">.</span><span class="n">sh</span>
+<span class="c1">#!/bin/sh</span>
+<span class="n">perl</span><span class="w"> </span><span class="o">-</span><span class="n">e</span><span class="w"> </span><span class="s1">&#39;BEGIN{ $/ = &quot;</span><span class="se">\n</span><span class="s1">&gt;&quot;; &lt;&gt;; } while(&lt;&gt;){s/&gt;$//;  $i = index $_, &quot;</span><span class="se">\n</span><span class="s1">&quot;; $h = substr $_, 0, $i; $s = substr $_, $i+1; if ($h !~ /&gt;/) { print &quot;&gt;$_&quot;; next; }; $h = &quot;&gt;$h&quot;; while($h =~ /&gt;([^ ]+ .+?) ?(?=&gt;|$)/g){ $h1 = $1; $h1 =~ s/^\W+//; print &quot;&gt;$h1</span><span class="se">\n</span><span class="s1">$s&quot;;} } &#39;</span>
 
-# 10 min
-time ls nr.fa.gz.split/nr.part_*.fa.gz \
-    | rush -j 15 -v id=$id 'cat &lt;(echo) &lt;(pigz -dc {}) \
-        | ./_unfold_blastdb_fa.sh \
-        | seqkit grep -f {id}.acc.txt -o nr.{id}.{%@nr\.(.+)$} '
+<span class="c1"># 10 min</span>
+<span class="n">time</span><span class="w"> </span><span class="n">ls</span><span class="w"> </span><span class="n">nr</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="o">.</span><span class="n">split</span><span class="o">/</span><span class="n">nr</span><span class="o">.</span><span class="n">part_</span><span class="o">*.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">rush</span><span class="w"> </span><span class="o">-</span><span class="n">j</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="n">id</span><span class="o">=$</span><span class="n">id</span><span class="w"> </span><span class="s1">&#39;cat &lt;(echo) &lt;(pigz -dc {}) </span><span class="se">\</span>
+<span class="s1">        | ./_unfold_blastdb_fa.sh </span><span class="se">\</span>
+<span class="s1">        | seqkit grep -f {id}.acc.txt -o nr.{id}.{%@nr\.(.+)$} &#39;</span>
 
-# (3). merge result
-cat nr.$id.part*.fa.gz &gt; nr.$id.fa.gz
-rm nr.$id.part*.fa.gz
+<span class="c1"># (3). merge result</span>
+<span class="n">cat</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">part</span><span class="o">*.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">rm</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">part</span><span class="o">*.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
 
-# ---------------------------------------------------------------------
+<span class="c1"># ---------------------------------------------------------------------</span>
 
-# method 3) (for huge $id.acc.txt file, e.g., bacteria)
+<span class="c1"># method 3) (for huge $id.acc.txt file, e.g., bacteria)</span>
 
-# (1). split ${id}.acc.txt into several parts. chunk size depends on lines and RAM (64G for me).
-split -d -l 300000000 $id.acc.txt $id.acc.txt.part_
+<span class="c1"># (1). split ${id}.acc.txt into several parts. chunk size depends on lines and RAM (64G for me).</span>
+<span class="n">split</span><span class="w"> </span><span class="o">-</span><span class="n">d</span><span class="w"> </span><span class="o">-</span><span class="n">l</span><span class="w"> </span><span class="mi">300000000</span><span class="w"> </span><span class="o">$</span><span class="n">id</span><span class="o">.</span><span class="n">acc</span><span class="o">.</span><span class="n">txt</span><span class="w"> </span><span class="o">$</span><span class="n">id</span><span class="o">.</span><span class="n">acc</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">part_</span>
 
-# (2). filter
-time ls $id.acc.txt.part_* \
-    | rush -j 1 --immediate-output -v id=$id \
-        'echo {}; cat &lt;(echo) &lt;(pigz -dc nr.fa.gz ) \
-        | ./_unfold_blastdb_fa.sh \
-        | seqkit grep -f {} -o nr.{id}.{%@(part_.+)}.fa.gz '
+<span class="c1"># (2). filter</span>
+<span class="n">time</span><span class="w"> </span><span class="n">ls</span><span class="w"> </span><span class="o">$</span><span class="n">id</span><span class="o">.</span><span class="n">acc</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">part_</span><span class="o">*</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">rush</span><span class="w"> </span><span class="o">-</span><span class="n">j</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">--</span><span class="n">immediate</span><span class="o">-</span><span class="n">output</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="n">id</span><span class="o">=$</span><span class="n">id</span><span class="w"> </span>\
+<span class="w">        </span><span class="s1">&#39;echo {}; cat &lt;(echo) &lt;(pigz -dc nr.fa.gz ) </span><span class="se">\</span>
+<span class="s1">        | ./_unfold_blastdb_fa.sh </span><span class="se">\</span>
+<span class="s1">        | seqkit grep -f {} -o nr.{id}.{%@(part_.+)}.fa.gz &#39;</span>
 
-# (3). merge
-cat nr.$id.part*.fa.gz &gt; nr.$id.fa.gz
+<span class="c1"># (3). merge</span>
+<span class="n">cat</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">part</span><span class="o">*.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
 
-# clean
-rm nr.$id.part*.fa.gz
-rm $id.acc.txt.part_
+<span class="c1"># clean</span>
+<span class="n">rm</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">part</span><span class="o">*.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">rm</span><span class="w"> </span><span class="o">$</span><span class="n">id</span><span class="o">.</span><span class="n">acc</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">part_</span>
 
-# (4). optionally adding taxid, you may edit replacement (-r) below
-# split
-time split -d -l 200000000 $id.acc2taxid.txt $id.acc2taxid.txt.part_
+<span class="c1"># (4). optionally adding taxid, you may edit replacement (-r) below</span>
+<span class="c1"># split</span>
+<span class="n">time</span><span class="w"> </span><span class="n">split</span><span class="w"> </span><span class="o">-</span><span class="n">d</span><span class="w"> </span><span class="o">-</span><span class="n">l</span><span class="w"> </span><span class="mi">200000000</span><span class="w"> </span><span class="o">$</span><span class="n">id</span><span class="o">.</span><span class="n">acc2taxid</span><span class="o">.</span><span class="n">txt</span><span class="w"> </span><span class="o">$</span><span class="n">id</span><span class="o">.</span><span class="n">acc2taxid</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">part_</span>
 
-ln -s nr.$id.fa.gz nr.$id.with-taxid.part0.fa.gz         
-i=0
-for f in $id.acc2taxid.txt.part_* ; do
-    echo $f
-    time pigz -cd nr.$id.with-taxid.part$i.fa.gz \
-        | seqkit replace -k $f -p "^([^\-]+?) " -r "{kv}-\$1 " -K -U -o nr.$id.with-taxid.part$(($i+1)).fa.gz;
-    /bin/rm nr.$id.with-taxid.part$i.fa.gz
-    i=$(($i+1));
-done
-mv nr.$id.with-taxid.part$i.fa.gz nr.$id.with-taxid.fa.gz
+<span class="n">ln</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">with</span><span class="o">-</span><span class="n">taxid</span><span class="o">.</span><span class="n">part0</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="w">         </span>
+<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="o">$</span><span class="n">id</span><span class="o">.</span><span class="n">acc2taxid</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">part_</span><span class="o">*</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">do</span>
+<span class="w">    </span><span class="n">echo</span><span class="w"> </span><span class="o">$</span><span class="n">f</span>
+<span class="w">    </span><span class="n">time</span><span class="w"> </span><span class="n">pigz</span><span class="w"> </span><span class="o">-</span><span class="n">cd</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">with</span><span class="o">-</span><span class="n">taxid</span><span class="o">.</span><span class="n">part</span><span class="o">$</span><span class="n">i</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span>\
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="n">seqkit</span><span class="w"> </span><span class="n">replace</span><span class="w"> </span><span class="o">-</span><span class="n">k</span><span class="w"> </span><span class="o">$</span><span class="n">f</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="s2">&quot;^([^\-]+?) &quot;</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="s2">&quot;{kv}-\$1 &quot;</span><span class="w"> </span><span class="o">-</span><span class="n">K</span><span class="w"> </span><span class="o">-</span><span class="n">U</span><span class="w"> </span><span class="o">-</span><span class="n">o</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">with</span><span class="o">-</span><span class="n">taxid</span><span class="o">.</span><span class="n">part</span><span class="o">$</span><span class="p">((</span><span class="o">$</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="p">;</span>
+<span class="w">    </span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">rm</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">with</span><span class="o">-</span><span class="n">taxid</span><span class="o">.</span><span class="n">part</span><span class="o">$</span><span class="n">i</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
+<span class="w">    </span><span class="n">i</span><span class="o">=$</span><span class="p">((</span><span class="o">$</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+<span class="n">done</span>
+<span class="n">mv</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">with</span><span class="o">-</span><span class="n">taxid</span><span class="o">.</span><span class="n">part</span><span class="o">$</span><span class="n">i</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">with</span><span class="o">-</span><span class="n">taxid</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
 
-# =====================================================================
+<span class="c1"># =====================================================================</span>
 
-# 3. counting sequences
-#
-# ls -lh nr.$id.fa.gz
-# -rw-r--r-- 1 shenwei shenwei 902M 9月  13 01:42 nr.6656.fa.gz
-#
-pigz -dc nr.$id.fa.gz | grep '^&gt;' -c
+<span class="c1"># 3. counting sequences</span>
+<span class="c1">#</span>
+<span class="c1"># ls -lh nr.$id.fa.gz</span>
+<span class="c1"># -rw-r--r-- 1 shenwei shenwei 902M 9月  13 01:42 nr.6656.fa.gz</span>
+<span class="c1">#</span>
+<span class="n">pigz</span><span class="w"> </span><span class="o">-</span><span class="n">dc</span><span class="w"> </span><span class="n">nr</span><span class="o">.$</span><span class="n">id</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="s1">&#39;^&gt;&#39;</span><span class="w"> </span><span class="o">-</span><span class="n">c</span>
 
-# 6928017
-# Here 6928017 ~=  6928021 ($id.acc.txt)
-</code></pre>
+<span class="c1"># 6928017</span>
+<span class="c1"># Here 6928017 ~=  6928021 ($id.acc.txt)</span>
+</code></pre></div>
+
 </li>
 <li>
 <p>Directly from pre-formated blastdb</p>
-<pre><code># time: 5h20min
+<div class="codehilite"><pre><span></span><code><span class="gh">#</span> time: 5h20min
 blastdbcmd -db nr -entry_batch $id.acc.txt -out - | pigz -c &gt; nr.$id.fa.gz
 
-# counting sequences
-#
-# Note that the headers of outputed fasta by blastdbcmd are "folded"
-# for accessions from different species with same sequences, so the
-# number may be small than $(wc -l $id.acc.txt).
-pigz -dc nr.$id.fa.gz | grep '^&gt;' -c
-# 1577383
+<span class="gh">#</span> counting sequences
+<span class="gh">#</span>
+# Note that the headers of outputed fasta by blastdbcmd are &quot;folded&quot;
+<span class="gh">#</span> for accessions from different species with same sequences, so the
+<span class="gh">#</span> number may be small than $(wc -l $id.acc.txt).
+pigz -dc nr.$id.fa.gz | grep &#39;^&gt;&#39; -c
+<span class="gh">#</span> 1577383
 
-# counting accessions
-#
+<span class="gh">#</span> counting accessions
+<span class="gh">#</span>
 # ls -lh nr.$id.fa.gz
-# -rw-r--r-- 1 shenwei shenwei 2.1G 9月  13 03:38 nr.6656.fa.gz
-#
-pigz -dc nr.$id.fa.gz | grep '^&gt;' | sed 's/&gt;/\n&gt;/g' | grep '^&gt;' -c
-# 288415413
-</code></pre>
+<span class="gh">#</span> -rw-r--r-- 1 shenwei shenwei 2.1G 9月  13 03:38 nr.6656.fa.gz
+<span class="gh">#</span>
+pigz -dc nr.$id.fa.gz | grep &#39;^&gt;&#39; | sed &#39;s/&gt;/\n&gt;/g&#39; | grep &#39;^&gt;&#39; -c
+<span class="gh">#</span> 288415413
+</code></pre></div>
+
 </li>
 </ol>
 </li>
 <li>
 <p>makeblastdb</p>
-<pre><code>pigz -dc nr.$id.fa.gz &gt; nr.$id.fa
+<div class="codehilite"><pre><span></span><code><span class="nx">pigz</span><span class="w"> </span><span class="o">-</span><span class="nx">dc</span><span class="w"> </span><span class="nx">nr</span><span class="p">.</span><span class="err">$</span><span class="nx">id</span><span class="p">.</span><span class="nx">fa</span><span class="p">.</span><span class="nx">gz</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="nx">nr</span><span class="p">.</span><span class="err">$</span><span class="nx">id</span><span class="p">.</span><span class="nx">fa</span>
 
-# time: 3min ($nr.$id.fa from step 3 option 1)
-#
-# building $nr.$id.fa from step 3 option 2 with -parse_seqids would produce error:
-#
-#     BLAST Database creation error: Error: Duplicate seq_ids are found: SP|P29868.1
-#
-makeblastdb -parse_seqids -in nr.$id.fa -dbtype prot -out nr.$id
+<span class="err">#</span><span class="w"> </span><span class="nx">time</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="nx">min</span><span class="w"> </span><span class="p">(</span><span class="err">$</span><span class="nx">nr</span><span class="p">.</span><span class="err">$</span><span class="nx">id</span><span class="p">.</span><span class="nx">fa</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">step</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="nx">option</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="err">#</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">building</span><span class="w"> </span><span class="err">$</span><span class="nx">nr</span><span class="p">.</span><span class="err">$</span><span class="nx">id</span><span class="p">.</span><span class="nx">fa</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">step</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="nx">option</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="nx">with</span><span class="w"> </span><span class="o">-</span><span class="nx">parse_seqids</span><span class="w"> </span><span class="nx">would</span><span class="w"> </span><span class="nx">produce</span><span class="w"> </span><span class="nx">error</span><span class="p">:</span>
+<span class="err">#</span>
+<span class="err">#</span><span class="w">     </span><span class="nx">BLAST</span><span class="w"> </span><span class="nx">Database</span><span class="w"> </span><span class="nx">creation</span><span class="w"> </span><span class="nx">error</span><span class="p">:</span><span class="w"> </span><span class="nx">Error</span><span class="p">:</span><span class="w"> </span><span class="nx">Duplicate</span><span class="w"> </span><span class="nx">seq_ids</span><span class="w"> </span><span class="nx">are</span><span class="w"> </span><span class="nx">found</span><span class="p">:</span><span class="w"> </span><span class="nx">SP</span><span class="o">|</span><span class="nx">P29868</span><span class="m m-Double">.1</span>
+<span class="err">#</span>
+<span class="nx">makeblastdb</span><span class="w"> </span><span class="o">-</span><span class="nx">parse_seqids</span><span class="w"> </span><span class="o">-</span><span class="k">in</span><span class="w"> </span><span class="nx">nr</span><span class="p">.</span><span class="err">$</span><span class="nx">id</span><span class="p">.</span><span class="nx">fa</span><span class="w"> </span><span class="o">-</span><span class="nx">dbtype</span><span class="w"> </span><span class="nx">prot</span><span class="w"> </span><span class="o">-</span><span class="nx">out</span><span class="w"> </span><span class="nx">nr</span><span class="p">.</span><span class="err">$</span><span class="nx">id</span>
 
-# rm nr.$id.fa
-</code></pre>
+<span class="err">#</span><span class="w"> </span><span class="nx">rm</span><span class="w"> </span><span class="nx">nr</span><span class="p">.</span><span class="err">$</span><span class="nx">id</span><span class="p">.</span><span class="nx">fa</span>
+</code></pre></div>
+
 </li>
 <li>
 <p>blastp (optional)</p>
-<pre><code># blastdb nr.$id is built from sequences in step 3 option 1
-#
-blastp -num_threads 16 -db nr.$id -query t4.fa &gt; t4.fa.blast
-# real    0m20.866s
+<div class="codehilite"><pre><span></span><code><span class="cp"># blastdb nr.$id is built from sequences in step 3 option 1</span>
+<span class="cp">#</span>
+<span class="n">blastp</span><span class="w"> </span><span class="o">-</span><span class="n">num_threads</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="o">-</span><span class="n">db</span><span class="w"> </span><span class="n">nr</span><span class="p">.</span><span class="n">$id</span><span class="w"> </span><span class="o">-</span><span class="n">query</span><span class="w"> </span><span class="n">t4</span><span class="p">.</span><span class="n">fa</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">t4</span><span class="p">.</span><span class="n">fa</span><span class="p">.</span><span class="n">blast</span>
+<span class="cp"># real    0m20.866s</span>
 
-# $ cat t4.fa.blast | grep Query= -A 10
-# Query= A0A0J9X1W9.2 RecName: Full=Mu-theraphotoxin-Hd1a; Short=Mu-TRTX-Hd1a
-#
-# Length=35
-                                                                     Score     E
-# Sequences producing significant alignments:                          (Bits)  Value
+<span class="cp"># $ cat t4.fa.blast | grep Query= -A 10</span>
+<span class="cp"># Query= A0A0J9X1W9.2 RecName: Full=Mu-theraphotoxin-Hd1a; Short=Mu-TRTX-Hd1a</span>
+<span class="cp">#</span>
+<span class="cp"># Length=35</span>
+<span class="w">                                                                     </span><span class="n">Score</span><span class="w">     </span><span class="n">E</span>
+<span class="cp"># Sequences producing significant alignments:                          (Bits)  Value</span>
 
-# 2MPQ_A  Chain A, Solution structure of the sodium channel toxin Hd1a  72.4    2e-17
-# A0A0J9X1W9.2  RecName: Full=Mu-theraphotoxin-Hd1a; Short=Mu-TRTX-...  72.4    2e-17
-# ADB56726.1  HNTX-IV.2 precursor [Haplopelma hainanum]                 66.6    9e-15
-# D2Y233.1  RecName: Full=Mu-theraphotoxin-Hhn1b 2; Short=Mu-TRTX-H...  66.6    9e-15
-# ADB56830.1  HNTX-IV.3 precursor [Haplopelma hainanum]                 66.6    9e-15
-</code></pre>
+<span class="cp"># 2MPQ_A  Chain A, Solution structure of the sodium channel toxin Hd1a  72.4    2e-17</span>
+<span class="cp"># A0A0J9X1W9.2  RecName: Full=Mu-theraphotoxin-Hd1a; Short=Mu-TRTX-...  72.4    2e-17</span>
+<span class="cp"># ADB56726.1  HNTX-IV.2 precursor [Haplopelma hainanum]                 66.6    9e-15</span>
+<span class="cp"># D2Y233.1  RecName: Full=Mu-theraphotoxin-Hhn1b 2; Short=Mu-TRTX-H...  66.6    9e-15</span>
+<span class="cp"># ADB56830.1  HNTX-IV.3 precursor [Haplopelma hainanum]                 66.6    9e-15</span>
+</code></pre></div>
+
 </li>
 </ol>
-<h2 id="summaries-of-taxonomy-data">Summaries of taxonomy data</h2>
+<h2 id="summaries-of-taxonomy-data">Summaries of taxonomy data<a class="headerlink" href="#summaries-of-taxonomy-data" title="Permanent link">Link</a></h2>
 <p>You can change the TaxId of interest.</p>
 <ol>
 <li>
 <p>Rank counts of common categories.</p>
-<pre><code>$ echo Archaea Bacteria Eukaryota Fungi Metazoa Viridiplantae \
-    | rush -D ' ' -T b \
-        'taxonkit list --ids $(echo {} | taxonkit name2taxid | cut -f 2) \
-            | sed 1d \
-            | taxonkit filter -i 2 -E genus -L genus \
-            | taxonkit lineage -L -r \
-            | csvtk freq -H -t -f 2 -nr \
-            &gt; stats.{}.tsv '
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Archaea<span class="w"> </span>Bacteria<span class="w"> </span>Eukaryota<span class="w"> </span>Fungi<span class="w"> </span>Metazoa<span class="w"> </span>Viridiplantae<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>rush<span class="w"> </span>-D<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"> </span>-T<span class="w"> </span>b<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="s1">&#39;taxonkit list --ids $(echo {} | taxonkit name2taxid | cut -f 2) \</span>
+<span class="s1">            | sed 1d \</span>
+<span class="s1">            | taxonkit filter -i 2 -E genus -L genus \</span>
+<span class="s1">            | taxonkit lineage -L -r \</span>
+<span class="s1">            | csvtk freq -H -t -f 2 -nr \</span>
+<span class="s1">            &gt; stats.{}.tsv &#39;</span>
 
-$ csvtk -t join --outer-join stats.*.tsv \
-    | csvtk add-header -t -n "rank,$(ls stats.*.tsv | rush -k 'echo {@stats.(.+).tsv}' | paste -sd, )" \
-    | csvtk csv2md -t
-</code></pre>
+$<span class="w"> </span>csvtk<span class="w"> </span>-t<span class="w"> </span>join<span class="w"> </span>--outer-join<span class="w"> </span>stats.*.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>add-header<span class="w"> </span>-t<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;rank,</span><span class="k">$(</span>ls<span class="w"> </span>stats.*.tsv<span class="w"> </span><span class="p">|</span><span class="w"> </span>rush<span class="w"> </span>-k<span class="w"> </span><span class="s1">&#39;echo {@stats.(.+).tsv}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>paste<span class="w"> </span>-sd,<span class="w"> </span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>csv2md<span class="w"> </span>-t
+</code></pre></div>
+
 <p><a href="https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=statistics&amp;uncultured=hide&amp;unspecified=hide">Similar data on NCBI Taxonomy</a></p>
 <table>
 <thead>
 <tr>
-<th align="left">rank</th>
-<th align="left">Archaea</th>
-<th align="left">Bacteria</th>
-<th align="left">Eukaryota</th>
-<th align="left">Fungi</th>
-<th align="left">Metazoa</th>
-<th align="left">Viridiplantae</th>
+<th style="text-align: left;">rank</th>
+<th style="text-align: left;">Archaea</th>
+<th style="text-align: left;">Bacteria</th>
+<th style="text-align: left;">Eukaryota</th>
+<th style="text-align: left;">Fungi</th>
+<th style="text-align: left;">Metazoa</th>
+<th style="text-align: left;">Viridiplantae</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">species</td>
-<td align="left">12482</td>
-<td align="left">460940</td>
-<td align="left">1349648</td>
-<td align="left">156908</td>
-<td align="left">957297</td>
-<td align="left">191026</td>
+<td style="text-align: left;">species</td>
+<td style="text-align: left;">12482</td>
+<td style="text-align: left;">460940</td>
+<td style="text-align: left;">1349648</td>
+<td style="text-align: left;">156908</td>
+<td style="text-align: left;">957297</td>
+<td style="text-align: left;">191026</td>
 </tr>
 <tr>
-<td align="left">strain</td>
-<td align="left">354</td>
-<td align="left">40643</td>
-<td align="left">3486</td>
-<td align="left">2352</td>
-<td align="left">33</td>
-<td align="left">50</td>
+<td style="text-align: left;">strain</td>
+<td style="text-align: left;">354</td>
+<td style="text-align: left;">40643</td>
+<td style="text-align: left;">3486</td>
+<td style="text-align: left;">2352</td>
+<td style="text-align: left;">33</td>
+<td style="text-align: left;">50</td>
 </tr>
 <tr>
-<td align="left">genus</td>
-<td align="left">205</td>
-<td align="left">4112</td>
-<td align="left">90882</td>
-<td align="left">6844</td>
-<td align="left">64148</td>
-<td align="left">16202</td>
+<td style="text-align: left;">genus</td>
+<td style="text-align: left;">205</td>
+<td style="text-align: left;">4112</td>
+<td style="text-align: left;">90882</td>
+<td style="text-align: left;">6844</td>
+<td style="text-align: left;">64148</td>
+<td style="text-align: left;">16202</td>
 </tr>
 <tr>
-<td align="left">isolate</td>
-<td align="left">7</td>
-<td align="left">503</td>
-<td align="left">809</td>
-<td align="left">76</td>
-<td align="left">17</td>
-<td align="left">3</td>
+<td style="text-align: left;">isolate</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">503</td>
+<td style="text-align: left;">809</td>
+<td style="text-align: left;">76</td>
+<td style="text-align: left;">17</td>
+<td style="text-align: left;">3</td>
 </tr>
 <tr>
-<td align="left">species group</td>
-<td align="left">2</td>
-<td align="left">77</td>
-<td align="left">251</td>
-<td align="left">22</td>
-<td align="left">214</td>
-<td align="left">5</td>
+<td style="text-align: left;">species group</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">77</td>
+<td style="text-align: left;">251</td>
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">214</td>
+<td style="text-align: left;">5</td>
 </tr>
 <tr>
-<td align="left">serotype</td>
-<td align="left"></td>
-<td align="left">218</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td style="text-align: left;">serotype</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">218</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td align="left">serogroup</td>
-<td align="left"></td>
-<td align="left">136</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td style="text-align: left;">serogroup</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">136</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td align="left">subsection</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">21</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">21</td>
+<td style="text-align: left;">subsection</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">21</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">21</td>
 </tr>
 <tr>
-<td align="left">subspecies</td>
-<td align="left"></td>
-<td align="left">632</td>
-<td align="left">24523</td>
-<td align="left">158</td>
-<td align="left">17043</td>
-<td align="left">7212</td>
+<td style="text-align: left;">subspecies</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">632</td>
+<td style="text-align: left;">24523</td>
+<td style="text-align: left;">158</td>
+<td style="text-align: left;">17043</td>
+<td style="text-align: left;">7212</td>
 </tr>
 <tr>
-<td align="left">forma specialis</td>
-<td align="left"></td>
-<td align="left">521</td>
-<td align="left">220</td>
-<td align="left">179</td>
-<td align="left">33</td>
-<td align="left">1</td>
+<td style="text-align: left;">forma specialis</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">521</td>
+<td style="text-align: left;">220</td>
+<td style="text-align: left;">179</td>
+<td style="text-align: left;">33</td>
+<td style="text-align: left;">1</td>
 </tr>
 <tr>
-<td align="left">species subgroup</td>
-<td align="left"></td>
-<td align="left">23</td>
-<td align="left">101</td>
-<td align="left"></td>
-<td align="left">101</td>
-<td align="left"></td>
+<td style="text-align: left;">species subgroup</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">23</td>
+<td style="text-align: left;">101</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">101</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td align="left">biotype</td>
-<td align="left"></td>
-<td align="left">7</td>
-<td align="left">10</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td style="text-align: left;">biotype</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td align="left">morph</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">12</td>
-<td align="left">3</td>
-<td align="left">4</td>
-<td align="left">5</td>
+<td style="text-align: left;">morph</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">5</td>
 </tr>
 <tr>
-<td align="left">section</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">437</td>
-<td align="left">37</td>
-<td align="left">2</td>
-<td align="left">398</td>
+<td style="text-align: left;">section</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">437</td>
+<td style="text-align: left;">37</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">398</td>
 </tr>
 <tr>
-<td align="left">genotype</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">12</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">12</td>
+<td style="text-align: left;">genotype</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">12</td>
 </tr>
 <tr>
-<td align="left">series</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">9</td>
-<td align="left"></td>
-<td align="left">5</td>
-<td align="left">4</td>
+<td style="text-align: left;">series</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">4</td>
 </tr>
 <tr>
-<td align="left">varietas</td>
-<td align="left"></td>
-<td align="left">25</td>
-<td align="left">8499</td>
-<td align="left">1100</td>
-<td align="left">2</td>
-<td align="left">7188</td>
+<td style="text-align: left;">varietas</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">25</td>
+<td style="text-align: left;">8499</td>
+<td style="text-align: left;">1100</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">7188</td>
 </tr>
 <tr>
-<td align="left">forma</td>
-<td align="left"></td>
-<td align="left">4</td>
-<td align="left">560</td>
-<td align="left">185</td>
-<td align="left">6</td>
-<td align="left">315</td>
+<td style="text-align: left;">forma</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">560</td>
+<td style="text-align: left;">185</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">315</td>
 </tr>
 <tr>
-<td align="left">subgenus</td>
-<td align="left"></td>
-<td align="left">1</td>
-<td align="left">1558</td>
-<td align="left">10</td>
-<td align="left">1414</td>
-<td align="left">112</td>
+<td style="text-align: left;">subgenus</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1558</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">1414</td>
+<td style="text-align: left;">112</td>
 </tr>
 <tr>
-<td align="left">pathogroup</td>
-<td align="left"></td>
-<td align="left">5</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td style="text-align: left;">pathogroup</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td align="left">subvariety</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">5</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">5</td>
+<td style="text-align: left;">subvariety</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">5</td>
 </tr>
 </tbody>
 </table>
 </li>
 <li>
 <p>Count of all ranks</p>
-<pre><code>$ time taxonkit list --ids 1 \
-    | taxonkit lineage -L -r \
-    | csvtk freq -H -t -f 2 -nr \
-    | csvtk pretty -H -t
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">time</span><span class="w"> </span>taxonkit<span class="w"> </span>list<span class="w"> </span>--ids<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-L<span class="w"> </span>-r<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>freq<span class="w"> </span>-H<span class="w"> </span>-t<span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="w"> </span>-nr<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
 
-species            1879659
-no rank            222743
-genus              96625
-strain             44483
-subspecies         25174
-family             9492
-varietas           8524
-subfamily          3050
-tribe              2213
-order              1660
-subgenus           1618
-isolate            1319
-serotype           1216
-clade              886
-superfamily        865
-forma specialis    741
-forma              564
-subtribe           508
-section            437
-class              429
-suborder           372
-species group      330
-phylum             272
-subclass           156
-serogroup          138
-infraorder         130
-species subgroup   124
-superorder         55
-subphylum          33
-parvorder          26
-subsection         21
-genotype           20
-infraclass         18
-biotype            17
-morph              12
-kingdom            11
-series             9
-superclass         6
-cohort             5
-pathogroup         5
-subvariety         5
-superkingdom       4
-subcohort          3
-subkingdom         1
-superphylum        1
+species<span class="w">            </span><span class="m">1879659</span>
+no<span class="w"> </span>rank<span class="w">            </span><span class="m">222743</span>
+genus<span class="w">              </span><span class="m">96625</span>
+strain<span class="w">             </span><span class="m">44483</span>
+subspecies<span class="w">         </span><span class="m">25174</span>
+family<span class="w">             </span><span class="m">9492</span>
+varietas<span class="w">           </span><span class="m">8524</span>
+subfamily<span class="w">          </span><span class="m">3050</span>
+tribe<span class="w">              </span><span class="m">2213</span>
+order<span class="w">              </span><span class="m">1660</span>
+subgenus<span class="w">           </span><span class="m">1618</span>
+isolate<span class="w">            </span><span class="m">1319</span>
+serotype<span class="w">           </span><span class="m">1216</span>
+clade<span class="w">              </span><span class="m">886</span>
+superfamily<span class="w">        </span><span class="m">865</span>
+forma<span class="w"> </span>specialis<span class="w">    </span><span class="m">741</span>
+forma<span class="w">              </span><span class="m">564</span>
+subtribe<span class="w">           </span><span class="m">508</span>
+section<span class="w">            </span><span class="m">437</span>
+class<span class="w">              </span><span class="m">429</span>
+suborder<span class="w">           </span><span class="m">372</span>
+species<span class="w"> </span>group<span class="w">      </span><span class="m">330</span>
+phylum<span class="w">             </span><span class="m">272</span>
+subclass<span class="w">           </span><span class="m">156</span>
+serogroup<span class="w">          </span><span class="m">138</span>
+infraorder<span class="w">         </span><span class="m">130</span>
+species<span class="w"> </span>subgroup<span class="w">   </span><span class="m">124</span>
+superorder<span class="w">         </span><span class="m">55</span>
+subphylum<span class="w">          </span><span class="m">33</span>
+parvorder<span class="w">          </span><span class="m">26</span>
+subsection<span class="w">         </span><span class="m">21</span>
+genotype<span class="w">           </span><span class="m">20</span>
+infraclass<span class="w">         </span><span class="m">18</span>
+biotype<span class="w">            </span><span class="m">17</span>
+morph<span class="w">              </span><span class="m">12</span>
+kingdom<span class="w">            </span><span class="m">11</span>
+series<span class="w">             </span><span class="m">9</span>
+superclass<span class="w">         </span><span class="m">6</span>
+cohort<span class="w">             </span><span class="m">5</span>
+pathogroup<span class="w">         </span><span class="m">5</span>
+subvariety<span class="w">         </span><span class="m">5</span>
+superkingdom<span class="w">       </span><span class="m">4</span>
+subcohort<span class="w">          </span><span class="m">3</span>
+subkingdom<span class="w">         </span><span class="m">1</span>
+superphylum<span class="w">        </span><span class="m">1</span>
 
-real    0m3.663s
-user    0m15.897s
-sys     0m1.010s
-</code></pre>
+real<span class="w">    </span>0m3.663s
+user<span class="w">    </span>0m15.897s
+sys<span class="w">     </span>0m1.010s
+</code></pre></div>
+
 </li>
 <li>
 <p>Ranks of taxa at or below species.</p>
-<pre><code>$ taxonkit list --ids 1 \
-    | taxonkit filter --lower-than species --equal-to species \
-    | taxonkit lineage -L -r  \
-    | csvtk freq -Ht -nr -f 2 \
-    | csvtk add-header -t -n rank,count \
-    | csvtk pretty -t
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>taxonkit<span class="w"> </span>list<span class="w"> </span>--ids<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>--lower-than<span class="w"> </span>species<span class="w"> </span>--equal-to<span class="w"> </span>species<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-L<span class="w"> </span>-r<span class="w">  </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>freq<span class="w"> </span>-Ht<span class="w"> </span>-nr<span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>add-header<span class="w"> </span>-t<span class="w"> </span>-n<span class="w"> </span>rank,count<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-t
 
-rank              count
----------------   -------
-species           1880044
-no rank           222756
-strain            44483
-subspecies        25171
-varietas          8524
-isolate           1319
-serotype          1216
-clade             885
-forma specialis   741
-forma             564
-serogroup         138
-genotype          20
-biotype           17
-morph             12
-pathogroup        5
-subvariety        5
-</code></pre>
+rank<span class="w">              </span>count
+---------------<span class="w">   </span>-------
+species<span class="w">           </span><span class="m">1880044</span>
+no<span class="w"> </span>rank<span class="w">           </span><span class="m">222756</span>
+strain<span class="w">            </span><span class="m">44483</span>
+subspecies<span class="w">        </span><span class="m">25171</span>
+varietas<span class="w">          </span><span class="m">8524</span>
+isolate<span class="w">           </span><span class="m">1319</span>
+serotype<span class="w">          </span><span class="m">1216</span>
+clade<span class="w">             </span><span class="m">885</span>
+forma<span class="w"> </span>specialis<span class="w">   </span><span class="m">741</span>
+forma<span class="w">             </span><span class="m">564</span>
+serogroup<span class="w">         </span><span class="m">138</span>
+genotype<span class="w">          </span><span class="m">20</span>
+biotype<span class="w">           </span><span class="m">17</span>
+morph<span class="w">             </span><span class="m">12</span>
+pathogroup<span class="w">        </span><span class="m">5</span>
+subvariety<span class="w">        </span><span class="m">5</span>
+</code></pre></div>
+
 </li>
 </ol>
-<h2 id="merging-gtdb-and-ncbi-taxonomy">Merging GTDB and NCBI taxonomy</h2>
+<h2 id="merging-gtdb-and-ncbi-taxonomy">Merging GTDB and NCBI taxonomy<a class="headerlink" href="#merging-gtdb-and-ncbi-taxonomy" title="Permanent link">Link</a></h2>
 <p>Sometimes (<a href="https://github.com/shenwei356/gtdb-taxdump/issues/6">1</a>) one needs to build a database including bacteria and archaea (from GTDB) and viral database from NCBI.
 The idea is to export lineages from both GTDB and NCBI using <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat">taxonkit reformat</a>, and then create taxdump files from them with <a href="https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump">taxonkit create-taxdump</a>.</p>
 <ol>
 <li>
 <p>Exporting taxonomic lineages of taxa with rank equal to species from <a href="https://github.com/shenwei356/gtdb-taxdump">GTDB-taxdump</a>.</p>
-<pre><code>taxonkit list --data-dir gtdb-taxdump/R207/ --ids 1 --indent "" \
+<div class="codehilite"><pre><span></span><code>taxonkit list --data-dir gtdb-taxdump/R207/ --ids 1 --indent &quot;&quot; \
     | taxonkit filter --data-dir gtdb-taxdump/R207/ --equal-to species \
     | taxonkit reformat --data-dir gtdb-taxdump/R207/ --taxid-field 1 \
-        --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" \
+        --format &quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}&quot; \
         -o gtdb.tsv
-</code></pre>
+</code></pre></div>
+
 </li>
 <li>
 <p>Exporting taxonomic lineages of viral taxa with rank equal to or lower than species from NCBI taxdump.
    For taxa whose rank is "no rank" below the species, we treat them as tax of strain rank (<code>--pseudo-strain</code>, taxonkit v0.14.1 needed).</p>
-<pre><code># taxid of Viruses: 10239
-taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent "" \
+<div class="codehilite"><pre><span></span><code># taxid of Viruses: 10239
+taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent &quot;&quot; \
     | taxonkit filter --data-dir ~/.taxonkit --equal-to species --lower-than species \
     | taxonkit reformat --data-dir ~/.taxonkit --taxid-field 1 \
-        --pseudo-strain --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        --pseudo-strain --format &quot;{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}&quot; \
         -o ncbi-viral.tsv
-</code></pre>
+</code></pre></div>
+
 </li>
 <li>
 <p>Creating taxdump from lineages above.</p>
-<pre><code>(awk '{print $_"\t"}' gtdb.tsv; cat ncbi-viral.tsv) \
+<div class="codehilite"><pre><span></span><code>(awk &#39;{print $_&quot;\t&quot;}&#39; gtdb.tsv; cat ncbi-viral.tsv) \
     | taxonkit create-taxdump \
         --field-accession 1 \
-        -R "superkingdom,phylum,class,order,family,genus,species,strain" \
+        -R &quot;superkingdom,phylum,class,order,family,genus,species,strain&quot; \
         -O taxdump
 
-# we use --field-accession  1 to output the mapping file between old taxids and new ones.
+<span class="gh">#</span> we use --field-accession  1 to output the mapping file between old taxids and new ones.
 $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
 2697049 21630522
-</code></pre>
+</code></pre></div>
+
 </li>
 </ol>
 <p>Some tests:</p>
-<pre><code># SARS-COV-2 in NCBI taxonomy
-$ echo 2697049 \
-    | taxonkit lineage -t --data-dir ~/.taxonkit \
-    | csvtk cut -Ht -f 3 \
-    | csvtk unfold -Ht -f 1 -s ";" \
-    | taxonkit lineage -r -n -L --data-dir ~/.taxonkit \
-    | csvtk cut -Ht -f 1,3,2 \
-    | csvtk pretty -Ht
-10239     superkingdom   Viruses
-2559587   clade          Riboviria
-2732396   kingdom        Orthornavirae
-2732408   phylum         Pisuviricota
-2732506   class          Pisoniviricetes
-76804     order          Nidovirales
-2499399   suborder       Cornidovirineae
-11118     family         Coronaviridae
-2501931   subfamily      Orthocoronavirinae
-694002    genus          Betacoronavirus
-2509511   subgenus       Sarbecovirus
-694009    species        Severe acute respiratory syndrome-related coronavirus
-2697049   no rank        Severe acute respiratory syndrome coronavirus 2
+<div class="codehilite"><pre><span></span><code><span class="c1"># SARS-COV-2 in NCBI taxonomy</span>
+<span class="nv">$</span><span class="w"> </span><span class="nv">echo</span><span class="w"> </span><span class="mi">2697049</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="o">~</span><span class="sr">/.taxonkit \</span>
+<span class="sr">    | csvtk cut -Ht -f 3 \</span>
+<span class="sr">    | csvtk unfold -Ht -f 1 -s &quot;;&quot; \</span>
+<span class="sr">    | taxonkit lineage -r -n -L --data-dir ~/</span><span class="o">.</span><span class="n">taxonkit</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">pretty</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span>
+<span class="mi">10239</span><span class="w">     </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">Viruses</span>
+<span class="mi">2559587</span><span class="w">   </span><span class="n">clade</span><span class="w">          </span><span class="n">Riboviria</span>
+<span class="mi">2732396</span><span class="w">   </span><span class="n">kingdom</span><span class="w">        </span><span class="n">Orthornavirae</span>
+<span class="mi">2732408</span><span class="w">   </span><span class="n">phylum</span><span class="w">         </span><span class="n">Pisuviricota</span>
+<span class="mi">2732506</span><span class="w">   </span><span class="n">class</span><span class="w">          </span><span class="n">Pisoniviricetes</span>
+<span class="mi">76804</span><span class="w">     </span><span class="n">order</span><span class="w">          </span><span class="n">Nidovirales</span>
+<span class="mi">2499399</span><span class="w">   </span><span class="n">suborder</span><span class="w">       </span><span class="n">Cornidovirineae</span>
+<span class="mi">11118</span><span class="w">     </span><span class="n">family</span><span class="w">         </span><span class="n">Coronaviridae</span>
+<span class="mi">2501931</span><span class="w">   </span><span class="n">subfamily</span><span class="w">      </span><span class="n">Orthocoronavirinae</span>
+<span class="mi">694002</span><span class="w">    </span><span class="n">genus</span><span class="w">          </span><span class="n">Betacoronavirus</span>
+<span class="mi">2509511</span><span class="w">   </span><span class="n">subgenus</span><span class="w">       </span><span class="n">Sarbecovirus</span>
+<span class="mi">694009</span><span class="w">    </span><span class="n">species</span><span class="w">        </span><span class="n">Severe</span><span class="w"> </span><span class="n">acute</span><span class="w"> </span><span class="n">respiratory</span><span class="w"> </span><span class="n">syndrome</span><span class="o">-</span><span class="n">related</span><span class="w"> </span><span class="n">coronavirus</span>
+<span class="mi">2697049</span><span class="w">   </span><span class="k">no</span><span class="w"> </span><span class="nn">rank</span><span class="w">        </span><span class="n">Severe</span><span class="w"> </span><span class="n">acute</span><span class="w"> </span><span class="n">respiratory</span><span class="w"> </span><span class="n">syndrome</span><span class="w"> </span><span class="n">coronavirus</span><span class="w"> </span><span class="mi">2</span>
 
-$ echo "Severe acute respiratory syndrome coronavirus 2" | taxonkit name2taxid --data-dir taxdump/
-Severe acute respiratory syndrome coronavirus 2 216305222
+<span class="nv">$</span><span class="w"> </span><span class="nv">echo</span><span class="w"> </span><span class="s">&quot;Severe acute respiratory syndrome coronavirus 2&quot;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">name2taxid</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">taxdump</span><span class="o">/</span>
+<span class="n">Severe</span><span class="w"> </span><span class="n">acute</span><span class="w"> </span><span class="n">respiratory</span><span class="w"> </span><span class="n">syndrome</span><span class="w"> </span><span class="n">coronavirus</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">216305222</span>
 
-$ echo 216305222 \
-    | taxonkit lineage -t --data-dir taxdump/ \
-    | csvtk cut -Ht -f 3 \
-    | csvtk unfold -Ht -f 1 -s ";" \
-    | taxonkit lineage -r -n -L --data-dir taxdump/ \
-    | csvtk cut -Ht -f 1,3,2 \
-    | csvtk pretty -Ht
-1287770734   superkingdom   Viruses
-1506901452   phylum         Pisuviricota
-1091693597   class          Pisoniviricetes
-37745009     order          Nidovirales
-738421640    family         Coronaviridae
-906833049    genus          Betacoronavirus
-1015862491   species        Severe acute respiratory syndrome-related coronavirus
-216305222    strain         Severe acute respiratory syndrome coronavirus 2
+<span class="nv">$</span><span class="w"> </span><span class="nv">echo</span><span class="w"> </span><span class="mi">216305222</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">taxdump</span><span class="sr">/ \</span>
+<span class="sr">    | csvtk cut -Ht -f 3 \</span>
+<span class="sr">    | csvtk unfold -Ht -f 1 -s &quot;;&quot; \</span>
+<span class="sr">    | taxonkit lineage -r -n -L --data-dir taxdump/</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">pretty</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span>
+<span class="mi">1287770734</span><span class="w">   </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">Viruses</span>
+<span class="mi">1506901452</span><span class="w">   </span><span class="n">phylum</span><span class="w">         </span><span class="n">Pisuviricota</span>
+<span class="mi">1091693597</span><span class="w">   </span><span class="n">class</span><span class="w">          </span><span class="n">Pisoniviricetes</span>
+<span class="mi">37745009</span><span class="w">     </span><span class="n">order</span><span class="w">          </span><span class="n">Nidovirales</span>
+<span class="mi">738421640</span><span class="w">    </span><span class="n">family</span><span class="w">         </span><span class="n">Coronaviridae</span>
+<span class="mi">906833049</span><span class="w">    </span><span class="n">genus</span><span class="w">          </span><span class="n">Betacoronavirus</span>
+<span class="mi">1015862491</span><span class="w">   </span><span class="n">species</span><span class="w">        </span><span class="n">Severe</span><span class="w"> </span><span class="n">acute</span><span class="w"> </span><span class="n">respiratory</span><span class="w"> </span><span class="n">syndrome</span><span class="o">-</span><span class="n">related</span><span class="w"> </span><span class="n">coronavirus</span>
+<span class="mi">216305222</span><span class="w">    </span><span class="n">strain</span><span class="w">         </span><span class="n">Severe</span><span class="w"> </span><span class="n">acute</span><span class="w"> </span><span class="n">respiratory</span><span class="w"> </span><span class="n">syndrome</span><span class="w"> </span><span class="n">coronavirus</span><span class="w"> </span><span class="mi">2</span>
 
 
 
-$ echo "Escherichia coli"  | taxonkit name2taxid --data-dir taxdump/
-Escherichia coli        1945799576
+<span class="nv">$</span><span class="w"> </span><span class="nv">echo</span><span class="w"> </span><span class="s">&quot;Escherichia coli&quot;</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">name2taxid</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">taxdump</span><span class="o">/</span>
+<span class="n">Escherichia</span><span class="w"> </span><span class="n">coli</span><span class="w">        </span><span class="mi">1945799576</span>
 
-$ echo 1945799576 \
-    | taxonkit lineage -t --data-dir taxdump/ \
-    | csvtk cut -Ht -f 3 \
-    | csvtk unfold -Ht -f 1 -s ";" \
-    | taxonkit lineage -r -n -L --data-dir taxdump/ \
-    | csvtk cut -Ht -f 1,3,2 \
-    | csvtk pretty -Ht
-609216830    superkingdom   Bacteria
-1641076285   phylum         Proteobacteria
-329474883    class          Gammaproteobacteria
-1012954932   order          Enterobacterales
-87250111     family         Enterobacteriaceae
-1187493883   genus          Escherichia
-1945799576   species        Escherichia coli
-</code></pre>
+<span class="nv">$</span><span class="w"> </span><span class="nv">echo</span><span class="w"> </span><span class="mi">1945799576</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">taxdump</span><span class="sr">/ \</span>
+<span class="sr">    | csvtk cut -Ht -f 3 \</span>
+<span class="sr">    | csvtk unfold -Ht -f 1 -s &quot;;&quot; \</span>
+<span class="sr">    | taxonkit lineage -r -n -L --data-dir taxdump/</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="w"> </span><span class="o">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">pretty</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span>
+<span class="mi">609216830</span><span class="w">    </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">Bacteria</span>
+<span class="mi">1641076285</span><span class="w">   </span><span class="n">phylum</span><span class="w">         </span><span class="n">Proteobacteria</span>
+<span class="mi">329474883</span><span class="w">    </span><span class="n">class</span><span class="w">          </span><span class="n">Gammaproteobacteria</span>
+<span class="mi">1012954932</span><span class="w">   </span><span class="n">order</span><span class="w">          </span><span class="n">Enterobacterales</span>
+<span class="mi">87250111</span><span class="w">     </span><span class="n">family</span><span class="w">         </span><span class="n">Enterobacteriaceae</span>
+<span class="mi">1187493883</span><span class="w">   </span><span class="n">genus</span><span class="w">          </span><span class="n">Escherichia</span>
+<span class="mi">1945799576</span><span class="w">   </span><span class="n">species</span><span class="w">        </span><span class="n">Escherichia</span><span class="w"> </span><span class="n">coli</span>
+</code></pre></div>
+
 <div id="disqus_thread"></div>
 <script>
 
@@ -1543,49 +1638,20 @@ s.setAttribute('data-timestamp', +new Date());
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-              
-            </article>
-          </div>
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
       
         <footer class="md-footer">
-  
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
-      
-        
-        <a href="../usage/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Usage" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Usage
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../chinese/" class="md-footer__link md-footer__link--next" aria-label="Next: 中文介绍" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              中文介绍
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1607,10 +1673,12 @@ s.setAttribute('data-timestamp', +new Date());
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.b6ff8c07.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.5e13d264.min.js"></script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>
