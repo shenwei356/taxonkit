@@ -700,7 +700,7 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h2 id="taxonkit">taxonkit<a class="headerlink" href="#taxonkit" title="Permanent link">Link</a></h2>
 <div class="codehilite"><pre><span></span><code>TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.14.2
+Version: 0.15.1
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -733,7 +733,7 @@ Available Commands:
   lca             Compute lowest common ancestor (LCA) for TaxIds
   lineage         Query taxonomic lineage of given TaxIds
   list            List taxonomic subtrees of given TaxIds
-  name2taxid      Convert scientific names to TaxIds
+  name2taxid      Convert taxon names to TaxIds
   profile2cami    Convert metagenomic profile table to CAMI format
   reformat        Reformat lineage in canonical ranks
   taxid-changelog Create TaxId changelog from dump archives
@@ -747,6 +747,8 @@ Flags:
   -o, --out-file string   out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
   -j, --threads int       number of CPUs. 4 is enough (default 4)
       --verbose           print verbose information
+
+Use &quot;taxonkit [command] --help&quot; for more information about a command.
 </code></pre></div>
 
 <h2 id="list">list<a class="headerlink" href="#list" title="Permanent link">Link</a></h2>
@@ -1680,11 +1682,11 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids.txt<span class="w"> <
 </ol>
 <h2 id="name2taxid">name2taxid<a class="headerlink" href="#name2taxid" title="Permanent link">Link</a></h2>
 <p>Usage</p>
-<div class="codehilite"><pre><span></span><code>Convert scientific names to TaxIds
+<div class="codehilite"><pre><span></span><code>Convert taxon names to TaxIds
 
 Attention:
 
-  1. Some TaxIds share the same scientific names, e.g, Drosophila.
+  1. Some TaxIds share the same names, e.g, Drosophila.
      These input lines are duplicated with multiple TaxIds.
 
     $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L
@@ -1752,6 +1754,13 @@ Mouse<span class="w"> </span>Intracisternal<span class="w"> </span>A-particle<sp
 Wei<span class="w"> </span>Shen
 uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B<span class="w"> </span><span class="m">314101</span><span class="w">  </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>environmental<span class="w"> </span>samples<span class="p">;</span>uncultured<span class="w"> </span>murine<span class="w"> </span>large<span class="w"> </span>bowel<span class="w"> </span>bacterium<span class="w"> </span>BAC<span class="w"> </span>54B
 Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y<span class="w">       </span><span class="m">1327037</span><span class="w"> </span>Viruses<span class="p">;</span>Caudovirales<span class="p">;</span>Siphoviridae<span class="p">;</span>unclassified<span class="w"> </span>Siphoviridae<span class="p">;</span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y
+</code></pre></div>
+
+</li>
+<li>
+<p>Convert old names to new names.</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Lactobacillus<span class="w"> </span>fermentum<span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>name2taxid<span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>-n<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,2,4
+Lactobacillus<span class="w"> </span>fermentum<span class="w"> </span><span class="m">1613</span><span class="w">    </span>Limosilactobacillus<span class="w"> </span>fermentum
 </code></pre></div>
 
 </li>

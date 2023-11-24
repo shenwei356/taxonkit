@@ -345,6 +345,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#mapping-old-species-names-to-new-ones" class="md-nav__link">
+    Mapping old species names to new ones
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#add-taxonomy-information-to-blast-result" class="md-nav__link">
     Add taxonomy information to BLAST result
   </a>
@@ -518,6 +525,13 @@
         <li class="md-nav__item">
   <a href="#formatting-lineage" class="md-nav__link">
     Formatting lineage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-old-species-names-to-new-ones" class="md-nav__link">
+    Mapping old species names to new ones
   </a>
   
 </li>
@@ -752,6 +766,69 @@ family<span class="w">    </span>Coronaviridae
 genus<span class="w">     </span>Betacoronavirus
 species<span class="w">   </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome-related<span class="w"> </span>coronavirus
 strain<span class="w">    </span>Severe<span class="w"> </span>acute<span class="w"> </span>respiratory<span class="w"> </span>syndrome<span class="w"> </span>coronavirus<span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+
+<h2 id="mapping-old-species-names-to-new-ones">Mapping old species names to new ones<a class="headerlink" href="#mapping-old-species-names-to-new-ones" title="Permanent link">Link</a></h2>
+<p>Some species names in papers or websites might changed, we can try querying their TaxIds via their old new names
+and then retrieve the new ones.</p>
+<div class="codehilite"><pre><span></span><code>cat example/changed_species_names.txt
+Lactobacillus fermentum
+Mycoplasma gallinaceum
+
+<span class="gh">#</span>  TaxonKit &gt;= v0.15.1
+cat example/changed_species_names.txt \
+    | taxonkit name2taxid \
+    | taxonkit lineage -i 2 -n \
+    | cut -f 1,4
+
+Lactobacillus fermentum Limosilactobacillus fermentum
+Mycoplasma gallinaceum
+</code></pre></div>
+
+<p>Woops, there's no information of <code>Mycoplasma gallinaceum</code>.
+Then we check the <a href="https://github.com/shenwei356/taxid-changelog">taxid-changelog</a>.</p>
+<div class="codehilite"><pre><span></span><code>zcat taxonkit/taxid-changelog.csv.gz \
+    | csvtk grep -f name -P example/changed_species_names.txt
+    | csvtk cut -f taxid,version,change,name,rank \
+    | csvtk pretty
+
+taxid   version      change           name                      rank
+-----   ----------   --------------   -----------------------   -------
+1613    2013-02-21   NEW              Lactobacillus fermentum   species
+1613    2016-03-01   ABSORB           Lactobacillus fermentum   species
+1613    2016-03-01   CHANGE_LIN_LEN   Lactobacillus fermentum   species
+29556   2013-02-21   NEW              Mycoplasma gallinaceum    species
+29556   2016-03-01   CHANGE_LIN_LEN   Mycoplasma gallinaceum    species
+29556   2021-01-01   CHANGE_NAME      Mycoplasma gallinaceum    species
+29556   2021-01-01   CHANGE_LIN_LIN   Mycoplasma gallinaceum    species
+</code></pre></div>
+
+<p>We can see the names are changed. Full changes can be queried with the taxid. e.g.,</p>
+<div class="codehilite"><pre><span></span><code>taxid   version      change           change-value   name                        rank
+-----   ----------   --------------   ------------   -------------------------   -------
+29556   2013-02-21   NEW                             Mycoplasma gallinaceum      species
+29556   2016-03-01   CHANGE_LIN_LEN                  Mycoplasma gallinaceum      species
+29556   2020-09-01   CHANGE_NAME                     Mycoplasmopsis gallinacea   species
+29556   2020-09-01   CHANGE_LIN_TAX                  Mycoplasmopsis gallinacea   species
+29556   2021-01-01   CHANGE_NAME                     Mycoplasma gallinaceum      species
+29556   2021-01-01   CHANGE_LIN_LIN                  Mycoplasma gallinaceum      species
+29556   2021-09-01   CHANGE_NAME                     Mycoplasmopsis gallinacea   species
+29556   2021-09-01   CHANGE_LIN_LIN                  Mycoplasmopsis gallinacea   species
+29556   2023-03-01   CHANGE_LIN_LIN                  Mycoplasmopsis gallinacea   species
+</code></pre></div>
+
+<p>Then we just use their TaxIds to rertrieve the new names. <strong>The final commands are</strong>:</p>
+<div class="codehilite"><pre><span></span><code>zcat taxonkit/taxid-changelog.csv.gz \
+    | csvtk grep -f name -P example/changed_species_names.txt \
+    | csvtk uniq -f taxid \
+    | csvtk cut -f name,taxid \
+    | csvtk del-header \
+    | csvtk csv2tab \
+    | taxonkit lineage -i 2 -n \
+    | cut -f 1,4
+
+Lactobacillus fermentum Limosilactobacillus fermentum
+Mycoplasma gallinaceum  Mycoplasmopsis gallinacea
 </code></pre></div>
 
 <h2 id="add-taxonomy-information-to-blast-result">Add taxonomy information to BLAST result<a class="headerlink" href="#add-taxonomy-information-to-blast-result" title="Permanent link">Link</a></h2>
