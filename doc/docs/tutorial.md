@@ -182,6 +182,71 @@ where rank of the closest higher node is still lower than rank cutoff**.
     species   Severe acute respiratory syndrome-related coronavirus
     strain    Severe acute respiratory syndrome coronavirus 2
     
+## Mapping old species names to new ones
+
+Some species names in papers or websites might changed, we can try querying their TaxIds via their old new names
+and then retrieve the new ones.
+
+    cat example/changed_species_names.txt
+    Lactobacillus fermentum
+    Mycoplasma gallinaceum
+
+    #  TaxonKit >= v0.15.1
+    cat example/changed_species_names.txt \
+        | taxonkit name2taxid \
+        | taxonkit lineage -i 2 -n \
+        | cut -f 1,4
+
+    Lactobacillus fermentum Limosilactobacillus fermentum
+    Mycoplasma gallinaceum
+
+Woops, there's no information of `Mycoplasma gallinaceum`.
+Then we check the [taxid-changelog](https://github.com/shenwei356/taxid-changelog).
+
+    zcat taxonkit/taxid-changelog.csv.gz \
+        | csvtk grep -f name -P example/changed_species_names.txt
+        | csvtk cut -f taxid,version,change,name,rank \
+        | csvtk pretty
+
+    taxid   version      change           name                      rank
+    -----   ----------   --------------   -----------------------   -------
+    1613    2013-02-21   NEW              Lactobacillus fermentum   species
+    1613    2016-03-01   ABSORB           Lactobacillus fermentum   species
+    1613    2016-03-01   CHANGE_LIN_LEN   Lactobacillus fermentum   species
+    29556   2013-02-21   NEW              Mycoplasma gallinaceum    species
+    29556   2016-03-01   CHANGE_LIN_LEN   Mycoplasma gallinaceum    species
+    29556   2021-01-01   CHANGE_NAME      Mycoplasma gallinaceum    species
+    29556   2021-01-01   CHANGE_LIN_LIN   Mycoplasma gallinaceum    species
+
+We can see the names are changed. Full changes can be queried with the taxid. e.g.,
+
+    taxid   version      change           change-value   name                        rank
+    -----   ----------   --------------   ------------   -------------------------   -------
+    29556   2013-02-21   NEW                             Mycoplasma gallinaceum      species
+    29556   2016-03-01   CHANGE_LIN_LEN                  Mycoplasma gallinaceum      species
+    29556   2020-09-01   CHANGE_NAME                     Mycoplasmopsis gallinacea   species
+    29556   2020-09-01   CHANGE_LIN_TAX                  Mycoplasmopsis gallinacea   species
+    29556   2021-01-01   CHANGE_NAME                     Mycoplasma gallinaceum      species
+    29556   2021-01-01   CHANGE_LIN_LIN                  Mycoplasma gallinaceum      species
+    29556   2021-09-01   CHANGE_NAME                     Mycoplasmopsis gallinacea   species
+    29556   2021-09-01   CHANGE_LIN_LIN                  Mycoplasmopsis gallinacea   species
+    29556   2023-03-01   CHANGE_LIN_LIN                  Mycoplasmopsis gallinacea   species
+
+
+Then we just use their TaxIds to rertrieve the new names. **The final commands are**:
+
+    zcat taxonkit/taxid-changelog.csv.gz \
+        | csvtk grep -f name -P example/changed_species_names.txt \
+        | csvtk uniq -f taxid \
+        | csvtk cut -f name,taxid \
+        | csvtk del-header \
+        | csvtk csv2tab \
+        | taxonkit lineage -i 2 -n \
+        | cut -f 1,4
+
+    Lactobacillus fermentum Limosilactobacillus fermentum
+    Mycoplasma gallinaceum  Mycoplasmopsis gallinacea
+
 ## Add taxonomy information to BLAST result
 
 An blast result file `blast_result.txt`, where the second column is the accession of matched sequences.

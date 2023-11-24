@@ -64,7 +64,7 @@ Subcommand                                                                    |F
 [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)                      |List taxonomic subtrees (TaxIds) bellow given TaxIds
 [`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage)                |Query taxonomic lineage of given TaxIds
 [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat)              |Reformat lineage in canonical ranks
-[`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid)          |Convert scientific names to TaxIds
+[`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid)          |Convert taxon names to TaxIds
 [`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter)                  |Filter TaxIds by taxonomic rank range
 [`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca)                        |Compute lowest common ancestor (LCA) for TaxIds
 [`taxid-changelog`](https://bioinf.shenwei.me/taxonkit/usage/#taxid-changelog)|Create TaxId changelog from dump archives

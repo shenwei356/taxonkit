@@ -33,12 +33,12 @@ import (
 // name2taxidCmd represents the fx2tab command
 var name2taxidCmd = &cobra.Command{
 	Use:   "name2taxid",
-	Short: "Convert scientific names to TaxIds",
-	Long: `Convert scientific names to TaxIds
+	Short: "Convert taxon names to TaxIds",
+	Long: `Convert taxon names to TaxIds
 
 Attention:
 
-  1. Some TaxIds share the same scientific names, e.g, Drosophila.
+  1. Some TaxIds share the same names, e.g, Drosophila.
      These input lines are duplicated with multiple TaxIds.
 
     $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L

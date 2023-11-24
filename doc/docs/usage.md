@@ -42,7 +42,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.14.2
+Version: 0.15.1
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -75,7 +75,7 @@ Available Commands:
   lca             Compute lowest common ancestor (LCA) for TaxIds
   lineage         Query taxonomic lineage of given TaxIds
   list            List taxonomic subtrees of given TaxIds
-  name2taxid      Convert scientific names to TaxIds
+  name2taxid      Convert taxon names to TaxIds
   profile2cami    Convert metagenomic profile table to CAMI format
   reformat        Reformat lineage in canonical ranks
   taxid-changelog Create TaxId changelog from dump archives
@@ -89,6 +89,8 @@ Flags:
   -o, --out-file string   out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
   -j, --threads int       number of CPUs. 4 is enough (default 4)
       --verbose           print verbose information
+
+Use "taxonkit [command] --help" for more information about a command.
 
 ```
 
@@ -999,11 +1001,11 @@ Examples:
 Usage
 
 ```text
-Convert scientific names to TaxIds
+Convert taxon names to TaxIds
 
 Attention:
 
-  1. Some TaxIds share the same scientific names, e.g, Drosophila.
+  1. Some TaxIds share the same names, e.g, Drosophila.
      These input lines are duplicated with multiple TaxIds.
 
     $ echo Drosophila | taxonkit name2taxid | taxonkit lineage -i 2 -r -L
@@ -1068,6 +1070,12 @@ Example data
         Wei Shen
         uncultured murine large bowel bacterium BAC 54B 314101  cellular organisms;Bacteria;environmental samples;uncultured murine large bowel bacterium BAC 54B
         Croceibacter phage P2559Y       1327037 Viruses;Caudovirales;Siphoviridae;unclassified Siphoviridae;Croceibacter phage P2559Y
+
+1. Convert old names to new names.
+
+        $ echo Lactobacillus fermentum | taxonkit name2taxid | taxonkit lineage -i 2 -n | cut -f 1,2,4
+        Lactobacillus fermentum 1613    Limosilactobacillus fermentum
+
 
 1. **Some TaxIds share the same scientific names**, e.g, Drosophila.
 
