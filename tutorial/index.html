@@ -1014,9 +1014,18 @@ abundance<span class="w">   </span>taxid<span class="w">     </span>rank<span cl
 <h2 id="making-nr-blastdb-for-specific-taxids">Making nr blastdb for specific taxids<a class="headerlink" href="#making-nr-blastdb-for-specific-taxids" title="Permanent link">Link</a></h2>
 <p>Attention:</p>
 <ul>
-<li><a href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/01/04/blast-2-8-1-with-new-databases-and-better-performance/">BLAST+ 2.8.1 is released with new databases</a>,
+<li>
+<p>(2023-11-27) BLAST+ 2.2.15 supports limiting a group of organisms without first using a custom script to get all species-level Taxonomy IDs (taxids) for the group. <a href="https://www.ncbi.nlm.nih.gov/books/NBK569839/#_usrman_BLAST_feat_Taxonomic_filtering_fo_">Details</a>.</p>
+<p>E.g., Search of the nr BLAST database limited to Bacteria (taxID 2).</p>
+<div class="codehilite"><pre><span></span><code>blastp -db nr -taxids 2 -query ...
+</code></pre></div>
+
+</li>
+<li>
+<p>(2019) <a href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/01/04/blast-2-8-1-with-new-databases-and-better-performance/">BLAST+ 2.8.1 is released with new databases</a>,
 which allows you to limit your search by taxonomy using information built into the BLAST databases.
-So you don't need to build blastdb for specific taxids now.</li>
+So you don't need to build blastdb for specific taxids now.</p>
+</li>
 </ul>
 <p>Changes:</p>
 <ul>
