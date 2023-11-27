@@ -436,7 +436,13 @@ Only save species or lower level and get lineage in format of "superkingdom phyl
 
 Attention:
 
-- [BLAST+ 2.8.1 is released with new databases](https://ncbiinsights.ncbi.nlm.nih.gov/2019/01/04/blast-2-8-1-with-new-databases-and-better-performance/),
+- (2023-11-27) BLAST+ 2.2.15 supports limiting a group of organisms without first using a custom script to get all species-level Taxonomy IDs (taxids) for the group. [Details](https://www.ncbi.nlm.nih.gov/books/NBK569839/#_usrman_BLAST_feat_Taxonomic_filtering_fo_).
+
+    E.g., Search of the nr BLAST database limited to Bacteria (taxID 2).
+
+        blastp -db nr -taxids 2 -query ...
+
+- (2019) [BLAST+ 2.8.1 is released with new databases](https://ncbiinsights.ncbi.nlm.nih.gov/2019/01/04/blast-2-8-1-with-new-databases-and-better-performance/),
 which allows you to limit your search by taxonomy using information built into the BLAST databases.
 So you don't need to build blastdb for specific taxids now.
 
