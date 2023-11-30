@@ -81,6 +81,7 @@ Examples:
 
 		skipDeleted := getFlagBool(cmd, "skip-deleted")
 		skipUnfound := getFlagBool(cmd, "skip-unfound")
+		keepInvalid := getFlagBool(cmd, "keep-invalid")
 
 		bufferSizeS := getFlagString(cmd, "buffer-size")
 		if bufferSizeS == "" {
@@ -179,7 +180,9 @@ Examples:
 
 				switch len(taxids) {
 				case 0:
-					continue
+					if !keepInvalid {
+						continue
+					}
 				case 1:
 					lca = taxids[0]
 				default:
@@ -210,6 +213,7 @@ func init() {
 	lcaCmd.Flags().StringP("separator", "s", " ", "separator for TaxIds")
 	lcaCmd.Flags().BoolP("skip-deleted", "D", false, "skip deleted TaxIds and compute with left ones")
 	lcaCmd.Flags().BoolP("skip-unfound", "U", false, "skip unfound TaxIds and compute with left ones")
+	lcaCmd.Flags().BoolP("keep-invalid", "K", false, "print the query even if no single valid taxid left")
 	lcaCmd.Flags().StringP("buffer-size", "b", "1M", `size of line buffer, supported unit: K, M, G. You need to increase the value when "bufio.Scanner: token too long" error occured`)
 
 }

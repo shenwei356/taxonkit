@@ -1,3 +1,7 @@
+- [TaxonKit v0.15.2](https://github.com/shenwei356/taxonkit/releases/tag/v0.15.2)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.15.2/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.15.2)
+    - `taxonkit lca`:
+        - new flag `-K/--keep-invalid`: print the query even if no single valid taxid left. [#89](https://github.com/shenwei356/taxonkit/issues/89)
 - [TaxonKit v0.15.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.15.1)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.15.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.15.1)
     - `taxonkit name2taxid`:
