@@ -58,30 +58,9 @@ Input format:
      comma-seperated integers. 
 
 Attentions:
-  1. Names should be distinct in taxa of different ranks.
-     But for these missing some taxon nodes, using names of parent nodes is allowed:
-
-       GB_GCA_018897955.1      d__Archaea;p__EX4484-52;c__EX4484-52;o__EX4484-52;f__LFW-46;g__LFW-46;s__LFW-46 sp018897155
-
-     It can also detect duplicate names with different ranks, e.g.,
-     the Class and Genus have the same name B47-G6, and the Order and Family
-     between them have different names. In this case, we reassign a new TaxId
-     by increasing the TaxId until it being distinct.
-
-       GB_GCA_003663585.1      d__Archaea;p__Thermoplasmatota;c__B47-G6;o__B47-G6B;f__47-G6;g__B47-G6;s__B47-G6 sp003663585
-
-  2. Taxa from different parents may have the same name.
-     We will assign different TaxIds to them. 
-
-     E.g., in ICTV, many viruses from different species have the same names.
-     In practice, we set the "Virus names(s)" as a subspecies rank and also
-     specify it as the accession.
-
-       Species             Virus name(s)
-       Jerseyvirus SETP3   Salmonella phage SETP7
-       Jerseyvirus SETP7   Salmonella phage SETP7
-
-  3. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
+  1. Duplicated taxon names wit different ranks are allowed since v0.16.0, since
+     the rank and taxon name are contatenated for generating the TaxId.
+  2. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
      required this, you can use the script below for convertion:
      
      https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
@@ -338,7 +317,7 @@ Attentions:
 								rankNames = rankNames[:0]
 								for i, val := range items0 {
 									if i+1 != fAccession {
-										rankNames = append(rankNames, val)
+										rankNames = append(rankNames, strings.ToLower(val))
 									} else {
 										rankNames = append(rankNames, "subspecies")
 									}
@@ -353,14 +332,17 @@ Attentions:
 								rankNames = rankNames[:0]
 								for i, val := range items0 {
 									if i+1 != fAccession {
-										rankNames = append(rankNames, val)
+										rankNames = append(rankNames, strings.ToLower(val))
 									}
 								}
 							}
 						} else {
 							numRanks = numFields
 
-							rankNames = items0
+							rankNames = make([]string, len(items0))
+							for i, val := range items0 {
+								rankNames[i] = strings.ToLower(val)
+							}
 						}
 
 						_items := make([]string, numFields)
@@ -484,13 +466,7 @@ Attentions:
 							continue
 						}
 
-						if j == 0 {
-							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])) & 2147483647)
-							continue
-						}
-						if t.Names[j] != t.Names[j-1] {
-							t.TaxIds[j] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[j])) & 2147483647)
-						}
+						t.TaxIds[j] = uint32(xxhash.Sum64String(rankNames[j]+strings.ToLower(t.Names[j])) & 2147483647)
 					}
 				} else {
 					// var ok bool
@@ -525,13 +501,7 @@ Attentions:
 							continue
 						}
 
-						if j == 0 {
-							t.TaxIds[0] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[0])) & 2147483647)
-							continue
-						}
-						if t.Names[j] != t.Names[j-1] {
-							t.TaxIds[j] = uint32(xxhash.Sum64String(strings.ToLower(t.Names[j])) & 2147483647)
-						}
+						t.TaxIds[j] = uint32(xxhash.Sum64String(rankNames[j]+strings.ToLower(t.Names[j])) & 2147483647)
 					}
 				}
 
@@ -921,12 +891,12 @@ func init() {
 	// --------------
 
 	createTaxDumpCmd.Flags().StringSliceP("null", "", []string{"", "NULL", "NA"}, "null value of taxa")
-	createTaxDumpCmd.Flags().StringSliceP("rank-names", "R", []string{}, "names of all ranks, leave it empty to use the first row of input as rank names")
+	createTaxDumpCmd.Flags().StringSliceP("rank-names", "R", []string{}, "names of all ranks, leave it empty to use the (lowercase) first row of input as rank names")
 
 	// --------------
 
 	createTaxDumpCmd.Flags().StringP("out-dir", "O", "", `output directory`)
-	createTaxDumpCmd.Flags().BoolP("force", "", false, `overwrite existed output directory`)
+	createTaxDumpCmd.Flags().BoolP("force", "", false, `overwrite existing output directory`)
 
 	// --------------
 

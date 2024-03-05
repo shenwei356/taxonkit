@@ -1561,7 +1561,7 @@ Usage
 ```text
 Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV
 
-Input format: 
+Input format:
   0. For GTDB taxonomy file, just use --gtdb.
      We use the numeric assembly accession as the taxon at subspecies rank.
      (without the prefix GCA_ and GCF_, and version number).
@@ -1569,60 +1569,40 @@ Input format:
   2. Ranks can be given either via the first row or the flag --rank-names.
   3. The column containing the genome/assembly accession is recommended to
      generate TaxId mapping file (taxid.map, id -> taxid).
-       -A/--field-accession,    field contaning genome/assembly accession      
+       -A/--field-accession,    field contaning genome/assembly accession
        --field-accession-re,    regular expression to extract the accession
      Note that mutiple TaxIds pointing to the same accession are listed as
-     comma-seperated integers. 
+     comma-seperated integers.
 
 Attentions:
-  1. Names should be distinct in taxa of different ranks.
-     But for these missing some taxon nodes, using names of parent nodes is allowed:
-
-       GB_GCA_018897955.1      d__Archaea;p__EX4484-52;c__EX4484-52;o__EX4484-52;f__LFW-46;g__LFW-46;s__LFW-46 sp018897155
-
-     It can also detect duplicate names with different ranks, e.g.,
-     the Class and Genus have the same name B47-G6, and the Order and Family
-     between them have different names. In this case, we reassign a new TaxId
-     by increasing the TaxId until it being distinct.
-
-       GB_GCA_003663585.1      d__Archaea;p__Thermoplasmatota;c__B47-G6;o__B47-G6B;f__47-G6;g__B47-G6;s__B47-G6 sp003663585
-
-  2. Taxa from different parents may have the same name.
-     We will assign different TaxIds to them. 
-
-     E.g., in ICTV, many viruses from different species have the same names.
-     In practice, we set the "Virus names(s)" as a subspecies rank and also
-     specify it as the accession.
-
-       Species             Virus name(s)
-       Jerseyvirus SETP3   Salmonella phage SETP7
-       Jerseyvirus SETP7   Salmonella phage SETP7
-
-  3. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
+  1. Duplicated taxon names wit different ranks are allowed since v0.16.0, since
+     the rank and taxon name are contatenated for generating the TaxId.
+  2. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
      required this, you can use the script below for convertion:
-     
+
      https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
 
 Usage:
-  taxonkit create-taxdump [flags] 
+  taxonkit create-taxdump [flags]
 
 Flags:
-  -A, --field-accession int         field index of assembly accession (genome ID), for outputting taxid.map
-      --field-accession-re string   regular expression to extract assembly accession (default
-                                    "^\\w\\w_(.+)$")
-      --force                       overwrite existed output directory
-      --gtdb                        input files are GTDB taxonomy file
-      --gtdb-re-subs string         regular expression to extract assembly accession as the subspecies
-                                    (default "^\\w\\w_GC[AF]_(.+)\\.\\d+$")
-  -h, --help                        help for create-taxdump
-      --line-chunk-size int         number of lines to process for each thread, and 4 threads is fast
-                                    enough. (default 5000)
-      --null strings                null value of taxa (default [,NULL,NA])
-  -x, --old-taxdump-dir string      taxdump directory of the previous version, for generating merged.dmp
-                                    and delnodes.dmp
-  -O, --out-dir string              output directory
-  -R, --rank-names strings          names of all ranks, leave it empty to use the first row of input as
-                                    rank names
+  -A, --field-accession int             field index of assembly accession (genome ID), for outputting
+                                        taxid.map
+  -S, --field-accession-as-subspecies   treate the accession as subspecies rank
+      --field-accession-re string       regular expression to extract assembly accession (default "^(.+)$")
+      --force                           overwrite existing output directory
+      --gtdb                            input files are GTDB taxonomy file
+      --gtdb-re-subs string             regular expression to extract assembly accession as the
+                                        subspecies (default "^\\w\\w_GC[AF]_(.+)\\.\\d+$")
+  -h, --help                            help for create-taxdump
+      --line-chunk-size int             number of lines to process for each thread, and 4 threads is
+                                        fast enough. (default 5000)
+      --null strings                    null value of taxa (default [,NULL,NA])
+  -x, --old-taxdump-dir string          taxdump directory of the previous version, for generating
+                                        merged.dmp and delnodes.dmp
+  -O, --out-dir string                  output directory
+  -R, --rank-names strings              names of all ranks, leave it empty to use the (lowercase) first
+                                        row of input as rank names
 
 ```
 
@@ -1699,25 +1679,25 @@ Examples:
         
         
         $ export TAXONKIT_DB=example/taxdump
-        $ taxonkit list --ids 1 | taxonkit filter -E species | taxonkit lineage -r
-        1527235303      Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus mitis  species
-        2983929374      Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus pneumoniae     species
-        3809813362      Bacteria;Firmicutes;Bacilli;Lactobacillales;Enterococcaceae;Enterococcus;Enterococcus faecalis  species
-        4145431389      Bacteria;Firmicutes;Bacilli;Lactobacillales;Enterococcaceae;Enterococcus;Enterococcus faecium   species
-        1569132721      Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus;Staphylococcus aureus   species
-        1920251658      Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus;Staphylococcus epidermidis      species
-        3843752343      Bacteria;Proteobacteria;Gammaproteobacteria;Pseudomonadales;Pseudomonadaceae;Pseudomonas;Pseudomonas aeruginosa species
-        72054943        Bacteria;Proteobacteria;Gammaproteobacteria;Moraxellales;Moraxellaceae;Acinetobacter;Acinetobacter baumannii    species
-        1678121664      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Salmonella;Salmonella enterica  species
-        524994882       Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella dysenteriae   species
-        2695851945      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella flexneri      species
-        3958205156      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Klebsiella;Klebsiella pneumoniae        species
-        4093283224      Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli    species
-        
+        $ taxonkit list --ids 1 | taxonkit filter -E species | taxonkit lineage -r | csvtk pretty -Ht
+        793223984    Bacteria;Proteobacteria;Gammaproteobacteria;Moraxellales;Moraxellaceae;Acinetobacter;Acinetobacter baumannii       species
+        1220345221   Bacteria;Proteobacteria;Gammaproteobacteria;Pseudomonadales;Pseudomonadaceae;Pseudomonas;Pseudomonas aeruginosa    species
+        561101225    Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella flexneri         species
+        1969112428   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Shigella;Shigella dysenteriae      species
+        599451526    Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli       species
+        2034984046   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Salmonella;Salmonella enterica     species
+        1859674812   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Klebsiella;Klebsiella pneumoniae   species
+        773201972    Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus;Staphylococcus aureus                      species
+        1295317147   Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus;Staphylococcus epidermidis                 species
+        182402976    Bacteria;Firmicutes;Bacilli;Lactobacillales;Enterococcaceae;Enterococcus;Enterococcus faecium                      species
+        1566113429   Bacteria;Firmicutes;Bacilli;Lactobacillales;Enterococcaceae;Enterococcus;Enterococcus faecalis                     species
+        891083107    Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus pneumoniae                species
+        1357145446   Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus mitis                     species
+
         $ head -n 3 example/taxdump/taxid.map
-        GCF_001027105.1 1569132721
-        GCF_001096185.1 2983929374
-        GCF_001544255.1 4145431389
+        GCF_001027105.1 773201972
+        GCF_001096185.1 891083107
+        GCF_001544255.1 182402976
         
 1. Custom lineages with the first row as rank names (pure lineage data)
 
@@ -1736,8 +1716,8 @@ Examples:
         
         $ export TAXONKIT_DB=example/taxdump2
         $ taxonkit list --ids 1 | taxonkit filter -E species | taxonkit lineage -r | head -n 2
-        1527235303      Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus mitis  species
-        2983929374      Bacteria;Firmicutes;Bacilli;Lactobacillales;Streptococcaceae;Streptococcus;Streptococcus pneumoniae     species
+        793223984       Bacteria;Proteobacteria;Gammaproteobacteria;Moraxellales;Moraxellaceae;Acinetobacter;Acinetobacter baumannii    species
+        1220345221      Bacteria;Proteobacteria;Gammaproteobacteria;Pseudomonadales;Pseudomonadaceae;Pseudomonas;Pseudomonas aeruginosa species
 
 
 ## genautocomplete
