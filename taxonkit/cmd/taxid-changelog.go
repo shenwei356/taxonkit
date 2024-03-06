@@ -42,6 +42,16 @@ var taxidlogCmd = &cobra.Command{
 	Short: "Create TaxId changelog from dump archives",
 	Long: `Create TaxId changelog from dump archives
 
+Attention:
+  1. This command was originally designed for NCBI taxonomy, where the the TaxIds are stable.
+  2. For other taxonomic data created by "taxonkit create-taxdump", e.g., GTDB-taxdump,
+    some change events might be wrong, because
+     a) There would be dramatic changes between the two versions.
+     b) Different taxons in multiple versions might have the same TaxIds, because we only
+        check and eliminate taxid collision within a single version.
+     So a single version of taxonomic data created by "taxonkit create-taxdump" has no problem,
+     it's just the changelog might not be perfect.
+
 Steps:
 
     # dependencies:

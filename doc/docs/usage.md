@@ -42,7 +42,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.15.1
+Version: 0.16.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -53,7 +53,7 @@ Citation   : https://www.sciencedirect.com/science/article/pii/S1673852721000837
 Dataset:
 
     Please download and uncompress "taxdump.tar.gz":
-    ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
+    http://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
     and copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data directory:
     "/home/shenwei/.taxonkit"
@@ -101,7 +101,7 @@ Usage
 ```text
 List taxonomic subtrees of given TaxIds
 
-Attentions:
+Attention:
   1. When multiple taxids are given, the output may contain duplicated records
      if some taxids are descendants of others.
 
@@ -1096,7 +1096,7 @@ Usage
 ```text
 Filter TaxIds by taxonomic rank range
 
-Attentions:
+Attention:
 
   1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
      used along with -E/--equal-to which values can be different.
@@ -1414,6 +1414,16 @@ Usage
 ```text
 Create TaxId changelog from dump archives
 
+Attention:
+  1. This command was originally designed for NCBI taxonomy, where the the TaxIds are stable.
+  2. For other taxonomic data created by "taxonkit create-taxdump", e.g., GTDB-taxdump,
+    some change events might be wrong, because
+     a) There would be dramatic changes between the two versions.
+     b) Different taxons in multiple versions might have the same TaxIds, because we only
+        check and eliminate taxid collision within a single version.
+     So a single version of taxonomic data created by "taxonkit create-taxdump" has no problem,
+     it's just the changelog might not be perfect.
+
 Steps:
 
     # dependencies:
@@ -1574,13 +1584,20 @@ Input format:
      Note that mutiple TaxIds pointing to the same accession are listed as
      comma-seperated integers.
 
-Attentions:
+Attention:
   1. Duplicated taxon names wit different ranks are allowed since v0.16.0, since
      the rank and taxon name are contatenated for generating the TaxId.
   2. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
      required this, you can use the script below for convertion:
 
      https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
+
+  3. We only check and eliminate taxid collision within a single version of taxonomy data.
+     Therefore, if you create taxid-changelog with "taxid-changelog", different taxons
+     in multiple versions might have the same TaxIds and some change events might be wrong.
+
+     So a single version of taxonomic data created by "taxonkit create-taxdump" has no problem,
+     it's just the changelog might not be perfect.
 
 Usage:
   taxonkit create-taxdump [flags]
@@ -1775,7 +1792,7 @@ Input format:
      a) TaxId of taxon at species or lower rank.
      b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
-Attentions:
+Attention:
   1. Some TaxIds may be merged to another ones in current taxonomy version,
      the abundances will be summed up.
   2. Some TaxIds may be deleted in current taxonomy version,

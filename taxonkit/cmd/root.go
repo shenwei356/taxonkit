@@ -67,7 +67,7 @@ Citation   : https://www.sciencedirect.com/science/article/pii/S1673852721000837
 Dataset:
 
     Please download and uncompress "taxdump.tar.gz":
-    ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
+    http://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
     and copy "names.dmp", "nodes.dmp", "delnodes.dmp" and "merged.dmp" to data directory:
     "%s"

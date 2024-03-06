@@ -38,7 +38,7 @@ var listCmd = &cobra.Command{
 	Short: "List taxonomic subtrees of given TaxIds",
 	Long: `List taxonomic subtrees of given TaxIds
 
-Attentions:
+Attention:
   1. When multiple taxids are given, the output may contain duplicated records
      if some taxids are descendants of others.
 

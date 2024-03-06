@@ -47,7 +47,7 @@ Input format:
      a) TaxId of taxon at species or lower rank.
      b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
-Attentions:
+Attention:
   1. Some TaxIds may be merged to another ones in current taxonomy version,
      the abundances will be summed up.
   2. Some TaxIds may be deleted in current taxonomy version,

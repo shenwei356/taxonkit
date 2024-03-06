@@ -39,7 +39,7 @@ var filterCmd = &cobra.Command{
 	Short: "Filter TaxIds by taxonomic rank range",
 	Long: `Filter TaxIds by taxonomic rank range
 
-Attentions:
+Attention:
 
   1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
      used along with -E/--equal-to which values can be different.

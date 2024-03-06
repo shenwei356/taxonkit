@@ -57,13 +57,20 @@ Input format:
      Note that mutiple TaxIds pointing to the same accession are listed as
      comma-seperated integers. 
 
-Attentions:
+Attention:
   1. Duplicated taxon names wit different ranks are allowed since v0.16.0, since
      the rank and taxon name are contatenated for generating the TaxId.
   2. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
      required this, you can use the script below for convertion:
      
      https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
+
+  3. We only check and eliminate taxid collision within a single version of taxonomy data.
+     Therefore, if you create taxid-changelog with "taxid-changelog", different taxons
+     in multiple versions might have the same TaxIds and some change events might be wrong.
+
+     So a single version of taxonomic data created by "taxonkit create-taxdump" has no problem,
+     it's just the changelog might not be perfect.
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -251,6 +258,8 @@ Attentions:
 		ranks := make(map[uint32]uint8, 1<<16)
 
 		// child -> name
+		names0 := make(map[uint32]string, 1<<16)
+		// child -> rank+name
 		names := make(map[uint32]string, 1<<16)
 
 		// accession -> taxid
@@ -267,7 +276,6 @@ Attentions:
 			var first bool
 			var taxid uint32
 			var _name string
-			var _rank uint8
 			var ok bool
 			var reAssignTaxid bool
 
@@ -523,9 +531,9 @@ Attentions:
 					reAssignTaxid = false
 
 					if _name, ok = names[taxid]; ok { // check name
-						if _name != t.Names[i] { // two names hashed to the same uint32
+						if _name != rankNames[i]+t.Names[i] { // two names hashed to the same uint32
 							if config.Verbose {
-								log.Infof(`"%s" and "%s" having the same taxId: %d`, _name, t.Names[i], taxid)
+								log.Infof(`"%s" and "%s" have the same taxId: %d`, _name, rankNames[i]+t.Names[i], taxid)
 							}
 							reAssignTaxid = true
 						} else if i > 0 { // taxa with different parents may have the same names, many cases in ICTV
@@ -535,7 +543,7 @@ Attentions:
 								}
 							}
 							if j >= 0 { // have a non-root parent
-								if tree[taxid] != t.TaxIds[j] && names[tree[taxid]] != t.Names[j] { // not the same parent
+								if tree[taxid] != t.TaxIds[j] && names[tree[taxid]] != rankNames[j]+t.Names[j] { // not the same parent
 									if config.Verbose {
 										log.Infof(`"%s" (%d) and "%s" (%d) having the same child: %s`,
 											names[tree[taxid]], tree[taxid], t.Names[j], t.TaxIds[j], _name)
@@ -545,24 +553,15 @@ Attentions:
 							}
 						}
 					} else {
-						names[taxid] = t.Names[i]
+						names[taxid] = rankNames[i] + t.Names[i]
+						names0[taxid] = t.Names[i]
 					}
 
-					if _rank, ok = ranks[taxid]; ok {
-						if int(_rank) != i {
-							if config.Verbose {
-								// log.Debug(t)
-								log.Infof(`duplicate name (%s) with different ranks: "%s" and "%s"`, t.Names[i], rankNames[_rank], rankNames[i])
-							}
-							reAssignTaxid = true
-						}
-					} else {
-						ranks[taxid] = uint8(i)
-					}
+					ranks[taxid] = uint8(i)
 
 					if reAssignTaxid {
 						if config.Verbose {
-							log.Infof(`assign a new TaxId for "%s" (rank: %s): %d -> %d`, names[taxid], rankNames[i], taxid, taxid+1)
+							log.Infof(`  assign a new TaxId for "%s" (rank: %s): %d -> %d`, names[taxid], rankNames[i], taxid, taxid+1)
 						}
 						taxid++
 						t.TaxIds[i] = taxid
@@ -676,7 +675,7 @@ Attentions:
 
 		fmt.Fprintf(outfhNames, "%d\t|\t%s\t|\t\t|\tscientific name\t|\n", 1, "root")
 		for _, child := range taxids {
-			fmt.Fprintf(outfhNames, "%d\t|\t%s\t|\t\t|\tscientific name\t|\n", child, names[child])
+			fmt.Fprintf(outfhNames, "%d\t|\t%s\t|\t\t|\tscientific name\t|\n", child, names0[child])
 		}
 		log.Infof("%d records saved to %s", len(names)+1, fileNames)
 
