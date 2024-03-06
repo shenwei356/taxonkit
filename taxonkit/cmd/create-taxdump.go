@@ -557,7 +557,9 @@ Attention:
 						names0[taxid] = t.Names[i]
 					}
 
-					ranks[taxid] = uint8(i)
+					if _, ok = ranks[taxid]; !ok {
+						ranks[taxid] = uint8(i)
+					}
 
 					if reAssignTaxid {
 						if config.Verbose {
