@@ -700,7 +700,7 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h2 id="taxonkit">taxonkit<a class="headerlink" href="#taxonkit" title="Permanent link">Link</a></h2>
 <div class="codehilite"><pre><span></span><code>TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.15.1
+Version: 0.16.0
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -711,7 +711,7 @@ Citation   : https://www.sciencedirect.com/science/article/pii/S1673852721000837
 Dataset:
 
     Please download and uncompress &quot;taxdump.tar.gz&quot;:
-    ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
+    http://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
     and copy &quot;names.dmp&quot;, &quot;nodes.dmp&quot;, &quot;delnodes.dmp&quot; and &quot;merged.dmp&quot; to data directory:
     &quot;/home/shenwei/.taxonkit&quot;
@@ -755,7 +755,7 @@ Use &quot;taxonkit [command] --help&quot; for more information about a command.
 <p>Usage</p>
 <div class="codehilite"><pre><span></span><code>List taxonomic subtrees of given TaxIds
 
-Attentions:
+Attention:
   1. When multiple taxids are given, the output may contain duplicated records
      if some taxids are descendants of others.
 
@@ -1783,7 +1783,7 @@ Drosophila<span class="w">   </span><span class="m">2081351</span><span class="w
 <p>Usage</p>
 <div class="codehilite"><pre><span></span><code>Filter TaxIds by taxonomic rank range
 
-Attentions:
+Attention:
 
   1. Flag -L/--lower-than and -H/--higher-than are exclusive, and can be
      used along with -E/--equal-to which values can be different.
@@ -2119,6 +2119,16 @@ b<span class="w">       </span><span class="m">63221</span>,<span class="w"> </s
 <p>Usage</p>
 <div class="codehilite"><pre><span></span><code>Create TaxId changelog from dump archives
 
+Attention:
+  1. This command was originally designed for NCBI taxonomy, where the the TaxIds are stable.
+  2. For other taxonomic data created by &quot;taxonkit create-taxdump&quot;, e.g., GTDB-taxdump,
+    some change events might be wrong, because
+     a) There would be dramatic changes between the two versions.
+     b) Different taxons in multiple versions might have the same TaxIds, because we only
+        check and eliminate taxid collision within a single version.
+     So a single version of taxonomic data created by &quot;taxonkit create-taxdump&quot; has no problem,
+     it&#39;s just the changelog might not be perfect.
+
 Steps:
 
     # dependencies:
@@ -2268,7 +2278,7 @@ sys<span class="w">     </span>0m3.985s
 <p>Usage</p>
 <div class="codehilite"><pre><span></span><code>Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV
 
-Input format: 
+Input format:
   0. For GTDB taxonomy file, just use --gtdb.
      We use the numeric assembly accession as the taxon at subspecies rank.
      (without the prefix GCA_ and GCF_, and version number).
@@ -2276,60 +2286,47 @@ Input format:
   2. Ranks can be given either via the first row or the flag --rank-names.
   3. The column containing the genome/assembly accession is recommended to
      generate TaxId mapping file (taxid.map, id -&gt; taxid).
-       -A/--field-accession,    field contaning genome/assembly accession      
+       -A/--field-accession,    field contaning genome/assembly accession
        --field-accession-re,    regular expression to extract the accession
      Note that mutiple TaxIds pointing to the same accession are listed as
-     comma-seperated integers. 
+     comma-seperated integers.
 
-Attentions:
-  1. Names should be distinct in taxa of different ranks.
-     But for these missing some taxon nodes, using names of parent nodes is allowed:
-
-       GB_GCA_018897955.1      d__Archaea;p__EX4484-52;c__EX4484-52;o__EX4484-52;f__LFW-46;g__LFW-46;s__LFW-46 sp018897155
-
-     It can also detect duplicate names with different ranks, e.g.,
-     the Class and Genus have the same name B47-G6, and the Order and Family
-     between them have different names. In this case, we reassign a new TaxId
-     by increasing the TaxId until it being distinct.
-
-       GB_GCA_003663585.1      d__Archaea;p__Thermoplasmatota;c__B47-G6;o__B47-G6B;f__47-G6;g__B47-G6;s__B47-G6 sp003663585
-
-  2. Taxa from different parents may have the same name.
-     We will assign different TaxIds to them. 
-
-     E.g., in ICTV, many viruses from different species have the same names.
-     In practice, we set the &quot;Virus names(s)&quot; as a subspecies rank and also
-     specify it as the accession.
-
-       Species             Virus name(s)
-       Jerseyvirus SETP3   Salmonella phage SETP7
-       Jerseyvirus SETP7   Salmonella phage SETP7
-
-  3. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
+Attention:
+  1. Duplicated taxon names wit different ranks are allowed since v0.16.0, since
+     the rank and taxon name are contatenated for generating the TaxId.
+  2. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
      required this, you can use the script below for convertion:
 
      https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
 
+  3. We only check and eliminate taxid collision within a single version of taxonomy data.
+     Therefore, if you create taxid-changelog with &quot;taxid-changelog&quot;, different taxons
+     in multiple versions might have the same TaxIds and some change events might be wrong.
+
+     So a single version of taxonomic data created by &quot;taxonkit create-taxdump&quot; has no problem,
+     it&#39;s just the changelog might not be perfect.
+
 Usage:
-  taxonkit create-taxdump [flags] 
+  taxonkit create-taxdump [flags]
 
 Flags:
-  -A, --field-accession int         field index of assembly accession (genome ID), for outputting taxid.map
-      --field-accession-re string   regular expression to extract assembly accession (default
-                                    &quot;^\\w\\w_(.+)$&quot;)
-      --force                       overwrite existed output directory
-      --gtdb                        input files are GTDB taxonomy file
-      --gtdb-re-subs string         regular expression to extract assembly accession as the subspecies
-                                    (default &quot;^\\w\\w_GC[AF]_(.+)\\.\\d+$&quot;)
-  -h, --help                        help for create-taxdump
-      --line-chunk-size int         number of lines to process for each thread, and 4 threads is fast
-                                    enough. (default 5000)
-      --null strings                null value of taxa (default [,NULL,NA])
-  -x, --old-taxdump-dir string      taxdump directory of the previous version, for generating merged.dmp
-                                    and delnodes.dmp
-  -O, --out-dir string              output directory
-  -R, --rank-names strings          names of all ranks, leave it empty to use the first row of input as
-                                    rank names
+  -A, --field-accession int             field index of assembly accession (genome ID), for outputting
+                                        taxid.map
+  -S, --field-accession-as-subspecies   treate the accession as subspecies rank
+      --field-accession-re string       regular expression to extract assembly accession (default &quot;^(.+)$&quot;)
+      --force                           overwrite existing output directory
+      --gtdb                            input files are GTDB taxonomy file
+      --gtdb-re-subs string             regular expression to extract assembly accession as the
+                                        subspecies (default &quot;^\\w\\w_GC[AF]_(.+)\\.\\d+$&quot;)
+  -h, --help                            help for create-taxdump
+      --line-chunk-size int             number of lines to process for each thread, and 4 threads is
+                                        fast enough. (default 5000)
+      --null strings                    null value of taxa (default [,NULL,NA])
+  -x, --old-taxdump-dir string          taxdump directory of the previous version, for generating
+                                        merged.dmp and delnodes.dmp
+  -O, --out-dir string                  output directory
+  -R, --rank-names strings              names of all ranks, leave it empty to use the (lowercase) first
+                                        row of input as rank names
 </code></pre></div>
 
 <p>Examples:</p>
@@ -2409,25 +2406,25 @@ Flags:
 <span class="mi">16</span><span class="err">:</span><span class="mi">31</span><span class="err">:</span><span class="mf">31.843</span><span class="w"> </span><span class="o">[</span><span class="n">INFO</span><span class="o">]</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">records</span><span class="w"> </span><span class="n">saved</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">example</span><span class="o">/</span><span class="n">taxdump</span><span class="o">/</span><span class="n">delnodes</span><span class="p">.</span><span class="n">dmp</span>
 
 <span class="err">$</span><span class="w"> </span><span class="n">export</span><span class="w"> </span><span class="n">TAXONKIT_DB</span><span class="o">=</span><span class="n">example</span><span class="o">/</span><span class="n">taxdump</span>
-<span class="err">$</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">--</span><span class="n">ids</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="k">filter</span><span class="w"> </span><span class="o">-</span><span class="n">E</span><span class="w"> </span><span class="n">species</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">-</span><span class="n">r</span>
-<span class="mi">1527235303</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Streptococcaceae</span><span class="p">;</span><span class="n">Streptococcus</span><span class="p">;</span><span class="n">Streptococcus</span><span class="w"> </span><span class="n">mitis</span><span class="w">  </span><span class="n">species</span>
-<span class="mi">2983929374</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Streptococcaceae</span><span class="p">;</span><span class="n">Streptococcus</span><span class="p">;</span><span class="n">Streptococcus</span><span class="w"> </span><span class="n">pneumoniae</span><span class="w">     </span><span class="n">species</span>
-<span class="mi">3809813362</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Enterococcaceae</span><span class="p">;</span><span class="n">Enterococcus</span><span class="p">;</span><span class="n">Enterococcus</span><span class="w"> </span><span class="n">faecalis</span><span class="w">  </span><span class="n">species</span>
-<span class="mi">4145431389</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Enterococcaceae</span><span class="p">;</span><span class="n">Enterococcus</span><span class="p">;</span><span class="n">Enterococcus</span><span class="w"> </span><span class="n">faecium</span><span class="w">   </span><span class="n">species</span>
-<span class="mi">1569132721</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Bacillales</span><span class="p">;</span><span class="n">Staphylococcaceae</span><span class="p">;</span><span class="n">Staphylococcus</span><span class="p">;</span><span class="n">Staphylococcus</span><span class="w"> </span><span class="n">aureus</span><span class="w">   </span><span class="n">species</span>
-<span class="mi">1920251658</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Bacillales</span><span class="p">;</span><span class="n">Staphylococcaceae</span><span class="p">;</span><span class="n">Staphylococcus</span><span class="p">;</span><span class="n">Staphylococcus</span><span class="w"> </span><span class="n">epidermidis</span><span class="w">      </span><span class="n">species</span>
-<span class="mi">3843752343</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Pseudomonadales</span><span class="p">;</span><span class="n">Pseudomonadaceae</span><span class="p">;</span><span class="n">Pseudomonas</span><span class="p">;</span><span class="n">Pseudomonas</span><span class="w"> </span><span class="n">aeruginosa</span><span class="w"> </span><span class="n">species</span>
-<span class="mi">72054943</span><span class="w">        </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Moraxellales</span><span class="p">;</span><span class="n">Moraxellaceae</span><span class="p">;</span><span class="n">Acinetobacter</span><span class="p">;</span><span class="n">Acinetobacter</span><span class="w"> </span><span class="n">baumannii</span><span class="w">    </span><span class="n">species</span>
-<span class="mi">1678121664</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Salmonella</span><span class="p">;</span><span class="n">Salmonella</span><span class="w"> </span><span class="n">enterica</span><span class="w">  </span><span class="n">species</span>
-<span class="mi">524994882</span><span class="w">       </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Shigella</span><span class="p">;</span><span class="n">Shigella</span><span class="w"> </span><span class="n">dysenteriae</span><span class="w">   </span><span class="n">species</span>
-<span class="mi">2695851945</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Shigella</span><span class="p">;</span><span class="n">Shigella</span><span class="w"> </span><span class="n">flexneri</span><span class="w">      </span><span class="n">species</span>
-<span class="mi">3958205156</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Klebsiella</span><span class="p">;</span><span class="n">Klebsiella</span><span class="w"> </span><span class="n">pneumoniae</span><span class="w">        </span><span class="n">species</span>
-<span class="mi">4093283224</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Escherichia</span><span class="p">;</span><span class="n">Escherichia</span><span class="w"> </span><span class="n">coli</span><span class="w">    </span><span class="n">species</span>
+<span class="err">$</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">--</span><span class="n">ids</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="k">filter</span><span class="w"> </span><span class="o">-</span><span class="n">E</span><span class="w"> </span><span class="n">species</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">pretty</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span>
+<span class="mi">793223984</span><span class="w">    </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Moraxellales</span><span class="p">;</span><span class="n">Moraxellaceae</span><span class="p">;</span><span class="n">Acinetobacter</span><span class="p">;</span><span class="n">Acinetobacter</span><span class="w"> </span><span class="n">baumannii</span><span class="w">       </span><span class="n">species</span>
+<span class="mi">1220345221</span><span class="w">   </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Pseudomonadales</span><span class="p">;</span><span class="n">Pseudomonadaceae</span><span class="p">;</span><span class="n">Pseudomonas</span><span class="p">;</span><span class="n">Pseudomonas</span><span class="w"> </span><span class="n">aeruginosa</span><span class="w">    </span><span class="n">species</span>
+<span class="mi">561101225</span><span class="w">    </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Shigella</span><span class="p">;</span><span class="n">Shigella</span><span class="w"> </span><span class="n">flexneri</span><span class="w">         </span><span class="n">species</span>
+<span class="mi">1969112428</span><span class="w">   </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Shigella</span><span class="p">;</span><span class="n">Shigella</span><span class="w"> </span><span class="n">dysenteriae</span><span class="w">      </span><span class="n">species</span>
+<span class="mi">599451526</span><span class="w">    </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Escherichia</span><span class="p">;</span><span class="n">Escherichia</span><span class="w"> </span><span class="n">coli</span><span class="w">       </span><span class="n">species</span>
+<span class="mi">2034984046</span><span class="w">   </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Salmonella</span><span class="p">;</span><span class="n">Salmonella</span><span class="w"> </span><span class="n">enterica</span><span class="w">     </span><span class="n">species</span>
+<span class="mi">1859674812</span><span class="w">   </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Enterobacterales</span><span class="p">;</span><span class="n">Enterobacteriaceae</span><span class="p">;</span><span class="n">Klebsiella</span><span class="p">;</span><span class="n">Klebsiella</span><span class="w"> </span><span class="n">pneumoniae</span><span class="w">   </span><span class="n">species</span>
+<span class="mi">773201972</span><span class="w">    </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Bacillales</span><span class="p">;</span><span class="n">Staphylococcaceae</span><span class="p">;</span><span class="n">Staphylococcus</span><span class="p">;</span><span class="n">Staphylococcus</span><span class="w"> </span><span class="n">aureus</span><span class="w">                      </span><span class="n">species</span>
+<span class="mi">1295317147</span><span class="w">   </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Bacillales</span><span class="p">;</span><span class="n">Staphylococcaceae</span><span class="p">;</span><span class="n">Staphylococcus</span><span class="p">;</span><span class="n">Staphylococcus</span><span class="w"> </span><span class="n">epidermidis</span><span class="w">                 </span><span class="n">species</span>
+<span class="mi">182402976</span><span class="w">    </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Enterococcaceae</span><span class="p">;</span><span class="n">Enterococcus</span><span class="p">;</span><span class="n">Enterococcus</span><span class="w"> </span><span class="n">faecium</span><span class="w">                      </span><span class="n">species</span>
+<span class="mi">1566113429</span><span class="w">   </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Enterococcaceae</span><span class="p">;</span><span class="n">Enterococcus</span><span class="p">;</span><span class="n">Enterococcus</span><span class="w"> </span><span class="n">faecalis</span><span class="w">                     </span><span class="n">species</span>
+<span class="mi">891083107</span><span class="w">    </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Streptococcaceae</span><span class="p">;</span><span class="n">Streptococcus</span><span class="p">;</span><span class="n">Streptococcus</span><span class="w"> </span><span class="n">pneumoniae</span><span class="w">                </span><span class="n">species</span>
+<span class="mi">1357145446</span><span class="w">   </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Streptococcaceae</span><span class="p">;</span><span class="n">Streptococcus</span><span class="p">;</span><span class="n">Streptococcus</span><span class="w"> </span><span class="n">mitis</span><span class="w">                     </span><span class="n">species</span>
 
 <span class="err">$</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="n">example</span><span class="o">/</span><span class="n">taxdump</span><span class="o">/</span><span class="n">taxid</span><span class="p">.</span><span class="k">map</span>
-<span class="n">GCF_001027105</span><span class="mf">.1</span><span class="w"> </span><span class="mi">1569132721</span>
-<span class="n">GCF_001096185</span><span class="mf">.1</span><span class="w"> </span><span class="mi">2983929374</span>
-<span class="n">GCF_001544255</span><span class="mf">.1</span><span class="w"> </span><span class="mi">4145431389</span>
+<span class="n">GCF_001027105</span><span class="mf">.1</span><span class="w"> </span><span class="mi">773201972</span>
+<span class="n">GCF_001096185</span><span class="mf">.1</span><span class="w"> </span><span class="mi">891083107</span>
+<span class="n">GCF_001544255</span><span class="mf">.1</span><span class="w"> </span><span class="mi">182402976</span>
 </code></pre></div>
 
 </li>
@@ -2448,8 +2445,8 @@ Flags:
 
 <span class="err">$</span><span class="w"> </span><span class="n">export</span><span class="w"> </span><span class="n">TAXONKIT_DB</span><span class="o">=</span><span class="n">example</span><span class="o">/</span><span class="n">taxdump2</span>
 <span class="err">$</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">--</span><span class="n">ids</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="k">filter</span><span class="w"> </span><span class="o">-</span><span class="n">E</span><span class="w"> </span><span class="n">species</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span><span class="mi">2</span>
-<span class="mi">1527235303</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Streptococcaceae</span><span class="p">;</span><span class="n">Streptococcus</span><span class="p">;</span><span class="n">Streptococcus</span><span class="w"> </span><span class="n">mitis</span><span class="w">  </span><span class="n">species</span>
-<span class="mi">2983929374</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Firmicutes</span><span class="p">;</span><span class="n">Bacilli</span><span class="p">;</span><span class="n">Lactobacillales</span><span class="p">;</span><span class="n">Streptococcaceae</span><span class="p">;</span><span class="n">Streptococcus</span><span class="p">;</span><span class="n">Streptococcus</span><span class="w"> </span><span class="n">pneumoniae</span><span class="w">     </span><span class="n">species</span>
+<span class="mi">793223984</span><span class="w">       </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Moraxellales</span><span class="p">;</span><span class="n">Moraxellaceae</span><span class="p">;</span><span class="n">Acinetobacter</span><span class="p">;</span><span class="n">Acinetobacter</span><span class="w"> </span><span class="n">baumannii</span><span class="w">    </span><span class="n">species</span>
+<span class="mi">1220345221</span><span class="w">      </span><span class="n">Bacteria</span><span class="p">;</span><span class="n">Proteobacteria</span><span class="p">;</span><span class="n">Gammaproteobacteria</span><span class="p">;</span><span class="n">Pseudomonadales</span><span class="p">;</span><span class="n">Pseudomonadaceae</span><span class="p">;</span><span class="n">Pseudomonas</span><span class="p">;</span><span class="n">Pseudomonas</span><span class="w"> </span><span class="n">aeruginosa</span><span class="w"> </span><span class="n">species</span>
 </code></pre></div>
 
 </li>
@@ -2502,7 +2499,7 @@ Input format:
      a) TaxId of taxon at species or lower rank.
      b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
-Attentions:
+Attention:
   1. Some TaxIds may be merged to another ones in current taxonomy version,
      the abundances will be summed up.
   2. Some TaxIds may be deleted in current taxonomy version,
