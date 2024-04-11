@@ -828,6 +828,19 @@ Examples:
         1458427   2        1224      28216     80840     80864     2490452   1458425
 
 
+        # both node name and taxids
+        echo 562 \
+            | taxonkit reformat -I 1 -t \
+            | csvtk -H -t sep -f 2 -s ';' -R \
+            | csvtk -H -t sep -f 2 -s ';' -R \
+            | csvtk add-header -t -n "taxid,kingdom,phylum,class,order,family,genus,species,kingdom_taxid,phylum_taxid,class_taxid,order_taxid,family_taxid,genus_taxid,species_taxid" \
+            | csvtk pretty -t
+        taxid   kingdom    phylum           class                 order              family               genus         species            kingdom_taxid   phylum_taxid   class_taxid   order_taxid   family_taxid   genus_taxid   species_taxid
+        -----   --------   --------------   -------------------   ----------------   ------------------   -----------   ----------------   -------------   ------------   -----------   -----------   ------------   -----------   -------------
+        562     Bacteria   Pseudomonadota   Gammaproteobacteria   Enterobacterales   Enterobacteriaceae   Escherichia   Escherichia coli   2               1224           1236          91347         543            561           562
+
+
+
 1. Use custom symbols for unclassfied ranks (`-r/--miss-rank-repl`)
 
         $ taxonkit reformat lineage.txt -r "__"  | cut -f 3
