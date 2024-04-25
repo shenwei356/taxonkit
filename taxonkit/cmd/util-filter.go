@@ -223,6 +223,9 @@ func (f *rankFilter) isPassed(taxid uint32) (bool, error) {
 				f.cache[taxid] = false
 				return false, nil
 			}
+		} else { // all nonrank will be outputted if !discardNorank
+			f.cache[taxid] = true
+			return true, nil
 		}
 	}
 
@@ -267,7 +270,7 @@ func (f *rankFilter) isPassed(taxid uint32) (bool, error) {
 		}
 	}
 
-	order, _ := f.rankOrder[rank]
+	order := f.rankOrder[rank]
 	// order, ok := f.rankOrder[rank]
 	// if !ok {
 	// 	return false, fmt.Errorf("rank order not defined in rank file: %s", rank)

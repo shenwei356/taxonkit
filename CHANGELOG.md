@@ -1,3 +1,7 @@
+- [TaxonKit v0.16.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.16.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.16.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.16.1)
+    - `taxonkit filter`:
+        - Fix keeping taxids with a rank of "no rank" or "clade". [#97](https://github.com/shenwei356/taxonkit/issues/97)
 - [TaxonKit v0.16.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.16.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.16.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.16.0)
     - `taxonkit create-taxdump`:
