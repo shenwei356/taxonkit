@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -31,6 +32,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/shenwei356/util/pathutil"
+	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
 	"github.com/twotwotwo/sorts"
 )
@@ -127,7 +129,8 @@ func getFlagTaxonIDs(cmd *cobra.Command, flag string) []int {
 	s, err := cmd.Flags().GetString(flag)
 	checkError(err)
 	if s == "" {
-		checkError(fmt.Errorf("flag --%s needed", flag))
+		// checkError(fmt.Errorf("flag --%s needed", flag))
+		return nil
 	}
 	if !reTaxIDs.MatchString(s) {
 		checkError(fmt.Errorf("invalid value of flag %s. comma-separated integers needed", flag))
@@ -139,6 +142,37 @@ func getFlagTaxonIDs(cmd *cobra.Command, flag string) []int {
 		id, _ = strconv.Atoi(s)
 		ids[i] = id
 	}
+	return ids
+}
+
+func getTaxonIDs(files []string) []int {
+	ids := make([]int, 0, 1024)
+	var id int
+	var line string
+	for _, file := range files {
+		fh, err := xopen.Ropen(file)
+		checkError(err)
+
+		scanner := bufio.NewScanner(fh)
+		for scanner.Scan() {
+			line = strings.Trim(scanner.Text(), "\t\r\n")
+			if line == "" {
+				continue
+			}
+			id, err = strconv.Atoi(line)
+			if err != nil {
+				continue
+			}
+
+			ids = append(ids, id)
+		}
+		if err := scanner.Err(); err != nil {
+			checkError(err)
+		}
+
+		checkError(fh.Close())
+	}
+
 	return ids
 }
 

@@ -54,6 +54,12 @@ Examples:
     63221
     741158
 
+    # from stdin
+    echo 9606 | taxonkit list
+
+    # from file
+    taxonkit list <(echo 9606)
+
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := getConfigs(cmd)
@@ -63,9 +69,16 @@ Examples:
 		jsonFormat := getFlagBool(cmd, "json")
 
 		files := getFileList(args)
-		if len(files) > 1 || (len(files) == 1 && files[0] == "stdin") {
-			log.Warningf("no positional arguments needed")
+		// if len(files) > 1 || (len(files) == 1 && files[0] == "stdin") {
+		// 	log.Warningf("no positional arguments needed")
+		// }
+
+		if len(ids) == 0 && len(files) == 1 && isStdin(files[0]) && !xopen.IsStdin() {
+			checkError(fmt.Errorf("stdin not detected"))
 		}
+
+		_ids := getTaxonIDs(files)
+		ids = append(ids, _ids...)
 
 		outfh, err := xopen.Wopen(config.OutFile)
 		checkError(err)
