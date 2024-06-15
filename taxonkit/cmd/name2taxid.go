@@ -28,6 +28,9 @@ import (
 	"github.com/shenwei356/breader"
 	"github.com/shenwei356/xopen"
 	"github.com/spf13/cobra"
+	"github.com/suggest-go/suggest/pkg/dictionary"
+	"github.com/suggest-go/suggest/pkg/metric"
+	"github.com/suggest-go/suggest/pkg/suggest"
 )
 
 // name2taxidCmd represents the fx2tab command
@@ -53,6 +56,8 @@ Attention:
 		printRank := getFlagBool(cmd, "show-rank")
 		field := getFlagPositiveInt(cmd, "name-field") - 1
 		limite2SciName := getFlagBool(cmd, "sci-name")
+		fuzzy := getFlagBool(cmd, "fuzzy")
+		fuzzyTopN := getFlagPositiveInt(cmd, "fuzzy-top-n")
 
 		files := getFileList(args)
 
@@ -66,6 +71,9 @@ Attention:
 
 		var m map[string][]uint32
 
+		var dict dictionary.Dictionary
+		var service *suggest.Service
+
 		var wg sync.WaitGroup
 		wg.Add(1)
 
@@ -77,6 +85,41 @@ Attention:
 			if config.Verbose {
 				log.Infof("%d names parsed", len(m))
 			}
+
+			if fuzzy {
+				if config.Verbose {
+					log.Infof("creating indexing for name searching ...")
+				}
+
+				names := make([]string, len(m))
+				i := 0
+				for n := range m {
+					names[i] = n
+					i++
+				}
+				dict = dictionary.NewInMemoryDictionary(names)
+
+				indexDescription := suggest.IndexDescription{
+					Name:      "taxonkit",
+					NGramSize: 3,
+					Wrap:      [2]string{"$", "$"},
+					Pad:       "$",
+					Alphabet:  []string{"english", "$"},
+				}
+
+				builder, err := suggest.NewRAMBuilder(dict, indexDescription)
+				checkError(err)
+
+				service = suggest.NewService()
+				if err := service.AddIndex(indexDescription.Name, dict, builder); err != nil {
+					checkError(err)
+				}
+
+				if config.Verbose {
+					log.Infof(`indexing finished`)
+				}
+			}
+
 			wg.Done()
 		}()
 
@@ -114,7 +157,21 @@ Attention:
 			if len(data) < field+1 {
 				field = len(data) - 1
 			}
-			return line2taxids{line, m[strings.ToLower(data[field])]}, true, nil
+			var taxids []uint32
+			if !fuzzy {
+				taxids = m[strings.ToLower(data[field])]
+			} else {
+				searchConf, err := suggest.NewSearchConfig(data[field], fuzzyTopN, metric.CosineMetric(), 0.7)
+				checkError(err)
+				result, err := service.Suggest("taxonkit", searchConf)
+				checkError(err)
+				taxids = make([]uint32, 0, 8)
+				for _, item := range result {
+					taxids = append(taxids, m[strings.ToLower(item.Value)]...)
+				}
+			}
+
+			return line2taxids{line, taxids}, true, nil
 		}
 
 		var taxid uint32
@@ -161,4 +218,6 @@ func init() {
 	name2taxidCmd.Flags().BoolP("show-rank", "r", false, `show rank`)
 	name2taxidCmd.Flags().IntP("name-field", "i", 1, "field index of name. data should be tab-separated")
 	name2taxidCmd.Flags().BoolP("sci-name", "s", false, "only searching scientific names")
+	name2taxidCmd.Flags().BoolP("fuzzy", "f", false, "allow fuzzy match")
+	name2taxidCmd.Flags().IntP("fuzzy-top-n", "n", 1, "choose top n matches in fuzzy search")
 }

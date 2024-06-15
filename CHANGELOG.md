@@ -4,6 +4,8 @@
         - Fix keeping taxids with a rank of "no rank" or "clade". [#97](https://github.com/shenwei356/taxonkit/issues/97)
     - `taxonkit list`:
         - Accept input TaxIds from stdin/files, not just the flag `--ids`. [#93](https://github.com/shenwei356/taxonkit/issues/93)
+    - `taxonkit name2taxid`:
+        - Add support of fuzzy match with `-f/--fuzzy`. [#88](https://github.com/shenwei356/taxonkit/issues/88)
 - [TaxonKit v0.16.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.16.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.16.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.16.0)
     - `taxonkit create-taxdump`:

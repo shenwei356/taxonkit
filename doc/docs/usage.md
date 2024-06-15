@@ -117,6 +117,12 @@ Examples:
     63221
     741158
 
+    # from stdin
+    echo 9606 | taxonkit list
+
+    # from file
+    taxonkit list <(echo 9606)
+
 Usage:
   taxonkit list [flags]
 
