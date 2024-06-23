@@ -150,6 +150,9 @@ func getTaxonIDs(files []string) []int {
 	var id int
 	var line string
 	for _, file := range files {
+		if isStdin(file) && !xopen.IsStdin() {
+			continue
+		}
 		fh, err := xopen.Ropen(file)
 		checkError(err)
 

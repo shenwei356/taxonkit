@@ -74,7 +74,7 @@ Examples:
 		// }
 
 		if len(ids) == 0 && len(files) == 1 && isStdin(files[0]) && !xopen.IsStdin() {
-			checkError(fmt.Errorf("stdin not detected"))
+			checkError(fmt.Errorf("the flag --ids is not given and stdin is not detected"))
 		}
 
 		_ids := getTaxonIDs(files)
