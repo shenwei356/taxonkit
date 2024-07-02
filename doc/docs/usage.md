@@ -1805,13 +1805,15 @@ Usage
 ```text
 Convert metagenomic profile table to CAMI format
 
-Input format: 
+Input format:
   1. The input file should be tab-delimited
   2. At least two columns needed:
-     a) TaxId of taxon at species or lower rank.
+     a) TaxId of a taxon.
      b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
 Attention:
+  0. If some TaxIds are parents of others, please switch on -S/--no-sum-up to disable
+     summing up abundances.
   1. Some TaxIds may be merged to another ones in current taxonomy version,
      the abundances will be summed up.
   2. Some TaxIds may be deleted in current taxonomy version,
@@ -1824,6 +1826,7 @@ Flags:
   -a, --abundance-field int   field index of abundance. input data should be tab-separated (default 2)
   -h, --help                  help for profile2cami
   -0, --keep-zero             keep taxons with abundance of zero
+  -S, --no-sum-up             do not sum up abundance from child to parent TaxIds
   -p, --percentage            abundance is in percentage
   -R, --recompute-abd         recompute abundance if some TaxIds are deleted in current taxonomy version
   -s, --sample-id string      sample ID in result file
@@ -1896,7 +1899,41 @@ Examples
         239935  species 2|74201|203494|48461|1647988|239934|239935      Bacteria|Verrucomicrobia|Verrucomicrobiae|Verrucomicrobiales|Akkermansiaceae|Akkermansia|Akkermansia muciniphila 55.555555555555557
         483329  species 2759|6656|50557|7041|57514|57515|483329 Eukaryota|Arthropoda|Insecta|Coleoptera|Silphidae|Nicrophorus|Nicrophorus carolina       44.444444444444450
         
-- See https://github.com/shenwei356/sun2021-cami-profiles
+- Some abundance might have taxa where some of them are parrents of others. E.g.,
+
+        $ cat example/abundance2.tsv
+        2       0.99
+        1224    0.59
+        1236    0.2
+        28211   0.4
+        1239    0.4
+        91061   0.39
+        2759    0.01
+        9606    0.01
+
+    Please switch on -S/--no-sum-up to disable summing up abundances.
+
+        $ taxonkit profile2cami example/abundance2.tsv -S
+        @SampleID:
+        @Version:0.10.0
+        @Ranks:superkingdom|phylum|class|order|family|genus|species|strain
+        @TaxonomyID:
+        @@TAXID RANK    TAXPATH TAXPATHSN       PERCENTAGE
+        2       superkingdom    2       Bacteria        99.000000000000000
+        2759    superkingdom    2759    Eukaryota       1.000000000000000
+        1224    phylum  2|1224  Bacteria|Pseudomonadota 59.000000000000000
+        1239    phylum  2|1239  Bacteria|Bacillota      40.000000000000000
+        7711    phylum  2759|7711       Eukaryota|Chordata      1.000000000000000
+        28211   class   2|1224|28211    Bacteria|Pseudomonadota|Alphaproteobacteria     40.000000000000000
+        91061   class   2|1239|91061    Bacteria|Bacillota|Bacilli      39.000000000000000
+        1236    class   2|1224|1236     Bacteria|Pseudomonadota|Gammaproteobacteria     20.000000000000000
+        40674   class   2759|7711|40674 Eukaryota|Chordata|Mammalia     1.000000000000000
+        9443    order   2759|7711|40674|9443    Eukaryota|Chordata|Mammalia|Primates    1.000000000000000
+        9604    family  2759|7711|40674|9443|9604       Eukaryota|Chordata|Mammalia|Primates|Hominidae  1.000000000000000
+        9605    genus   2759|7711|40674|9443|9604|9605  Eukaryota|Chordata|Mammalia|Primates|Hominidae|Homo     1.000000000000000
+        9606    species 2759|7711|40674|9443|9604|9605|9606     Eukaryota|Chordata|Mammalia|Primates|Hominidae|Homo|Homo sapiens        1.000000000000000
+
+- Also see https://github.com/shenwei356/sun2021-cami-profiles
 
 ## cami-filter
 

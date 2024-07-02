@@ -96,7 +96,7 @@ type ProfileNode struct {
 	Abundance     float64
 }
 
-func generateProfile(taxdb *taxdump.Taxonomy, targets []*Target) map[uint32]*ProfileNode {
+func generateProfile(taxdb *taxdump.Taxonomy, targets []*Target, summedUp bool) map[uint32]*ProfileNode {
 
 	profile := make(map[uint32]*ProfileNode, len(targets))
 
@@ -112,7 +112,7 @@ func generateProfile(taxdb *taxdump.Taxonomy, targets []*Target) map[uint32]*Pro
 
 					Abundance: target.Abundance,
 				}
-			} else {
+			} else if summedUp {
 				node.Abundance += target.Abundance
 			}
 		}

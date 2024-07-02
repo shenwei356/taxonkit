@@ -44,10 +44,12 @@ var profile2camiCmd = &cobra.Command{
 Input format: 
   1. The input file should be tab-delimited
   2. At least two columns needed:
-     a) TaxId of taxon at species or lower rank.
+     a) TaxId of a taxon.
      b) Abundance (could be percentage, automatically detected or use -p/--percentage).
 
 Attention:
+  0. If some TaxIds are parents of others, please switch on -S/--no-sum-up to disable
+     summing up abundances.
   1. Some TaxIds may be merged to another ones in current taxonomy version,
      the abundances will be summed up.
   2. Some TaxIds may be deleted in current taxonomy version,
@@ -64,6 +66,7 @@ Attention:
 		keepZero := getFlagBool(cmd, "keep-zero")
 		usePercentage := getFlagBool(cmd, "percentage")
 		recomputeAbd := getFlagBool(cmd, "recompute-abd")
+		noSumUp := getFlagBool(cmd, "no-sum-up")
 
 		showRanks := getFlagStringSlice(cmd, "show-rank")
 
@@ -245,23 +248,76 @@ Attention:
 			}
 		}
 
+		// check merged
+		targets2 := make([]*Target, 0, len(targets))
+		taxid2i := make(map[uint32]int, len(targets))
+		var j int
+		for _, target := range targets {
+			if j, ok = taxid2i[target.Taxid]; ok {
+				targets2[j].Abundance += target.Abundance
+			} else {
+				taxid2i[target.Taxid] = len(targets2)
+				targets2 = append(targets2, target)
+			}
+		}
+		targets = targets2
+
 		if recomputeAbd {
 			sum = 0
-			for _, target := range targets {
+			var lca uint32
+			var isAChildOfSomeOne bool
+			for i, target := range targets {
+				// fmt.Printf("i: %d, t: %d, a: %f\n", i, target.Taxid, target.Abundance)
 				if len(target.CompleteLineageTaxids) == 0 {
 					continue
 				}
-				sum += target.Abundance
+				isAChildOfSomeOne = false
+				for j, target2 := range targets {
+					if i == j {
+						continue
+					}
+
+					lca = taxdb.LCA(target.Taxid, target2.Taxid)
+					if lca != 0 && lca == target2.Taxid {
+						isAChildOfSomeOne = true
+						break
+					}
+				}
+
+				// fmt.Printf("i: %d, t: %d, is: %v\n", i, target.Taxid, isAChildOfSomeOne)
+				if !isAChildOfSomeOne {
+					sum += target.Abundance
+				}
 			}
 
-			for _, target := range targets {
-				target.Abundance = target.Abundance / sum
+			// fmt.Printf("sum: %f\n", sum)
+
+			for i, target := range targets {
+				if len(target.CompleteLineageTaxids) == 0 {
+					continue
+				}
+				isAChildOfSomeOne = false
+				for j, target2 := range targets {
+					if i == j {
+						continue
+					}
+
+					lca = taxdb.LCA(target.Taxid, target2.Taxid)
+					if lca != 0 && lca == target2.Taxid {
+						isAChildOfSomeOne = true
+						break
+					}
+				}
+
+				if !isAChildOfSomeOne {
+					target.Abundance = target.Abundance / sum
+				}
 			}
 		}
 
 		// ----------------------
 
-		profile := generateProfile(taxdb, targets)
+		profile := generateProfile(taxdb, targets, !noSumUp)
 
 		nodes := make([]*ProfileNode, 0, len(profile))
 		for _, node := range profile {
@@ -346,4 +402,5 @@ func init() {
 	profile2camiCmd.Flags().BoolP("keep-zero", "0", false, "keep taxons with abundance of zero")
 	profile2camiCmd.Flags().BoolP("percentage", "p", false, "abundance is in percentage")
 	profile2camiCmd.Flags().BoolP("recompute-abd", "R", false, "recompute abundance if some TaxIds are deleted in current taxonomy version")
+	profile2camiCmd.Flags().BoolP("no-sum-up", "S", false, "do not sum up abundance from child to parent TaxIds")
 }
