@@ -42,7 +42,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.16.0
+Version: 0.17.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
