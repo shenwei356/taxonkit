@@ -39,6 +39,7 @@ var rankList = []string{
 
 var srankList = []string{
 	"",
+	"r",
 	"k",
 	"K",
 	"p",
@@ -53,6 +54,7 @@ var srankList = []string{
 }
 
 var rank2symbol = map[string]string{
+	"realm":             "r",
 	"superkingdom":      "k",
 	"kingdom":           "K",
 	"phylum":            "p",
@@ -67,6 +69,7 @@ var rank2symbol = map[string]string{
 }
 
 var symbol2rank = map[string]string{
+	"r": "realm",
 	"k": "superkingdom",
 	"K": "kingdom",
 	"p": "phylum",
@@ -80,6 +83,7 @@ var symbol2rank = map[string]string{
 	"T": "strain",
 }
 var symbol2weight = map[string]float32{
+	"r": 0.5,
 	"k": 1,
 	"K": 1.5,
 	"p": 2,
@@ -96,6 +100,7 @@ var symbol2weight = map[string]float32{
 var reRankPlaceHolder = regexp.MustCompile(`\{(\w)\}`)
 
 var reRankPlaceHolders = map[string]*regexp.Regexp{
+	"r": regexp.MustCompile(`\{r\}`),
 	"k": regexp.MustCompile(`\{k\}`),
 	"K": regexp.MustCompile(`\{K\}`),
 	"p": regexp.MustCompile(`\{p\}`),

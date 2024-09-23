@@ -597,6 +597,7 @@ Ambiguous names:
 
 Output format can be formated by flag --format, available placeholders:
 
+    {r}: realm
     {k}: superkingdom
     {K}: kingdom
     {p}: phylum
@@ -630,7 +631,7 @@ Flags:
   -h, --help                           help for reformat
   -i, --lineage-field int              field index of lineage. data should be tab-separated (default 2)
   -r, --miss-rank-repl string          replacement string for missing rank
-  -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default "unclassified ")
+  -p, --miss-rank-repl-prefix string   prefix for estimated taxon names (default "unclassified ")
   -s, --miss-rank-repl-suffix string   suffix for estimated taxon names. "rank" for rank name, "" for no
                                        suffix (default "rank")
   -R, --miss-taxid-repl string         replacement string for missing taxid
@@ -650,6 +651,7 @@ Flags:
       --prefix-o string                prefix for order, used along with flag -P/--add-prefix (default "o__")
       --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default
                                        "p__")
+      --prefix-r string                prefix for realm, used along with flag -P/--add-prefix (default "r__")
       --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default
                                        "s__")
       --prefix-t string                prefix for subspecies/strain, used along with flag
@@ -661,7 +663,6 @@ Flags:
   -I, --taxid-field int                field index of taxid. input data should be tab-separated. it
                                        overrides -i/--lineage-field
   -T, --trim                           do not fill or add prefix for missing rank lower than current rank
-
 
 ```
 

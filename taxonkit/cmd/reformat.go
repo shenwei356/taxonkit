@@ -61,6 +61,7 @@ Ambiguous names:
 
 Output format can be formated by flag --format, available placeholders:
 
+    {r}: realm
     {k}: superkingdom
     {K}: kingdom
     {p}: phylum
@@ -116,6 +117,7 @@ Output format can contains some escape charactors like "\t".
 		printLineageInTaxid := getFlagBool(cmd, "show-lineage-taxids")
 
 		addPrefix := getFlagBool(cmd, "add-prefix")
+		prefixR := getFlagString(cmd, "prefix-r")
 		prefixK := getFlagString(cmd, "prefix-k")
 		prefixK2 := getFlagString(cmd, "prefix-K")
 		prefixP := getFlagString(cmd, "prefix-p")
@@ -131,6 +133,7 @@ Output format can contains some escape charactors like "\t".
 		trim := getFlagBool(cmd, "trim")
 
 		prefixes := map[string]string{
+			"r": prefixR,
 			"k": prefixK,
 			"K": prefixK2,
 			"p": prefixP,
@@ -588,6 +591,7 @@ func init() {
 	flineageCmd.Flags().BoolP("output-ambiguous-result", "a", false, `output one of the ambigous result`)
 
 	flineageCmd.Flags().BoolP("add-prefix", "P", false, `add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X`)
+	flineageCmd.Flags().StringP("prefix-r", "", "r__", `prefix for realm, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-k", "", "k__", `prefix for superkingdom, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-K", "", "K__", `prefix for kingdom, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-p", "", "p__", `prefix for phylum, used along with flag -P/--add-prefix`)
