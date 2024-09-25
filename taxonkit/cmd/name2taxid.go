@@ -195,16 +195,21 @@ Attention:
 						if config.LineBuffered {
 							outfh.Flush()
 						}
-					} else {
-						for _, taxid = range l2t.taxids {
-							if printRank {
-								outfh.WriteString(fmt.Sprintf("%s\t%d\t%s\n", l2t.line, taxid, ranks[taxid]))
-							} else {
-								outfh.WriteString(fmt.Sprintf("%s\t%d\n", l2t.line, taxid))
-							}
-							if config.LineBuffered {
-								outfh.Flush()
-							}
+
+						continue
+					}
+
+					if len(l2t.taxids) > 1 {
+						log.Warningf("multiple TaxIds found for '%s'", l2t.line)
+					}
+					for _, taxid = range l2t.taxids {
+						if printRank {
+							outfh.WriteString(fmt.Sprintf("%s\t%d\t%s\n", l2t.line, taxid, ranks[taxid]))
+						} else {
+							outfh.WriteString(fmt.Sprintf("%s\t%d\n", l2t.line, taxid))
+						}
+						if config.LineBuffered {
+							outfh.Flush()
 						}
 					}
 				}

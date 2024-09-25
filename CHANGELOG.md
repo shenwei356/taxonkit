@@ -2,6 +2,8 @@
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.18.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.18.0)
     - `taxonkit reformat`:
         - Add a placeholder for rank "realm", "{r}", which is common in Virus taxonomy like [ictv](https://github.com/shenwei356/ictv-taxdump). [#102](https://github.com/shenwei356/taxonkit/issues/102)
+    - `taxonkit name2taxid`:
+        - Show warning for names with multiple taxids. [#103](https://github.com/shenwei356/taxonkit/issues/103)
 - [TaxonKit v0.17.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.17.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.17.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.17.0)
     - `taxonkit filter`:
