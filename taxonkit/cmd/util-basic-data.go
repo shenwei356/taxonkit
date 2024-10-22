@@ -78,7 +78,7 @@ func loadData(config Config, loadTree bool, recordRank bool) (
 	wg.Add(1)
 	go func() {
 		if config.Verbose {
-			log.Infof("parsing delnodes file: %s", config.NamesFile)
+			log.Infof("parsing delnodes file: %s", config.DelNodesFile)
 		}
 		delnodes = getDelnodesMap(config.DelNodesFile)
 		if config.Verbose {
@@ -90,7 +90,7 @@ func loadData(config Config, loadTree bool, recordRank bool) (
 	wg.Add(1)
 	go func() {
 		if config.Verbose {
-			log.Infof("parsing merged file: %s", config.NamesFile)
+			log.Infof("parsing merged file: %s", config.MergedFile)
 		}
 		merged = getMergedNodesMap(config.MergedFile)
 		if config.Verbose {
