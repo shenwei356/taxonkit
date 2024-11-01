@@ -700,7 +700,7 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h2 id="taxonkit">taxonkit<a class="headerlink" href="#taxonkit" title="Permanent link">Link</a></h2>
 <div class="codehilite"><pre><span></span><code>TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.17.0
+Version: 0.18.0
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -1258,6 +1258,7 @@ Ambiguous names:
 
 Output format can be formated by flag --format, available placeholders:
 
+    {r}: realm
     {k}: superkingdom
     {K}: kingdom
     {p}: phylum
@@ -1291,7 +1292,7 @@ Flags:
   -h, --help                           help for reformat
   -i, --lineage-field int              field index of lineage. data should be tab-separated (default 2)
   -r, --miss-rank-repl string          replacement string for missing rank
-  -p, --miss-rank-repl-prefix string   prefix for estimated taxon level (default &quot;unclassified &quot;)
+  -p, --miss-rank-repl-prefix string   prefix for estimated taxon names (default &quot;unclassified &quot;)
   -s, --miss-rank-repl-suffix string   suffix for estimated taxon names. &quot;rank&quot; for rank name, &quot;&quot; for no
                                        suffix (default &quot;rank&quot;)
   -R, --miss-taxid-repl string         replacement string for missing taxid
@@ -1311,6 +1312,7 @@ Flags:
       --prefix-o string                prefix for order, used along with flag -P/--add-prefix (default &quot;o__&quot;)
       --prefix-p string                prefix for phylum, used along with flag -P/--add-prefix (default
                                        &quot;p__&quot;)
+      --prefix-r string                prefix for realm, used along with flag -P/--add-prefix (default &quot;r__&quot;)
       --prefix-s string                prefix for species, used along with flag -P/--add-prefix (default
                                        &quot;s__&quot;)
       --prefix-t string                prefix for subspecies/strain, used along with flag
