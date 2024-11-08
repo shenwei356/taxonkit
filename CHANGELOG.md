@@ -1,3 +1,7 @@
+- [TaxonKit v0.18.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.18.1)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.18.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.18.1)
+    - `taxonkit reformat`:
+        - Fix `-T/--trim` which did not work for `-r/--miss-rank-repl`. [#106](https://github.com/shenwei356/taxonkit/issues/106)
 - [TaxonKit v0.18.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.18.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.18.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.18.0)
     - `taxonkit reformat`:

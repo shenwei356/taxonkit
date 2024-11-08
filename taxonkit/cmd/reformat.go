@@ -386,13 +386,6 @@ Output format can contains some escape charactors like "\t".
 				ireplacements = make(map[string]string, len(matches))
 			}
 
-			for _, match := range matches {
-				replacements[match[1]] = blank
-				if printLineageInTaxid {
-					ireplacements[match[1]] = iblank
-				}
-			}
-
 			for i, name := range names {
 				rank = ranks[i]
 				taxid = taxids[i]
@@ -517,18 +510,30 @@ Output format can contains some escape charactors like "\t".
 			}
 
 			for srank, re := range reRankPlaceHolders {
-				if addPrefix {
-					if trim && replacements[srank] == "" {
+				if replacements[srank] == "" {
+					if trim && symbol2weight[srank] > maxRankWeight {
 						flineage = re.ReplaceAllString(flineage, "")
+
+						if printLineageInTaxid {
+							iflineage = re.ReplaceAllString(iflineage, "")
+						}
 					} else {
-						flineage = re.ReplaceAllString(flineage, prefixes[srank]+replacements[srank])
+						flineage = re.ReplaceAllString(flineage, blank)
+
+						if printLineageInTaxid {
+							iflineage = re.ReplaceAllString(iflineage, iblank)
+						}
 					}
 				} else {
-					flineage = re.ReplaceAllString(flineage, replacements[srank])
-				}
+					if addPrefix {
+						flineage = re.ReplaceAllString(flineage, prefixes[srank]+replacements[srank])
+					} else {
+						flineage = re.ReplaceAllString(flineage, replacements[srank])
+					}
 
-				if printLineageInTaxid {
-					iflineage = re.ReplaceAllString(iflineage, ireplacements[srank])
+					if printLineageInTaxid {
+						iflineage = re.ReplaceAllString(iflineage, ireplacements[srank])
+					}
 				}
 			}
 
