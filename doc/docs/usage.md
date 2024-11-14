@@ -9,6 +9,7 @@ Table of Contents
   - [list](#list)
   - [lineage](#lineage)
   - [reformat](#reformat)
+  - [reformat2](#reformat2)
   - [name2taxid](#name2taxid)
   - [filter](#filter)
   - [lca](#lca)
@@ -42,7 +43,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.18.0
+Version: 0.19.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -78,6 +79,7 @@ Available Commands:
   name2taxid      Convert taxon names to TaxIds
   profile2cami    Convert metagenomic profile table to CAMI format
   reformat        Reformat lineage in canonical ranks
+  reformat2       Reformat lineage in chosen ranks, allowing more ranks than 'reformat'
   taxid-changelog Create TaxId changelog from dump archives
   version         print version information and check for update
 
@@ -1015,6 +1017,114 @@ Examples:
         $ echo -ne "2507530\n2516889\n" | taxonkit lineage --data-dir . | taxonkit reformat --data-dir . -t -a
         2507530 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019     Eukaryota;Basidiomycota;Agaricomycetes;Russulales;Russulaceae;Russula;Russula sp. 8 KA-2019      2759;5204;155619;452342;5401;5402;2507530
         2516889 cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Agaricomycetes;Agaricomycetes incertae sedis;Russulales;Russulaceae;Russula;unclassified Russula;Russula sp. 8 KA-2019     Eukaryota;Basidiomycota;Agaricomycetes;Russulales;Russulaceae;Russula;Russula sp. 8 KA-2019      2759;5204;155619;452342;5401;5402;2507530
+
+## reformat2
+
+Usage
+
+```text
+Reformat lineage in chosen ranks, allowing more ranks than 'reformat'
+
+Input:
+
+  - List of TaxIds, one record per line.
+  - Or tab-delimited format.
+    Plese specify the TaxId field with flag -I/--taxid-field (default 1)
+  - Supporting (gzipped) file or STDIN.
+
+Output:
+
+  1. Input line data.
+  2. Reformated lineage.
+  3. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
+
+Output format:
+
+  1. it can contains some escape charactors like "\t".
+  2. For subspecies nodes, the rank might be "subpecies", "strain", or "no rank".
+     You can use "|" to set multiple ranks, and the first valid one will be outputted.
+     For example,
+       $ echo -ne "562\n83333\n2697049\n" \
+          | taxonkit lineage -L -r \
+          | taxonkit reformat2 -f "{species};{strain|subspecies|no rank}"
+       562     species Escherichia coli;
+       83333   strain  Escherichia coli;Escherichia coli K-12
+       2697049 no rank Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
+
+Differences from 'taxonkit reformat':
+
+  - [input] only accept TaxIDs
+  - [format] accept more rank place holders, not just the seven canonical ones.
+  - [format] use the full name of ranks, such as "{species}", rather than "{s}"
+  - [format] support multiple ranks in one place holder, such as "{subspecies|strain}"
+  - do not automatically add prefixes, but you can set in the format
+
+Usage:
+  taxonkit reformat2 [flags]
+
+Flags:
+  -f, --format string            output format, placeholders of rank are needed (default
+                                 "{superkingdom};{phylum};{class};{order};{family};{genus};{species}")
+  -h, --help                     help for reformat2
+  -r, --miss-rank-repl string    replacement string for missing rank
+  -R, --miss-taxid-repl string   replacement string for missing taxid
+  -B, --no-ranks strings         rank names of no-rank. A lineage might have many "no rank" ranks, we
+                                 only keep the last one below known ranks (default [no rank,clade])
+  -t, --show-lineage-taxids      show corresponding taxids of reformated lineage
+  -I, --taxid-field int          field index of taxid. input data should be tab-separated. it overrides
+                                 -i/--lineage-field (default 1)
+  -T, --trim                     do not replace missing ranks lower than the rank of current node
+
+```
+
+Examples
+
+1. Default format
+
+        $ echo 562 | taxonkit reformat2
+        562     Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+
+1. Change the format
+
+        $ echo 562 | taxonkit reformat2 -f "g__{genus}\ts__{species}"
+        562     g__Escherichia  s__Escherichia coli
+
+1. Subspecies
+
+        $ echo 511145 | taxonkit lineage
+        511145  cellular organisms;Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12;Escherichia coli str. K-12 substr. MG1655
+
+        $ echo 511145 | taxonkit reformat  -I 1 -f "{k};{p};{c};{o};{f};{g};{s};{t}"
+        511145  Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
+
+        $ echo 511145 | taxonkit reformat2 -I 1 -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species};{subspecies|strain|no rank}"
+        511145  Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
+
+1. Trim
+
+        $ echo 561 | taxonkit reformat2 -r unknown
+        561     Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;unknown
+
+        $ echo 561 | taxonkit reformat2 -r unknown -T
+        561     Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;
+
+
+        # -----------------------------------------------------------
+        # another example where the order rank is missing
+
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species}"
+        102403  Eukaryota;Mollusca;Bivalvia;0;Poromyidae;Tropidomya;0
+
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species}" -T
+        102403  Eukaryota;Mollusca;Bivalvia;0;Poromyidae;Tropidomya;
+
+        # and now, the lowest rank in the output format is order, but the tailing "0" is not trimmed.
+
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order}"
+        102403  Eukaryota;Mollusca;Bivalvia;0
+
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order}" -T
+        102403  Eukaryota;Mollusca;Bivalvia;0
 
 ## name2taxid
 
