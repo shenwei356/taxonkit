@@ -1057,7 +1057,6 @@ Differences from 'taxonkit reformat':
   - [format] accept more rank place holders, not just the seven canonical ones.
   - [format] use the full name of ranks, such as "{species}", rather than "{s}"
   - [format] support multiple ranks in one place holder, such as "{subspecies|strain}"
-  - do not fill missing ranks
   - do not automatically add prefixes, but you can set in the format
 
 Usage:
@@ -1074,6 +1073,7 @@ Flags:
   -t, --show-lineage-taxids      show corresponding taxids of reformated lineage
   -I, --taxid-field int          field index of taxid. input data should be tab-separated. it overrides
                                  -i/--lineage-field (default 1)
+  -T, --trim                     do not replace missing ranks lower than the rank of current node
 
 ```
 
@@ -1099,6 +1099,32 @@ Examples
 
         $ echo 511145 | taxonkit reformat2 -I 1 -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species};{subspecies|strain|no rank}"
         511145  Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
+
+1. Trim
+
+        $ echo 561 | taxonkit reformat2 -r unknown
+        561     Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;unknown
+
+        $ echo 561 | taxonkit reformat2 -r unknown -T
+        561     Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;
+
+
+        # -----------------------------------------------------------
+        # another example where the order rank is missing
+
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species}"
+        102403  Eukaryota;Mollusca;Bivalvia;0;Poromyidae;Tropidomya;0
+
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species}" -T
+        102403  Eukaryota;Mollusca;Bivalvia;0;Poromyidae;Tropidomya;
+
+        # and now, the lowest rank in the output format is order, but the tailing "0" is not trimmed.
+
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order}"
+        102403  Eukaryota;Mollusca;Bivalvia;0
+
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order}" -T
+        102403  Eukaryota;Mollusca;Bivalvia;0
 
 ## name2taxid
 

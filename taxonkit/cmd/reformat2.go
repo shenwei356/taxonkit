@@ -71,7 +71,6 @@ Differences from 'taxonkit reformat':
   - [format] accept more rank place holders, not just the seven canonical ones.
   - [format] use the full name of ranks, such as "{species}", rather than "{s}"
   - [format] support multiple ranks in one place holder, such as "{subspecies|strain}"
-  - do not fill missing ranks
   - do not automatically add prefixes, but you can set in the format
 
 `,
@@ -83,6 +82,7 @@ Differences from 'taxonkit reformat':
 		iblank := getFlagString(cmd, "miss-taxid-repl")
 		taxIdField := getFlagPositiveInt(cmd, "taxid-field")
 		noRanks := getFlagStringSlice(cmd, "no-ranks")
+		trim := getFlagBool(cmd, "trim")
 
 		if config.Verbose {
 			log.Infof("parsing TaxIds from field %d", taxIdField)
@@ -195,6 +195,7 @@ Differences from 'taxonkit reformat':
 			rank2idx := poolRank2idx.Get().(*map[string]int)
 			clear(*rank2idx)
 			var meetKnownRanks bool
+			var lastKnownRank string
 			for i, rank := range ranks {
 				rank = strings.ToLower(rank)
 
@@ -205,6 +206,7 @@ Differences from 'taxonkit reformat':
 				} else {
 					meetKnownRanks = true
 					(*rank2idx)[rank] = i
+					lastKnownRank = rank
 				}
 			}
 
@@ -218,6 +220,8 @@ Differences from 'taxonkit reformat':
 			var _matches []string
 			var _match string
 			var matched bool
+			var foundLastKnownRank bool
+			var repl, irepl string
 			for _, match := range matches {
 				_matches = strings.Split(match[1], "|")
 
@@ -227,7 +231,8 @@ Differences from 'taxonkit reformat':
 						continue
 					}
 
-					if i, ok = (*rank2idx)[strings.ToLower(_match)]; !ok {
+					_match = strings.ToLower(_match)
+					if i, ok = (*rank2idx)[_match]; !ok {
 						continue
 					}
 
@@ -236,13 +241,25 @@ Differences from 'taxonkit reformat':
 						iflineage = strings.ReplaceAll(iflineage, match[0], strconv.Itoa(int(taxids[i])))
 					}
 					matched = true
+
+					if _match == lastKnownRank {
+						foundLastKnownRank = true
+					}
 					break
 				}
 
 				if !matched {
-					flineage = strings.ReplaceAll(flineage, match[0], blank)
+					if !foundLastKnownRank {
+						repl, irepl = blank, iblank
+					} else if trim {
+						repl, irepl = "", ""
+					} else {
+						repl, irepl = blank, iblank
+					}
+
+					flineage = strings.ReplaceAll(flineage, match[0], repl)
 					if printLineageInTaxid {
-						iflineage = strings.ReplaceAll(iflineage, match[0], iblank)
+						iflineage = strings.ReplaceAll(iflineage, match[0], irepl)
 					}
 				}
 			}
@@ -293,11 +310,13 @@ func init() {
 	reformat2Cmd.Flags().StringP("format", "f", "{superkingdom};{phylum};{class};{order};{family};{genus};{species}", "output format, placeholders of rank are needed")
 	reformat2Cmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank`)
 	reformat2Cmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
+	reformat2Cmd.Flags().BoolP("trim", "T", false, "do not replace missing ranks lower than the rank of current node")
 
 	reformat2Cmd.Flags().IntP("taxid-field", "I", 1, "field index of taxid. input data should be tab-separated. it overrides -i/--lineage-field")
 	reformat2Cmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)
 
 	reformat2Cmd.Flags().StringSliceP("no-ranks", "B", []string{"no rank", "clade"}, `rank names of no-rank. A lineage might have many "no rank" ranks, we only keep the last one below known ranks`)
+
 }
 
 var reRankPlaceHolder2 = regexp.MustCompile(`\{([^\{\}]+?)\}`)
