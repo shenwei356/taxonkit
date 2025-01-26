@@ -63,7 +63,7 @@ Attention:
   2. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
      required this, you can use the script below for convertion:
      
-     https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
+     https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/scripts/fix_taxdump.py
 
   3. We only check and eliminate taxid collision within a single version of taxonomy data.
      Therefore, if you create taxid-changelog with "taxid-changelog", different taxons
