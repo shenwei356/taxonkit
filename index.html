@@ -755,7 +755,7 @@
 <li><strong>Versatile commands</strong> <ul>
 <li><a href="http://bioinf.shenwei.me/taxonkit/usage/">Usage and examples</a></li>
 <li>Featured command: <a href="https://github.com/shenwei356/taxid-changelog">tracking monthly changelog of all TaxIds</a></li>
-<li>Featured command: <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat">reformating lineage into format of seven-level ("superkingdom/kingdom, phylum, class, order, family, genus, species"</a></li>
+<li>Featured command: <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat">reformating lineage into format of seven-level ("superkingdom/kingdom, phylum, class, order, family, genus, species"</a>, and <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat2">even all possible ranks</a></li>
 <li>Featured command: <a href="http://bioinf.shenwei.me/taxonkit/usage/#filter">filtering taxiDs by a rank range</a>, e.g., at or below genus rank.</li>
 <li>Featured command: <a href="https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump"><strong>Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV</strong></a></li>
 </ul>
@@ -781,6 +781,10 @@
 <tr>
 <td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat"><code>reformat</code></a></td>
 <td style="text-align: left;">Reformat lineage in canonical ranks</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat2"><code>reformat2</code></a><sup>*</sup></td>
+<td style="text-align: left;">Reformat lineage in chosen ranks, allowing more ranks than 'reformat'</td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="https://bioinf.shenwei.me/taxonkit/usage/#name2taxid"><code>name2taxid</code></a></td>
@@ -816,20 +820,20 @@
 <p><img src="taxonkit.jpg" alt="taxonkit" width="700" align="center" /></p>
 <h2 id="benchmark">Benchmark<a class="headerlink" href="#benchmark" title="Permanent link">Link</a></h2>
 <ol>
-<li>Getting complete lineage for given TaxIds</li>
+<li>Getting complete lineage for given TaxIds (this plot is very old).</li>
 </ol>
 <p><img src="bench/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" /></p>
 <p>Versions: ETE=3.1.2, taxopy=0.5.0 (<a href="https://github.com/shenwei356/taxonkit/issues/47">faster since 0.6.0</a>), TaxonKit=0.7.2.</p>
 <h2 id="dataset">Dataset<a class="headerlink" href="#dataset" title="Permanent link">Link</a></h2>
 <ol>
-<li>Download and uncompress <code>taxdump.tar.gz</code>: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
+<li>Download and uncompress <code>taxdump.tar.gz</code>: https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz </li>
 <li>Copy <code>names.dmp</code>, <code>nodes.dmp</code>, <code>delnodes.dmp</code> and <code>merged.dmp</code> to data directory: <code>$HOME/.taxonkit</code>,
 e.g., <code>/home/shenwei/.taxonkit</code> ,</li>
 <li>Optionally copy to some other directories, and later you can refer to using flag <code>--data-dir</code>,
 or environment variable <code>TAXONKIT_DB</code>.</li>
 </ol>
 <p>All-in-one command:</p>
-<div class="codehilite"><pre><span></span><code>wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+<div class="codehilite"><pre><span></span><code>wget -c https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
 tar -zxvf taxdump.tar.gz
 
 mkdir -p $HOME/.taxonkit
@@ -881,9 +885,9 @@ And then:</p>
 <ol>
 <li>
 <p><a href="https://go.dev/doc/install">Install go</a></p>
-<div class="codehilite"><pre><span></span><code><span class="n">wget</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">go</span><span class="o">.</span><span class="n">dev</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">go1</span><span class="o">.</span><span class="mf">17.13</span><span class="o">.</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<div class="codehilite"><pre><span></span><code><span class="n">wget</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">go</span><span class="o">.</span><span class="n">dev</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">go1</span><span class="o">.</span><span class="mf">24.1</span><span class="o">.</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 
-<span class="n">tar</span><span class="w"> </span><span class="o">-</span><span class="n">zxf</span><span class="w"> </span><span class="n">go1</span><span class="o">.</span><span class="mf">17.13</span><span class="o">.</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">$</span><span class="n">HOME</span><span class="o">/</span>
+<span class="n">tar</span><span class="w"> </span><span class="o">-</span><span class="n">zxf</span><span class="w"> </span><span class="n">go1</span><span class="o">.</span><span class="mf">24.1</span><span class="o">.</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">$</span><span class="n">HOME</span><span class="o">/</span>
 
 <span class="c1"># or </span>
 <span class="c1">#   echo &quot;export PATH=$PATH:$HOME/go/bin&quot; &gt;&gt; ~/.bashrc</span>

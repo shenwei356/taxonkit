@@ -347,6 +347,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#reformat2" class="md-nav__link">
+    reformat2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#name2taxid" class="md-nav__link">
     name2taxid
   </a>
@@ -586,6 +593,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#reformat2" class="md-nav__link">
+    reformat2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#name2taxid" class="md-nav__link">
     name2taxid
   </a>
@@ -669,6 +683,7 @@
 <li><a href="#list">list</a></li>
 <li><a href="#lineage">lineage</a></li>
 <li><a href="#reformat">reformat</a></li>
+<li><a href="#reformat2">reformat2</a></li>
 <li><a href="#name2taxid">name2taxid</a></li>
 <li><a href="#filter">filter</a></li>
 <li><a href="#lca">lca</a></li>
@@ -700,7 +715,7 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h2 id="taxonkit">taxonkit<a class="headerlink" href="#taxonkit" title="Permanent link">Link</a></h2>
 <div class="codehilite"><pre><span></span><code>TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.18.0
+Version: 0.19.0
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -736,6 +751,7 @@ Available Commands:
   name2taxid      Convert taxon names to TaxIds
   profile2cami    Convert metagenomic profile table to CAMI format
   reformat        Reformat lineage in canonical ranks
+  reformat2       Reformat lineage in chosen ranks, allowing more ranks than &#39;reformat&#39;
   taxid-changelog Create TaxId changelog from dump archives
   version         print version information and check for update
 
@@ -1699,6 +1715,118 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids.txt<span class="w"> <
 
 </li>
 </ol>
+<h2 id="reformat2">reformat2<a class="headerlink" href="#reformat2" title="Permanent link">Link</a></h2>
+<p>Usage</p>
+<div class="codehilite"><pre><span></span><code>Reformat lineage in chosen ranks, allowing more ranks than &#39;reformat&#39;
+
+Input:
+
+  - List of TaxIds, one record per line.
+  - Or tab-delimited format.
+    Please specify the TaxId field with flag -I/--taxid-field (default 1)
+  - Supporting (gzipped) file or STDIN.
+
+Output:
+
+  1. Input line data.
+  2. Reformated lineage.
+  3. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
+
+Output format:
+
+  1. it can contain some escape characters like &quot;\t&quot;.
+  2. For subspecies nodes, the rank might be &quot;subpecies&quot;, &quot;strain&quot;, or &quot;no rank&quot;.
+     You can use &quot;|&quot; to set multiple ranks, and the first valid one will be outputted.
+     For example,
+       $ echo -ne &quot;562\n83333\n2697049\n&quot; \
+          | taxonkit lineage -L -r \
+          | taxonkit reformat2 -f &quot;{species};{strain|subspecies|no rank}&quot;
+       562     species Escherichia coli;
+       83333   strain  Escherichia coli;Escherichia coli K-12
+       2697049 no rank Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
+
+Differences from &#39;taxonkit reformat&#39;:
+
+  - [input] only accept TaxIDs
+  - [format] accept more rank place holders, not just the seven canonical ones.
+  - [format] use the full name of ranks, such as &quot;{species}&quot;, rather than &quot;{s}&quot;
+  - [format] support multiple ranks in one place holder, such as &quot;{subspecies|strain}&quot;
+  - do not automatically add prefixes, but you can set in the format
+
+Usage:
+  taxonkit reformat2 [flags] 
+
+Flags:
+  -f, --format string            output format, placeholders of rank are needed (default
+                                 &quot;{superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;)
+  -h, --help                     help for reformat2
+  -r, --miss-rank-repl string    replacement string for missing rank
+  -R, --miss-taxid-repl string   replacement string for missing taxid
+  -B, --no-ranks strings         rank names of no-rank. A lineage might have many &quot;no rank&quot; ranks, we
+                                 only keep the last one below known ranks (default [no rank,clade])
+  -t, --show-lineage-taxids      show corresponding taxids of reformated lineage
+  -I, --taxid-field int          field index of taxid. input data should be tab-separated. it overrides
+                                 -i/--lineage-field (default 1)
+  -T, --trim                     do not replace missing ranks lower than the rank of the current node
+</code></pre></div>
+
+<p>Examples</p>
+<ol>
+<li>
+<p>Default format</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">562</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2
+<span class="m">562</span><span class="w">     </span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli
+</code></pre></div>
+
+</li>
+<li>
+<p>Change the format</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">562</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;g__{genus}\ts__{species}&quot;</span>
+<span class="m">562</span><span class="w">     </span>g__Escherichia<span class="w">  </span>s__Escherichia<span class="w"> </span>coli
+</code></pre></div>
+
+</li>
+<li>
+<p>Subspecies</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">511145</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage
+<span class="m">511145</span><span class="w">  </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>str.<span class="w"> </span>K-12<span class="w"> </span>substr.<span class="w"> </span>MG1655
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">511145</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w">  </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k};{p};{c};{o};{f};{g};{s};{t}&quot;</span>
+<span class="m">511145</span><span class="w">  </span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">511145</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order};{family};{genus};{species};{subspecies|strain|no rank}&quot;</span>
+<span class="m">511145</span><span class="w">  </span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12
+</code></pre></div>
+
+</li>
+<li>
+<p>Trim</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">561</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-r<span class="w"> </span>unknown
+<span class="m">561</span><span class="w">     </span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>unknown
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">561</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-r<span class="w"> </span>unknown<span class="w"> </span>-T
+<span class="m">561</span><span class="w">     </span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>
+
+<span class="c1"># -----------------------------------------------------------</span>
+<span class="c1"># another example where the order rank is missing</span>
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;</span>
+<span class="m">102403</span><span class="w">  </span>Eukaryota<span class="p">;</span>Mollusca<span class="p">;</span>Bivalvia<span class="p">;</span><span class="m">0</span><span class="p">;</span>Poromyidae<span class="p">;</span>Tropidomya<span class="p">;</span><span class="m">0</span>
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;</span><span class="w"> </span>-T
+<span class="m">102403</span><span class="w">  </span>Eukaryota<span class="p">;</span>Mollusca<span class="p">;</span>Bivalvia<span class="p">;</span><span class="m">0</span><span class="p">;</span>Poromyidae<span class="p">;</span>Tropidomya<span class="p">;</span>
+
+<span class="c1"># and now, the lowest rank in the output format is order, but the tailing &quot;0&quot; is not trimmed.</span>
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order}&quot;</span>
+<span class="m">102403</span><span class="w">  </span>Eukaryota<span class="p">;</span>Mollusca<span class="p">;</span>Bivalvia<span class="p">;</span><span class="m">0</span>
+
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order}&quot;</span><span class="w"> </span>-T
+<span class="m">102403</span><span class="w">  </span>Eukaryota<span class="p">;</span>Mollusca<span class="p">;</span>Bivalvia<span class="p">;</span><span class="m">0</span>
+</code></pre></div>
+
+</li>
+</ol>
 <h2 id="name2taxid">name2taxid<a class="headerlink" href="#name2taxid" title="Permanent link">Link</a></h2>
 <p>Usage</p>
 <div class="codehilite"><pre><span></span><code>Convert taxon names to TaxIds
@@ -2316,7 +2444,7 @@ Attention:
   2. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
      required this, you can use the script below for convertion:
 
-     https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/fix_taxdump.py
+     https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/scripts/fix_taxdump.py
 
   3. We only check and eliminate taxid collision within a single version of taxonomy data.
      Therefore, if you create taxid-changelog with &quot;taxid-changelog&quot;, different taxons

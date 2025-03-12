@@ -386,6 +386,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#filtering-or-subsetting-taxdmp-files-to-make-a-custom-taxdmp-with-given-taxids" class="md-nav__link">
+    Filtering or subsetting taxdmp files to make a custom taxdmp with given TaxIDs
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -571,6 +578,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#filtering-or-subsetting-taxdmp-files-to-make-a-custom-taxdmp-with-given-taxids" class="md-nav__link">
+    Filtering or subsetting taxdmp files to make a custom taxdmp with given TaxIDs
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -600,6 +614,7 @@
 <li><a href="#making-nr-blastdb-for-specific-taxids">Making nr blastdb for specific taxids</a></li>
 <li><a href="#summaries-of-taxonomy-data">Summaries of taxonomy data</a></li>
 <li><a href="#merging-gtdb-and-ncbi-taxonomy">Merging GTDB and NCBI taxonomy</a></li>
+<li><a href="#filtering-or-subsetting-taxdmp-files-to-make-a-custom-taxdmp-with-given-taxids">Filtering or subsetting taxdmp files to make a custom taxdmp with given TaxIDs</a></li>
 </ul>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1701,6 +1716,87 @@ $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
 <span class="mi">87250111</span><span class="w">     </span><span class="n">family</span><span class="w">         </span><span class="n">Enterobacteriaceae</span>
 <span class="mi">1187493883</span><span class="w">   </span><span class="n">genus</span><span class="w">          </span><span class="n">Escherichia</span>
 <span class="mi">1945799576</span><span class="w">   </span><span class="n">species</span><span class="w">        </span><span class="n">Escherichia</span><span class="w"> </span><span class="n">coli</span>
+</code></pre></div>
+
+<h2 id="filtering-or-subsetting-taxdmp-files-to-make-a-custom-taxdmp-with-given-taxids">Filtering or subsetting taxdmp files to make a custom taxdmp with given TaxIDs<a class="headerlink" href="#filtering-or-subsetting-taxdmp-files-to-make-a-custom-taxdmp-with-given-taxids" title="Permanent link">Link</a></h2>
+<blockquote>
+<p>You want to create a smaller version of the official NCBI taxonomy taxdmp filtered or subset to just the lineages of certain species, for purposes such as creating small test data for testing of tools using taxdmp files.</p>
+<p>https://github.com/shenwei356/taxonkit/issues/112</p>
+</blockquote>
+<p>Step 1:  preparing taxids in the subset tree</p>
+<div class="codehilite"><pre><span></span><code># here, only keep nodes at the rank of species
+taxonkit list --ids 707,9606 -I &quot;&quot; \
+    | taxonkit filter -E species \
+    | taxonkit lineage -t \
+    | cut -f 3 \
+    | sed -s &#39;s/;/\n/g&#39; \
+    &gt; taxids.txt
+
+# the root node
+echo 1 &gt;&gt; taxids.txt
+</code></pre></div>
+
+<p>Step 2: extracting data of needed nodes</p>
+<div class="codehilite"><pre><span></span><code>mkdir subset
+
+grep -w -f &lt;(awk &#39;{print &quot;^&quot;$1}&#39; taxids.txt) ~/.taxonkit/nodes.dmp &gt; subset/nodes.dmp
+grep -w -f &lt;(awk &#39;{print &quot;^&quot;$1}&#39; taxids.txt) ~/.taxonkit/names.dmp &gt; subset/names.dmp
+
+touch subset/delnodes.dmp subset/merged.dmp
+</code></pre></div>
+
+<p>Checking it. Since there are only two leaves here, we just dump the whole tree</p>
+<div class="codehilite"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">wc</span><span class="w"> </span><span class="o">-</span><span class="n">l</span><span class="w"> </span><span class="n">subset</span><span class="cm">/*.dmp</span>
+<span class="cm">   0 subset/delnodes.dmp</span>
+<span class="cm">   0 subset/merged.dmp</span>
+<span class="cm"> 144 subset/names.dmp</span>
+<span class="cm">  39 subset/nodes.dmp</span>
+<span class="cm"> 183 total</span>
+
+<span class="cm">$ taxonkit list --ids 1 --data-dir subset/ -nr</span>
+<span class="cm">1 [no rank] root</span>
+<span class="cm">  131567 [no rank] cellular organisms</span>
+<span class="cm">    2 [superkingdom] Bacteria</span>
+<span class="cm">      1224 [phylum] Pseudomonadota</span>
+<span class="cm">        1236 [class] Gammaproteobacteria</span>
+<span class="cm">          135623 [order] Vibrionales</span>
+<span class="cm">            641 [family] Vibrionaceae</span>
+<span class="cm">              662 [genus] Vibrio</span>
+<span class="cm">                28174 [species] Vibrio ordalii</span>
+<span class="cm">    2759 [superkingdom] Eukaryota</span>
+<span class="cm">      33154 [clade] Opisthokonta</span>
+<span class="cm">        33208 [kingdom] Metazoa</span>
+<span class="cm">          6072 [clade] Eumetazoa</span>
+<span class="cm">            33213 [clade] Bilateria</span>
+<span class="cm">              33511 [clade] Deuterostomia</span>
+<span class="cm">                7711 [phylum] Chordata</span>
+<span class="cm">                  89593 [subphylum] Craniata</span>
+<span class="cm">                    7742 [clade] Vertebrata</span>
+<span class="cm">                      7776 [clade] Gnathostomata</span>
+<span class="cm">                        117570 [clade] Teleostomi</span>
+<span class="cm">                          117571 [clade] Euteleostomi</span>
+<span class="cm">                            8287 [superclass] Sarcopterygii</span>
+<span class="cm">                              1338369 [clade] Dipnotetrapodomorpha</span>
+<span class="cm">                                32523 [clade] Tetrapoda</span>
+<span class="cm">                                  32524 [clade] Amniota</span>
+<span class="cm">                                    40674 [class] Mammalia</span>
+<span class="cm">                                      32525 [clade] Theria</span>
+<span class="cm">                                        9347 [clade] Eutheria</span>
+<span class="cm">                                          1437010 [clade] Boreoeutheria</span>
+<span class="cm">                                            314146 [superorder] Euarchontoglires</span>
+<span class="cm">                                              9443 [order] Primates</span>
+<span class="cm">                                                376913 [suborder] Haplorrhini</span>
+<span class="cm">                                                  314293 [infraorder] Simiiformes</span>
+<span class="cm">                                                    9526 [parvorder] Catarrhini</span>
+<span class="cm">                                                      314295 [superfamily] Hominoidea</span>
+<span class="cm">                                                        9604 [family] Hominidae</span>
+<span class="cm">                                                          207598 [subfamily] Homininae</span>
+<span class="cm">                                                            9605 [genus] Homo</span>
+<span class="cm">                                                              9606 [species] Homo sapiens</span>
+
+
+<span class="cm">$ echo 28174 | taxonkit lineage -nr --data-dir subset/</span>
+<span class="cm">28174   cellular organisms;Bacteria;Pseudomonadota;Gammaproteobacteria;Vibrionales;Vibrionaceae;Vibrio;Vibrio ordalii       Vibrio ordalii  species</span>
 </code></pre></div>
 
 <div id="disqus_thread"></div>
