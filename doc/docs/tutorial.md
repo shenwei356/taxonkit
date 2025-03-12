@@ -11,6 +11,7 @@
 - [Making nr blastdb for specific taxids](#making-nr-blastdb-for-specific-taxids)
 - [Summaries of taxonomy data](#summaries-of-taxonomy-data)
 - [Merging GTDB and NCBI taxonomy](#merging-gtdb-and-ncbi-taxonomy)
+- [Filtering or subsetting taxdmp files to make a custom taxdmp with given TaxIDs](#filtering-or-subsetting-taxdmp-files-to-make-a-custom-taxdmp-with-given-taxids)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -914,6 +915,89 @@ Some tests:
     87250111     family         Enterobacteriaceae
     1187493883   genus          Escherichia
     1945799576   species        Escherichia coli
+
+## Filtering or subsetting taxdmp files to make a custom taxdmp with given TaxIDs
+
+> You want to create a smaller version of the official NCBI taxonomy taxdmp filtered or subset to just the lineages of certain species, for purposes such as creating small test data for testing of tools using taxdmp files.
+>
+> https://github.com/shenwei356/taxonkit/issues/112
+
+Step 1:  preparing taxids in the subset tree
+
+    # here, only keep nodes at the rank of species
+    taxonkit list --ids 707,9606 -I "" \
+        | taxonkit filter -E species \
+        | taxonkit lineage -t \
+        | cut -f 3 \
+        | sed -s 's/;/\n/g' \
+        > taxids.txt
+
+    # the root node
+    echo 1 >> taxids.txt
+
+Step 2: extracting data of needed nodes
+
+    mkdir subset
+
+    grep -w -f <(awk '{print "^"$1}' taxids.txt) ~/.taxonkit/nodes.dmp > subset/nodes.dmp
+    grep -w -f <(awk '{print "^"$1}' taxids.txt) ~/.taxonkit/names.dmp > subset/names.dmp
+
+    touch subset/delnodes.dmp subset/merged.dmp
+
+
+Checking it. Since there are only two leaves here, we just dump the whole tree
+
+    $ wc -l subset/*.dmp
+       0 subset/delnodes.dmp
+       0 subset/merged.dmp
+     144 subset/names.dmp
+      39 subset/nodes.dmp
+     183 total
+
+    $ taxonkit list --ids 1 --data-dir subset/ -nr
+    1 [no rank] root
+      131567 [no rank] cellular organisms
+        2 [superkingdom] Bacteria
+          1224 [phylum] Pseudomonadota
+            1236 [class] Gammaproteobacteria
+              135623 [order] Vibrionales
+                641 [family] Vibrionaceae
+                  662 [genus] Vibrio
+                    28174 [species] Vibrio ordalii
+        2759 [superkingdom] Eukaryota
+          33154 [clade] Opisthokonta
+            33208 [kingdom] Metazoa
+              6072 [clade] Eumetazoa
+                33213 [clade] Bilateria
+                  33511 [clade] Deuterostomia
+                    7711 [phylum] Chordata
+                      89593 [subphylum] Craniata
+                        7742 [clade] Vertebrata
+                          7776 [clade] Gnathostomata
+                            117570 [clade] Teleostomi
+                              117571 [clade] Euteleostomi
+                                8287 [superclass] Sarcopterygii
+                                  1338369 [clade] Dipnotetrapodomorpha
+                                    32523 [clade] Tetrapoda
+                                      32524 [clade] Amniota
+                                        40674 [class] Mammalia
+                                          32525 [clade] Theria
+                                            9347 [clade] Eutheria
+                                              1437010 [clade] Boreoeutheria
+                                                314146 [superorder] Euarchontoglires
+                                                  9443 [order] Primates
+                                                    376913 [suborder] Haplorrhini
+                                                      314293 [infraorder] Simiiformes
+                                                        9526 [parvorder] Catarrhini
+                                                          314295 [superfamily] Hominoidea
+                                                            9604 [family] Hominidae
+                                                              207598 [subfamily] Homininae
+                                                                9605 [genus] Homo
+                                                                  9606 [species] Homo sapiens
+   
+
+    $ echo 28174 | taxonkit lineage -nr --data-dir subset/
+    28174   cellular organisms;Bacteria;Pseudomonadota;Gammaproteobacteria;Vibrionales;Vibrionaceae;Vibrio;Vibrio ordalii       Vibrio ordalii  species
 
 
 <div id="disqus_thread"></div>

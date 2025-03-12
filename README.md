@@ -53,7 +53,7 @@ Related projects:
 - **Versatile commands** 
     - [Usage and examples](http://bioinf.shenwei.me/taxonkit/usage/)
     - Featured command: [tracking monthly changelog of all TaxIds](https://github.com/shenwei356/taxid-changelog)
-    - Featured command: [reformating lineage into format of seven-level ("superkingdom/kingdom, phylum, class, order, family, genus, species"](https://bioinf.shenwei.me/taxonkit/usage/#reformat)
+    - Featured command: [reformating lineage into format of seven-level ("superkingdom/kingdom, phylum, class, order, family, genus, species"](https://bioinf.shenwei.me/taxonkit/usage/#reformat), and [even all possible ranks](https://bioinf.shenwei.me/taxonkit/usage/#reformat2)
     - Featured command: [filtering taxiDs by a rank range](http://bioinf.shenwei.me/taxonkit/usage/#filter), e.g., at or below genus rank.
     - Featured command: [**Create NCBI-style taxdump files for custom taxonomy, e.g., GTDB and ICTV**](https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump)
 
@@ -64,7 +64,7 @@ Subcommand                                                                    |F
 [`list`](https://bioinf.shenwei.me/taxonkit/usage/#list)                      |List taxonomic subtrees (TaxIds) bellow given TaxIds
 [`lineage`](https://bioinf.shenwei.me/taxonkit/usage/#lineage)                |Query taxonomic lineage of given TaxIds
 [`reformat`](https://bioinf.shenwei.me/taxonkit/usage/#reformat)              |Reformat lineage in canonical ranks
-[`reformat2`](https://bioinf.shenwei.me/taxonkit/usage/#reformat2)            |Reformat lineage in chosen ranks, allowing more ranks than 'reformat'
+[`reformat2`](https://bioinf.shenwei.me/taxonkit/usage/#reformat2)<sup>*</sup>|Reformat lineage in chosen ranks, allowing more ranks than 'reformat'
 [`name2taxid`](https://bioinf.shenwei.me/taxonkit/usage/#name2taxid)          |Convert taxon names to TaxIds
 [`filter`](https://bioinf.shenwei.me/taxonkit/usage/#filter)                  |Filter TaxIds by taxonomic rank range
 [`lca`](https://bioinf.shenwei.me/taxonkit/usage/#lca)                        |Compute lowest common ancestor (LCA) for TaxIds
@@ -79,7 +79,7 @@ Note: <sup>*</sup>New commands since the publication.
 
 ## Benchmark
 
-1. Getting complete lineage for given TaxIds
+1. Getting complete lineage for given TaxIds (this plot is very old).
 
    <img src="bench/bench.get_lineage.reformat.tsv.png" alt="" width="600" align="center" />
 
@@ -87,7 +87,7 @@ Note: <sup>*</sup>New commands since the publication.
 
 ## Dataset
 
-1. Download and uncompress `taxdump.tar.gz`: ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+1. Download and uncompress `taxdump.tar.gz`: https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
 2. Copy `names.dmp`, `nodes.dmp`, `delnodes.dmp` and `merged.dmp` to data directory: `$HOME/.taxonkit`,
 e.g., `/home/shenwei/.taxonkit` ,
 3. Optionally copy to some other directories, and later you can refer to using flag `--data-dir`,
@@ -95,7 +95,7 @@ or environment variable `TAXONKIT_DB`.
 
 All-in-one command:
 
-    wget -c ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
+    wget -c https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz 
     tar -zxvf taxdump.tar.gz
     
     mkdir -p $HOME/.taxonkit
@@ -141,9 +141,9 @@ And then:
 
 1. [Install go](https://go.dev/doc/install)
 
-        wget https://go.dev/dl/go1.17.13.linux-amd64.tar.gz
+        wget https://go.dev/dl/go1.24.1.linux-amd64.tar.gz
 
-        tar -zxf go1.17.13.linux-amd64.tar.gz -C $HOME/
+        tar -zxf go1.24.1.linux-amd64.tar.gz -C $HOME/
 
         # or 
         #   echo "export PATH=$PATH:$HOME/go/bin" >> ~/.bashrc

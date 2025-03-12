@@ -43,7 +43,7 @@ Input:
 
   - List of TaxIds, one record per line.
   - Or tab-delimited format.
-    Plese specify the TaxId field with flag -I/--taxid-field (default 1)
+    Please specify the TaxId field with flag -I/--taxid-field (default 1)
   - Supporting (gzipped) file or STDIN.
 
 Output:
@@ -51,10 +51,10 @@ Output:
   1. Input line data.
   2. Reformated lineage.
   3. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
-   
+
 Output format:
 
-  1. it can contains some escape charactors like "\t".
+  1. it can contain some escape characters like "\t".
   2. For subspecies nodes, the rank might be "subpecies", "strain", or "no rank".
      You can use "|" to set multiple ranks, and the first valid one will be outputted.
      For example,
@@ -310,7 +310,7 @@ func init() {
 	reformat2Cmd.Flags().StringP("format", "f", "{superkingdom};{phylum};{class};{order};{family};{genus};{species}", "output format, placeholders of rank are needed")
 	reformat2Cmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank`)
 	reformat2Cmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
-	reformat2Cmd.Flags().BoolP("trim", "T", false, "do not replace missing ranks lower than the rank of current node")
+	reformat2Cmd.Flags().BoolP("trim", "T", false, "do not replace missing ranks lower than the rank of the current node")
 
 	reformat2Cmd.Flags().IntP("taxid-field", "I", 1, "field index of taxid. input data should be tab-separated. it overrides -i/--lineage-field")
 	reformat2Cmd.Flags().BoolP("show-lineage-taxids", "t", false, `show corresponding taxids of reformated lineage`)

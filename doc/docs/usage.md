@@ -1029,7 +1029,7 @@ Input:
 
   - List of TaxIds, one record per line.
   - Or tab-delimited format.
-    Plese specify the TaxId field with flag -I/--taxid-field (default 1)
+    Please specify the TaxId field with flag -I/--taxid-field (default 1)
   - Supporting (gzipped) file or STDIN.
 
 Output:
@@ -1040,7 +1040,7 @@ Output:
 
 Output format:
 
-  1. it can contains some escape charactors like "\t".
+  1. it can contain some escape characters like "\t".
   2. For subspecies nodes, the rank might be "subpecies", "strain", or "no rank".
      You can use "|" to set multiple ranks, and the first valid one will be outputted.
      For example,
@@ -1060,7 +1060,7 @@ Differences from 'taxonkit reformat':
   - do not automatically add prefixes, but you can set in the format
 
 Usage:
-  taxonkit reformat2 [flags]
+  taxonkit reformat2 [flags] 
 
 Flags:
   -f, --format string            output format, placeholders of rank are needed (default
@@ -1073,7 +1073,7 @@ Flags:
   -t, --show-lineage-taxids      show corresponding taxids of reformated lineage
   -I, --taxid-field int          field index of taxid. input data should be tab-separated. it overrides
                                  -i/--lineage-field (default 1)
-  -T, --trim                     do not replace missing ranks lower than the rank of current node
+  -T, --trim                     do not replace missing ranks lower than the rank of the current node
 
 ```
 
