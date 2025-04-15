@@ -140,12 +140,8 @@ Differences from 'taxonkit reformat':
 
 		blankS := format
 		iblankS := format
-		for _, re := range reRankPlaceHolders {
-			blankS = re.ReplaceAllString(blankS, blank)
-		}
-		for _, re := range reRankPlaceHolders {
-			iblankS = re.ReplaceAllString(iblankS, iblank)
-		}
+		blankS = reRankPlaceHolder2.ReplaceAllString(blankS, blank)
+		iblankS = reRankPlaceHolder2.ReplaceAllString(iblankS, iblank)
 
 		fn := func(line string) (interface{}, bool, error) {
 			if len(line) == 0 || line[0] == '#' {
