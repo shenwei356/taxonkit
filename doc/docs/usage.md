@@ -575,6 +575,12 @@ Usage
 ```text
 Reformat lineage in canonical ranks
 
+Warning:
+
+  - 'taxonkit reformat2' is recommended since Match 2025 when NCBI made
+    big changes to ranks.
+    See more: https://ncbiinsights.ncbi.nlm.nih.gov/2025/02/27/new-ranks-ncbi-taxonomy/
+
 Input:
 
   - List of TaxIds or lineages, one record per line.
@@ -590,16 +596,19 @@ Output:
   1. Input line data.
   2. Reformated lineage.
   3. (Optional) TaxIds taxons in the lineage (-t/--show-lineage-taxids)
-
+  
 Ambiguous names:
 
-  - Some TaxIds have the same complete lineage, empty result is returned
+  - Some TaxIds have the same complete lineage, empty result is returned 
     by default. You can use the flag -a/--output-ambiguous-result to
     return one possible result
 
 Output format can be formated by flag --format, available placeholders:
 
+    {C}: cellular root
+    {a}: acellular root
     {r}: realm
+    {d}: domain
     {k}: superkingdom
     {K}: kingdom
     {p}: phylum
@@ -609,19 +618,19 @@ Output format can be formated by flag --format, available placeholders:
     {g}: genus
     {s}: species
     {t}: subspecies/strain
-
+    
     {S}: subspecies
     {T}: strain
 
 When these're no nodes of rank "subspecies" nor "strain",
 you can switch on -S/--pseudo-strain to use the node with lowest rank
-as subspecies/strain name, if which rank is lower than "species".
+as subspecies/strain name, if which rank is lower than "species". 
 This flag affects {t}, {S}, {T}.
-
+    
 Output format can contains some escape charactors like "\t".
 
 Usage:
-  taxonkit reformat [flags]
+  taxonkit reformat [flags] 
 
 Flags:
   -P, --add-prefix                     add prefixes for all ranks, single prefix for a rank is defined
@@ -638,13 +647,19 @@ Flags:
                                        suffix (default "rank")
   -R, --miss-taxid-repl string         replacement string for missing taxid
   -a, --output-ambiguous-result        output one of the ambigous result
+      --prefix-C string                prefix for cellular root, used along with flag -P/--add-prefix
+                                       (default "d__")
       --prefix-K string                prefix for kingdom, used along with flag -P/--add-prefix (default
                                        "K__")
       --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix
                                        (default "S__")
       --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default
                                        "T__")
+      --prefix-a string                prefix for acellular root, used along with flag -P/--add-prefix
+                                       (default "d__")
       --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default "c__")
+      --prefix-d string                prefix for domain, used along with flag -P/--add-prefix (default
+                                       "d__")
       --prefix-f string                prefix for family, used along with flag -P/--add-prefix (default
                                        "f__")
       --prefix-g string                prefix for genus, used along with flag -P/--add-prefix (default "g__")
@@ -1040,13 +1055,36 @@ Output:
 
 Output format:
 
-  1. it can contain some escape characters like "\t".
-  2. For subspecies nodes, the rank might be "subpecies", "strain", or "no rank".
-     You can use "|" to set multiple ranks, and the first valid one will be outputted.
+  1. It can contain some escape characters like "\t".
+  2. You can use "|" to set multiple ranks, and the first valid one will be outputted.
+
+     This is useful for a rank with different rank names, especially since NCBI
+     made big changes to some ranks in March 2025:
+        - "Domain" replaces "superkingdom" for Archaea, Bacteria, and Eukaryota
+        - "Acellular root" replaces "superkingdom" for Viruses
+        - Six viral groups are designated with the new rank "realm", the equivalent of "domain"
+     So, we can use "{domain|acellular root|superkingdom}" to handle all these cases
+     and keep compatible with old taxonomy data.
+
+       $ echo -ne "Eukaryota\nBacteria\nViruses\n" \
+           | taxonkit name2taxid -s -r \
+           | taxonkit reformat2 -I 2 -f "{domain|acellular root|superkingdom}" \
+           | csvtk add-header -Ht -n name,taxid,rank,kingdom/domain \
+           | csvtk pretty -t
+
+       name        taxid   rank             kingdom/domain
+       ---------   -----   --------------   --------------
+       Eukaryota   2759    domain           Eukaryota
+       Bacteria    2       domain           Bacteria
+       Viruses     10239   acellular root   Viruses
+
+     Another example is for subspecies nodes, the rank might be "subpecies", "strain", or "no rank".
      For example,
+
        $ echo -ne "562\n83333\n2697049\n" \
           | taxonkit lineage -L -r \
           | taxonkit reformat2 -f "{species};{strain|subspecies|no rank}"
+
        562     species Escherichia coli;
        83333   strain  Escherichia coli;Escherichia coli K-12
        2697049 no rank Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
@@ -1057,14 +1095,15 @@ Differences from 'taxonkit reformat':
   - [format] accept more rank place holders, not just the seven canonical ones.
   - [format] use the full name of ranks, such as "{species}", rather than "{s}"
   - [format] support multiple ranks in one place holder, such as "{subspecies|strain}"
-  - do not automatically add prefixes, but you can set in the format
+  - do not automatically add prefixes, but you can simply set them in the format
 
 Usage:
   taxonkit reformat2 [flags] 
 
 Flags:
   -f, --format string            output format, placeholders of rank are needed (default
-                                 "{superkingdom};{phylum};{class};{order};{family};{genus};{species}")
+                                 "{domain|acellular
+                                 root|superkingdom};{phylum};{class};{order};{family};{genus};{species}")
   -h, --help                     help for reformat2
   -r, --miss-rank-repl string    replacement string for missing rank
   -R, --miss-taxid-repl string   replacement string for missing taxid

@@ -37,6 +37,12 @@ var flineageCmd = &cobra.Command{
 	Short: "Reformat lineage in canonical ranks",
 	Long: `Reformat lineage in canonical ranks
 
+Warning:
+
+  - 'taxonkit reformat2' is recommended since Match 2025 when NCBI made
+    big changes to ranks.
+    See more: https://ncbiinsights.ncbi.nlm.nih.gov/2025/02/27/new-ranks-ncbi-taxonomy/
+
 Input:
 
   - List of TaxIds or lineages, one record per line.
@@ -61,7 +67,10 @@ Ambiguous names:
 
 Output format can be formated by flag --format, available placeholders:
 
+    {C}: cellular root
+    {a}: acellular root
     {r}: realm
+    {d}: domain
     {k}: superkingdom
     {K}: kingdom
     {p}: phylum
@@ -118,6 +127,9 @@ Output format can contains some escape charactors like "\t".
 
 		addPrefix := getFlagBool(cmd, "add-prefix")
 		prefixR := getFlagString(cmd, "prefix-r")
+		prefixC2 := getFlagString(cmd, "prefix-C")
+		prefixD := getFlagString(cmd, "prefix-d")
+		prefixA := getFlagString(cmd, "prefix-a")
 		prefixK := getFlagString(cmd, "prefix-k")
 		prefixK2 := getFlagString(cmd, "prefix-K")
 		prefixP := getFlagString(cmd, "prefix-p")
@@ -133,6 +145,9 @@ Output format can contains some escape charactors like "\t".
 		trim := getFlagBool(cmd, "trim")
 
 		prefixes := map[string]string{
+			"C": prefixC2,
+			"a": prefixA,
+			"d": prefixD,
 			"r": prefixR,
 			"k": prefixK,
 			"K": prefixK2,
@@ -593,6 +608,9 @@ func init() {
 
 	flineageCmd.Flags().BoolP("add-prefix", "P", false, `add prefixes for all ranks, single prefix for a rank is defined by flag --prefix-X`)
 	flineageCmd.Flags().StringP("prefix-r", "", "r__", `prefix for realm, used along with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-d", "", "d__", `prefix for domain, used along with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-a", "", "d__", `prefix for acellular root, used along with flag -P/--add-prefix`)
+	flineageCmd.Flags().StringP("prefix-C", "", "d__", `prefix for cellular root, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-k", "", "k__", `prefix for superkingdom, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-K", "", "K__", `prefix for kingdom, used along with flag -P/--add-prefix`)
 	flineageCmd.Flags().StringP("prefix-p", "", "p__", `prefix for phylum, used along with flag -P/--add-prefix`)

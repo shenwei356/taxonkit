@@ -54,13 +54,36 @@ Output:
 
 Output format:
 
-  1. it can contain some escape characters like "\t".
-  2. For subspecies nodes, the rank might be "subpecies", "strain", or "no rank".
-     You can use "|" to set multiple ranks, and the first valid one will be outputted.
+  1. It can contain some escape characters like "\t".
+  2. You can use "|" to set multiple ranks, and the first valid one will be outputted.
+
+     This is useful for a rank with different rank names, especially since NCBI
+     made big changes to some ranks in March 2025:
+        - "Domain" replaces "superkingdom" for Archaea, Bacteria, and Eukaryota
+        - "Acellular root" replaces "superkingdom" for Viruses
+        - Six viral groups are designated with the new rank "realm", the equivalent of "domain"
+     So, we can use "{domain|acellular root|superkingdom}" to handle all these cases
+     and keep compatible with old taxonomy data.
+
+       $ echo -ne "Eukaryota\nBacteria\nViruses\n" \
+           | taxonkit name2taxid -s -r \
+           | taxonkit reformat2 -I 2 -f "{domain|acellular root|superkingdom}" \
+           | csvtk add-header -Ht -n name,taxid,rank,kingdom/domain \
+           | csvtk pretty -t
+
+       name        taxid   rank             kingdom/domain
+       ---------   -----   --------------   --------------
+       Eukaryota   2759    domain           Eukaryota
+       Bacteria    2       domain           Bacteria
+       Viruses     10239   acellular root   Viruses
+
+     Another example is for subspecies nodes, the rank might be "subpecies", "strain", or "no rank".
      For example,
+
        $ echo -ne "562\n83333\n2697049\n" \
           | taxonkit lineage -L -r \
           | taxonkit reformat2 -f "{species};{strain|subspecies|no rank}"
+
        562     species Escherichia coli;
        83333   strain  Escherichia coli;Escherichia coli K-12
        2697049 no rank Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
@@ -71,7 +94,7 @@ Differences from 'taxonkit reformat':
   - [format] accept more rank place holders, not just the seven canonical ones.
   - [format] use the full name of ranks, such as "{species}", rather than "{s}"
   - [format] support multiple ranks in one place holder, such as "{subspecies|strain}"
-  - do not automatically add prefixes, but you can set in the format
+  - do not automatically add prefixes, but you can simply set them in the format
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -303,7 +326,7 @@ Differences from 'taxonkit reformat':
 func init() {
 	RootCmd.AddCommand(reformat2Cmd)
 
-	reformat2Cmd.Flags().StringP("format", "f", "{superkingdom};{phylum};{class};{order};{family};{genus};{species}", "output format, placeholders of rank are needed")
+	reformat2Cmd.Flags().StringP("format", "f", "{domain|acellular root|superkingdom};{phylum};{class};{order};{family};{genus};{species}", "output format, placeholders of rank are needed")
 	reformat2Cmd.Flags().StringP("miss-rank-repl", "r", "", `replacement string for missing rank`)
 	reformat2Cmd.Flags().StringP("miss-taxid-repl", "R", "", `replacement string for missing taxid`)
 	reformat2Cmd.Flags().BoolP("trim", "T", false, "do not replace missing ranks lower than the rank of the current node")

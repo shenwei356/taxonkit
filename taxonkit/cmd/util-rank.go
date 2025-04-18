@@ -22,24 +22,12 @@ package cmd
 
 import "regexp"
 
-var rankList = []string{
-	"",
-	"superkingdom",
-	"kingdom",
-	"phylum",
-	"class",
-	"order",
-	"family",
-	"genus",
-	"species",
-	"subspecies",
-	"subspecies/strain",
-	"strain",
-}
-
 var srankList = []string{
 	"",
+	"C",
+	"a",
 	"r",
+	"d",
 	"k",
 	"K",
 	"p",
@@ -54,7 +42,10 @@ var srankList = []string{
 }
 
 var rank2symbol = map[string]string{
+	"cellular root":     "C",
+	"acellular root":    "a",
 	"realm":             "r",
+	"domain":            "d",
 	"superkingdom":      "k",
 	"kingdom":           "K",
 	"phylum":            "p",
@@ -69,7 +60,10 @@ var rank2symbol = map[string]string{
 }
 
 var symbol2rank = map[string]string{
+	"C": "Cellular root",
+	"a": "acellular root",
 	"r": "realm",
+	"d": "domain",
 	"k": "superkingdom",
 	"K": "kingdom",
 	"p": "phylum",
@@ -83,7 +77,10 @@ var symbol2rank = map[string]string{
 	"T": "strain",
 }
 var symbol2weight = map[string]float32{
-	"r": 0.5,
+	"C": 0.5,
+	"a": 0.5,
+	"r": 1,
+	"d": 1,
 	"k": 1,
 	"K": 1.5,
 	"p": 2,
@@ -100,7 +97,10 @@ var symbol2weight = map[string]float32{
 var reRankPlaceHolder = regexp.MustCompile(`\{(\w)\}`)
 
 var reRankPlaceHolders = map[string]*regexp.Regexp{
+	"C": regexp.MustCompile(`\{C\}`),
+	"a": regexp.MustCompile(`\{a\}`),
 	"r": regexp.MustCompile(`\{r\}`),
+	"d": regexp.MustCompile(`\{d\}`),
 	"k": regexp.MustCompile(`\{k\}`),
 	"K": regexp.MustCompile(`\{K\}`),
 	"p": regexp.MustCompile(`\{p\}`),

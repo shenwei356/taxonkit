@@ -411,6 +411,7 @@ const defaultRanksText = `
 
 life
 
+acellular root,cellular root
 domain,superkingdom,realm,empire
 
 kingdom

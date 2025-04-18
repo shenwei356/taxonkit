@@ -44,9 +44,11 @@ func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]uint32 {
 
 	items := make([]string, 8)
 	scanner := bufio.NewScanner(fh)
+	var preTaxid, taxid string
 	var id int
 	var name string
 	var ok bool
+	m := make(map[string]interface{})
 	for scanner.Scan() {
 		stringSplitN(scanner.Text(), "\t", 8, &items)
 		if len(items) < 7 {
@@ -62,22 +64,34 @@ func getTaxonName2Taxids(file string, limit2SciName bool) map[string][]uint32 {
 		// 		continue
 		// 	}
 		// }
-		name = items[2]
+		taxid = items[0]
+		name = strings.ToLower(items[2])
 
-		id, err = strconv.Atoi(items[0])
+		if taxid == preTaxid {
+			if _, ok = m[name]; ok {
+				continue
+			} else {
+				m[name] = struct{}{}
+			}
+		} else {
+			clear(m)
+			m[name] = struct{}{}
+		}
+
+		id, err = strconv.Atoi(taxid)
 		if err != nil {
 			continue
 		}
 
 		// -------------
 
-		name = strings.ToLower(name)
 		if _, ok = name2taxids[name]; !ok {
 			name2taxids[name] = []uint32{uint32(id)}
 		} else {
 			name2taxids[name] = append(name2taxids[name], uint32(id))
 		}
 
+		preTaxid = taxid
 	}
 	if err := scanner.Err(); err != nil {
 		checkError(err)

@@ -1,7 +1,17 @@
-- [TaxonKit v0.19.1](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.1)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.19.1/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.1)
+- [TaxonKit v0.20.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.20.0)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.20.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.20.0)
+    
+    This version is mainly for maintaining compitibility with [NCBI's recent changes](https://ncbiinsights.ncbi.nlm.nih.gov/2025/02/27/new-ranks-ncbi-taxonomy/).
+    - `taxonkit reformat`:
+        - Tried to make it compatible with NCBI's recent changes but failed.
+        - **Update doc to recommend using `taxonkit reformat2`**.
     - `taxonkit reformat2`:
         - Fix handling deleted TaxIds. [#117](https://github.com/shenwei356/taxonkit/issues/117)
+        - **Change the default output format to be compatible with NCBI's recent changes**. [#115](https://github.com/shenwei356/taxonkit/issues/115), [#116](https://github.com/shenwei356/taxonkit/issues/116))
+    - `taxonkit filter2`:
+        - Support new ranks: `acellular root` and `cellular root`. Please remove the `ranks.txt` file in `~/.taxonkit/` or other directories containing taxdump files.
+    - `taxonkit name2taxid`:
+        - Remove duplicated records caused by capitalization.
 - [TaxonKit v0.19.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.19.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.0)
     - new command `taxonkit reformat2`: Reformat lineage in chosen ranks, allowing more ranks than 'reformat'
