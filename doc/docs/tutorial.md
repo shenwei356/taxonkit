@@ -21,7 +21,7 @@
 Show lineage detail of a TaxId.
 The command below works on Windows with help of [csvtk](http://bioinf.shenwei.me/csvtk).
 
-    $ echo "2697049" \
+    $ echo 2697049 \
         | taxonkit lineage -t \
         | csvtk cut -Ht -f 3 \
         | csvtk unfold -Ht -f 1 -s ";" \
@@ -29,19 +29,19 @@ The command below works on Windows with help of [csvtk](http://bioinf.shenwei.me
         | csvtk cut -Ht -f 1,3,2 \
         | csvtk pretty -Ht 
     
-    10239     superkingdom   Viruses
-    2559587   clade          Riboviria
-    2732396   kingdom        Orthornavirae
-    2732408   phylum         Pisuviricota
-    2732506   class          Pisoniviricetes
-    76804     order          Nidovirales
-    2499399   suborder       Cornidovirineae
-    11118     family         Coronaviridae
-    2501931   subfamily      Orthocoronavirinae
-    694002    genus          Betacoronavirus
-    2509511   subgenus       Sarbecovirus
-    694009    species        Severe acute respiratory syndrome-related coronavirus
-    2697049   no rank        Severe acute respiratory syndrome coronavirus 2
+    10239     acellular root   Viruses                                        
+    2559587   realm            Riboviria                                      
+    2732396   kingdom          Orthornavirae                                  
+    2732408   phylum           Pisuviricota                                   
+    2732506   class            Pisoniviricetes                                
+    76804     order            Nidovirales                                    
+    2499399   suborder         Cornidovirineae                                
+    11118     family           Coronaviridae                                  
+    2501931   subfamily        Orthocoronavirinae                             
+    694002    genus            Betacoronavirus                                
+    2509511   subgenus         Sarbecovirus                                   
+    3418604   species          Betacoronavirus pandemicum                     
+    2697049   no rank          Severe acute respiratory syndrome coronavirus 2
 
 Example data.
 
@@ -61,127 +61,147 @@ Example data.
 Format to 7-level ranks ("superkingdom phylum class order family genus species").
 
     $ cat taxids3.txt \
-        | taxonkit reformat -I 1
+        | taxonkit reformat2 -I 1
     
-    376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
-    349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-    239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+    376619  Bacteria;Pseudomonadota;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis
+    349741  Bacteria;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
+    239935  Bacteria;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
     314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B
     11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle
-    1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y
-    83333   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
-    1408252 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
-    2605619 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
-    2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Severe acute respiratory syndrome-related coronavirus
+    1327037 Viruses;Uroviricota;Caudoviricetes;;;;Croceibacter phage P2559Y
+    83333   Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+    1408252 Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+    2605619 Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli
+    2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Betacoronavirus pandemicum
 
 Format to 8-level ranks ("superkingdom phylum class order family genus species subspecies/rank").
 
     $ cat taxids3.txt \
-        | taxonkit reformat -I 1 -f "{k};{p};{c};{o};{f};{g};{s};{t}" 
+        | taxonkit reformat2 -I 1 -f "{domain|acellular root|superkingdom};{phylum};{class};{order};{family};{genus};{species};{strain|subspecies|no rank}" 
     
-    376619  Bacteria;Proteobacteria;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica LVS
-    349741  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
-    239935  Bacteria;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;
-    314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B;
-    11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle;
-    1327037 Viruses;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;;Croceibacter phage P2559Y;
-    83333   Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
-    1408252 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli R178
-    2605619 Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;
-    2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Severe acute respiratory syndrome-related coronavirus;
+    376619  Bacteria;Pseudomonadota;Gammaproteobacteria;Thiotrichales;Francisellaceae;Francisella;Francisella tularensis;Francisella tularensis subsp. holarctica LVS
+    349741  Bacteria;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+    239935  Bacteria;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;
+    314101  Bacteria;;;;;;uncultured murine large bowel bacterium BAC 54B;environmental samples
+    11932   Viruses;Artverviricota;Revtraviricetes;Ortervirales;Retroviridae;Intracisternal A-particles;Mouse Intracisternal A-particle;unclassified Retroviridae
+    1327037 Viruses;Uroviricota;Caudoviricetes;;;;Croceibacter phage P2559Y;unclassified Caudoviricetes
+    83333   Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
+    1408252 Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli R178
+    2605619 Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli O16:H48
+    2697049 Viruses;Pisuviricota;Pisoniviricetes;Nidovirales;Coronaviridae;Betacoronavirus;Betacoronavirus pandemicum;Severe acute respiratory syndrome coronavirus 2
 
 Replace missing ranks with `Unassigned` and output tab-delimited format.
+**(Warning:  for NCBI taxonomy data since March 2025, `reformat` can't handle Bacteria's rank `domain` and Viruses' rank `acellular root` simutaneously).**
 
     $ cat taxids3.txt \
-        | taxonkit reformat -I 1 -r "Unassigned" -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        | taxonkit reformat2 -I 1 -r "Unassigned" -f "{d}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | csvtk pretty -H -t 
         
-    376619    Bacteria   Proteobacteria    Gammaproteobacteria   Thiotrichales        Francisellaceae      Francisella                  Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
-    349741    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
-    239935    Bacteria   Verrucomicrobia   Verrucomicrobiae      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                                 Unassigned
-    314101    Bacteria   Unassigned        Unassigned            Unassigned           Unassigned           Unassigned                   uncultured murine large bowel bacterium BAC 54B         Unassigned
-    11932     Viruses    Artverviricota    Revtraviricetes       Ortervirales         Retroviridae         Intracisternal A-particles   Mouse Intracisternal A-particle                         Unassigned
-    1327037   Viruses    Uroviricota       Caudoviricetes        Caudovirales         Siphoviridae         Unassigned                   Croceibacter phage P2559Y                               Unassigned
-    83333     Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Escherichia coli K-12
-    1408252   Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Escherichia coli R178
-    2605619   Bacteria   Proteobacteria    Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                        Unassigned
-    2697049   Viruses    Pisuviricota      Pisoniviricetes       Nidovirales          Coronaviridae        Betacoronavirus              Severe acute respiratory syndrome-related coronavirus   Unassigned
+    376619    Bacteria     Pseudomonadota      Gammaproteobacteria   Thiotrichales        Francisellaceae      Francisella                  Francisella tularensis                            Francisella tularensis subsp. holarctica LVS
+    349741    Bacteria     Verrucomicrobiota   Verrucomicrobiia      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                           Akkermansia muciniphila ATCC BAA-835        
+    239935    Bacteria     Verrucomicrobiota   Verrucomicrobiia      Verrucomicrobiales   Akkermansiaceae      Akkermansia                  Akkermansia muciniphila                           Unassigned                                  
+    314101    Bacteria     Unassigned          Unassigned            Unassigned           Unassigned           Unassigned                   uncultured murine large bowel bacterium BAC 54B   Unassigned                                  
+    11932     Unassigned   Artverviricota      Revtraviricetes       Ortervirales         Retroviridae         Intracisternal A-particles   Mouse Intracisternal A-particle                   Unassigned                                  
+    1327037   Unassigned   Uroviricota         Caudoviricetes        Unassigned           Unassigned           Unassigned                   Croceibacter phage P2559Y                         Unassigned                                  
+    83333     Bacteria     Pseudomonadota      Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                  Escherichia coli K-12                       
+    1408252   Bacteria     Pseudomonadota      Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                  Escherichia coli R178                       
+    2605619   Bacteria     Pseudomonadota      Gammaproteobacteria   Enterobacterales     Enterobacteriaceae   Escherichia                  Escherichia coli                                  Unassigned                                  
+    2697049   Unassigned   Pisuviricota        Pisoniviricetes       Nidovirales          Coronaviridae        Betacoronavirus              Betacoronavirus pandemicum                        Unassigned 
 
 Fill missing ranks and add prefixes.
+**(Warning:  for NCBI taxonomy data since March 2025, `reformat` can't handle Bacteria's rank `domain` and Viruses' rank `acellular root` simutaneously).**
 
     $ cat taxids3.txt \
-        | taxonkit reformat -I 1 -F -P -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        | taxonkit reformat -I 1 -F -P -f "{d}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | csvtk pretty -H -t 
         
-    376619    k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Thiotrichales                 f__Francisellaceae                g__Francisella                       s__Francisella tularensis                                  t__Francisella tularensis subsp. holarctica LVS
-    349741    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__Akkermansia muciniphila ATCC BAA-835
-    239935    k__Bacteria   p__Verrucomicrobia                c__Verrucomicrobiae              o__Verrucomicrobiales            f__Akkermansiaceae                g__Akkermansia                       s__Akkermansia muciniphila                                 t__unclassified Akkermansia muciniphila subspecies/strain
-    314101    k__Bacteria   p__unclassified Bacteria phylum   c__unclassified Bacteria class   o__unclassified Bacteria order   f__unclassified Bacteria family   g__unclassified Bacteria genus       s__uncultured murine large bowel bacterium BAC 54B         t__unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
-    11932     k__Viruses    p__Artverviricota                 c__Revtraviricetes               o__Ortervirales                  f__Retroviridae                   g__Intracisternal A-particles        s__Mouse Intracisternal A-particle                         t__unclassified Mouse Intracisternal A-particle subspecies/strain
-    1327037   k__Viruses    p__Uroviricota                    c__Caudoviricetes                o__Caudovirales                  f__Siphoviridae                   g__unclassified Siphoviridae genus   s__Croceibacter phage P2559Y                               t__unclassified Croceibacter phage P2559Y subspecies/strain
-    83333     k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__Escherichia coli K-12
-    1408252   k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__Escherichia coli R178
-    2605619   k__Bacteria   p__Proteobacteria                 c__Gammaproteobacteria           o__Enterobacterales              f__Enterobacteriaceae             g__Escherichia                       s__Escherichia coli                                        t__unclassified Escherichia coli subspecies/strain
-    2697049   k__Viruses    p__Pisuviricota                   c__Pisoniviricetes               o__Nidovirales                   f__Coronaviridae                  g__Betacoronavirus                   s__Severe acute respiratory syndrome-related coronavirus   t__unclassified Severe acute respiratory syndrome-related coronavirus subspecies/strain
+    376619    d__Bacteria                      p__Pseudomonadota                 c__Gammaproteobacteria           o__Thiotrichales                       f__Francisellaceae                      g__Francisella                         s__Francisella tularensis                            t__Francisella tularensis subsp. holarctica LVS                                  
+    349741    d__Bacteria                      p__Verrucomicrobiota              c__Verrucomicrobiia              o__Verrucomicrobiales                  f__Akkermansiaceae                      g__Akkermansia                         s__Akkermansia muciniphila                           t__Akkermansia muciniphila ATCC BAA-835                                          
+    239935    d__Bacteria                      p__Verrucomicrobiota              c__Verrucomicrobiia              o__Verrucomicrobiales                  f__Akkermansiaceae                      g__Akkermansia                         s__Akkermansia muciniphila                           t__unclassified Akkermansia muciniphila subspecies/strain                        
+    314101    d__Bacteria                      p__unclassified Bacteria phylum   c__unclassified Bacteria class   o__unclassified Bacteria order         f__unclassified Bacteria family         g__unclassified Bacteria genus         s__uncultured murine large bowel bacterium BAC 54B   t__unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
+    11932     d__unclassified Viruses domain   p__Artverviricota                 c__Revtraviricetes               o__Ortervirales                        f__Retroviridae                         g__Intracisternal A-particles          s__Mouse Intracisternal A-particle                   t__unclassified Mouse Intracisternal A-particle subspecies/strain                
+    1327037   d__unclassified Viruses domain   p__Uroviricota                    c__Caudoviricetes                o__unclassified Caudoviricetes order   f__unclassified Caudoviricetes family   g__unclassified Caudoviricetes genus   s__Croceibacter phage P2559Y                         t__unclassified Croceibacter phage P2559Y subspecies/strain                      
+    83333     d__Bacteria                      p__Pseudomonadota                 c__Gammaproteobacteria           o__Enterobacterales                    f__Enterobacteriaceae                   g__Escherichia                         s__Escherichia coli                                  t__Escherichia coli K-12                                                         
+    1408252   d__Bacteria                      p__Pseudomonadota                 c__Gammaproteobacteria           o__Enterobacterales                    f__Enterobacteriaceae                   g__Escherichia                         s__Escherichia coli                                  t__Escherichia coli R178                                                         
+    2605619   d__Bacteria                      p__Pseudomonadota                 c__Gammaproteobacteria           o__Enterobacterales                    f__Enterobacteriaceae                   g__Escherichia                         s__Escherichia coli                                  t__unclassified Escherichia coli subspecies/strain                               
+    2697049   d__unclassified Viruses domain   p__Pisuviricota                   c__Pisoniviricetes               o__Nidovirales                         f__Coronaviridae                        g__Betacoronavirus                     s__Betacoronavirus pandemicum                        t__unclassified Betacoronavirus pandemicum subspecies/strain 
 
 **When these's no nodes of rank "subspecies" nor "strain",
 we can switch `-S/--pseudo-strain` to use the node with lowest rank
 as subspecies/strain name, if which rank is lower than "species"**.
+**(Warning:  for NCBI taxonomy data since March 2025, `reformat` can't handle Bacteria's rank `domain` and Viruses' rank `acellular root` simutaneously).**
 
     $ cat taxids3.txt \
         | taxonkit lineage -r -L \
-        | taxonkit reformat -I 1 -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        | taxonkit reformat -I 1 -F -S -f "{d}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
         | cut -f 1,2,9,10 \
         | csvtk add-header -t -n "taxid,rank,species,strain" \
         | csvtk pretty -t
         
-    taxid     rank         species                                                 strain
-    -------   ----------   -----------------------------------------------------   ------------------------------------------------------------------------------
-    376619    strain       Francisella tularensis                                  Francisella tularensis subsp. holarctica LVS
-    349741    strain       Akkermansia muciniphila                                 Akkermansia muciniphila ATCC BAA-835
-    239935    species      Akkermansia muciniphila                                 unclassified Akkermansia muciniphila subspecies/strain
-    314101    species      uncultured murine large bowel bacterium BAC 54B         unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
-    11932     species      Mouse Intracisternal A-particle                         unclassified Mouse Intracisternal A-particle subspecies/strain
-    1327037   species      Croceibacter phage P2559Y                               unclassified Croceibacter phage P2559Y subspecies/strain
-    83333     strain       Escherichia coli                                        Escherichia coli K-12
-    1408252   subspecies   Escherichia coli                                        Escherichia coli R178
-    2605619   no rank      Escherichia coli                                        Escherichia coli O16:H48
-    2697049   no rank      Severe acute respiratory syndrome-related coronavirus   Severe acute respiratory syndrome coronavirus 2
+    taxid     rank         species                                           strain                                                                        
+    -------   ----------   -----------------------------------------------   ------------------------------------------------------------------------------
+    376619    strain       Francisella tularensis                            Francisella tularensis subsp. holarctica LVS                                  
+    349741    strain       Akkermansia muciniphila                           Akkermansia muciniphila ATCC BAA-835                                          
+    239935    species      Akkermansia muciniphila                           unclassified Akkermansia muciniphila subspecies/strain                        
+    314101    species      uncultured murine large bowel bacterium BAC 54B   unclassified uncultured murine large bowel bacterium BAC 54B subspecies/strain
+    11932     species      Mouse Intracisternal A-particle                   unclassified Mouse Intracisternal A-particle subspecies/strain                
+    1327037   species      Croceibacter phage P2559Y                         unclassified Croceibacter phage P2559Y subspecies/strain                      
+    83333     strain       Escherichia coli                                  Escherichia coli K-12                                                         
+    1408252   subspecies   Escherichia coli                                  Escherichia coli R178                                                         
+    2605619   no rank      Escherichia coli                                  Escherichia coli O16:H48                                                      
+    2697049   no rank      Betacoronavirus pandemicum                        Severe acute respiratory syndrome coronavirus 2 
 
 List eight-level lineage for all TaxIds of rank lower than or equal to species, including some nodes with "no rank".
 But when filtering with `-L/--lower-than`, you can use
 `-n/--save-predictable-norank` to **save some special ranks without order,
 where rank of the closest higher node is still lower than rank cutoff**.
 
-    $ time taxonkit list --ids 1 \
+    $ time taxonkit list --ids 1 -I "" \
         | taxonkit filter -L species -E species -R -N -n \
-        | taxonkit lineage -n -r -L \
-        | taxonkit reformat -I 1 -F -S -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+        | taxonkit lineage -n -r \
+        | taxonkit reformat2 -I 1 -f "{domain|acellular root|superkingdom}\t{phylum}\t{class}\t{order}\t{family}\t{genus}\t{species}\t{strain|subspecies|no rank}" \
         | csvtk cut -Ht -l -f 1,3,2,1,4-11 \
         | csvtk add-header -t -n "taxid,rank,name,lineage,kingdom,phylum,class,order,family,genus,species,strain" \
         | pigz -c > result.tsv.gz
 
-    real    0m25.167s
-    user    2m14.809s
-    sys     0m7.197s
+    real    0m9.778s
+    user    1m22.211s
+    sys     0m8.489s
     
     $ pigz -cd result.tsv.gz \
         | csvtk grep -t -f taxid -p 2697049 \
         | csvtk transpose -t \
-        | csvtk pretty -H -t 
+        | csvtk pretty -H -t -W 70 -x ';' -S round
         
-    taxid     2697049
-    rank      no rank
-    name      Severe acute respiratory syndrome coronavirus 2
-    lineage   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
-    kingdom   Viruses
-    phylum    Pisuviricota
-    class     Pisoniviricetes
-    order     Nidovirales
-    family    Coronaviridae
-    genus     Betacoronavirus
-    species   Severe acute respiratory syndrome-related coronavirus
-    strain    Severe acute respiratory syndrome coronavirus 2
+    ╭---------┬------------------------------------------------------------------------╮
+    | taxid   | 2697049                                                                |
+    ├---------┼------------------------------------------------------------------------┤
+    | rank    | Severe acute respiratory syndrome coronavirus 2                        |
+    ├---------┼------------------------------------------------------------------------┤
+    | name    | Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;          |
+    |         | Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;          |
+    |         | Betacoronavirus;Sarbecovirus;Betacoronavirus pandemicum;               |
+    |         | Severe acute respiratory syndrome coronavirus 2                        |
+    ├---------┼------------------------------------------------------------------------┤
+    | lineage | 2697049                                                                |
+    ├---------┼------------------------------------------------------------------------┤
+    | kingdom | no rank                                                                |
+    ├---------┼------------------------------------------------------------------------┤
+    | phylum  | Viruses                                                                |
+    ├---------┼------------------------------------------------------------------------┤
+    | class   | Pisuviricota                                                           |
+    ├---------┼------------------------------------------------------------------------┤
+    | order   | Pisoniviricetes                                                        |
+    ├---------┼------------------------------------------------------------------------┤
+    | family  | Nidovirales                                                            |
+    ├---------┼------------------------------------------------------------------------┤
+    | genus   | Coronaviridae                                                          |
+    ├---------┼------------------------------------------------------------------------┤
+    | species | Betacoronavirus                                                        |
+    ├---------┼------------------------------------------------------------------------┤
+    | strain  | Betacoronavirus pandemicum                                             |
+    ╰---------┴------------------------------------------------------------------------╯
+
     
 ## Mapping old species names to new ones
 
@@ -342,51 +362,48 @@ Converting to MetaPhlAn2 format. (Similar to [kreport2mpa.py](https://github.com
 
     $ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
         | csvtk cut -Ht -f 5,1 \
-        | taxonkit lineage \
-        | taxonkit reformat -i 3 -P -f "{k}|{p}|{c}|{o}|{f}|{g}|{s}" \
-        | csvtk cut -Ht -f 4,2 \
+        | taxonkit reformat2 -I 1 -f "k__{domain|acellular root|superkingdom}|p__{phylum}|c__{class}|o__{order}|f__{family}|g__{genus}|s__{species}" \
+        | csvtk cut -Ht -f 3,2 \
         | csvtk replace -Ht -p "(\|[kpcofgs]__)+$" \
-        | csvtk replace -Ht -p "\|[kpcofgs]__\|" -r "|" \
+        | csvtk replace -Ht -p "\|([kpcofgs]__\|)+" -r "|" \
         | csvtk uniq -Ht \
         | csvtk grep -Ht -p k__ -v \
-        > SRS014459-Stool.fasta.gz_bracken_species.kreport.format
-        
-    $ head -n 10 SRS014459-Stool.fasta.gz_bracken_species.kreport.format
+        | tee SRS014459-Stool.fasta.gz_bracken_species.kreport.format \
+        | head -n 10
     
     k__Bacteria     99.85
-    k__Bacteria|p__Bacteroidetes    66.08
-    k__Bacteria|p__Bacteroidetes|c__Bacteroidia     66.08
-    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales    66.08
-    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae  34.45
-    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides   34.45
-    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides cellulosilyticus   10.43
-    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides ovatus     7.98
-    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. CACC 737       1.06
-    k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. HF-5287        0.49
+    k__Bacteria|p__Bacteroidota     66.08
+    k__Bacteria|p__Bacteroidota|c__Bacteroidia      66.08
+    k__Bacteria|p__Bacteroidota|c__Bacteroidia|o__Bacteroidales     66.08
+    k__Bacteria|p__Bacteroidota|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae   34.45
+    k__Bacteria|p__Bacteroidota|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides    34.45
+    k__Bacteria|p__Bacteroidota|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides cellulosilyticus    10.43
+    k__Bacteria|p__Bacteroidota|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides ovatus      7.98
+    k__Bacteria|p__Bacteroidota|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides sp. CACC 737        1.06
+    k__Bacteria|p__Bacteroidota|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides zhangwenhongii      0.49
 
 Converting to Qiime format
 
     $ cat SRS014459-Stool.fasta.gz_bracken_species.kreport \
         | csvtk cut -Ht -f 5,1 \
-        | taxonkit lineage \
-        | taxonkit reformat -i 3 -P -f "{k}; {p}; {c}; {o}; {f}; {g}; {s}" \
-        | csvtk cut -Ht -f 4,2 \
+        | taxonkit reformat2 -I 1 -f "k__{domain|acellular root|superkingdom}; p__{phylum}; c__{class}; o__{order}; f__{family}; g__{genus}; s__{species}" \
+        | csvtk cut -Ht -f 3,2 \
         | csvtk replace -Ht -p "(; [kpcofgs]__)+$" \
-        | csvtk replace -Ht -p "; [kpcofgs]__; " -r "; " \
+        | csvtk replace -Ht -p "; ([kpcofgs]__; )+" -r "; " \
         | csvtk uniq -Ht \
         | csvtk grep -Ht -p k__ -v \
         | head -n 10 
         
     k__Bacteria     99.85
-    k__Bacteria; p__Bacteroidetes   66.08
-    k__Bacteria; p__Bacteroidetes; c__Bacteroidia   66.08
-    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales 66.08
-    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae      34.45
-    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides      34.45
-    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides cellulosilyticus     10.43
-    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides ovatus       7.98
-    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides sp. CACC 737 1.06
-    k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides sp. HF-5287  0.49
+    k__Bacteria; p__Bacteroidota    66.08
+    k__Bacteria; p__Bacteroidota; c__Bacteroidia    66.08
+    k__Bacteria; p__Bacteroidota; c__Bacteroidia; o__Bacteroidales  66.08
+    k__Bacteria; p__Bacteroidota; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae       34.45
+    k__Bacteria; p__Bacteroidota; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides       34.45
+    k__Bacteria; p__Bacteroidota; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides cellulosilyticus      10.43
+    k__Bacteria; p__Bacteroidota; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides ovatus        7.98
+    k__Bacteria; p__Bacteroidota; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides sp. CACC 737  1.06
+    k__Bacteria; p__Bacteroidota; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides; s__Bacteroides zhangwenhongii        0.49
 
 Save taxon proportion and taxid, and get lineage, name and rank.
 
@@ -397,17 +414,16 @@ Save taxon proportion and taxid, and get lineage, name and rank.
         | head -n 10 \
         | csvtk pretty -Ht
         
-    100.00   1         no rank        root                           root
-    99.85    131567    no rank        cellular organisms             cellular organisms
-    99.85    2         superkingdom   Bacteria                       cellular organisms;Bacteria
-    66.08    1783270   clade          FCB group                      cellular organisms;Bacteria;FCB group
-    66.08    68336     clade          Bacteroidetes/Chlorobi group   cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group
-    66.08    976       phylum         Bacteroidetes                  cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes
-    66.08    200643    class          Bacteroidia                    cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia
-    66.08    171549    order          Bacteroidales                  cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales
-    34.45    815       family         Bacteroidaceae                 cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae
-    34.45    816       genus          Bacteroides                    cellular organisms;Bacteria;FCB group;Bacteroidetes/Chlorobi group;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides
-
+    100.00   1         no rank         root                             root                                                                                                                                                 
+    99.85    131567    cellular root   cellular organisms               cellular organisms                                                                                                                                   
+    99.85    2         domain          Bacteria                         cellular organisms;Bacteria                                                                                                                          
+    66.08    1783270   clade           FCB group                        cellular organisms;Bacteria;Pseudomonadati;FCB group                                                                                                 
+    66.08    68336     clade           Bacteroidota/Chlorobiota group   cellular organisms;Bacteria;Pseudomonadati;FCB group;Bacteroidota/Chlorobiota group                                                                  
+    66.08    976       phylum          Bacteroidota                     cellular organisms;Bacteria;Pseudomonadati;FCB group;Bacteroidota/Chlorobiota group;Bacteroidota                                                     
+    66.08    200643    class           Bacteroidia                      cellular organisms;Bacteria;Pseudomonadati;FCB group;Bacteroidota/Chlorobiota group;Bacteroidota;Bacteroidia                                         
+    66.08    171549    order           Bacteroidales                    cellular organisms;Bacteria;Pseudomonadati;FCB group;Bacteroidota/Chlorobiota group;Bacteroidota;Bacteroidia;Bacteroidales                           
+    34.45    815       family          Bacteroidaceae                   cellular organisms;Bacteria;Pseudomonadati;FCB group;Bacteroidota/Chlorobiota group;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae            
+    34.45    816       genus           Bacteroides                      cellular organisms;Bacteria;Pseudomonadati;FCB group;Bacteroidota/Chlorobiota group;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides
 
 Only save species or lower level and get lineage in format of "superkingdom phylum class order family genus species".
 
@@ -415,23 +431,23 @@ Only save species or lower level and get lineage in format of "superkingdom phyl
         | csvtk cut -Ht -f 1,5 \
         | taxonkit filter -N -E species -L species -i 2 \
         | taxonkit lineage -i 2 -n -r \
-        | taxonkit reformat -i 3 -f "{k};{p};{c};{o};{f};{g};{s}" \
+        | taxonkit reformat2 -I 2  \
         | csvtk cut -Ht -f 1,2,5,4,6 \
         | csvtk add-header -t -n abundance,taxid,rank,name,lineage \
         | head -n 10 \
         | csvtk pretty -t
         
-    abundance   taxid     rank      name                           lineage
-    ---------   -------   -------   ----------------------------   --------------------------------------------------------------------------------------------------------
-    10.43       246787    species   Bacteroides cellulosilyticus   Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides cellulosilyticus
-    7.98        28116     species   Bacteroides ovatus             Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides ovatus
-    1.06        2755405   species   Bacteroides sp. CACC 737       Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. CACC 737
-    0.49        2650157   species   Bacteroides sp. HF-5287        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. HF-5287
-    0.99        2528203   species   Bacteroides sp. A1C1           Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. A1C1
-    0.28        2763022   species   Bacteroides sp. M10            Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. M10
-    0.16        2650158   species   Bacteroides sp. HF-5141        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. HF-5141
-    0.12        2715212   species   Bacteroides sp. CBA7301        Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. CBA7301
-    5.10        817       species   Bacteroides fragilis           Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides fragilis
+    abundance   taxid     rank      name                           lineage                                                                                                
+    ---------   -------   -------   ----------------------------   -------------------------------------------------------------------------------------------------------
+    10.43       246787    species   Bacteroides cellulosilyticus   Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides cellulosilyticus
+    7.98        28116     species   Bacteroides ovatus             Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides ovatus          
+    1.06        2755405   species   Bacteroides sp. CACC 737       Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. CACC 737    
+    0.49        2650157   species   Bacteroides zhangwenhongii     Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides zhangwenhongii  
+    0.99        2528203   species   Bacteroides sp. A1C1           Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. A1C1        
+    0.28        2763022   species   Bacteroides sp. M10            Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides sp. M10         
+    0.16        2650158   species   Bacteroides luhongzhouii       Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides luhongzhouii    
+    0.12        2715212   species   Bacteroides faecium            Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides faecium         
+    5.10        817       species   Bacteroides fragilis           Bacteria;Bacteroidota;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides fragilis        817       species   Bacteroides fragilis           Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides fragilis
 
 ## Making nr blastdb for specific taxids
 
@@ -825,10 +841,10 @@ The idea is to export lineages from both GTDB and NCBI using [taxonkit reformat]
 
 1. Exporting taxonomic lineages of taxa with rank equal to species from [GTDB-taxdump](https://github.com/shenwei356/gtdb-taxdump).
 
-        taxonkit list --data-dir gtdb-taxdump/R207/ --ids 1 --indent "" \
-            | taxonkit filter --data-dir gtdb-taxdump/R207/ --equal-to species \
-            | taxonkit reformat --data-dir gtdb-taxdump/R207/ --taxid-field 1 \
-                --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" \
+        taxonkit list --data-dir gtdb-taxdump/R226/ --ids 1 --indent "" \
+            | taxonkit filter --data-dir gtdb-taxdump/R226/ --equal-to species \
+            | taxonkit reformat2 --data-dir gtdb-taxdump/R226/ --taxid-field 1 \
+                --format "{domain|acellular root|superkingdom}\t{phylum}\t{class}\t{order}\t{family}\t{genus}\t{species}\t{strain|subspecies|no rank}" \
                 -o gtdb.tsv
 
 1. Exporting taxonomic lineages of viral taxa with rank equal to or lower than species from NCBI taxdump.
@@ -837,13 +853,13 @@ The idea is to export lineages from both GTDB and NCBI using [taxonkit reformat]
         # taxid of Viruses: 10239
         taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent "" \
             | taxonkit filter --data-dir ~/.taxonkit --equal-to species --lower-than species \
-            | taxonkit reformat --data-dir ~/.taxonkit --taxid-field 1 \
-                --pseudo-strain --format "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+            | taxonkit reformat2 --data-dir ~/.taxonkit --taxid-field 1 \
+                --format "{domain|acellular root|superkingdom}\t{phylum}\t{class}\t{order}\t{family}\t{genus}\t{species}\t{strain|subspecies|no rank}" \
                 -o ncbi-viral.tsv
 
 1. Creating taxdump from lineages above.
 
-        (awk '{print $_"\t"}' gtdb.tsv; cat ncbi-viral.tsv) \
+        cat gtdb.tsv ncbi-viral.tsv \
             | taxonkit create-taxdump \
                 --field-accession 1 \
                 -R "superkingdom,phylum,class,order,family,genus,species,strain" \
@@ -878,43 +894,43 @@ Some tests:
     2697049   no rank        Severe acute respiratory syndrome coronavirus 2
 
     $ echo "Severe acute respiratory syndrome coronavirus 2" | taxonkit name2taxid --data-dir taxdump/
-    Severe acute respiratory syndrome coronavirus 2 216305222
+    Severe acute respiratory syndrome coronavirus 2 192491219
 
-    $ echo 216305222 \
+    $ echo 192491219 \
         | taxonkit lineage -t --data-dir taxdump/ \
         | csvtk cut -Ht -f 3 \
         | csvtk unfold -Ht -f 1 -s ";" \
         | taxonkit lineage -r -n -L --data-dir taxdump/ \
         | csvtk cut -Ht -f 1,3,2 \
         | csvtk pretty -Ht
-    1287770734   superkingdom   Viruses
-    1506901452   phylum         Pisuviricota
-    1091693597   class          Pisoniviricetes
-    37745009     order          Nidovirales
-    738421640    family         Coronaviridae
-    906833049    genus          Betacoronavirus
-    1015862491   species        Severe acute respiratory syndrome-related coronavirus
-    216305222    strain         Severe acute respiratory syndrome coronavirus 2
+    1088277216   superkingdom   Viruses                                        
+    38781089     phylum         Pisuviricota                                   
+    1832208221   class          Pisoniviricetes                                
+    1393610206   order          Nidovirales                                    
+    779314330    family         Coronaviridae                                  
+    68549826     genus          Betacoronavirus                                
+    341128742    species        Betacoronavirus pandemicum                     
+    192491219    strain         Severe acute respiratory syndrome coronavirus 2
 
 
 
     $ echo "Escherichia coli"  | taxonkit name2taxid --data-dir taxdump/
-    Escherichia coli        1945799576
+    Escherichia coli        599451526
 
-    $ echo 1945799576 \
+    $ echo 599451526 \
         | taxonkit lineage -t --data-dir taxdump/ \
         | csvtk cut -Ht -f 3 \
         | csvtk unfold -Ht -f 1 -s ";" \
         | taxonkit lineage -r -n -L --data-dir taxdump/ \
         | csvtk cut -Ht -f 1,3,2 \
         | csvtk pretty -Ht
-    609216830    superkingdom   Bacteria
-    1641076285   phylum         Proteobacteria
-    329474883    class          Gammaproteobacteria
-    1012954932   order          Enterobacterales
-    87250111     family         Enterobacteriaceae
-    1187493883   genus          Escherichia
-    1945799576   species        Escherichia coli
+    81602897     superkingdom   Bacteria           
+    1712663402   phylum         Pseudomonadota     
+    1969409366   class          Gammaproteobacteria
+    1851777887   order          Enterobacterales   
+    1691888815   family         Enterobacteriaceae 
+    1028471294   genus          Escherichia        
+    599451526    species        Escherichia coli
 
 ## Filtering or subsetting taxdmp files to make a custom taxdmp with given TaxIDs
 
@@ -950,21 +966,22 @@ Checking it. Since there are only two leaves here, we just dump the whole tree
     $ wc -l subset/*.dmp
        0 subset/delnodes.dmp
        0 subset/merged.dmp
-     144 subset/names.dmp
-      39 subset/nodes.dmp
-     183 total
+     146 subset/names.dmp
+      40 subset/nodes.dmp
+     186 total
 
     $ taxonkit list --ids 1 --data-dir subset/ -nr
     1 [no rank] root
-      131567 [no rank] cellular organisms
-        2 [superkingdom] Bacteria
-          1224 [phylum] Pseudomonadota
-            1236 [class] Gammaproteobacteria
-              135623 [order] Vibrionales
-                641 [family] Vibrionaceae
-                  662 [genus] Vibrio
-                    28174 [species] Vibrio ordalii
-        2759 [superkingdom] Eukaryota
+      131567 [cellular root] cellular organisms
+        2 [domain] Bacteria
+          3379134 [kingdom] Pseudomonadati
+            1224 [phylum] Pseudomonadota
+              1236 [class] Gammaproteobacteria
+                135623 [order] Vibrionales
+                  641 [family] Vibrionaceae
+                    662 [genus] Vibrio
+                      28174 [species] Vibrio ordalii
+        2759 [domain] Eukaryota
           33154 [clade] Opisthokonta
             33208 [kingdom] Metazoa
               6072 [clade] Eumetazoa
@@ -994,7 +1011,7 @@ Checking it. Since there are only two leaves here, we just dump the whole tree
                                                               207598 [subfamily] Homininae
                                                                 9605 [genus] Homo
                                                                   9606 [species] Homo sapiens
-   
+      
 
     $ echo 28174 | taxonkit lineage -nr --data-dir subset/
     28174   cellular organisms;Bacteria;Pseudomonadota;Gammaproteobacteria;Vibrionales;Vibrionaceae;Vibrio;Vibrio ordalii       Vibrio ordalii  species

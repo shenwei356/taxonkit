@@ -48,8 +48,13 @@ Attention:
   3. All ranks in taxonomy database should be defined in rank file.
   4. Ranks can be removed with black list via -B/--black-list.
 
-  5. TaxIDs with no rank are kept by default!!!
-     They can be optionally discarded by -N/--discard-noranks.
+  5. TaxIDs with no rank (those starting with ! in the rank file) are kept
+     by default! They can be optionally discarded by -N/--discard-noranks.
+
+     One exception: -N/--discard-noranks is switched on automatically
+     when only -E/--equal-to is given and the value is not one of ranks
+     without order ("no rank", "clade").
+
   6. [Recommended] When filtering with -L/--lower-than, you can use
     -n/--save-predictable-norank to save some special ranks without order,
     where rank of the closest higher node is still lower than rank cutoff.

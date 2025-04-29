@@ -6,11 +6,25 @@
 
 ## Current Version
 
-- [TaxonKit v0.19.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.0)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.19.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.0)
-    - new command `taxonkit reformat2`: Reformat lineage in chosen ranks, allowing more ranks than 'reformat'
+- [TaxonKit v0.20.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.20.0)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.20.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.20.0)
+    
+    This version is mainly for maintaining compatibility with NCBI's recent changes([1](https://ncbiinsights.ncbi.nlm.nih.gov/2025/02/27/new-ranks-ncbi-taxonomy/), [2](https://ncbiinsights.ncbi.nlm.nih.gov/2025/04/25/ncbi-taxonomy-updates-virus-classification-april-2025/)).    
+    **Please remove the `ranks.txt` file in `~/.taxonkit/` or other directories containing taxdump files (nodes.dmp)**.
+    
     - `taxonkit reformat`:
-        - Fix `-T/--trim` which did not work for `-r/--miss-rank-repl`. [#106](https://github.com/shenwei356/taxonkit/issues/106)
+        - Tried to make it compatible with NCBI's recent changes but failed.
+        - **Update doc to recommend using `taxonkit reformat2`**.
+    - `taxonkit reformat2`:
+        - Fix handling of deleted TaxIds. [#117](https://github.com/shenwei356/taxonkit/issues/117)
+        - **Change the default output format to be compatible with NCBI's recent changes**. [#115](https://github.com/shenwei356/taxonkit/issues/115), [#116](https://github.com/shenwei356/taxonkit/issues/116))
+    - `taxonkit filter2`:
+        - Support new ranks: `acellular root` and `cellular root`. 
+          **Please remove the `ranks.txt` file in `~/.taxonkit/` or other directories containing taxdump files (nodes.dmp)**.
+        - Automaticly switch on `-N/--discard-noranks` when only `-E/--equal-to` is given and the value is not one of ranks without order ("no rank", "clade").
+    - `taxonkit name2taxid`:
+        - Remove duplicated records caused by capitalization.
+
 
 ### Please cite
 
@@ -27,11 +41,11 @@
 
 OS     |Arch      |File, 中国镜像                                                                                                                                                                              |Download Count
 :------|:---------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Linux  |**64-bit**|[**taxonkit_linux_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_linux_amd64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_linux_amd64.tar.gz)
-Linux  |**arm64** |[**taxonkit_linux_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_linux_arm64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_linux_arm64.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_linux_arm64.tar.gz)
-macOS  |**64-bit**|[**taxonkit_darwin_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_darwin_amd64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_darwin_amd64.tar.gz)
-macOS  |**arm64** |[**taxonkit_darwin_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_darwin_arm64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_darwin_arm64.tar.gz)
-Windows|**64-bit**|[**taxonkit_windows_amd64.exe.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_windows_amd64.exe.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz)|[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.19.0/taxonkit_windows_amd64.exe.tar.gz)
+Linux  |**64-bit**|[**taxonkit_linux_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_linux_amd64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_linux_amd64.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_linux_amd64.tar.gz)
+Linux  |**arm64** |[**taxonkit_linux_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_linux_arm64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_linux_arm64.tar.gz)                  |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_linux_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_linux_arm64.tar.gz)
+macOS  |**64-bit**|[**taxonkit_darwin_amd64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_darwin_amd64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_amd64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_amd64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_darwin_amd64.tar.gz)
+macOS  |**arm64** |[**taxonkit_darwin_arm64.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_darwin_arm64.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_darwin_arm64.tar.gz)               |[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_darwin_arm64.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_darwin_arm64.tar.gz)
+Windows|**64-bit**|[**taxonkit_windows_amd64.exe.tar.gz**](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_windows_amd64.exe.tar.gz),<br/> [中国镜像](http://app.shenwei.me/data/taxonkit/taxonkit_windows_amd64.exe.tar.gz)|[![Github Releases (by Asset)](https://img.shields.io/github/downloads/shenwei356/taxonkit/latest/taxonkit_windows_amd64.exe.tar.gz.svg?maxAge=3600)](https://github.com/shenwei356/taxonkit/releases/download/v0.20.0/taxonkit_windows_amd64.exe.tar.gz)
 
 ## Installation
 
@@ -41,7 +55,7 @@ Windows|**64-bit**|[**taxonkit_windows_amd64.exe.tar.gz**](https://github.com/sh
  executable binary files **for most popular operating systems** are freely available
   in [release](https://github.com/shenwei356/taxonkit/releases) page.
 
-#### Method 1: Download binaries (latest stable/dev version)
+#### Method 1: Download binaries (latest stable)
 
 Just [download](https://github.com/shenwei356/taxonkit/releases) compressed
 executable file of your operating system,
@@ -71,9 +85,9 @@ And then:
 
 1. [Install go](https://go.dev/doc/install)
 
-        wget https://go.dev/dl/go1.24.1.linux-amd64.tar.gz
+        wget https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
 
-        tar -zxf go1.24.1.linux-amd64.tar.gz -C $HOME/
+        tar -zxf go1.24.2.linux-amd64.tar.gz -C $HOME/
 
         # or 
         #   echo "export PATH=$PATH:$HOME/go/bin" >> ~/.bashrc
@@ -81,19 +95,6 @@ And then:
         export PATH=$PATH:$HOME/go/bin
 
 2. Compile TaxonKit
-
-        # ------------- the latest stable version -------------
-
-        go get -v -u github.com/shenwei356/taxonkit/taxonkit
-
-        # The executable binary file is located in:
-        #   ~/go/bin/taxonkit
-        # You can also move it to anywhere in the $PATH
-        mkdir -p $HOME/bin
-        cp ~/go/bin/taxonkit $HOME/bin/
-
-
-        # --------------- the development version --------------
 
         git clone https://github.com/shenwei356/taxonkit
         cd taxonkit/taxonkit/
@@ -152,6 +153,11 @@ All-in-one command:
 
 ## Release history
 
+- [TaxonKit v0.19.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.0)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.19.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.0)
+    - new command `taxonkit reformat2`: Reformat lineage in chosen ranks, allowing more ranks than 'reformat'
+    - `taxonkit reformat`:
+        - Fix `-T/--trim` which did not work for `-r/--miss-rank-repl`. [#106](https://github.com/shenwei356/taxonkit/issues/106)
 - [TaxonKit v0.18.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.18.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.18.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.18.0)
     - `taxonkit reformat`:

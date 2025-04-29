@@ -43,7 +43,7 @@ All-in-one command:
 ```text
 TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.19.0
+Version: 0.20.0
 
 Author: Wei Shen <shenwei356@gmail.com>
 
@@ -66,7 +66,7 @@ Dataset:
     overide the value of TAXONKIT_DB.
 
 Usage:
-  taxonkit [command]
+  taxonkit [command] 
 
 Available Commands:
   cami-filter     Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
@@ -91,8 +91,6 @@ Flags:
   -o, --out-file string   out file ("-" for stdout, suffix .gz for gzipped out) (default "-")
   -j, --threads int       number of CPUs. 4 is enough (default 4)
       --verbose           print verbose information
-
-Use "taxonkit [command] --help" for more information about a command.
 
 ```
 
@@ -1133,10 +1131,10 @@ Examples
         $ echo 511145 | taxonkit lineage
         511145  cellular organisms;Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12;Escherichia coli str. K-12 substr. MG1655
 
-        $ echo 511145 | taxonkit reformat  -I 1 -f "{k};{p};{c};{o};{f};{g};{s};{t}"
+        $ echo 511145 | taxonkit reformat  -I 1 -f "{d};{p};{c};{o};{f};{g};{s};{t}"
         511145  Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
 
-        $ echo 511145 | taxonkit reformat2 -I 1 -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species};{subspecies|strain|no rank}"
+        $ echo 511145 | taxonkit reformat2 -I 1 -f "{domain|acellular root|superkingdom};{phylum};{class};{order};{family};{genus};{species};{subspecies|strain|no rank}"
         511145  Bacteria;Pseudomonadota;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia coli;Escherichia coli K-12
 
 1. Trim
@@ -1151,18 +1149,18 @@ Examples
         # -----------------------------------------------------------
         # another example where the order rank is missing
 
-        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species}"
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{domain|acellular root|superkingdom};{phylum};{class};{order};{family};{genus};{species}"
         102403  Eukaryota;Mollusca;Bivalvia;0;Poromyidae;Tropidomya;0
 
-        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order};{family};{genus};{species}" -T
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{domain|acellular root|superkingdom};{phylum};{class};{order};{family};{genus};{species}" -T
         102403  Eukaryota;Mollusca;Bivalvia;0;Poromyidae;Tropidomya;
 
         # and now, the lowest rank in the output format is order, but the tailing "0" is not trimmed.
 
-        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order}"
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{domain|acellular root|superkingdom};{phylum};{class};{order}"
         102403  Eukaryota;Mollusca;Bivalvia;0
 
-        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{superkingdom};{phylum};{class};{order}" -T
+        $ echo 102403 | taxonkit reformat2 -I 1 -r "0" -f "{domain|acellular root|superkingdom};{phylum};{class};{order}" -T
         102403  Eukaryota;Mollusca;Bivalvia;0
 
 ## name2taxid
@@ -1274,8 +1272,13 @@ Attention:
   3. All ranks in taxonomy database should be defined in rank file.
   4. Ranks can be removed with black list via -B/--black-list.
 
-  5. TaxIDs with no rank are kept by default!!!
-     They can be optionally discarded by -N/--discard-noranks.
+  5. TaxIDs with no rank (those starting with ! in the rank file) are kept
+     by default! They can be optionally discarded by -N/--discard-noranks.
+
+     One exception: -N/--discard-noranks is switched on automatically
+     when only -E/--equal-to is given and the value is not one of ranks
+     without order ("no rank", "clade").
+
   6. [Recommended] When filtering with -L/--lower-than, you can use
     -n/--save-predictable-norank to save some special ranks without order,
     where rank of the closest higher node is still lower than rank cutoff.
@@ -1288,7 +1291,7 @@ Rank file:
   4. Ranks without order should be assigned a prefix symbol "!" for each rank.
 
 Usage:
-  taxonkit filter [flags]
+  taxonkit filter [flags] 
 
 Flags:
   -B, --black-list strings        black list of ranks to discard, e.g., '-B "no rank" -B "clade"
@@ -1331,21 +1334,21 @@ Examples
         
         
         $ cat taxids2.txt  | taxonkit lineage -r | csvtk -Ht cut -f 1,3,2 | csvtk pretty -H -t
-        131567    no rank        cellular organisms
-        2         superkingdom   cellular organisms;Bacteria
-        1783257   clade          cellular organisms;Bacteria;PVC group
-        74201     phylum         cellular organisms;Bacteria;PVC group;Verrucomicrobia
-        203494    class          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae
-        48461     order          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales
-        1647988   family         cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae
-        239934    genus          cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia
-        239935    species        cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila
-        349741    strain         cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
+        131567    cellular root   cellular organisms                                                                                                                                                                                 
+        2         domain          cellular organisms;Bacteria                                                                                                                                                                        
+        1783257   clade           cellular organisms;Bacteria;Pseudomonadati;PVC group                                                                                                                                               
+        74201     phylum          cellular organisms;Bacteria;Pseudomonadati;PVC group;Verrucomicrobiota                                                                                                                             
+        203494    class           cellular organisms;Bacteria;Pseudomonadati;PVC group;Verrucomicrobiota;Verrucomicrobiia                                                                                                            
+        48461     order           cellular organisms;Bacteria;Pseudomonadati;PVC group;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales                                                                                         
+        1647988   family          cellular organisms;Bacteria;Pseudomonadati;PVC group;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales;Akkermansiaceae                                                                         
+        239934    genus           cellular organisms;Bacteria;Pseudomonadati;PVC group;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales;Akkermansiaceae;Akkermansia                                                             
+        239935    species         cellular organisms;Bacteria;Pseudomonadati;PVC group;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila                                     
+        349741    strain          cellular organisms;Bacteria;Pseudomonadati;PVC group;Verrucomicrobiota;Verrucomicrobiia;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835
 
 1. Equal to certain rank(s) (`-E/--equal-to`)
 
         $ cat taxids2.txt \
-            | taxonkit filter -E Phylum -E Class \
+            | taxonkit filter -E Phylum -E Class -N \
             | taxonkit lineage -r \
             | csvtk -Ht cut -f 1,3,2 \
             | csvtk pretty -H -t
@@ -1355,7 +1358,7 @@ Examples
 1. Lower than a rank (`-L/--lower-than`)
 
         $ cat taxids2.txt \
-            | taxonkit filter -L genus \
+            | taxonkit filter -L genus -N \
             | taxonkit lineage -r -n -L \
             | csvtk -Ht cut -f 1,3,2 \
             | csvtk pretty -H -t
@@ -1365,11 +1368,12 @@ Examples
 1. Higher than a rank (`-H/--higher-than`)
 
         $ cat taxids2.txt \
-            | taxonkit filter -H phylum \
+            | taxonkit filter -H phylum -N \
             | taxonkit lineage -r -n -L \
             | csvtk -Ht cut -f 1,3,2 \
             | csvtk pretty -H -t
-        2   superkingdom   Bacteria
+        131567   cellular root   cellular organisms
+        2        domain          Bacteria 
 
 1. TaxIDs with no rank are kept by default!!!
   "no rank" and "clade" have no rank and can be filter out via `-N/--discard-noranks`.
@@ -1382,11 +1386,11 @@ Examples
             | csvtk cut -Ht -f 1,3,2 \
             | csvtk freq -Ht -f 2 -nr \
             | csvtk pretty -H -t
-        strain       2950
-        no rank      149
-        serotype     141
-        serogroup    95
-        isolate      1
+        strain       2940
+        no rank      486 
+        serotype     176 
+        serogroup    110 
+        isolate      1   
         subspecies   1
         
         $ taxonkit list --ids 562 \
@@ -1395,15 +1399,15 @@ Examples
             | csvtk cut -Ht -f 1,3,2 \
             | csvtk freq -Ht -f 2 -nr \
             | csvtk pretty -H -t
-        serotype     141
-        serogroup    95
-        isolate      1
-        subspecies   1
+        serotype     176
+        serogroup    110
+        isolate      1  
+        subspecies   1 
         
 1. Combine of `-L/-H` with `-E`.
 
         $ cat taxids2.txt \
-            | taxonkit filter -L genus -E genus  \
+            | taxonkit filter -L genus -E genus -N  \
             | taxonkit lineage -r -n -L \
             | csvtk cut -Ht -f 1,3,2 \
             | csvtk pretty -H -t
@@ -1422,26 +1426,26 @@ Examples
             | csvtk unfold -Ht -f 1 -s ";" \
             | taxonkit lineage -r -n -L \
             | csvtk cut -Ht -f 1,3,2 \
-            | csvtk pretty -H -t 
-        131567    no rank        cellular organisms
-        2         superkingdom   Bacteria
-        1224      phylum         Proteobacteria
-        1236      class          Gammaproteobacteria
-        91347     order          Enterobacterales
-        543       family         Enterobacteriaceae
-        561       genus          Escherichia
-        562       species        Escherichia coli
-        2605619   no rank        Escherichia coli O16:H48
+            | csvtk pretty -H -t
+            
+        131567    cellular root    cellular organisms         
+        2         domain           Bacteria                   
+        3379134   kingdom          Pseudomonadati             
+        1224      phylum           Pseudomonadota             
+        1236      class            Gammaproteobacteria        
+        91347     order            Enterobacterales           
+        543       family           Enterobacteriaceae         
+        561       genus            Escherichia                
+        562       species          Escherichia coli           
+        2605619   no rank          Escherichia coli O16:H48
         
-        10239     superkingdom   Viruses
-        2731341   clade          Duplodnaviria
-        2731360   clade          Heunggongvirae
-        2731618   phylum         Uroviricota
-        2731619   class          Caudoviricetes
-        28883     order          Caudovirales
-        10699     family         Siphoviridae
-        196894    no rank        unclassified Siphoviridae
-        1327037   species        Croceibacter phage P2559Y
+        10239     acellular root   Viruses                    
+        2731341   realm            Duplodnaviria              
+        2731360   kingdom          Heunggongvirae             
+        2731618   phylum           Uroviricota                
+        2731619   class            Caudoviricetes             
+        2788787   no rank          unclassified Caudoviricetes
+        1327037   species          Croceibacter phage P2559Y 
     
         # save taxids
         $  echo -ne "2605619\n1327037\n" \

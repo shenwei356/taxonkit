@@ -173,14 +173,23 @@ func newRankFilter(taxondb *taxdump.Taxonomy, rankOrder map[string]int, noRanks 
 	if len(equals) > 0 {
 		f.oEquals = make(map[int]interface{}, len(equals))
 		var oe int
+		var ok, equalNorank bool
 		for _, equal := range equals {
 			oe, err = getRankOrder(dbRanks, rankOrder, equal)
 			if err != nil {
 				return nil, err
 			}
 			f.oEquals[oe] = struct{}{}
+
+			if _, ok = noRanks[equal]; ok {
+				equalNorank = true
+			}
 		}
 		f.limitEqual = true
+
+		if !f.limitLower && !f.limitHigher && !equalNorank {
+			f.discardNorank = true
+		}
 	}
 	return f, nil
 }

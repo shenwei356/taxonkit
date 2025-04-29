@@ -1,7 +1,9 @@
 - [TaxonKit v0.20.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.20.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.20.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.20.0)
     
-    This version is mainly for maintaining compatibility with [NCBI's recent changes](https://ncbiinsights.ncbi.nlm.nih.gov/2025/02/27/new-ranks-ncbi-taxonomy/).
+    This version is mainly for maintaining compatibility with NCBI's recent changes([1](https://ncbiinsights.ncbi.nlm.nih.gov/2025/02/27/new-ranks-ncbi-taxonomy/), [2](https://ncbiinsights.ncbi.nlm.nih.gov/2025/04/25/ncbi-taxonomy-updates-virus-classification-april-2025/)).    
+    **Please remove the `ranks.txt` file in `~/.taxonkit/` or other directories containing taxdump files (nodes.dmp)**.
+    
     - `taxonkit reformat`:
         - Tried to make it compatible with NCBI's recent changes but failed.
         - **Update doc to recommend using `taxonkit reformat2`**.
@@ -11,6 +13,7 @@
     - `taxonkit filter2`:
         - Support new ranks: `acellular root` and `cellular root`. 
           **Please remove the `ranks.txt` file in `~/.taxonkit/` or other directories containing taxdump files (nodes.dmp)**.
+        - Automaticly switch on `-N/--discard-noranks` when only `-E/--equal-to` is given and the value is not one of ranks without order ("no rank", "clade").
     - `taxonkit name2taxid`:
         - Remove duplicated records caused by capitalization.
 - [TaxonKit v0.19.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.0)
