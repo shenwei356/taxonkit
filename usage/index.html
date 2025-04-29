@@ -715,7 +715,7 @@ cp names.dmp nodes.dmp delnodes.dmp merged.dmp $HOME/.taxonkit
 <h2 id="taxonkit">taxonkit<a class="headerlink" href="#taxonkit" title="Permanent link">Link</a></h2>
 <div class="codehilite"><pre><span></span><code>TaxonKit - A Practical and Efficient NCBI Taxonomy Toolkit
 
-Version: 0.19.0
+Version: 0.20.0
 
 Author: Wei Shen &lt;shenwei356@gmail.com&gt;
 
@@ -738,7 +738,7 @@ Dataset:
     overide the value of TAXONKIT_DB.
 
 Usage:
-  taxonkit [command]
+  taxonkit [command] 
 
 Available Commands:
   cami-filter     Remove taxa of given TaxIds and their descendants in CAMI metagenomic profile
@@ -763,8 +763,6 @@ Flags:
   -o, --out-file string   out file (&quot;-&quot; for stdout, suffix .gz for gzipped out) (default &quot;-&quot;)
   -j, --threads int       number of CPUs. 4 is enough (default 4)
       --verbose           print verbose information
-
-Use &quot;taxonkit [command] --help&quot; for more information about a command.
 </code></pre></div>
 
 <h2 id="list">list<a class="headerlink" href="#list" title="Permanent link">Link</a></h2>
@@ -1250,6 +1248,12 @@ superkingdom<span class="p">;</span>clade<span class="p">;</span>kingdom<span cl
 <p>Usage</p>
 <div class="codehilite"><pre><span></span><code>Reformat lineage in canonical ranks
 
+Warning:
+
+  - &#39;taxonkit reformat2&#39; is recommended since Match 2025 when NCBI made
+    big changes to ranks.
+    See more: https://ncbiinsights.ncbi.nlm.nih.gov/2025/02/27/new-ranks-ncbi-taxonomy/
+
 Input:
 
   - List of TaxIds or lineages, one record per line.
@@ -1268,13 +1272,16 @@ Output:
 
 Ambiguous names:
 
-  - Some TaxIds have the same complete lineage, empty result is returned
+  - Some TaxIds have the same complete lineage, empty result is returned 
     by default. You can use the flag -a/--output-ambiguous-result to
     return one possible result
 
 Output format can be formated by flag --format, available placeholders:
 
+    {C}: cellular root
+    {a}: acellular root
     {r}: realm
+    {d}: domain
     {k}: superkingdom
     {K}: kingdom
     {p}: phylum
@@ -1290,13 +1297,13 @@ Output format can be formated by flag --format, available placeholders:
 
 When these&#39;re no nodes of rank &quot;subspecies&quot; nor &quot;strain&quot;,
 you can switch on -S/--pseudo-strain to use the node with lowest rank
-as subspecies/strain name, if which rank is lower than &quot;species&quot;.
+as subspecies/strain name, if which rank is lower than &quot;species&quot;. 
 This flag affects {t}, {S}, {T}.
 
 Output format can contains some escape charactors like &quot;\t&quot;.
 
 Usage:
-  taxonkit reformat [flags]
+  taxonkit reformat [flags] 
 
 Flags:
   -P, --add-prefix                     add prefixes for all ranks, single prefix for a rank is defined
@@ -1313,13 +1320,19 @@ Flags:
                                        suffix (default &quot;rank&quot;)
   -R, --miss-taxid-repl string         replacement string for missing taxid
   -a, --output-ambiguous-result        output one of the ambigous result
+      --prefix-C string                prefix for cellular root, used along with flag -P/--add-prefix
+                                       (default &quot;d__&quot;)
       --prefix-K string                prefix for kingdom, used along with flag -P/--add-prefix (default
                                        &quot;K__&quot;)
       --prefix-S string                prefix for subspecies, used along with flag -P/--add-prefix
                                        (default &quot;S__&quot;)
       --prefix-T string                prefix for strain, used along with flag -P/--add-prefix (default
                                        &quot;T__&quot;)
+      --prefix-a string                prefix for acellular root, used along with flag -P/--add-prefix
+                                       (default &quot;d__&quot;)
       --prefix-c string                prefix for class, used along with flag -P/--add-prefix (default &quot;c__&quot;)
+      --prefix-d string                prefix for domain, used along with flag -P/--add-prefix (default
+                                       &quot;d__&quot;)
       --prefix-f string                prefix for family, used along with flag -P/--add-prefix (default
                                        &quot;f__&quot;)
       --prefix-g string                prefix for genus, used along with flag -P/--add-prefix (default &quot;g__&quot;)
@@ -1734,13 +1747,36 @@ Output:
 
 Output format:
 
-  1. it can contain some escape characters like &quot;\t&quot;.
-  2. For subspecies nodes, the rank might be &quot;subpecies&quot;, &quot;strain&quot;, or &quot;no rank&quot;.
-     You can use &quot;|&quot; to set multiple ranks, and the first valid one will be outputted.
+  1. It can contain some escape characters like &quot;\t&quot;.
+  2. You can use &quot;|&quot; to set multiple ranks, and the first valid one will be outputted.
+
+     This is useful for a rank with different rank names, especially since NCBI
+     made big changes to some ranks in March 2025:
+        - &quot;Domain&quot; replaces &quot;superkingdom&quot; for Archaea, Bacteria, and Eukaryota
+        - &quot;Acellular root&quot; replaces &quot;superkingdom&quot; for Viruses
+        - Six viral groups are designated with the new rank &quot;realm&quot;, the equivalent of &quot;domain&quot;
+     So, we can use &quot;{domain|acellular root|superkingdom}&quot; to handle all these cases
+     and keep compatible with old taxonomy data.
+
+       $ echo -ne &quot;Eukaryota\nBacteria\nViruses\n&quot; \
+           | taxonkit name2taxid -s -r \
+           | taxonkit reformat2 -I 2 -f &quot;{domain|acellular root|superkingdom}&quot; \
+           | csvtk add-header -Ht -n name,taxid,rank,kingdom/domain \
+           | csvtk pretty -t
+
+       name        taxid   rank             kingdom/domain
+       ---------   -----   --------------   --------------
+       Eukaryota   2759    domain           Eukaryota
+       Bacteria    2       domain           Bacteria
+       Viruses     10239   acellular root   Viruses
+
+     Another example is for subspecies nodes, the rank might be &quot;subpecies&quot;, &quot;strain&quot;, or &quot;no rank&quot;.
      For example,
+
        $ echo -ne &quot;562\n83333\n2697049\n&quot; \
           | taxonkit lineage -L -r \
           | taxonkit reformat2 -f &quot;{species};{strain|subspecies|no rank}&quot;
+
        562     species Escherichia coli;
        83333   strain  Escherichia coli;Escherichia coli K-12
        2697049 no rank Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2
@@ -1751,14 +1787,15 @@ Differences from &#39;taxonkit reformat&#39;:
   - [format] accept more rank place holders, not just the seven canonical ones.
   - [format] use the full name of ranks, such as &quot;{species}&quot;, rather than &quot;{s}&quot;
   - [format] support multiple ranks in one place holder, such as &quot;{subspecies|strain}&quot;
-  - do not automatically add prefixes, but you can set in the format
+  - do not automatically add prefixes, but you can simply set them in the format
 
 Usage:
   taxonkit reformat2 [flags] 
 
 Flags:
   -f, --format string            output format, placeholders of rank are needed (default
-                                 &quot;{superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;)
+                                 &quot;{domain|acellular
+                                 root|superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;)
   -h, --help                     help for reformat2
   -r, --miss-rank-repl string    replacement string for missing rank
   -R, --miss-taxid-repl string   replacement string for missing taxid
@@ -1791,10 +1828,10 @@ Flags:
 <div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">511145</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage
 <span class="m">511145</span><span class="w">  </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>str.<span class="w"> </span>K-12<span class="w"> </span>substr.<span class="w"> </span>MG1655
 
-$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">511145</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w">  </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{k};{p};{c};{o};{f};{g};{s};{t}&quot;</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">511145</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat<span class="w">  </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{d};{p};{c};{o};{f};{g};{s};{t}&quot;</span>
 <span class="m">511145</span><span class="w">  </span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12
 
-$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">511145</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order};{family};{genus};{species};{subspecies|strain|no rank}&quot;</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">511145</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{domain|acellular root|superkingdom};{phylum};{class};{order};{family};{genus};{species};{subspecies|strain|no rank}&quot;</span>
 <span class="m">511145</span><span class="w">  </span>Bacteria<span class="p">;</span>Pseudomonadota<span class="p">;</span>Gammaproteobacteria<span class="p">;</span>Enterobacterales<span class="p">;</span>Enterobacteriaceae<span class="p">;</span>Escherichia<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="p">;</span>Escherichia<span class="w"> </span>coli<span class="w"> </span>K-12
 </code></pre></div>
 
@@ -1810,18 +1847,18 @@ $<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><sp
 <span class="c1"># -----------------------------------------------------------</span>
 <span class="c1"># another example where the order rank is missing</span>
 
-$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{domain|acellular root|superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;</span>
 <span class="m">102403</span><span class="w">  </span>Eukaryota<span class="p">;</span>Mollusca<span class="p">;</span>Bivalvia<span class="p">;</span><span class="m">0</span><span class="p">;</span>Poromyidae<span class="p">;</span>Tropidomya<span class="p">;</span><span class="m">0</span>
 
-$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;</span><span class="w"> </span>-T
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{domain|acellular root|superkingdom};{phylum};{class};{order};{family};{genus};{species}&quot;</span><span class="w"> </span>-T
 <span class="m">102403</span><span class="w">  </span>Eukaryota<span class="p">;</span>Mollusca<span class="p">;</span>Bivalvia<span class="p">;</span><span class="m">0</span><span class="p">;</span>Poromyidae<span class="p">;</span>Tropidomya<span class="p">;</span>
 
 <span class="c1"># and now, the lowest rank in the output format is order, but the tailing &quot;0&quot; is not trimmed.</span>
 
-$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order}&quot;</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{domain|acellular root|superkingdom};{phylum};{class};{order}&quot;</span>
 <span class="m">102403</span><span class="w">  </span>Eukaryota<span class="p">;</span>Mollusca<span class="p">;</span>Bivalvia<span class="p">;</span><span class="m">0</span>
 
-$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{superkingdom};{phylum};{class};{order}&quot;</span><span class="w"> </span>-T
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">102403</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>reformat2<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;{domain|acellular root|superkingdom};{phylum};{class};{order}&quot;</span><span class="w"> </span>-T
 <span class="m">102403</span><span class="w">  </span>Eukaryota<span class="p">;</span>Mollusca<span class="p">;</span>Bivalvia<span class="p">;</span><span class="m">0</span>
 </code></pre></div>
 
@@ -1939,8 +1976,13 @@ Attention:
   3. All ranks in taxonomy database should be defined in rank file.
   4. Ranks can be removed with black list via -B/--black-list.
 
-  5. TaxIDs with no rank are kept by default!!!
-     They can be optionally discarded by -N/--discard-noranks.
+  5. TaxIDs with no rank (those starting with ! in the rank file) are kept
+     by default! They can be optionally discarded by -N/--discard-noranks.
+
+     One exception: -N/--discard-noranks is switched on automatically
+     when only -E/--equal-to is given and the value is not one of ranks
+     without order (&quot;no rank&quot;, &quot;clade&quot;).
+
   6. [Recommended] When filtering with -L/--lower-than, you can use
     -n/--save-predictable-norank to save some special ranks without order,
     where rank of the closest higher node is still lower than rank cutoff.
@@ -1953,7 +1995,7 @@ Rank file:
   4. Ranks without order should be assigned a prefix symbol &quot;!&quot; for each rank.
 
 Usage:
-  taxonkit filter [flags]
+  taxonkit filter [flags] 
 
 Flags:
   -B, --black-list strings        black list of ranks to discard, e.g., &#39;-B &quot;no rank&quot; -B &quot;clade&quot;
@@ -1994,23 +2036,23 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids2.txt
 <span class="m">349741</span>
 
 $<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w">  </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>-Ht<span class="w"> </span>cut<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2<span class="w"> </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
-<span class="m">131567</span><span class="w">    </span>no<span class="w"> </span>rank<span class="w">        </span>cellular<span class="w"> </span>organisms
-<span class="m">2</span><span class="w">         </span>superkingdom<span class="w">   </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria
-<span class="m">1783257</span><span class="w">   </span>clade<span class="w">          </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>PVC<span class="w"> </span>group
-<span class="m">74201</span><span class="w">     </span>phylum<span class="w">         </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobia
-<span class="m">203494</span><span class="w">    </span>class<span class="w">          </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae
-<span class="m">48461</span><span class="w">     </span>order<span class="w">          </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales
-<span class="m">1647988</span><span class="w">   </span>family<span class="w">         </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae
-<span class="m">239934</span><span class="w">    </span>genus<span class="w">          </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia
-<span class="m">239935</span><span class="w">    </span>species<span class="w">        </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila
-<span class="m">349741</span><span class="w">    </span>strain<span class="w">         </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobia<span class="p">;</span>Verrucomicrobiae<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>ATCC<span class="w"> </span>BAA-835
+<span class="m">131567</span><span class="w">    </span>cellular<span class="w"> </span>root<span class="w">   </span>cellular<span class="w"> </span>organisms<span class="w">                                                                                                                                                                                 </span>
+<span class="m">2</span><span class="w">         </span>domain<span class="w">          </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="w">                                                                                                                                                                        </span>
+<span class="m">1783257</span><span class="w">   </span>clade<span class="w">           </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadati<span class="p">;</span>PVC<span class="w"> </span>group<span class="w">                                                                                                                                               </span>
+<span class="m">74201</span><span class="w">     </span>phylum<span class="w">          </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadati<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobiota<span class="w">                                                                                                                             </span>
+<span class="m">203494</span><span class="w">    </span>class<span class="w">           </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadati<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobiota<span class="p">;</span>Verrucomicrobiia<span class="w">                                                                                                            </span>
+<span class="m">48461</span><span class="w">     </span>order<span class="w">           </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadati<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobiota<span class="p">;</span>Verrucomicrobiia<span class="p">;</span>Verrucomicrobiales<span class="w">                                                                                         </span>
+<span class="m">1647988</span><span class="w">   </span>family<span class="w">          </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadati<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobiota<span class="p">;</span>Verrucomicrobiia<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="w">                                                                         </span>
+<span class="m">239934</span><span class="w">    </span>genus<span class="w">           </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadati<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobiota<span class="p">;</span>Verrucomicrobiia<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="w">                                                             </span>
+<span class="m">239935</span><span class="w">    </span>species<span class="w">         </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadati<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobiota<span class="p">;</span>Verrucomicrobiia<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila<span class="w">                                     </span>
+<span class="m">349741</span><span class="w">    </span>strain<span class="w">          </span>cellular<span class="w"> </span>organisms<span class="p">;</span>Bacteria<span class="p">;</span>Pseudomonadati<span class="p">;</span>PVC<span class="w"> </span>group<span class="p">;</span>Verrucomicrobiota<span class="p">;</span>Verrucomicrobiia<span class="p">;</span>Verrucomicrobiales<span class="p">;</span>Akkermansiaceae<span class="p">;</span>Akkermansia<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila<span class="p">;</span>Akkermansia<span class="w"> </span>muciniphila<span class="w"> </span>ATCC<span class="w"> </span>BAA-835
 </code></pre></div>
 
 </li>
 <li>
 <p>Equal to certain rank(s) (<code>-E/--equal-to</code>)</p>
 <div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-E<span class="w"> </span>Phylum<span class="w"> </span>-E<span class="w"> </span>Class<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-E<span class="w"> </span>Phylum<span class="w"> </span>-E<span class="w"> </span>Class<span class="w"> </span>-N<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>-Ht<span class="w"> </span>cut<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
@@ -2022,7 +2064,7 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> 
 <li>
 <p>Lower than a rank (<code>-L/--lower-than</code>)</p>
 <div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-L<span class="w"> </span>genus<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-L<span class="w"> </span>genus<span class="w"> </span>-N<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span>-n<span class="w"> </span>-L<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>-Ht<span class="w"> </span>cut<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
@@ -2034,11 +2076,12 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> 
 <li>
 <p>Higher than a rank (<code>-H/--higher-than</code>)</p>
 <div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-H<span class="w"> </span>phylum<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-H<span class="w"> </span>phylum<span class="w"> </span>-N<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span>-n<span class="w"> </span>-L<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>-Ht<span class="w"> </span>cut<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
-<span class="m">2</span><span class="w">   </span>superkingdom<span class="w">   </span>Bacteria
+<span class="m">131567</span><span class="w">   </span>cellular<span class="w"> </span>root<span class="w">   </span>cellular<span class="w"> </span>organisms
+<span class="m">2</span><span class="w">        </span>domain<span class="w">          </span>Bacteria
 </code></pre></div>
 
 </li>
@@ -2053,11 +2096,11 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> 
 <span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nx">csvtk</span><span class="w"> </span><span class="nx">cut</span><span class="w"> </span><span class="o">-</span><span class="nx">Ht</span><span class="w"> </span><span class="o">-</span><span class="nx">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="w"> </span>\
 <span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nx">csvtk</span><span class="w"> </span><span class="nx">freq</span><span class="w"> </span><span class="o">-</span><span class="nx">Ht</span><span class="w"> </span><span class="o">-</span><span class="nx">f</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="nx">nr</span><span class="w"> </span>\
 <span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nx">csvtk</span><span class="w"> </span><span class="nx">pretty</span><span class="w"> </span><span class="o">-</span><span class="nx">H</span><span class="w"> </span><span class="o">-</span><span class="nx">t</span>
-<span class="nx">strain</span><span class="w">       </span><span class="mi">2950</span>
-<span class="nx">no</span><span class="w"> </span><span class="nx">rank</span><span class="w">      </span><span class="mi">149</span>
-<span class="nx">serotype</span><span class="w">     </span><span class="mi">141</span>
-<span class="nx">serogroup</span><span class="w">    </span><span class="mi">95</span>
-<span class="nx">isolate</span><span class="w">      </span><span class="mi">1</span>
+<span class="nx">strain</span><span class="w">       </span><span class="mi">2940</span>
+<span class="nx">no</span><span class="w"> </span><span class="nx">rank</span><span class="w">      </span><span class="mi">486</span><span class="w"> </span>
+<span class="nx">serotype</span><span class="w">     </span><span class="mi">176</span><span class="w"> </span>
+<span class="nx">serogroup</span><span class="w">    </span><span class="mi">110</span><span class="w"> </span>
+<span class="nx">isolate</span><span class="w">      </span><span class="mi">1</span><span class="w">   </span>
 <span class="nx">subspecies</span><span class="w">   </span><span class="mi">1</span>
 
 <span class="err">$</span><span class="w"> </span><span class="nx">taxonkit</span><span class="w"> </span><span class="nx">list</span><span class="w"> </span><span class="o">--</span><span class="nx">ids</span><span class="w"> </span><span class="mi">562</span><span class="w"> </span>\
@@ -2066,9 +2109,9 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> 
 <span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nx">csvtk</span><span class="w"> </span><span class="nx">cut</span><span class="w"> </span><span class="o">-</span><span class="nx">Ht</span><span class="w"> </span><span class="o">-</span><span class="nx">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="w"> </span>\
 <span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nx">csvtk</span><span class="w"> </span><span class="nx">freq</span><span class="w"> </span><span class="o">-</span><span class="nx">Ht</span><span class="w"> </span><span class="o">-</span><span class="nx">f</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="nx">nr</span><span class="w"> </span>\
 <span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nx">csvtk</span><span class="w"> </span><span class="nx">pretty</span><span class="w"> </span><span class="o">-</span><span class="nx">H</span><span class="w"> </span><span class="o">-</span><span class="nx">t</span>
-<span class="nx">serotype</span><span class="w">     </span><span class="mi">141</span>
-<span class="nx">serogroup</span><span class="w">    </span><span class="mi">95</span>
-<span class="nx">isolate</span><span class="w">      </span><span class="mi">1</span>
+<span class="nx">serotype</span><span class="w">     </span><span class="mi">176</span>
+<span class="nx">serogroup</span><span class="w">    </span><span class="mi">110</span>
+<span class="nx">isolate</span><span class="w">      </span><span class="mi">1</span><span class="w">  </span>
 <span class="nx">subspecies</span><span class="w">   </span><span class="mi">1</span>
 </code></pre></div>
 
@@ -2076,7 +2119,7 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> 
 <li>
 <p>Combine of <code>-L/-H</code> with <code>-E</code>.</p>
 <div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-L<span class="w"> </span>genus<span class="w"> </span>-E<span class="w"> </span>genus<span class="w">  </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>filter<span class="w"> </span>-L<span class="w"> </span>genus<span class="w"> </span>-E<span class="w"> </span>genus<span class="w"> </span>-N<span class="w">  </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span>-n<span class="w"> </span>-L<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
@@ -2097,26 +2140,26 @@ $<span class="w"> </span>cat<span class="w"> </span>taxids2.txt<span class="w"> 
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>unfold<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;;&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>taxonkit<span class="w"> </span>lineage<span class="w"> </span>-r<span class="w"> </span>-n<span class="w"> </span>-L<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>cut<span class="w"> </span>-Ht<span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3,2<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t<span class="w"> </span>
-<span class="m">131567</span><span class="w">    </span>no<span class="w"> </span>rank<span class="w">        </span>cellular<span class="w"> </span>organisms
-<span class="m">2</span><span class="w">         </span>superkingdom<span class="w">   </span>Bacteria
-<span class="m">1224</span><span class="w">      </span>phylum<span class="w">         </span>Proteobacteria
-<span class="m">1236</span><span class="w">      </span>class<span class="w">          </span>Gammaproteobacteria
-<span class="m">91347</span><span class="w">     </span>order<span class="w">          </span>Enterobacterales
-<span class="m">543</span><span class="w">       </span>family<span class="w">         </span>Enterobacteriaceae
-<span class="m">561</span><span class="w">       </span>genus<span class="w">          </span>Escherichia
-<span class="m">562</span><span class="w">       </span>species<span class="w">        </span>Escherichia<span class="w"> </span>coli
-<span class="m">2605619</span><span class="w">   </span>no<span class="w"> </span>rank<span class="w">        </span>Escherichia<span class="w"> </span>coli<span class="w"> </span>O16:H48
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>csvtk<span class="w"> </span>pretty<span class="w"> </span>-H<span class="w"> </span>-t
 
-<span class="m">10239</span><span class="w">     </span>superkingdom<span class="w">   </span>Viruses
-<span class="m">2731341</span><span class="w">   </span>clade<span class="w">          </span>Duplodnaviria
-<span class="m">2731360</span><span class="w">   </span>clade<span class="w">          </span>Heunggongvirae
-<span class="m">2731618</span><span class="w">   </span>phylum<span class="w">         </span>Uroviricota
-<span class="m">2731619</span><span class="w">   </span>class<span class="w">          </span>Caudoviricetes
-<span class="m">28883</span><span class="w">     </span>order<span class="w">          </span>Caudovirales
-<span class="m">10699</span><span class="w">     </span>family<span class="w">         </span>Siphoviridae
-<span class="m">196894</span><span class="w">    </span>no<span class="w"> </span>rank<span class="w">        </span>unclassified<span class="w"> </span>Siphoviridae
-<span class="m">1327037</span><span class="w">   </span>species<span class="w">        </span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y
+<span class="m">131567</span><span class="w">    </span>cellular<span class="w"> </span>root<span class="w">    </span>cellular<span class="w"> </span>organisms<span class="w">         </span>
+<span class="m">2</span><span class="w">         </span>domain<span class="w">           </span>Bacteria<span class="w">                   </span>
+<span class="m">3379134</span><span class="w">   </span>kingdom<span class="w">          </span>Pseudomonadati<span class="w">             </span>
+<span class="m">1224</span><span class="w">      </span>phylum<span class="w">           </span>Pseudomonadota<span class="w">             </span>
+<span class="m">1236</span><span class="w">      </span>class<span class="w">            </span>Gammaproteobacteria<span class="w">        </span>
+<span class="m">91347</span><span class="w">     </span>order<span class="w">            </span>Enterobacterales<span class="w">           </span>
+<span class="m">543</span><span class="w">       </span>family<span class="w">           </span>Enterobacteriaceae<span class="w">         </span>
+<span class="m">561</span><span class="w">       </span>genus<span class="w">            </span>Escherichia<span class="w">                </span>
+<span class="m">562</span><span class="w">       </span>species<span class="w">          </span>Escherichia<span class="w"> </span>coli<span class="w">           </span>
+<span class="m">2605619</span><span class="w">   </span>no<span class="w"> </span>rank<span class="w">          </span>Escherichia<span class="w"> </span>coli<span class="w"> </span>O16:H48
+
+<span class="m">10239</span><span class="w">     </span>acellular<span class="w"> </span>root<span class="w">   </span>Viruses<span class="w">                    </span>
+<span class="m">2731341</span><span class="w">   </span>realm<span class="w">            </span>Duplodnaviria<span class="w">              </span>
+<span class="m">2731360</span><span class="w">   </span>kingdom<span class="w">          </span>Heunggongvirae<span class="w">             </span>
+<span class="m">2731618</span><span class="w">   </span>phylum<span class="w">           </span>Uroviricota<span class="w">                </span>
+<span class="m">2731619</span><span class="w">   </span>class<span class="w">            </span>Caudoviricetes<span class="w">             </span>
+<span class="m">2788787</span><span class="w">   </span>no<span class="w"> </span>rank<span class="w">          </span>unclassified<span class="w"> </span>Caudoviricetes
+<span class="m">1327037</span><span class="w">   </span>species<span class="w">          </span>Croceibacter<span class="w"> </span>phage<span class="w"> </span>P2559Y
 
 <span class="c1"># save taxids</span>
 $<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-ne<span class="w"> </span><span class="s2">&quot;2605619\n1327037\n&quot;</span><span class="w"> </span><span class="se">\</span>
