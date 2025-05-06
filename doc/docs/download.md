@@ -15,7 +15,7 @@
     - `taxonkit reformat`:
         - Tried to make it compatible with NCBI's recent changes but failed.
         - **Update doc to recommend using `taxonkit reformat2`**.
-    - `taxonkit reformat2`:
+    - `taxonkit reformat`:
         - Fix handling of deleted TaxIds. [#117](https://github.com/shenwei356/taxonkit/issues/117)
         - **Change the default output format to be compatible with NCBI's recent changes**. [#115](https://github.com/shenwei356/taxonkit/issues/115), [#116](https://github.com/shenwei356/taxonkit/issues/116))
     - `taxonkit filter2`:

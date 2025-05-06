@@ -10,7 +10,7 @@
     - `taxonkit reformat2`:
         - Fix handling of deleted TaxIds. [#117](https://github.com/shenwei356/taxonkit/issues/117)
         - **Change the default output format to be compatible with NCBI's recent changes**. [#115](https://github.com/shenwei356/taxonkit/issues/115), [#116](https://github.com/shenwei356/taxonkit/issues/116))
-    - `taxonkit filter2`:
+    - `taxonkit filter`:
         - Support new ranks: `acellular root` and `cellular root`. 
           **Please remove the `ranks.txt` file in `~/.taxonkit/` or other directories containing taxdump files (nodes.dmp)**.
         - Automaticlly switch on `-N/--discard-noranks` when only `-E/--equal-to` is given and the value is not one of ranks without order ("no rank", "clade").
