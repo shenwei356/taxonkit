@@ -13,7 +13,7 @@
     - `taxonkit filter2`:
         - Support new ranks: `acellular root` and `cellular root`. 
           **Please remove the `ranks.txt` file in `~/.taxonkit/` or other directories containing taxdump files (nodes.dmp)**.
-        - Automaticly switch on `-N/--discard-noranks` when only `-E/--equal-to` is given and the value is not one of ranks without order ("no rank", "clade").
+        - Automaticlly switch on `-N/--discard-noranks` when only `-E/--equal-to` is given and the value is not one of ranks without order ("no rank", "clade").
     - `taxonkit name2taxid`:
         - Remove duplicated records caused by capitalization.
 - [TaxonKit v0.19.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.19.0)
