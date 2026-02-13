@@ -839,44 +839,137 @@ You can change the TaxId of interest.
 Sometimes ([1](https://github.com/shenwei356/gtdb-taxdump/issues/6)) one needs to build a database including bacteria and archaea (from GTDB) and viral database from NCBI.
 The idea is to export lineages from both GTDB and NCBI using [taxonkit reformat](https://bioinf.shenwei.me/taxonkit/usage/#reformat), and then create taxdump files from them with [taxonkit create-taxdump](https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump).
 
-1. Exporting taxonomic lineages of taxa with rank equal to species from [GTDB-taxdump](https://github.com/shenwei356/gtdb-taxdump).
+1. Exporting taxonomic lineages of **taxa with rank equal to species** from [GTDB-taxdump](https://github.com/shenwei356/gtdb-taxdump).
 
-        taxonkit list --data-dir gtdb-taxdump/R226/ --ids 1 --indent "" \
-            | taxonkit filter --data-dir gtdb-taxdump/R226/ --equal-to species \
-            | taxonkit reformat2 --data-dir gtdb-taxdump/R226/ --taxid-field 1 \
+        dir=gtdb-taxdump/R226/
+        taxonkit list --data-dir $dir --ids 1 --indent "" \
+            | taxonkit filter --data-dir $dir --equal-to species \
+            | taxonkit reformat2 --data-dir $dir --taxid-field 1 \
                 --format "{domain|acellular root|superkingdom}\t{phylum}\t{class}\t{order}\t{family}\t{genus}\t{species}\t{strain|subspecies|no rank}" \
                 -o gtdb.tsv
 
-1. Exporting taxonomic lineages of viral taxa with rank equal to or lower than species from NCBI taxdump.
+1. Exporting taxonomic lineages of viral/fungal/human **taxa with rank equal to or lower than species** from NCBI taxdump.
    For taxa whose rank is "no rank" below the species, we treat them as tax of strain rank (`--pseudo-strain`, taxonkit v0.14.1 needed).
-
+        
         # taxid of Viruses: 10239
-        taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent "" \
-            | taxonkit filter --data-dir ~/.taxonkit --equal-to species --lower-than species \
-            | taxonkit reformat2 --data-dir ~/.taxonkit --taxid-field 1 \
-                --format "{domain|acellular root|superkingdom}\t{phylum}\t{class}\t{order}\t{family}\t{genus}\t{species}\t{strain|subspecies|no rank}" \
+        dir=ncbi-taxdump
+        taxonkit list --data-dir $dir --ids 10239,4751,9606 --indent "" \
+            | taxonkit filter --data-dir $dir --equal-to species --lower-than species \
+            | taxonkit reformat --data-dir $dir --taxid-field 1 \
+                --format "{a}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+                --pseudo-strain \
                 -o ncbi-viral.tsv
+
+        # taxid of Fungi: 4751
+        # taxid of Homo sapiens: 9606
+        dir=ncbi-taxdump
+        taxonkit list --data-dir $dir --ids 4751,9606 --indent "" \
+            | taxonkit filter --data-dir $dir --equal-to species --lower-than species \
+            | taxonkit reformat --data-dir $dir --taxid-field 1 \
+                --format "{d}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}" \
+                --pseudo-strain \
+                -o ncbi-fungal-human.tsv
 
 1. Creating taxdump from lineages above.
 
-        cat gtdb.tsv ncbi-viral.tsv \
+        cat gtdb.tsv ncbi-viral.tsv ncbi-fungal-human.tsv \
             | taxonkit create-taxdump \
                 --field-accession 1 \
                 -R "superkingdom,phylum,class,order,family,genus,species,strain" \
                 -O taxdump
-
+                
         # we use --field-accession  1 to output the mapping file between old taxids and new ones.
-        $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
-        2697049 21630522
+        $ grep -w 2697049  taxdump/taxid.map  # SARS-COV-2
+        2697049 192491219
+
+1. (Optional) Creating a two-column taxid mappping file for tools like KMCP and LexicMap.
+
+        # -----------------------------------------------
+        # gtdb
+        dir=gtdb-taxdump-R226
+        cat $dir/taxid.map \
+            | taxonkit reformat2 --data-dir $dir -I 2 -f '{species}' \
+            | taxonkit name2taxid --data-dir taxdump/ -i 3 \
+            | cut -f 1,4 > gtdb.map
+        
+        # check missing data
+        awk '$2 == ""' gtdb.map
+        
+        # -----------------------------------------------
+        # fungi and viral
+        # assembly_summary.txt is linked to assembly_summary.txt downloaded by genome_updater.sh
+        dir=ncbi-taxdump
+        cut -f 1,6 assembly_summary.txt \
+            | taxonkit lineage --data-dir $dir -i 2 -L -n \
+            | taxonkit name2taxid --data-dir taxdump/ -i 3 \
+            | cut -f 1,4 > ncbi.map
+        
+        # check missing data
+        awk '$2 == ""' ncbi.map
+        
+        # -----------------------------------------------
+        # human
+        # T2T-CHM13v2.0 is linked to a directory containing human genome fasta files,
+        # each containing one chromosome or mitochondrion.
+        #
+        #     # The human genome file is split into separate files for each chromosomes/mitochondrion.
+        #     seqkit split2 -s 1 -N GCA_009914755.4_T2T-CHM13v2.0_genomic.fna.gz -O T2T-CHM13v2.0
+        #     # reaname
+        #     brename -p ^ -r GCA_009914755.4_ T2T-CHM13v2.0/*.fna.gz
+        #
+        ls T2T-CHM13v2.0/*.fna.gz \
+            | rush -k 'echo -e "{%..}\tHomo sapiens"' \
+            | taxonkit name2taxid --data-dir taxdump/ -i 2 \
+            | cut -f 1,3 > human.map
+            
+        # check missing data
+        awk '$2 == ""' human.map
+
+        # -----------------------------------------------
+        # merge
+        cat gtdb.map ncbi.map human.map > taxid.map
+        
+1. (Optional) Creating a 4-column taxid mappping file for tools like Metabuli.
+
+        # gtdb + fungi + viral
+        # file name example: GCF_000143185.2_Schco3_genomic.fna.gz,
+        # where GCF_000143185.2 is mapped to a taxid.
+        #
+        fd .fna.gz$ \
+                fungi-viruses/2026-02-12_18-10-55/files/ \
+                gtdb/gtdb_genomes_reps_r226/ \
+            | rush --eta -v 'acc={%@^(\w\w\w_\d\d\d\d\d\d\d\d\d\.\d+)}' \
+                'taxid=$(grep {acc} taxdump/taxid.map | cut -f 2); \
+                seqkit seq -ni {} | awk "{print \$1\"\t\"\$1\"\t\"$taxid\"\t0\"}"' \
+            | csvtk replace -Ht -f 1 -p '\.\d+$' \
+            | csvtk add-header -t -n accession,accession.version,taxid,gi \
+            > accession2taxid.map
+        
+        # human
+        #
+        #     # The human genome file is split into separate files for each chromosomes/mitochondrion.
+        #     seqkit split2 -s 1 -N GCA_009914755.4_T2T-CHM13v2.0_genomic.fna.gz -O T2T-CHM13v2.0
+        #     # reaname
+        #     brename -p ^ -r GCA_009914755.4_ T2T-CHM13v2.0/*.fna.gz
+        #
+        # the accession is sligntly different, e.g., GCA_009914755.4_CP068254.1.fna.gz
+        # where GCA_009914755.4_CP068254.1 is mapped to a taxid.
+        #
+        fd .fna.gz$ human/T2T-CHM13v2.0/ \
+            | rush --eta  \
+                'taxid=$(grep {%..} taxdump/taxid.map | cut -f 2); \
+                seqkit seq -ni {} | awk "{print \$1\"\t\"\$1\"\t\"$taxid\"\t0\"}"' \
+            | csvtk replace -Ht -f 1 -p '\.\d+$' \
+            >> accession2taxid.map
 
 Some tests:
 
     # SARS-COV-2 in NCBI taxonomy
     $ echo 2697049 \
-        | taxonkit lineage -t --data-dir ~/.taxonkit \
+        | taxonkit lineage -t --data-dir ncbi-taxdump/ \
         | csvtk cut -Ht -f 3 \
         | csvtk unfold -Ht -f 1 -s ";" \
-        | taxonkit lineage -r -n -L --data-dir ~/.taxonkit \
+        | taxonkit lineage -r -n -L --data-dir ncbi-taxdump/ \
         | csvtk cut -Ht -f 1,3,2 \
         | csvtk pretty -Ht
     10239     superkingdom   Viruses
@@ -911,7 +1004,6 @@ Some tests:
     68549826     genus          Betacoronavirus                                
     341128742    species        Betacoronavirus pandemicum                     
     192491219    strain         Severe acute respiratory syndrome coronavirus 2
-
 
 
     $ echo "Escherichia coli"  | taxonkit name2taxid --data-dir taxdump/
