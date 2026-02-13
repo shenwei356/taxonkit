@@ -1635,38 +1635,135 @@ subvariety<span class="w">        </span><span class="m">5</span>
 The idea is to export lineages from both GTDB and NCBI using <a href="https://bioinf.shenwei.me/taxonkit/usage/#reformat">taxonkit reformat</a>, and then create taxdump files from them with <a href="https://bioinf.shenwei.me/taxonkit/usage/#create-taxdump">taxonkit create-taxdump</a>.</p>
 <ol>
 <li>
-<p>Exporting taxonomic lineages of taxa with rank equal to species from <a href="https://github.com/shenwei356/gtdb-taxdump">GTDB-taxdump</a>.</p>
-<div class="codehilite"><pre><span></span><code>taxonkit list --data-dir gtdb-taxdump/R226/ --ids 1 --indent &quot;&quot; \
-    | taxonkit filter --data-dir gtdb-taxdump/R226/ --equal-to species \
-    | taxonkit reformat2 --data-dir gtdb-taxdump/R226/ --taxid-field 1 \
+<p>Exporting taxonomic lineages of <strong>taxa with rank equal to species</strong> from <a href="https://github.com/shenwei356/gtdb-taxdump">GTDB-taxdump</a>.</p>
+<div class="codehilite"><pre><span></span><code>dir=gtdb-taxdump/R226/
+taxonkit list --data-dir $dir --ids 1 --indent &quot;&quot; \
+    | taxonkit filter --data-dir $dir --equal-to species \
+    | taxonkit reformat2 --data-dir $dir --taxid-field 1 \
         --format &quot;{domain|acellular root|superkingdom}\t{phylum}\t{class}\t{order}\t{family}\t{genus}\t{species}\t{strain|subspecies|no rank}&quot; \
         -o gtdb.tsv
 </code></pre></div>
 
 </li>
 <li>
-<p>Exporting taxonomic lineages of viral taxa with rank equal to or lower than species from NCBI taxdump.
+<p>Exporting taxonomic lineages of viral/fungal/human <strong>taxa with rank equal to or lower than species</strong> from NCBI taxdump.
    For taxa whose rank is "no rank" below the species, we treat them as tax of strain rank (<code>--pseudo-strain</code>, taxonkit v0.14.1 needed).</p>
 <div class="codehilite"><pre><span></span><code># taxid of Viruses: 10239
-taxonkit list --data-dir ~/.taxonkit --ids 10239 --indent &quot;&quot; \
-    | taxonkit filter --data-dir ~/.taxonkit --equal-to species --lower-than species \
-    | taxonkit reformat2 --data-dir ~/.taxonkit --taxid-field 1 \
-        --format &quot;{domain|acellular root|superkingdom}\t{phylum}\t{class}\t{order}\t{family}\t{genus}\t{species}\t{strain|subspecies|no rank}&quot; \
+dir=ncbi-taxdump
+taxonkit list --data-dir $dir --ids 10239,4751,9606 --indent &quot;&quot; \
+    | taxonkit filter --data-dir $dir --equal-to species --lower-than species \
+    | taxonkit reformat --data-dir $dir --taxid-field 1 \
+        --format &quot;{a}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}&quot; \
+        --pseudo-strain \
         -o ncbi-viral.tsv
+
+# taxid of Fungi: 4751
+# taxid of Homo sapiens: 9606
+dir=ncbi-taxdump
+taxonkit list --data-dir $dir --ids 4751,9606 --indent &quot;&quot; \
+    | taxonkit filter --data-dir $dir --equal-to species --lower-than species \
+    | taxonkit reformat --data-dir $dir --taxid-field 1 \
+        --format &quot;{d}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}\t{t}&quot; \
+        --pseudo-strain \
+        -o ncbi-fungal-human.tsv
 </code></pre></div>
 
 </li>
 <li>
 <p>Creating taxdump from lineages above.</p>
-<div class="codehilite"><pre><span></span><code>cat gtdb.tsv ncbi-viral.tsv \
+<div class="codehilite"><pre><span></span><code>cat gtdb.tsv ncbi-viral.tsv ncbi-fungal-human.tsv \
     | taxonkit create-taxdump \
         --field-accession 1 \
         -R &quot;superkingdom,phylum,class,order,family,genus,species,strain&quot; \
         -O taxdump
 
 # we use --field-accession  1 to output the mapping file between old taxids and new ones.
-$ grep 2697049  taxdump/taxid.map  # SARS-COV-2
-2697049 21630522
+$ grep -w 2697049  taxdump/taxid.map  # SARS-COV-2
+2697049 192491219
+</code></pre></div>
+
+</li>
+<li>
+<p>(Optional) Creating a two-column taxid mappping file for tools like KMCP and LexicMap.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># -----------------------------------------------</span>
+<span class="c1"># gtdb</span>
+<span class="n">dir</span><span class="o">=</span><span class="n">gtdb</span><span class="o">-</span><span class="n">taxdump</span><span class="o">-</span><span class="n">R226</span>
+<span class="n">cat</span><span class="w"> </span><span class="o">$</span><span class="n">dir</span><span class="o">/</span><span class="n">taxid</span><span class="o">.</span><span class="n">map</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">reformat2</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="o">$</span><span class="n">dir</span><span class="w"> </span><span class="o">-</span><span class="n">I</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="s1">&#39;{species}&#39;</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">name2taxid</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">taxdump</span><span class="o">/</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">gtdb</span><span class="o">.</span><span class="n">map</span>
+
+<span class="c1"># check missing data</span>
+<span class="n">awk</span><span class="w"> </span><span class="s1">&#39;$2 == &quot;&quot;&#39;</span><span class="w"> </span><span class="n">gtdb</span><span class="o">.</span><span class="n">map</span>
+
+<span class="c1"># -----------------------------------------------</span>
+<span class="c1"># fungi and viral</span>
+<span class="c1"># assembly_summary.txt is linked to assembly_summary.txt downloaded by genome_updater.sh</span>
+<span class="n">dir</span><span class="o">=</span><span class="n">ncbi</span><span class="o">-</span><span class="n">taxdump</span>
+<span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="w"> </span><span class="n">assembly_summary</span><span class="o">.</span><span class="n">txt</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="o">$</span><span class="n">dir</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="n">L</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">name2taxid</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">taxdump</span><span class="o">/</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">ncbi</span><span class="o">.</span><span class="n">map</span>
+
+<span class="c1"># check missing data</span>
+<span class="n">awk</span><span class="w"> </span><span class="s1">&#39;$2 == &quot;&quot;&#39;</span><span class="w"> </span><span class="n">ncbi</span><span class="o">.</span><span class="n">map</span>
+
+<span class="c1"># -----------------------------------------------</span>
+<span class="c1"># human</span>
+<span class="c1"># T2T-CHM13v2.0 is linked to a directory containing human genome fasta files,</span>
+<span class="c1"># each containing one chromosome or mitochondrion.</span>
+<span class="c1">#</span>
+<span class="c1">#     # The human genome file is split into separate files for each chromosomes/mitochondrion.</span>
+<span class="c1">#     seqkit split2 -s 1 -N GCA_009914755.4_T2T-CHM13v2.0_genomic.fna.gz -O T2T-CHM13v2.0</span>
+<span class="c1">#     # reaname</span>
+<span class="c1">#     brename -p ^ -r GCA_009914755.4_ T2T-CHM13v2.0/*.fna.gz</span>
+<span class="c1">#</span>
+<span class="n">ls</span><span class="w"> </span><span class="n">T2T</span><span class="o">-</span><span class="n">CHM13v2</span><span class="o">.</span><span class="mi">0</span><span class="o">/*.</span><span class="n">fna</span><span class="o">.</span><span class="n">gz</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">rush</span><span class="w"> </span><span class="o">-</span><span class="n">k</span><span class="w"> </span><span class="s1">&#39;echo -e &quot;{%..}</span><span class="se">\t</span><span class="s1">Homo sapiens&quot;&#39;</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">name2taxid</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">taxdump</span><span class="o">/</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span>\
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">human</span><span class="o">.</span><span class="n">map</span>
+
+<span class="c1"># check missing data</span>
+<span class="n">awk</span><span class="w"> </span><span class="s1">&#39;$2 == &quot;&quot;&#39;</span><span class="w"> </span><span class="n">human</span><span class="o">.</span><span class="n">map</span>
+
+<span class="c1"># -----------------------------------------------</span>
+<span class="c1"># merge</span>
+<span class="n">cat</span><span class="w"> </span><span class="n">gtdb</span><span class="o">.</span><span class="n">map</span><span class="w"> </span><span class="n">ncbi</span><span class="o">.</span><span class="n">map</span><span class="w"> </span><span class="n">human</span><span class="o">.</span><span class="n">map</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">taxid</span><span class="o">.</span><span class="n">map</span>
+</code></pre></div>
+
+</li>
+<li>
+<p>(Optional) Creating a 4-column taxid mappping file for tools like Metabuli.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="nt">gtdb</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nt">fungi</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nt">viral</span>
+<span class="err">#</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">name</span><span class="w"> </span><span class="nt">example</span><span class="o">:</span><span class="w"> </span><span class="nt">GCF_000143185</span><span class="p">.</span><span class="nc">2_Schco3_genomic</span><span class="p">.</span><span class="nc">fna</span><span class="p">.</span><span class="nc">gz</span><span class="o">,</span>
+<span class="err">#</span><span class="w"> </span><span class="nt">where</span><span class="w"> </span><span class="nt">GCF_000143185</span><span class="p">.</span><span class="nc">2</span><span class="w"> </span><span class="nt">is</span><span class="w"> </span><span class="nt">mapped</span><span class="w"> </span><span class="nt">to</span><span class="w"> </span><span class="nt">a</span><span class="w"> </span><span class="nt">taxid</span><span class="o">.</span>
+<span class="err">#</span>
+<span class="nt">fd</span><span class="w"> </span><span class="p">.</span><span class="nc">fna</span><span class="p">.</span><span class="nc">gz</span><span class="o">$</span><span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="nt">fungi-viruses</span><span class="o">/</span><span class="nt">2026-02-12_18-10-55</span><span class="o">/</span><span class="nt">files</span><span class="o">/</span><span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="nt">gtdb</span><span class="o">/</span><span class="nt">gtdb_genomes_reps_r226</span><span class="o">/</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nt">rush</span><span class="w"> </span><span class="nt">--eta</span><span class="w"> </span><span class="nt">-v</span><span class="w"> </span><span class="s1">&#39;acc={%@^(\w\w\w_\d\d\d\d\d\d\d\d\d\.\d+)}&#39;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="s1">&#39;taxid=$(grep {acc} taxdump/taxid.map | cut -f 2); \</span>
+<span class="s1">        seqkit seq -ni {} | awk &quot;{print \$1\&quot;\t\&quot;\$1\&quot;\t\&quot;$taxid\&quot;\t0\&quot;}&quot;&#39;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nt">csvtk</span><span class="w"> </span><span class="nt">replace</span><span class="w"> </span><span class="nt">-Ht</span><span class="w"> </span><span class="nt">-f</span><span class="w"> </span><span class="nt">1</span><span class="w"> </span><span class="nt">-p</span><span class="w"> </span><span class="s1">&#39;\.\d+$&#39;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nt">csvtk</span><span class="w"> </span><span class="nt">add-header</span><span class="w"> </span><span class="nt">-t</span><span class="w"> </span><span class="nt">-n</span><span class="w"> </span><span class="nt">accession</span><span class="o">,</span><span class="nt">accession</span><span class="p">.</span><span class="nc">version</span><span class="o">,</span><span class="nt">taxid</span><span class="o">,</span><span class="nt">gi</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">&gt;</span><span class="w"> </span><span class="nt">accession2taxid</span><span class="p">.</span><span class="nc">map</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nt">human</span>
+<span class="err">#</span>
+<span class="err">#</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="nt">The</span><span class="w"> </span><span class="nt">human</span><span class="w"> </span><span class="nt">genome</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">is</span><span class="w"> </span><span class="nt">split</span><span class="w"> </span><span class="nt">into</span><span class="w"> </span><span class="nt">separate</span><span class="w"> </span><span class="nt">files</span><span class="w"> </span><span class="nt">for</span><span class="w"> </span><span class="nt">each</span><span class="w"> </span><span class="nt">chromosomes</span><span class="o">/</span><span class="nt">mitochondrion</span><span class="o">.</span>
+<span class="err">#</span><span class="w">     </span><span class="nt">seqkit</span><span class="w"> </span><span class="nt">split2</span><span class="w"> </span><span class="nt">-s</span><span class="w"> </span><span class="nt">1</span><span class="w"> </span><span class="nt">-N</span><span class="w"> </span><span class="nt">GCA_009914755</span><span class="p">.</span><span class="nc">4_T2T-CHM13v2</span><span class="p">.</span><span class="nc">0_genomic</span><span class="p">.</span><span class="nc">fna</span><span class="p">.</span><span class="nc">gz</span><span class="w"> </span><span class="nt">-O</span><span class="w"> </span><span class="nt">T2T-CHM13v2</span><span class="p">.</span><span class="nc">0</span>
+<span class="err">#</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="nt">reaname</span>
+<span class="err">#</span><span class="w">     </span><span class="nt">brename</span><span class="w"> </span><span class="nt">-p</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="nt">-r</span><span class="w"> </span><span class="nt">GCA_009914755</span><span class="p">.</span><span class="nc">4_</span><span class="w"> </span><span class="nt">T2T-CHM13v2</span><span class="p">.</span><span class="nc">0</span><span class="o">/*</span><span class="p">.</span><span class="nc">fna</span><span class="p">.</span><span class="nc">gz</span>
+<span class="err">#</span>
+<span class="err">#</span><span class="w"> </span><span class="nt">the</span><span class="w"> </span><span class="nt">accession</span><span class="w"> </span><span class="nt">is</span><span class="w"> </span><span class="nt">sligntly</span><span class="w"> </span><span class="nt">different</span><span class="o">,</span><span class="w"> </span><span class="nt">e</span><span class="p">.</span><span class="nc">g</span><span class="o">.,</span><span class="w"> </span><span class="nt">GCA_009914755</span><span class="p">.</span><span class="nc">4_CP068254</span><span class="p">.</span><span class="nc">1</span><span class="p">.</span><span class="nc">fna</span><span class="p">.</span><span class="nc">gz</span>
+<span class="err">#</span><span class="w"> </span><span class="nt">where</span><span class="w"> </span><span class="nt">GCA_009914755</span><span class="p">.</span><span class="nc">4_CP068254</span><span class="p">.</span><span class="nc">1</span><span class="w"> </span><span class="nt">is</span><span class="w"> </span><span class="nt">mapped</span><span class="w"> </span><span class="nt">to</span><span class="w"> </span><span class="nt">a</span><span class="w"> </span><span class="nt">taxid</span><span class="o">.</span>
+<span class="err">#</span>
+<span class="nt">fd</span><span class="w"> </span><span class="p">.</span><span class="nc">fna</span><span class="p">.</span><span class="nc">gz</span><span class="o">$</span><span class="w"> </span><span class="nt">human</span><span class="o">/</span><span class="nt">T2T-CHM13v2</span><span class="p">.</span><span class="nc">0</span><span class="o">/</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nt">rush</span><span class="w"> </span><span class="nt">--eta</span><span class="w">  </span><span class="err">\</span>
+<span class="w">        </span><span class="s1">&#39;taxid=$(grep {%..} taxdump/taxid.map | cut -f 2); \</span>
+<span class="s1">        seqkit seq -ni {} | awk &quot;{print \$1\&quot;\t\&quot;\$1\&quot;\t\&quot;$taxid\&quot;\t0\&quot;}&quot;&#39;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nt">csvtk</span><span class="w"> </span><span class="nt">replace</span><span class="w"> </span><span class="nt">-Ht</span><span class="w"> </span><span class="nt">-f</span><span class="w"> </span><span class="nt">1</span><span class="w"> </span><span class="nt">-p</span><span class="w"> </span><span class="s1">&#39;\.\d+$&#39;</span><span class="w"> </span><span class="err">\</span>
+<span class="w">    </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nt">accession2taxid</span><span class="p">.</span><span class="nc">map</span>
 </code></pre></div>
 
 </li>
@@ -1674,10 +1771,10 @@ $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
 <p>Some tests:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># SARS-COV-2 in NCBI taxonomy</span>
 <span class="nv">$</span><span class="w"> </span><span class="nv">echo</span><span class="w"> </span><span class="mi">2697049</span><span class="w"> </span><span class="o">\</span>
-<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="o">~</span><span class="sr">/.taxonkit \</span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">lineage</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">ncbi</span><span class="o">-</span><span class="n">taxdump</span><span class="sr">/ \</span>
 <span class="sr">    | csvtk cut -Ht -f 3 \</span>
 <span class="sr">    | csvtk unfold -Ht -f 1 -s &quot;;&quot; \</span>
-<span class="sr">    | taxonkit lineage -r -n -L --data-dir ~/</span><span class="o">.</span><span class="n">taxonkit</span><span class="w"> </span><span class="o">\</span>
+<span class="sr">    | taxonkit lineage -r -n -L --data-dir ncbi-taxdump/</span><span class="w"> </span><span class="o">\</span>
 <span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="w"> </span><span class="o">\</span>
 <span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">csvtk</span><span class="w"> </span><span class="n">pretty</span><span class="w"> </span><span class="o">-</span><span class="n">Ht</span>
 <span class="mi">10239</span><span class="w">     </span><span class="n">superkingdom</span><span class="w">   </span><span class="n">Viruses</span>
@@ -1712,7 +1809,6 @@ $ grep 2697049  taxdump/taxid.map  # SARS-COV-2
 <span class="mi">68549826</span><span class="w">     </span><span class="n">genus</span><span class="w">          </span><span class="n">Betacoronavirus</span><span class="w">                                </span>
 <span class="mi">341128742</span><span class="w">    </span><span class="n">species</span><span class="w">        </span><span class="n">Betacoronavirus</span><span class="w"> </span><span class="n">pandemicum</span><span class="w">                     </span>
 <span class="mi">192491219</span><span class="w">    </span><span class="n">strain</span><span class="w">         </span><span class="n">Severe</span><span class="w"> </span><span class="n">acute</span><span class="w"> </span><span class="n">respiratory</span><span class="w"> </span><span class="n">syndrome</span><span class="w"> </span><span class="n">coronavirus</span><span class="w"> </span><span class="mi">2</span>
-
 
 
 <span class="nv">$</span><span class="w"> </span><span class="nv">echo</span><span class="w"> </span><span class="s">&quot;Escherichia coli&quot;</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">taxonkit</span><span class="w"> </span><span class="n">name2taxid</span><span class="w"> </span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">dir</span><span class="w"> </span><span class="n">taxdump</span><span class="o">/</span>
