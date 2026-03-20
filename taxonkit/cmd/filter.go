@@ -99,7 +99,11 @@ Rank file:
 			equals = append(equals, strings.ToLower(val))
 		}
 
+		trimChar := getFlagString(cmd, "trim")
+		delimiter := getFlagString(cmd, "delimiter")
 		field := getFlagPositiveInt(cmd, "taxid-field") - 1
+
+		keep := getFlagBool(cmd, "keep")
 
 		if higher != "" && lower != "" {
 			checkError(fmt.Errorf("-H/--higher-than and -L/--lower-than can't be simultaneous given"))
@@ -222,7 +226,7 @@ Rank file:
 			fh, err := xopen.Ropen(file)
 			checkError(err)
 
-			var line string
+			var line0, line string
 			var items []string
 
 			scanner := bufio.NewScanner(fh)
@@ -230,12 +234,13 @@ Rank file:
 			var taxid uint32
 			var pass bool
 			for scanner.Scan() {
-				line = strings.Trim(scanner.Text(), "\r\n ")
+				line0 = strings.Trim(scanner.Text(), "\r\n")
+				line = strings.Trim(line0, trimChar)
 				if line == "" {
 					continue
 				}
 
-				items = strings.Split(line, "\t")
+				items = strings.Split(line, delimiter)
 				if len(items) <= field {
 					field = len(items) - 1
 				}
@@ -266,7 +271,11 @@ Rank file:
 					continue
 				}
 
-				outfh.WriteString(line + "\n")
+				if keep {
+					outfh.WriteString(line0 + "\n")
+				} else {
+					outfh.WriteString(line + "\n")
+				}
 			}
 			if err := scanner.Err(); err != nil {
 				checkError(err)
@@ -296,5 +305,9 @@ func init() {
 	filterCmd.Flags().StringP("higher-than", "H", "", "output TaxIds with rank higher than a rank, exclusive with --lower-than")
 	filterCmd.Flags().StringSliceP("equal-to", "E", []string{}, `output TaxIds with rank equal to some ranks, multiple values can be separated with comma "," (e.g., -E "genus,species"), or give multiple times (e.g., -E genus -E species)`)
 
+	filterCmd.Flags().StringP("trim", "t", " ", "trim characters in the input before parsing the taxids")
+	filterCmd.Flags().StringP("delimiter", "d", "\t", "delimiting character of the input after triming characters from --trim")
 	filterCmd.Flags().IntP("taxid-field", "i", 1, "field index of taxid. input data should be tab-separated")
+
+	filterCmd.Flags().BoolP("keep", "k", false, `retain trimmed input characters in the output`)
 }

@@ -1,3 +1,7 @@
+- [TaxonKit v0.21.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.21.0)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.21.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.21.0)
+    - `taxonkit filter`:
+        - Add options (`--trim`, `--delimiter`, `--keep`) to better support input with whitespace characters, such as those from `taxonkit list`. [#125](https://github.com/shenwei356/taxonkit/issues/125)
 - [TaxonKit v0.20.0](https://github.com/shenwei356/taxonkit/releases/tag/v0.20.0)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/shenwei356/taxonkit/v0.20.0/total.svg)](https://github.com/shenwei356/taxonkit/releases/tag/v0.20.0)
     
