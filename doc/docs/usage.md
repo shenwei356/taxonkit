@@ -1749,6 +1749,8 @@ Input format:
      We use the numeric assembly accession as the taxon at subspecies rank.
      (without the prefix GCA_ and GCF_, and version number).
   1. The input file should be tab-delimited, at least one column is needed.
+     Columns must be sorted from the highest rank (leftmost) to the lowest
+     rank (rightmost).
   2. Ranks can be given either via the first row or the flag --rank-names.
   3. The column containing the genome/assembly accession is recommended to
      generate TaxId mapping file (taxid.map, id -> taxid).
