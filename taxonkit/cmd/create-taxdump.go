@@ -49,6 +49,8 @@ Input format:
      We use the numeric assembly accession as the taxon at subspecies rank.
      (without the prefix GCA_ and GCF_, and version number).
   1. The input file should be tab-delimited, at least one column is needed.
+     Columns must be sorted from the highest rank (leftmost) to the lowest
+     rank (rightmost).
   2. Ranks can be given either via the first row or the flag --rank-names.
   3. The column containing the genome/assembly accession is recommended to
      generate TaxId mapping file (taxid.map, id -> taxid).
@@ -63,7 +65,7 @@ Attention:
   2. The generated TaxIds are not consecutive numbers, however some tools like MMSeqs2
      required this, you can use the script below for convertion:
      
-     https://github.com/apcamargo/ictv-mmseqs2-protein-database/blob/master/scripts/fix_taxdump.py
+     https://gist.github.com/apcamargo/42b569f888e614b0e98c6eef1603a3a7
 
   3. We only check and eliminate taxid collision within a single version of taxonomy data.
      Therefore, if you create taxid-changelog with "taxid-changelog", different taxons
