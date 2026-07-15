@@ -1181,13 +1181,20 @@ Attention:
     Drosophila      2081351 genus
 
 Usage:
-  taxonkit name2taxid [flags]
+  taxonkit name2taxid [flags] 
 
 Flags:
-  -h, --help             help for name2taxid
-  -i, --name-field int   field index of name. data should be tab-separated (default 1)
-  -s, --sci-name         only searching scientific names
-  -r, --show-rank        show rank
+  -f, --fuzzy                 allow fuzzy match
+  -m, --fuzzy-metric string   similarity metric, available values: cosine, dice, exact, jaccard, overlap
+                              (default "overlap")
+  -N, --fuzzy-ngram int       n-gram size. Taxon names are segmented into substrings of length N
+                              characters to compute similarity. (default 5)
+  -t, --fuzzy-simi float      similarity threshold (default 0.8)
+  -n, --fuzzy-top-n int       choose the top n matches in fuzzy search (default 5)
+  -h, --help                  help for name2taxid
+  -i, --name-field int        field index of name. data should be tab-separated (default 1)
+  -s, --sci-name              only searching scientific names
+  -r, --show-rank             show rank
 
 ```
 

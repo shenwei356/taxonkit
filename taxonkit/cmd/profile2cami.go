@@ -343,10 +343,10 @@ Attention:
 		checkError(err)
 		defer outfh.Close()
 
-		outfh.WriteString(fmt.Sprintf("@SampleID:%s\n", sampleID))
+		fmt.Fprintf(outfh, "@SampleID:%s\n", sampleID)
 		outfh.WriteString("@Version:0.10.0\n")
 		outfh.WriteString("@Ranks:superkingdom|phylum|class|order|family|genus|species|strain\n")
-		outfh.WriteString(fmt.Sprintf("@TaxonomyID:%s\n", taxonomyID))
+		fmt.Fprintf(outfh, "@TaxonomyID:%s\n", taxonomyID)
 		outfh.WriteString("@@TAXID\tRANK\tTAXPATH\tTAXPATHSN\tPERCENTAGE\n")
 
 		var lineageTaxids, lineageNames string
@@ -385,8 +385,8 @@ Attention:
 				percentage = node.Abundance * 100
 			}
 
-			outfh.WriteString(fmt.Sprintf("%d\t%s\t%s\t%s\t%.15f\n",
-				node.Taxid, node.Rank, lineageTaxids, lineageNames, percentage))
+			fmt.Fprintf(outfh, "%d\t%s\t%s\t%s\t%.15f\n",
+				node.Taxid, node.Rank, lineageTaxids, lineageNames, percentage)
 		}
 	},
 }

@@ -58,6 +58,30 @@ Attention:
 		limite2SciName := getFlagBool(cmd, "sci-name")
 		fuzzy := getFlagBool(cmd, "fuzzy")
 		fuzzyTopN := getFlagPositiveInt(cmd, "fuzzy-top-n")
+		fuzzyNgram := getFlagInt(cmd, "fuzzy-ngram")
+		if fuzzyNgram < 2 {
+			checkError(fmt.Errorf("the value of -N/--fuzzy-ngram (%d) should be >=2", fuzzyNgram))
+		}
+		_metricS := strings.ToLower(getFlagString(cmd, "fuzzy-metric"))
+		fuzzySimi := getFlagFloat64(cmd, "fuzzy-simi")
+		if fuzzySimi < 0 || fuzzySimi > 1 {
+			checkError(fmt.Errorf("the value of -t/--fuzzy-simi (%f) should be in [0, 1]", fuzzySimi))
+		}
+		var _metric metric.Metric
+		switch _metricS {
+		case "cosine":
+			_metric = metric.CosineMetric()
+		case "dice":
+			_metric = metric.DiceMetric()
+		case "exact":
+			_metric = metric.ExactMetric()
+		case "jaccard":
+			_metric = metric.JaccardMetric()
+		case "overlap":
+			_metric = metric.OverlapMetric()
+		default:
+			checkError(fmt.Errorf("invalid value for -m/--fuzzy-metric: %s", _metricS))
+		}
 
 		files := getFileList(args)
 
@@ -101,7 +125,7 @@ Attention:
 
 				indexDescription := suggest.IndexDescription{
 					Name:      "taxonkit",
-					NGramSize: 3,
+					NGramSize: fuzzyNgram,
 					Wrap:      [2]string{"$", "$"},
 					Pad:       "$",
 					Alphabet:  []string{"english", "$"},
@@ -161,7 +185,7 @@ Attention:
 			if !fuzzy {
 				taxids = m[strings.ToLower(data[field])]
 			} else {
-				searchConf, err := suggest.NewSearchConfig(data[field], fuzzyTopN, metric.CosineMetric(), 0.7)
+				searchConf, err := suggest.NewSearchConfig(data[field], fuzzyTopN, _metric, fuzzySimi)
 				checkError(err)
 				result, err := service.Suggest("taxonkit", searchConf)
 				checkError(err)
@@ -188,9 +212,9 @@ Attention:
 					l2t = data.(line2taxids)
 					if len(l2t.taxids) == 0 {
 						if printRank {
-							outfh.WriteString(fmt.Sprintf("%s\t%s\t%s\n", l2t.line, "", ""))
+							fmt.Fprintf(outfh, "%s\t%s\t%s\n", l2t.line, "", "")
 						} else {
-							outfh.WriteString(fmt.Sprintf("%s\t%s\n", l2t.line, ""))
+							fmt.Fprintf(outfh, "%s\t%s\n", l2t.line, "")
 						}
 						if config.LineBuffered {
 							outfh.Flush()
@@ -204,9 +228,9 @@ Attention:
 					}
 					for _, taxid = range l2t.taxids {
 						if printRank {
-							outfh.WriteString(fmt.Sprintf("%s\t%d\t%s\n", l2t.line, taxid, ranks[taxid]))
+							fmt.Fprintf(outfh, "%s\t%d\t%s\n", l2t.line, taxid, ranks[taxid])
 						} else {
-							outfh.WriteString(fmt.Sprintf("%s\t%d\n", l2t.line, taxid))
+							fmt.Fprintf(outfh, "%s\t%d\n", l2t.line, taxid)
 						}
 						if config.LineBuffered {
 							outfh.Flush()
@@ -223,6 +247,10 @@ func init() {
 	name2taxidCmd.Flags().BoolP("show-rank", "r", false, `show rank`)
 	name2taxidCmd.Flags().IntP("name-field", "i", 1, "field index of name. data should be tab-separated")
 	name2taxidCmd.Flags().BoolP("sci-name", "s", false, "only searching scientific names")
+
 	name2taxidCmd.Flags().BoolP("fuzzy", "f", false, "allow fuzzy match")
-	name2taxidCmd.Flags().IntP("fuzzy-top-n", "n", 1, "choose top n matches in fuzzy search")
+	name2taxidCmd.Flags().IntP("fuzzy-top-n", "n", 5, "choose the top n matches in fuzzy search")
+	name2taxidCmd.Flags().IntP("fuzzy-ngram", "N", 5, "n-gram size. Taxon names are segmented into substrings of length N characters to compute similarity.")
+	name2taxidCmd.Flags().StringP("fuzzy-metric", "m", "overlap", `similarity metric, available values: cosine, dice, exact, jaccard, overlap`)
+	name2taxidCmd.Flags().Float64P("fuzzy-simi", "t", 0.8, "similarity threshold")
 }

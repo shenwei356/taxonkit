@@ -197,13 +197,13 @@ Examples:
 			if jsonFormat {
 				outfh.WriteString(`"`)
 			}
-			outfh.WriteString(fmt.Sprintf("%d", id))
+			fmt.Fprintf(outfh, "%d", id)
 
 			if printRank {
-				outfh.WriteString(fmt.Sprintf(" [%s]", ranks[uint32(id)]))
+				fmt.Fprintf(outfh, " [%s]", ranks[uint32(id)])
 			}
 			if printName {
-				outfh.WriteString(fmt.Sprintf(" %s", names[uint32(id)]))
+				fmt.Fprintf(outfh, " %s", names[uint32(id)])
 			}
 
 			level = 0
@@ -220,7 +220,7 @@ Examples:
 				printName, ranks, printRank, jsonFormat, config)
 
 			if jsonFormat {
-				outfh.WriteString(fmt.Sprintf("%s}", strings.Repeat(indent, level)))
+				fmt.Fprintf(outfh, "%s}", strings.Repeat(indent, level))
 			}
 			if jsonFormat && i < len(ids)-1 {
 				outfh.WriteString(",")
@@ -289,12 +289,12 @@ func traverseTree(
 		if jsonFormat {
 			outfh.WriteString(`"`)
 		}
-		outfh.WriteString(fmt.Sprintf("%d", child))
+		fmt.Fprintf(outfh, "%d", child)
 		if printRank {
-			outfh.WriteString(fmt.Sprintf(" [%s]", ranks[child]))
+			fmt.Fprintf(outfh, " [%s]", ranks[child])
 		}
 		if printName {
-			outfh.WriteString(fmt.Sprintf(" %s", names[child]))
+			fmt.Fprintf(outfh, " %s", names[child])
 		}
 
 		var ok bool
@@ -320,7 +320,7 @@ func traverseTree(
 			ranks, printRank, jsonFormat, config)
 
 		if jsonFormat && ok {
-			outfh.WriteString(fmt.Sprintf("%s}", strings.Repeat(indent, level)))
+			fmt.Fprintf(outfh, "%s}", strings.Repeat(indent, level))
 			if level > 1 && i < len(children)-1 {
 				outfh.WriteString(",")
 			}

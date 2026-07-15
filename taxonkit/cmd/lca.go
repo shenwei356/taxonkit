@@ -174,7 +174,7 @@ Examples:
 					}
 				}
 				if flag {
-					outfh.WriteString(fmt.Sprintf("%s\t%d\n", line, 0))
+					fmt.Fprintf(outfh, "%s\t%d\n", line, 0)
 					continue
 				}
 
@@ -192,7 +192,7 @@ Examples:
 					}
 				}
 
-				outfh.WriteString(fmt.Sprintf("%s\t%d\n", line, lca))
+				fmt.Fprintf(outfh, "%s\t%d\n", line, lca)
 			}
 			if err := scanner.Err(); err != nil {
 				checkError(err)
