@@ -26,7 +26,7 @@ require (
 	github.com/glycerine/go-unsnap-stream v0.0.0-20181221182339-f9677308dec2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/klauspost/compress v1.18.3 // indirect
+	github.com/klauspost/compress v1.18.7 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mschoch/smat v0.0.0-20160514031455-90eadee771ae // indirect
